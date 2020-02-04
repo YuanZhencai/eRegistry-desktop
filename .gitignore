@@ -9,3 +9,13 @@ npm-debug.log
 npm-debug.log.*
 thumbs.db
 !.gitkeep
+######################
+# Intellij
+######################
+.idea/
+*.iml
+*.iws
+*.ipr
+*.ids
+*.orig
+classes/
