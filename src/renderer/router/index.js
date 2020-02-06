@@ -71,7 +71,18 @@ export const constantRouterMap = [
       }
     ]
   },
-
+  {
+    path: '/calendar',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Calendar',
+        component: () => import('@/views/calendar/index'),
+        meta: { title: 'Calendar', icon: 'form' }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 
