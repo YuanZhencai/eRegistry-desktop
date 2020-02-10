@@ -72,6 +72,28 @@ export const constantRouterMap = [
     ]
   },
 
+  {
+    path: '/project',
+    component: Layout,
+    redirect: '/project/',
+    name: 'Project',
+    meta: { title: '研究项目', icon: 'example' },
+    children: [
+      {
+        path: '',
+        name: 'Home',
+        component: () => import('@/views/project/index'),
+        meta: { title: '项目概览', icon: 'home' }
+      },
+      {
+        path: 'members',
+        name: 'Member',
+        component: () => import('@/views/members/index'),
+        meta: { title: '项目成员', icon: 'user' }
+      }
+    ]
+  },
+
   { path: '*', redirect: '/404', hidden: true }
 ]
 

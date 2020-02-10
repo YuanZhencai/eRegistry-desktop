@@ -1,5 +1,6 @@
 import Vue from 'vue'
-
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 import 'normalize.css/normalize.css'// A modern alternative to CSS resets
 
 import ElementUI from 'element-ui'
@@ -14,7 +15,7 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
-
+Vue.use(VueAxios, axios)
 Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
