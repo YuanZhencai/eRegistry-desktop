@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑成员" :visible.sync="editDialogVisible" @closed="closeDialog">
+    <el-dialog title="创建或编辑成员" :visible.sync="editDialogVisible" :before-close="closeDialog">
         <el-row :gutter="8">
             <el-col :span="8">
                 <div>
@@ -20,7 +20,7 @@
                         <el-avatar size="small" icon="el-icon-user-solid" @error="() => {return true}">
                           <img src="user.imageUrl">
                         </el-avatar>
-                        <span class="user-name text-ellipsis">{{user.login}},{{user.selected}}</span>
+                        <span class="user-name text-ellipsis">{{user.login}}</span>
                         <div class="triangle" v-if="user.selected">
                             <i class="el-icon-check user-check"></i>
                         </div>
@@ -64,8 +64,8 @@
             </el-col>
         </el-row>
         <div slot="footer" class="dialog-footer">
-            <el-button size="mini" @click="deditDialogVisible = false">取 消</el-button>
-            <el-button size="mini" type="primary" @click="editDialogVisible = false">确 定</el-button>
+            <el-button size="mini" @click="closeDialog">取 消</el-button>
+            <el-button size="mini" type="primary" @click="closeDialog">确 定</el-button>
         </div>
     </el-dialog>
 </template>
@@ -76,7 +76,6 @@
     props: ['editDialogVisible'],
     data() {
       return {
-        dialogIsShow: this.editDialogVisible,
         login: '',
         email: '',
         rules: {
@@ -97,6 +96,7 @@
       this.findProjects()
     },
     methods: {
+      findUsers(val) {},
       findProjects() {
         // 查找当前用户所创建的项目
         const data = [
@@ -124,11 +124,6 @@
           id: 20003,
           login: 'user'
         }, { createdBy: 'user', id: 20031, login: 'jiangyn', task: 'PATIENT' }]
-        // for(let i = 0; i < this.users.length; i++){
-        //   if(this.users[i].selected){
-        //     this.selectedUsers.push(this.users[i])
-        //   }
-        // }
       },
       findMembers() {
         // 查找当前项目的成员
@@ -140,16 +135,19 @@
       invite() {
       },
       selectUser(user) {
-        user.selected = !user.selected
-        // if(user.selected){
-        //   this.selectedUsers.push(user)
-        // }
+        this.$forceUpdate()
+        if (user.selected) {
+          this.$set(user, 'selected', false)
+        } else {
+          this.$set(user, 'selected', true)
+        }
       },
       remove(user) {
-        user.selected = false
+        this.$set(user, 'selected', false)
       },
       closeDialog() {
-        this.$refs.ruleForm.resetFields()
+        // this.$refs.ruleForm.resetFields()
+        this.$emit('closeDialog')
       }
     }
   }
@@ -204,5 +202,8 @@
   position: absolute;
   right: 2px;
   font-weight: 600;
+}
+.el-tag + .el-tag{
+    margin-left: 10px;
 }
 </style>

@@ -2,7 +2,7 @@
     <div class='app-container'>
         <el-row>
             <el-col :span='24'>
-                <el-button type='primary' class='float-right' @click="editDialogVisible=true">添加成员</el-button>
+                <el-button type='primary' class='float-right' @click="showNewDialog()">添加成员</el-button>
             </el-col>
         </el-row>
         <el-row>
@@ -36,7 +36,7 @@
                 <el-button type="primary" @click="delectDialogVisible = false">确 定</el-button>
             </span>
         </el-dialog>
-        <member-dialog-component :edit-dialog-visible="editDialogVisible"></member-dialog-component>
+        <member-dialog-component :edit-dialog-visible="editDialogVisible" @closeDialog="closeDialog"></member-dialog-component>
     </div>
 </template>
 
@@ -99,6 +99,12 @@
       this.total = this.tableData.length
     },
     methods: {
+      showNewDialog() {
+        this.editDialogVisible = true
+      },
+      closeDialog() {
+        this.editDialogVisible = false
+      },
       handleClose(done) {
         this.$confirm('确认关闭？')
           .then(_ => {
@@ -125,14 +131,15 @@
 </script>
 
 <style scoped>
-.float-right{
-    float: right;
-}
-table th{
-    background-color: #f2f2f2;
-}
-.pagination{
-  margin-top: 10px;
-  text-align: center;
-}
+    .float-right{
+        float: right;
+    }
+    table th{
+        background-color: #f2f2f2;
+    }
+    .pagination{
+        margin-top: 10px;
+        text-align: center;
+    }
 </style>
+
