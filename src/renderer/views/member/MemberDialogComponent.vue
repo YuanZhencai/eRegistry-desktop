@@ -147,7 +147,7 @@
       },
       closeDialog() {
         // this.$refs.ruleForm.resetFields()
-        this.$emit('closeDialog')
+        this.$emit('closeDialog', 'memberDialog')
       }
     }
   }

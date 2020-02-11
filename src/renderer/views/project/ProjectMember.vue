@@ -16,7 +16,7 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button type="text">分配中心</el-button>
+                        <el-button type="text" @click="assignCenter(scope.row)">分配中心</el-button>
                         <el-divider direction="vertical"></el-divider>
                         <el-button type="text">分配任务</el-button>
                         <el-divider direction="vertical"></el-divider>
@@ -37,18 +37,21 @@
             </span>
         </el-dialog>
         <member-dialog-component :edit-dialog-visible="editDialogVisible" @closeDialog="closeDialog"></member-dialog-component>
+        <assign-member-dialog v-if="assignCenterDialogVisible" :visible="assignCenterDialogVisible" :center-member="selectedMember" @closeDialog="closeDialog"></assign-member-dialog>
     </div>
 </template>
 
 <script>
   import axios from 'axios'
-  import MemberDialogComponent from './MemberDialogComponent'
+  import MemberDialogComponent from '../member/MemberDialogComponent'
+  import AssignMemberDialog from '../center-member/AssignMemberDialog'
   export default {
-    components: { MemberDialogComponent },
+    components: { AssignMemberDialog, MemberDialogComponent },
     data() {
       return {
         productId: 20016,
         members: [],
+        selectedMember: null,
         project: null,
         total: null,
         pageSize: 10, // 单页数据量
@@ -63,6 +66,8 @@
         },
         delectDialogVisible: false,
         editDialogVisible: false,
+        assignCenterDialogVisible: false,
+        assignTaskDialogVisible: false,
         tableData: [
           {
             createdBy: 'jiangyn',
@@ -70,6 +75,7 @@
             lastModifiedBy: 'jiangyn',
             lastModifiedDate: '2019-09-05T01: 48: 03Z',
             id: 20015,
+            projectId: 20016,
             username: 'jiangyn',
             centerName: ''
           },
@@ -80,7 +86,9 @@
             lastModifiedDate: '2019-09-30T07: 14: 18Z',
             id: 20060,
             username: 'user',
-            task: 'PATIENT'
+            centerName: '',
+            task: 'PATIENT',
+            tasks: []
           },
           {
             createdBy: 'jiangyn',
@@ -89,7 +97,9 @@
             lastModifiedDate: '2019-09-20T06: 07: 11Z',
             id: 20031,
             username: 'yuanzhencai',
-            task: 'PATIENT'
+            centerName: '',
+            task: 'PATIENT',
+            tasks: []
           }
         ]
       }
@@ -102,8 +112,15 @@
       showNewDialog() {
         this.editDialogVisible = true
       },
-      closeDialog() {
-        this.editDialogVisible = false
+      closeDialog(val) {
+        switch (val) {
+          case 'memberDialog':
+            this.editDialogVisible = false
+            break
+          case 'assignMember':
+            this.assignCenterDialogVisible = false
+            break
+        }
       },
       handleClose(done) {
         this.$confirm('确认关闭？')
@@ -125,6 +142,10 @@
       },
       sizeChange: function(val) {
         this.pageSize = val
+      },
+      assignCenter(member) {
+        this.selectedMember = member
+        this.assignCenterDialogVisible = true
       }
     }
   }

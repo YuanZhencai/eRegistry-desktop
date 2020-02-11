@@ -42,19 +42,19 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    meta: { title: 'Example', icon: 'el-icon-bangzhu' },
     children: [
       {
         path: 'table',
         name: 'Table',
         component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        meta: { title: 'Table', icon: 'el-icon-s-grid' }
       },
       {
         path: 'tree',
         name: 'Tree',
         component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        meta: { title: 'Tree', icon: 'el-icon-grape' }
       }
     ]
   },
@@ -67,7 +67,7 @@ export const constantRouterMap = [
         path: 'index',
         name: 'Form',
         component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        meta: { title: 'Form', icon: 'el-icon-document' }
       }
     ]
   },
@@ -77,19 +77,25 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/project/',
     name: 'Project',
-    meta: { title: '研究项目', icon: 'example' },
+    meta: { title: '研究项目', icon: 'el-icon-bangzhu' },
     children: [
       {
         path: '',
         name: 'Home',
         component: () => import('@/views/project/index'),
-        meta: { title: '项目概览', icon: 'home' }
+        meta: { title: '项目概览', icon: 'el-icon-s-home' }
       },
       {
         path: 'members',
         name: 'Member',
         component: () => import('@/views/project/ProjectMember'),
-        meta: { title: '项目成员', icon: 'user' }
+        meta: { title: '项目成员', icon: 'el-icon-s-custom' }
+      },
+      {
+        path: 'centers',
+        name: 'Center',
+        component: () => import('@/views/project/ProjectCenter'),
+        meta: { title: '项目中心', icon: 'el-icon-office-building' }
       }
     ]
   },
