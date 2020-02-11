@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑成员" :visible.sync="editDialogVisible" :before-close="closeDialog">
+    <el-dialog title="创建或编辑成员" :visible.sync="visible" :before-close="closeDialog">
         <el-row :gutter="8">
             <el-col :span="8">
                 <div>
@@ -73,7 +73,7 @@
 <script>
   export default {
     name: 'MemberDialogComponent',
-    props: ['editDialogVisible'],
+    props: ['visible'],
     data() {
       return {
         login: '',
@@ -88,7 +88,7 @@
         users: [],
         members: {},
         selectedUsers: [],
-        projectId: 20016
+        projectId: 20002
       }
     },
     created() {
@@ -100,7 +100,6 @@
       findProjects() {
         // 查找当前用户所创建的项目
         const data = [
-          { createdBy: 'cassie', id: 20016, name: 'test', open: false, reportId: 20042 },
           { createdBy: 'jiangyn', id: 20008, name: 'test', open: false, chargedBy: 'jiangyn', reportId: 20029 },
           { createdBy: 'user', id: 20002, name: 'ALK', open: false, chargedBy: 'user', reportId: 20000 }
         ]

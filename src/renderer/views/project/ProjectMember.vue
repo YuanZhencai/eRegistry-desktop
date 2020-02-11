@@ -2,11 +2,11 @@
     <div class='app-container'>
         <el-row>
             <el-col :span='24'>
-                <el-button type='primary' class='float-right' @click="showNewDialog()">添加成员</el-button>
+                <el-button type='primary' class='float-right' @click="newMember()">添加成员</el-button>
             </el-col>
         </el-row>
         <el-row>
-            <el-table stripe :data='tableData.slice((currentPage-1)*pageSize, currentPage*pageSize)'
+            <el-table stripe :data='members.slice((currentPage-1)*pageSize, currentPage*pageSize)'
                       :default-sort = "{prop: 'id', order: 'descending'}" style='width: 100%'>
                 <el-table-column prop='id' label='ID' width='180' sortable></el-table-column>
                 <el-table-column prop='username' label='用户名' width='180' sortable></el-table-column>
@@ -18,9 +18,9 @@
                     <template slot-scope="scope">
                         <el-button type="text" @click="assignCenter(scope.row)">分配中心</el-button>
                         <el-divider direction="vertical"></el-divider>
-                        <el-button type="text">分配任务</el-button>
+                        <el-button type="text" @click="assignTask(scope.row)">分配任务</el-button>
                         <el-divider direction="vertical"></el-divider>
-                        <el-button type="text" @click="delectDialogVisible=true">删除</el-button>
+                        <el-button type="text" @click="deleteMemberDialogVisible=true">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -29,30 +29,33 @@
                            @current-change="currentChange" @size-change="sizeChange" class="pagination">
             </el-pagination>
         </el-row>
-        <el-dialog title="确认删除成员" :visible.sync="delectDialogVisible" :before-close="handleClose">
+        <el-dialog title="确认删除成员" :visible.sync="deleteMemberDialogVisible" :before-close="closeDialog">
             <span>是否确认删除成员？</span>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="delectDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="delectDialogVisible = false">确 定</el-button>
+                <el-button @click="deleteMemberDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="deleteMemberDialogVisible = false">确 定</el-button>
             </span>
         </el-dialog>
-        <member-dialog-component :edit-dialog-visible="editDialogVisible" @closeDialog="closeDialog"></member-dialog-component>
-        <assign-member-dialog v-if="assignCenterDialogVisible" :visible="assignCenterDialogVisible" :center-member="selectedMember" @closeDialog="closeDialog"></assign-member-dialog>
+        <member-dialog-component :visible="newMemberDialogVisible" @closeDialog="closeDialog"></member-dialog-component>
+        <assign-member-dialog v-if="assignCenterDialogVisible" :visible="assignCenterDialogVisible" :center-member="selectedMember"
+                              @closeDialog="closeDialog"></assign-member-dialog>
+        <assign-task-dialog v-if="assignTaskDialogVisible" :visible="assignTaskDialogVisible" :member="selectedMember"
+                            @closeDialog="closeDialog"></assign-task-dialog>
     </div>
 </template>
 
 <script>
-  import axios from 'axios'
+  // import axios from 'axios'
   import MemberDialogComponent from '../member/MemberDialogComponent'
   import AssignMemberDialog from '../center-member/AssignMemberDialog'
+  import AssignTaskDialog from '../member-task/AssignTaskDialog'
   export default {
-    components: { AssignMemberDialog, MemberDialogComponent },
+    components: { AssignTaskDialog, AssignMemberDialog, MemberDialogComponent },
     data() {
       return {
-        productId: 20016,
         members: [],
         selectedMember: null,
-        project: null,
+        project: { id: 20002, name: 'ALK', open: false, reportId: 20000 },
         total: null,
         pageSize: 10, // 单页数据量
         currentPage: 1, // 默认开始页面
@@ -64,64 +67,16 @@
           VIEW: '查看',
           ADMIN: '负责人'
         },
-        delectDialogVisible: false,
-        editDialogVisible: false,
+        deleteMemberDialogVisible: false,
+        newMemberDialogVisible: false,
         assignCenterDialogVisible: false,
-        assignTaskDialogVisible: false,
-        tableData: [
-          {
-            createdBy: 'jiangyn',
-            createdDate: '2019-09-05T01: 48: 03Z',
-            lastModifiedBy: 'jiangyn',
-            lastModifiedDate: '2019-09-05T01: 48: 03Z',
-            id: 20015,
-            projectId: 20016,
-            username: 'jiangyn',
-            centerName: ''
-          },
-          {
-            createdBy: 'jiangyn',
-            createdDate: '2019-09-30T07: 14: 18Z',
-            lastModifiedBy: 'jiangyn',
-            lastModifiedDate: '2019-09-30T07: 14: 18Z',
-            id: 20060,
-            username: 'user',
-            centerName: '',
-            task: 'PATIENT',
-            tasks: []
-          },
-          {
-            createdBy: 'jiangyn',
-            createdDate: '2019-09-20T06: 07: 11Z',
-            lastModifiedBy: 'jiangyn',
-            lastModifiedDate: '2019-09-20T06: 07: 11Z',
-            id: 20031,
-            username: 'yuanzhencai',
-            centerName: '',
-            task: 'PATIENT',
-            tasks: []
-          }
-        ]
+        assignTaskDialogVisible: false
       }
     },
     created() {
-      // this.getMembers(this.productId)
-      this.total = this.tableData.length
+      this.getMembers(this.project.id)
     },
     methods: {
-      showNewDialog() {
-        this.editDialogVisible = true
-      },
-      closeDialog(val) {
-        switch (val) {
-          case 'memberDialog':
-            this.editDialogVisible = false
-            break
-          case 'assignMember':
-            this.assignCenterDialogVisible = false
-            break
-        }
-      },
       handleClose(done) {
         this.$confirm('确认关闭？')
           .then(_ => {
@@ -130,12 +85,17 @@
           .catch(_ => {})
       },
       getMembers(id) {
-        axios.get(`https://192.168.3.247:20002/api/projects/${id}/members`)
-          .then((response) => {
-            console.log('success')
-          }, (error) => {
-            console.log(error)
-          })
+        // axios.get(`https://192.168.3.247:20002/api/projects/${id}/members`)
+        //   .then((response) => {
+        //     console.log('success')
+        //   }, (error) => {
+        //     console.log(error)
+        //   })
+        this.members = [
+          { id: 20032, username: 'jiangyn', task: 'PATIENT' },
+          { id: 20032, username: 'user' }
+        ]
+        this.total = this.members.length
       },
       currentChange: function(currentPage) {
         this.currentPage = currentPage
@@ -143,9 +103,32 @@
       sizeChange: function(val) {
         this.pageSize = val
       },
+      newMember() {
+        this.newMemberDialogVisible = true
+      },
       assignCenter(member) {
         this.selectedMember = member
         this.assignCenterDialogVisible = true
+      },
+      assignTask(member) {
+        this.selectedMember = member
+        this.assignTaskDialogVisible = true
+      },
+      closeDialog(val) {
+        switch (val) {
+          case 'memberDialog':
+            this.newMemberDialogVisible = false
+            break
+          case 'assignMember':
+            this.assignCenterDialogVisible = false
+            break
+          case 'assignTask':
+            this.assignTaskDialogVisible = false
+            break
+          default:
+            this.deleteMemberDialogVisible = false
+            break
+        }
       }
     }
   }
