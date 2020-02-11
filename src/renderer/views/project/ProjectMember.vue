@@ -135,15 +135,6 @@
 </script>
 
 <style scoped>
-    .float-right{
-        float: right;
-    }
-    table th{
-        background-color: #f2f2f2;
-    }
-    .pagination{
-        margin-top: 10px;
-        text-align: center;
-    }
+
 </style>
 

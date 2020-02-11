@@ -1,10 +1,72 @@
 <template>
-    <div>center list</div>
+    <div class='app-container'>
+        <el-row>
+            <el-col :span='24'>
+                <el-button type='primary' class='float-right' @click="newCenter()">创建分中心</el-button>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-table stripe :data='centers.slice((currentPage-1)*pageSize, currentPage*pageSize)'
+                      :default-sort = "{prop: 'id', order: 'descending'}" style='width: 100%'>
+                <el-table-column prop='id' label='ID' sortable></el-table-column>
+                <el-table-column prop='name' label='名称' sortable></el-table-column>
+                <el-table-column prop='no' label='编号' sortable></el-table-column>
+                <el-table-column prop='chargedBy' label='负责人' sortable></el-table-column>
+                <el-table-column label='中心人数'>
+                    <template slot-scope="scope">{{ scope.row.memberCount || 0 }}</template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="text" @click="editCenter(scope.row)">编辑</el-button>
+                        <el-divider direction="vertical"></el-divider>
+                        <el-button type="text" @click="deleteCenterDialogVisible=true">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-pagination background layout="total, sizes, prev, pager, next, jumper"
+                           :total="total" :page-size="pageSize" :page-sizes="[10,20,30,40,50]" :current-page="currentPage"
+                           @current-change="currentChange" @size-change="sizeChange" class="pagination">
+            </el-pagination>
+        </el-row>
+        <el-dialog title="确认删除成员" :visible.sync="deleteCenterDialogVisible" :before-close="closeDialog">
+            <span>是否确认删除成员？</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="deleteCenterDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="deleteCenterDialogVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
+    </div>
 </template>
 
 <script>
   export default {
-    name: 'ProjectCenter'
+    name: 'ProjectCenter',
+    data() {
+      return {
+        centers: [],
+        total: null,
+        pageSize: 10, // 单页数据量
+        currentPage: 1, // 默认开始页面
+        deleteCenterDialogVisible: false
+      }
+    },
+    created() {
+      this.total = this.centers.length
+    },
+    methods: {
+      newCenter() {
+      },
+      editCenter(center) {},
+      currentChange: function(currentPage) {
+        this.currentPage = currentPage
+      },
+      sizeChange: function(val) {
+        this.pageSize = val
+      },
+      closeDialog: function() {
+        this.deleteCenterDialogVisible = false
+      }
+    }
   }
 </script>
 
