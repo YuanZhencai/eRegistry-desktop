@@ -81,21 +81,49 @@ export const constantRouterMap = [
     children: [
       {
         path: '',
-        name: 'Home',
+        name: 'ProjectList',
+        component: () => import('@/views/project/ProjectList'),
+        hidden: true
+      },
+      {
+        path: ':projectId',
+        name: 'ProjectDetail',
+        component: () => import('@/views/project/index'),
+        hidden: true
+      },
+      {
+        path: ':projectId/home',
+        name: 'ProjectHome',
         component: () => import('@/views/project/index'),
         meta: { title: '项目概览', icon: 'el-icon-s-home' }
       },
       {
-        path: 'members',
+        path: ':projectId/questionnaire',
+        name: 'Questionnaire',
+        component: () => import('@/views/project/ProjectQuestionnaire'),
+        meta: { title: '患者调查', icon: 'el-icon-edit-outline' }
+      },
+      {
+        path: ':projectId/members',
         name: 'Member',
         component: () => import('@/views/project/ProjectMember'),
         meta: { title: '项目成员', icon: 'el-icon-s-custom' }
       },
       {
-        path: 'centers',
+        path: ':projectId/centers',
         name: 'Center',
         component: () => import('@/views/project/ProjectCenter'),
         meta: { title: '项目中心', icon: 'el-icon-office-building' }
+      },
+      {
+        path: ':projectId/questionnaire-new',
+        component: () => import('@/views/questionnaire/QuestionnaireDetail'),
+        hidden: true
+      },
+      {
+        path: ':projectId/questionnaire/:id',
+        component: () => import('@/views/questionnaire/QuestionnaireDetail'),
+        hidden: true
       }
     ]
   },

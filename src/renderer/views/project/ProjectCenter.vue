@@ -19,7 +19,7 @@
                     <template slot-scope="scope">
                         <el-button type="text" @click="editCenter(scope.row)">编辑</el-button>
                         <el-divider direction="vertical"></el-divider>
-                        <el-button type="text" @click="deleteCenterDialogVisible=true">删除</el-button>
+                        <el-button type="text" @click="deleteCenter(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -28,11 +28,11 @@
                            @current-change="currentChange" @size-change="sizeChange" class="pagination">
             </el-pagination>
         </el-row>
-        <el-dialog title="确认删除成员" :visible.sync="deleteCenterDialogVisible" :before-close="closeDialog">
-            <span>是否确认删除成员？</span>
+        <el-dialog v-if="deleteCenterDialogVisible" title="确认删除项目中心" :visible.sync="deleteCenterDialogVisible" :before-close="closeDialog">
+            <span>是否确认删除项目 '{{this.selectedCenter.name}}' ？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="deleteCenterDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteCenterDialogVisible = false">确 定</el-button>
+                <el-button type="primary" @click="deleteCenterDialogVisible = false">删 除</el-button>
             </span>
         </el-dialog>
         <center-dialog-component v-if="centerDialogVisible" :visible="centerDialogVisible" :center="selectedCenter" @closeDialog="closeDialog"></center-dialog-component>
@@ -71,6 +71,10 @@
         this.selectedCenter = center
         this.centerDialogVisible = true
       },
+      deleteCenter(center) {
+        this.selectedCenter = center
+        this.deleteCenterDialogVisible = true
+      },
       currentChange: function(currentPage) {
         this.currentPage = currentPage
       },
@@ -84,7 +88,6 @@
             break
           default:
             this.deleteCenterDialogVisible = false
-            break
         }
       }
     }

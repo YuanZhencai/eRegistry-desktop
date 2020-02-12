@@ -20,7 +20,7 @@
                         <el-divider direction="vertical"></el-divider>
                         <el-button type="text" @click="assignTask(scope.row)">分配任务</el-button>
                         <el-divider direction="vertical"></el-divider>
-                        <el-button type="text" @click="deleteMemberDialogVisible=true">删除</el-button>
+                        <el-button type="text" @click="deleteMember(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -29,11 +29,11 @@
                            @current-change="currentChange" @size-change="sizeChange" class="pagination">
             </el-pagination>
         </el-row>
-        <el-dialog title="确认删除成员" :visible.sync="deleteMemberDialogVisible" :before-close="closeDialog">
-            <span>是否确认删除成员？</span>
+        <el-dialog v-if="deleteMemberDialogVisible" title="确认删除成员" :visible.sync="deleteMemberDialogVisible" :before-close="closeDialog">
+            <span>是否确认删除成员 '{{this.selectedMember.username}}'？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="deleteMemberDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteMemberDialogVisible = false">确 定</el-button>
+                <el-button type="primary" @click="deleteMemberDialogVisible = false">删 除</el-button>
             </span>
         </el-dialog>
         <member-dialog-component :visible="newMemberDialogVisible" @closeDialog="closeDialog"></member-dialog-component>
@@ -56,7 +56,7 @@
         members: [],
         selectedMember: null,
         project: { id: 20002, name: 'ALK', open: false, reportId: 20000 },
-        total: null,
+        total: 0,
         pageSize: 10, // 单页数据量
         currentPage: 1, // 默认开始页面
         taskType: {
@@ -77,13 +77,6 @@
       this.getMembers(this.project.id)
     },
     methods: {
-      handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done()
-          })
-          .catch(_ => {})
-      },
       getMembers(id) {
         // axios.get(`https://192.168.3.247:20002/api/projects/${id}/members`)
         //   .then((response) => {
@@ -114,6 +107,10 @@
         this.selectedMember = member
         this.assignTaskDialogVisible = true
       },
+      deleteMember(member) {
+        this.selectedMember = member
+        this.deleteMemberDialogVisible = true
+      },
       closeDialog(val) {
         switch (val) {
           case 'memberDialog':
@@ -127,7 +124,6 @@
             break
           default:
             this.deleteMemberDialogVisible = false
-            break
         }
       }
     }
