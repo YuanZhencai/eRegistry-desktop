@@ -35,36 +35,57 @@
                 <el-button type="primary" @click="deleteCenterDialogVisible = false">确 定</el-button>
             </span>
         </el-dialog>
+        <center-dialog-component v-if="centerDialogVisible" :visible="centerDialogVisible" :center="selectedCenter" @closeDialog="closeDialog"></center-dialog-component>
     </div>
 </template>
 
 <script>
+  import CenterDialogComponent from '../center/CenterDialogComponent'
   export default {
     name: 'ProjectCenter',
+    components: { CenterDialogComponent },
     data() {
       return {
         centers: [],
-        total: null,
+        total: 0,
         pageSize: 10, // 单页数据量
         currentPage: 1, // 默认开始页面
-        deleteCenterDialogVisible: false
+        deleteCenterDialogVisible: false,
+        centerDialogVisible: false,
+        selectedCenter: null
       }
     },
     created() {
-      this.total = this.centers.length
+      this.getCenters()
     },
     methods: {
-      newCenter() {
+      getCenters() {
+        this.centers = [{ id: 26, name: '数据收集中心', telephone: '15248975623', no: '001', chargedBy: '小高' }]
+        this.total = this.centers.length
       },
-      editCenter(center) {},
+      newCenter() {
+        this.selectedCenter = { id: null, name: null, telephone: null, chargedBy: null }
+        this.centerDialogVisible = true
+      },
+      editCenter(center) {
+        this.selectedCenter = center
+        this.centerDialogVisible = true
+      },
       currentChange: function(currentPage) {
         this.currentPage = currentPage
       },
       sizeChange: function(val) {
         this.pageSize = val
       },
-      closeDialog: function() {
-        this.deleteCenterDialogVisible = false
+      closeDialog: function(val) {
+        switch (val) {
+          case 'centerDialog':
+            this.centerDialogVisible = false
+            break
+          default:
+            this.deleteCenterDialogVisible = false
+            break
+        }
       }
     }
   }
