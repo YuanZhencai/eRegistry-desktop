@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import 'normalize.css/normalize.css'// A modern alternative to CSS resets
+// import 'normalize.css/normalize.css'// A modern alternative to CSS reset
+import 'bootstrap/dist/css/bootstrap.css'
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
