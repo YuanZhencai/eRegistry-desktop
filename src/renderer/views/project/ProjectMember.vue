@@ -9,7 +9,12 @@
             <el-table stripe :data='members.slice((currentPage-1)*pageSize, currentPage*pageSize)'
                       :default-sort = "{prop: 'id', order: 'descending'}" style='width: 100%'>
                 <el-table-column prop='id' label='ID' width='180' sortable></el-table-column>
-                <el-table-column prop='username' label='用户名' width='180' sortable></el-table-column>
+                <el-table-column label='用户名' width='180' sortable>
+                    <template slot-scope="scope">
+                        {{scope.row.username}}
+                        <span v-if="project && scope.row.username === project.chargedBy">(负责人)</span>
+                    </template>
+                </el-table-column>
                 <el-table-column prop='centerName' label='所属中心' sortable></el-table-column>
                 <el-table-column label='任务'>
                     <template slot-scope="scope">{{ taskType[scope.row.task] }}</template>
@@ -20,7 +25,7 @@
                         <el-divider direction="vertical"></el-divider>
                         <el-button type="text" @click="assignTask(scope.row)">分配任务</el-button>
                         <el-divider direction="vertical"></el-divider>
-                        <el-button type="text" @click="deleteMember(scope.row)">删除</el-button>
+                        <el-button type="text" @click="openDeleteDialog(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -33,7 +38,7 @@
             <span>是否确认删除成员 '{{this.selectedMember.username}}'？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="deleteMemberDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteMemberDialogVisible = false">删 除</el-button>
+                <el-button type="primary" @click="deleteMember">删 除</el-button>
             </span>
         </el-dialog>
         <member-dialog-component :visible="newMemberDialogVisible" @closeDialog="closeDialog"></member-dialog-component>
@@ -45,7 +50,8 @@
 </template>
 
 <script>
-  // import axios from 'axios'
+  import { getProjectMembers, deleteMember } from '@/api/MemberResource'
+  import { getProject } from '@/api/ProjectResource'
   import MemberDialogComponent from '../member/MemberDialogComponent'
   import AssignMemberDialog from '../center-member/AssignMemberDialog'
   import AssignTaskDialog from '../member-task/AssignTaskDialog'
@@ -75,20 +81,23 @@
     },
     created() {
       this.getMembers(this.project.id)
+      this.findProject(this.project.id)
     },
     methods: {
-      getMembers(id) {
-        // axios.get(`https://192.168.3.247:20002/api/projects/${id}/members`)
-        //   .then((response) => {
-        //     console.log('success')
-        //   }, (error) => {
-        //     console.log(error)
-        //   })
-        this.members = [
-          { id: 20032, username: 'jiangyn', task: 'PATIENT' },
-          { id: 20032, username: 'user' }
-        ]
-        this.total = this.members.length
+      findProject(projectId) {
+        getProject(projectId).then((response) => {
+          this.project = response.data
+        }, (error) => {
+          console.log(error)
+        })
+      },
+      getMembers(projectId) {
+        getProjectMembers(projectId).then((response) => {
+          this.members = response.data
+          this.total = this.members.length
+        }, (error) => {
+          console.log(error)
+        })
       },
       currentChange: function(currentPage) {
         this.currentPage = currentPage
@@ -107,9 +116,16 @@
         this.selectedMember = member
         this.assignTaskDialogVisible = true
       },
-      deleteMember(member) {
+      openDeleteDialog(member) {
         this.selectedMember = member
         this.deleteMemberDialogVisible = true
+      },
+      deleteMember() {
+        deleteMember(this.selectedMember.id).then(response => {
+          console.log(response)
+        }, error => {
+          console.log(error)
+        })
       },
       closeDialog(val) {
         switch (val) {

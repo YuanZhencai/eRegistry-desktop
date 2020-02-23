@@ -40,6 +40,7 @@
 </template>
 
 <script>
+  import { getProjectCenters } from '@/api/CenterResource'
   import CenterDialogComponent from '../center/CenterDialogComponent'
   export default {
     name: 'ProjectCenter',
@@ -52,7 +53,8 @@
         currentPage: 1, // 默认开始页面
         deleteCenterDialogVisible: false,
         centerDialogVisible: false,
-        selectedCenter: null
+        selectedCenter: null,
+        projectId: 20002
       }
     },
     created() {
@@ -60,8 +62,10 @@
     },
     methods: {
       getCenters() {
-        this.centers = [{ id: 26, name: '数据收集中心', telephone: '15248975623', no: '001', chargedBy: '小高' }]
-        this.total = this.centers.length
+        getProjectCenters(this.projectId).then(response => {
+          this.centers = response.data
+          this.total = this.centers.length
+        })
       },
       newCenter() {
         this.selectedCenter = { id: null, name: null, telephone: null, chargedBy: null }

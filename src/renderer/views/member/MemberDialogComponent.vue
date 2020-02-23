@@ -3,7 +3,7 @@
         <el-row :gutter="8">
             <el-col :span="8">
                 <div>
-                    <el-input v-model="login" size="mini" placeholder="用户名" suffix-icon="el-icon-search" @change="findUsers(value)"></el-input>
+                    <el-input v-model="login" size="mini" placeholder="用户名" suffix-icon="el-icon-search" @change="findUsers(login)"></el-input>
                     <!--用户参与的其他所有项目-->
                     <ul class="list-group">
                         <li class="list-group-item" v-for="project in projects" :key="project.id" @click="findProjectUsers(project.id)">
@@ -65,12 +65,16 @@
         </el-row>
         <div slot="footer" class="dialog-footer">
             <el-button size="mini" @click="closeDialog">取 消</el-button>
-            <el-button size="mini" type="primary" @click="closeDialog">确 定</el-button>
+            <el-button size="mini" type="primary" @click="confirm">确 定</el-button>
         </div>
     </el-dialog>
 </template>
 
 <script>
+  import { getMineProjects, getProjectUsers } from '@/api/ProjectResource'
+  import { getProjectMembers, createBatchMember } from '@/api/MemberResource'
+  import { getUsersByLoginStartingWith } from '@/api/UserResource'
+
   export default {
     name: 'MemberDialogComponent',
     props: ['visible'],
@@ -92,44 +96,44 @@
       }
     },
     created() {
-      this.findMembers()
+      this.findProjectMembers(this.projectId)
       this.findProjects()
     },
     methods: {
-      findUsers(val) {},
+      // 根据输入查找用户
+      findUsers(login) {
+        this.users = []
+        getUsersByLoginStartingWith(login).then(response => {
+          this.users = response.data
+        })
+      },
       findProjects() {
         // 查找当前用户所创建的项目
-        const data = [
-          { createdBy: 'jiangyn', id: 20008, name: 'test', open: false, chargedBy: 'jiangyn', reportId: 20029 },
-          { createdBy: 'user', id: 20002, name: 'ALK', open: false, chargedBy: 'user', reportId: 20000 }
-        ]
-        for (let i = 0; i < data.length; i++) {
-          const project = data[i]
-          if (this.projectId !== project.id) {
-            this.projects.push(project) // 用户参与的其他项目
+        getMineProjects().then(response => {
+          const data = response.data
+          for (let i = 0; i < data.length; i++) {
+            const project = data[i]
+            if (this.projectId !== project.id) {
+              this.projects.push(project) // 用户参与的其他项目
+            }
           }
-        }
+        })
       },
       findProjectUsers(projectId) {
         // 根据项目ID查找项目成员
-        this.users = [{
-          id: 20002,
-          login: 'cassie',
-          email: 'cassiexue@yopmail.com',
-          activated: true,
-          authorities: ['ROLE_USER']
-        }, {
-          createdBy: 'cassie',
-          id: 20003,
-          login: 'user'
-        }, { createdBy: 'user', id: 20031, login: 'jiangyn', task: 'PATIENT' }]
+        getProjectUsers(projectId).then(response => {
+          this.users = response.data
+        }, error => {
+          console.log(error)
+        })
       },
-      findMembers() {
+      findProjectMembers(projectId) {
         // 查找当前项目的成员
-        this.members = {
-          20032: { createdBy: 'user', id: 20032, username: 'jiangyn', task: 'PATIENT' },
-          20003: { createdBy: 'cassie', id: 20003, username: 'user' }
-        }
+        getProjectMembers(projectId).then(response => {
+          this.members = response.data
+        }, error => {
+          console.log(error)
+        })
       },
       invite() {
       },
@@ -147,6 +151,18 @@
       closeDialog() {
         // this.$refs.ruleForm.resetFields()
         this.$emit('closeDialog', 'memberDialog')
+      },
+      confirm() {
+        this.selectedUsers = this.users.filter(item => item.selected)
+        const batchMember = {
+          projectId: this.projectId,
+          users: this.selectedUsers
+        }
+        createBatchMember(batchMember).then(response => {
+          this.$emit('closeDialog', 'memberDialog')
+        }, error => {
+          console.log(error)
+        })
       }
     }
   }
@@ -162,11 +178,12 @@
 .list-group{
   list-style: none;
   padding: 0;
+  margin-top: .5em
 }
 .list-group > .list-group-item{
   border: 1px solid rgba(0,0,0,.125);
   padding: .25em 1em;
-  margin-bottom: 1em;
+  margin-bottom: .5em;
 }
 .user-avatar {
   position: relative;

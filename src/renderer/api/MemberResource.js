@@ -45,10 +45,11 @@ export function deleteMember(id) {
   })
 }
 
-export function createMember() {
+export function createBatchMember(batchMember) {
   return request({
-    url: `/api/members`,
+    url: `/api/members/batch`,
     method: 'post',
+    data: batchMember,
     transformResponse: [function(data) {
       try {
         data = JSON.parse(data)
@@ -60,10 +61,27 @@ export function createMember() {
   })
 }
 
-export function updateMember() {
+export function createMember(member) {
+  return request({
+    url: `/api/members`,
+    method: 'post',
+    data: member,
+    transformResponse: [function(data) {
+      try {
+        data = JSON.parse(data)
+      } catch (err) {
+        data = {}
+      }
+      return data
+    }]
+  })
+}
+
+export function updateMember(member) {
   return request({
     url: `/api/members`,
     method: 'put',
+    data: member,
     transformResponse: [function(data) {
       try {
         data = JSON.parse(data)

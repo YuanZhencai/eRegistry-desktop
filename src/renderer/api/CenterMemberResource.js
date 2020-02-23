@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 
-export function createCenterMember() {
+export function createCenterMember(centerMember) {
   return request({
     url: `/api/center-members`,
     method: 'post',
+    data: centerMember,
     transformResponse: [function(data) {
       try {
         data = JSON.parse(data)
@@ -15,10 +16,11 @@ export function createCenterMember() {
   })
 }
 
-export function updateCenterMember() {
+export function updateCenterMember(centerMember) {
   return request({
     url: `/api/center-members`,
     method: 'put',
+    data: centerMember,
     transformResponse: [function(data) {
       try {
         data = JSON.parse(data)
