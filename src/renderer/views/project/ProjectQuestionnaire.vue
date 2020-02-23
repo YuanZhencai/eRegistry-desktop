@@ -19,7 +19,7 @@
                         <el-divider direction="vertical"></el-divider>
                         <el-button type="text" @click="deleteQuestionnaire(scope.row)">删除</el-button>
                         <el-divider direction="vertical"></el-divider>
-                        <el-button type="text">进行调查</el-button>
+                        <el-button type="text" @click="patientInvestigation(scope.row.id)">进行调查</el-button>
                         <el-divider direction="vertical"></el-divider>
                         <el-button type="text">调查结果</el-button>
                         <el-divider direction="vertical"></el-divider>
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+  import { getProjectQuestionnaires } from '@/api/questionnaire'
   export default {
     name: 'ProjectQuestionnaire',
     data() {
@@ -67,8 +68,12 @@
         this.pageSize = val
       },
       getQuestionnaires() {
-        this.questionnaires = [{ id: 11, reportId: 20007, projectId: 20002, reportName: '患者调查表1', lastModifiedDate: '2018-08-10T01:37:05Z' }]
-        this.total = this.questionnaires.length
+        getProjectQuestionnaires(this.projectId).then(response => {
+          this.questionnaires = response.data
+          this.total = this.questionnaires.length
+        }).catch(error => {
+          console.log(error)
+        })
       },
       newQuestionnaire() {
         this.$router.push({
@@ -78,6 +83,11 @@
       editQuestionnaire(questionnaireId) {
         this.$router.push({
           path: `/project/${this.projectId}/questionnaire/${questionnaireId}`
+        })
+      },
+      patientInvestigation(questionnaireId) {
+        this.$router.push({
+          path: `/questionnaire/${questionnaireId}/investigation`
         })
       },
       deleteQuestionnaire(questionnaire) {

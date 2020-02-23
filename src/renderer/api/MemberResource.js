@@ -1,0 +1,76 @@
+import request from '@/utils/request'
+
+export function getProjectMembers(projectId) {
+  return request({
+    url: `/api/projects/${projectId}/members`,
+    method: 'get',
+    transformResponse: [function(data) {
+      try {
+        data = JSON.parse(data)
+      } catch (err) {
+        data = {}
+      }
+      return data
+    }]
+  })
+}
+
+export function getMember(id) {
+  return request({
+    url: `/api/members/${id}`,
+    method: 'get',
+    transformResponse: [function(data) {
+      try {
+        data = JSON.parse(data)
+      } catch (err) {
+        data = {}
+      }
+      return data
+    }]
+  })
+}
+
+export function deleteMember(id) {
+  return request({
+    url: `/api/members/${id}`,
+    method: 'delete',
+    transformResponse: [function(data) {
+      try {
+        data = JSON.parse(data)
+      } catch (err) {
+        data = {}
+      }
+      return data
+    }]
+  })
+}
+
+export function createMember() {
+  return request({
+    url: `/api/members`,
+    method: 'post',
+    transformResponse: [function(data) {
+      try {
+        data = JSON.parse(data)
+      } catch (err) {
+        data = {}
+      }
+      return data
+    }]
+  })
+}
+
+export function updateMember() {
+  return request({
+    url: `/api/members`,
+    method: 'put',
+    transformResponse: [function(data) {
+      try {
+        data = JSON.parse(data)
+      } catch (err) {
+        data = {}
+      }
+      return data
+    }]
+  })
+}

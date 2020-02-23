@@ -42,6 +42,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
+    hidden: true,
     meta: { title: 'Example', icon: 'el-icon-bangzhu' },
     children: [
       {
@@ -62,6 +63,7 @@ export const constantRouterMap = [
   {
     path: '/form',
     component: Layout,
+    hidden: true,
     children: [
       {
         path: 'index',
@@ -70,6 +72,11 @@ export const constantRouterMap = [
         meta: { title: 'Form', icon: 'el-icon-document' }
       }
     ]
+  },
+  {
+    path: '/questionnaire/:id/investigation',
+    component: () => import('@/views/questionnaire/PatientSurvey'),
+    hidden: true
   },
 
   {
