@@ -62,7 +62,8 @@
     watch: {
       questionnaireReport: {
         handler(newVal, oldVal) {
-          this.surveyCreator.text = JSON.stringify(this.questionnaireReport.report.survey || {})
+          this.$set(this.surveyCreator, 'text', JSON.stringify(this.questionnaireReport.report.survey || {}))
+          // this.surveyCreator.text = JSON.stringify(this.questionnaireReport.report.survey || {})
         }
       }
     },

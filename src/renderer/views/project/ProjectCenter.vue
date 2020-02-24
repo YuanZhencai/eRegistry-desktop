@@ -32,15 +32,17 @@
             <span>是否确认删除项目 '{{this.selectedCenter.name}}' ？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="deleteCenterDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteCenterDialogVisible = false">删 除</el-button>
+                <el-button type="primary" @click="confirmDelete">删 除</el-button>
             </span>
         </el-dialog>
-        <center-dialog-component v-if="centerDialogVisible" :visible="centerDialogVisible" :center="selectedCenter" @closeDialog="closeDialog"></center-dialog-component>
+        <center-dialog-component v-if="centerDialogVisible" :visible="centerDialogVisible"
+                                 :center-id="selectedCenter.id" @closeDialog="closeDialog"></center-dialog-component>
     </div>
 </template>
 
 <script>
   import { getProjectCenters } from '@/api/CenterResource'
+  import { deleteCenter } from '../../api/CenterResource'
   import CenterDialogComponent from '../center/CenterDialogComponent'
   export default {
     name: 'ProjectCenter',
@@ -62,7 +64,7 @@
     },
     methods: {
       getCenters() {
-        getProjectCenters(this.projectId).then(response => {
+        getProjectCenters(this.projectId, { page: this.currentPage - 1, size: this.pageSize }).then(response => {
           this.centers = response.data
           this.total = this.centers.length
         })
@@ -93,6 +95,9 @@
           default:
             this.deleteCenterDialogVisible = false
         }
+      },
+      confirmDelete() {
+        deleteCenter(this.selectedCenter.id)
       }
     }
   }

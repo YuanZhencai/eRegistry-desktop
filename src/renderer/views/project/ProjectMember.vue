@@ -20,7 +20,7 @@
                     <template slot-scope="scope">{{ taskType[scope.row.task] }}</template>
                 </el-table-column>
                 <el-table-column label="操作">
-                    <template slot-scope="scope">
+                    <template slot-scope="scope" >
                         <el-button type="text" @click="assignCenter(scope.row)">分配中心</el-button>
                         <el-divider direction="vertical"></el-divider>
                         <el-button type="text" @click="assignTask(scope.row)">分配任务</el-button>
@@ -42,9 +42,9 @@
             </span>
         </el-dialog>
         <member-dialog-component :visible="newMemberDialogVisible" @closeDialog="closeDialog"></member-dialog-component>
-        <assign-member-dialog v-if="assignCenterDialogVisible" :visible="assignCenterDialogVisible" :center-member="selectedMember"
+        <assign-member-dialog v-if="assignCenterDialogVisible" :visible="assignCenterDialogVisible" :member-id="selectedMember.id"
                               @closeDialog="closeDialog"></assign-member-dialog>
-        <assign-task-dialog v-if="assignTaskDialogVisible" :visible="assignTaskDialogVisible" :member="selectedMember"
+        <assign-task-dialog v-if="assignTaskDialogVisible" :visible="assignTaskDialogVisible" :member-id="selectedMember.id"
                             @closeDialog="closeDialog"></assign-task-dialog>
     </div>
 </template>
@@ -62,6 +62,7 @@
         members: [],
         selectedMember: null,
         project: { id: 20002, name: 'ALK', open: false, reportId: 20000 },
+        currentAccount: { id: 4, login: 'user' },
         total: 0,
         pageSize: 10, // 单页数据量
         currentPage: 1, // 默认开始页面
@@ -92,7 +93,7 @@
         })
       },
       getMembers(projectId) {
-        getProjectMembers(projectId).then((response) => {
+        getProjectMembers(projectId, { page: this.currentPage - 1, size: this.pageSize }).then((response) => {
           this.members = response.data
           this.total = this.members.length
         }, (error) => {

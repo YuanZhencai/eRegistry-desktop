@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 
-export function getProjectMembers(projectId) {
+export function getProjectMembers(projectId, params) {
   return request({
     url: `/api/projects/${projectId}/members`,
     method: 'get',
+    params: params,
     transformResponse: [function(data) {
       try {
         data = JSON.parse(data)

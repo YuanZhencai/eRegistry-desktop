@@ -68,7 +68,7 @@
         this.pageSize = val
       },
       getQuestionnaires() {
-        getProjectQuestionnaires(this.projectId).then(response => {
+        getProjectQuestionnaires(this.projectId, { page: this.currentPage - 1, size: this.pageSize }).then(response => {
           this.questionnaires = response.data
           this.total = this.questionnaires.length
         }).catch(error => {

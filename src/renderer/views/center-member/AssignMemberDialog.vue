@@ -21,33 +21,40 @@
 </template>
 
 <script>
-  import { getProjectCenters } from '@/api/CenterResource'
-  import { createCenterMember, updateCenterMember } from '@/api/CenterMemberResource'
+  import { getAllCenters } from '@/api/CenterResource'
+  import { createCenterMember, updateCenterMember, getCenterMemberByMemberId } from '@/api/CenterMemberResource'
   export default {
     name: 'AssignMemberDialog',
     props: {
       visible: {
         type: Boolean
       },
-      centerMember: {
-        type: Object
+      memberId: {
+        type: Number
       }
     },
     data() {
       return {
         centers: [],
         projectId: 20002,
+        centerMember: null,
         centerId: null
       }
     },
     created() {
       this.findCenters()
-      this.centerId = this.centerMember.centerId
+      this.findCenterMember()
     },
     methods: {
       findCenters: function() {
-        getProjectCenters(this.projectId).then((res) => {
+        getAllCenters({ 'EQ_center.projectId': this.projectId }).then((res) => {
           this.centers = res.data
+        })
+      },
+      findCenterMember: function() {
+        getCenterMemberByMemberId(this.memberId).then(res => {
+          this.centerMember = res.data
+          this.centerId = this.centerMember.centerId
         })
       },
       closeDialog() {
@@ -56,9 +63,12 @@
       confirm() {
         if (this.centerId) {
           updateCenterMember(this.centerMember).then(response => {
+            this.centerMember = response.data
           })
         } else {
-          createCenterMember(this.centerMember).then(response => {})
+          createCenterMember(this.centerMember).then(response => {
+            this.centerMember = response.data
+          })
         }
       }
     }

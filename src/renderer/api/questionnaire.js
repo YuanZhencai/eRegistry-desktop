@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 
-export function getProjectQuestionnaires(projectId) {
+export function getProjectQuestionnaires(projectId, params) {
   return request({
     url: `/api/project/${projectId}/questionnaires`,
     method: 'get',
+    params: params,
     transformResponse: [function(data) {
       try {
         data = JSON.parse(data)

@@ -32,24 +32,26 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button size="mini" @click="closeDialog">取 消</el-button>
-            <el-button size="mini" type="primary" @click="closeDialog">保存</el-button>
+            <el-button size="mini" type="primary" @click="confirm">保存</el-button>
         </div>
     </el-dialog>
 </template>
 
 <script>
+  import { getCenter, createCenter, updateCenter } from '@/api/CenterResource'
   export default {
     name: 'CenterDialogComponent',
     props: {
       visible: {
         type: Boolean
       },
-      center: {
-        type: Object
+      centerId: {
+        type: Number
       }
     },
     data() {
       return {
+        center: null,
         formRules: {
           name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
           telephone: [
@@ -61,9 +63,30 @@
         }
       }
     },
+    created() {
+      this.getCenter()
+    },
     methods: {
+      getCenter() {
+        if (this.centerId) {
+          getCenter(this.centerId).then(res => {
+            this.center = res.data
+          })
+        } else {
+          this.center = { id: null, name: null, telephone: null, chargedBy: null }
+        }
+      },
       closeDialog() {
         this.$emit('closeDialog', 'centerDialog')
+      },
+      confirm() {
+        if (this.centerId) {
+          updateCenter(this.center).then(res => {
+            console.log(res)
+          })
+        } else {
+          createCenter(this.center)
+        }
       }
     }
   }
