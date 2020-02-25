@@ -17,36 +17,25 @@
 
   // 只读，不能修改
   SurveyKo.JsonObject.metaData.findProperty('survey', 'locale').readOnly = true
+  SurveyCreator.editorLocalization.currentLocale = 'zh-cn'
+  // You may use any of these: "default", "orange", "darkblue", "darkrose", "stone", "winter", "winterstone"
+  SurveyCreator.StylesManager.applyTheme('bootstrap')
+  const options = {
+    showTestSurveyTab: true,
+    showJSONEditorTab: false,
+    showEmbededSurveyTab: false,
+    generateValidJSON: true
+  }
 
   export default {
     name: 'QuestionnaireDetail',
     data() {
       return {
-        questionnaireReport: null
-      }
-    },
-    created() {
-      if (this.$route.params.id) {
-        getQuestionnaireWithReport(this.$route.params.id).then(response => {
-          Object.assign({}, this.questionnaireReport, response.data)
-        }).catch(error => {
-          console.log(error)
-        })
-      } else {
-        this.$set(this.questionnaireReport, 'questionnaire', { projectId: this.$route.params.projectId })
-        this.$set(this.questionnaireReport, 'report', {})
+        questionnaireReport: null,
+        surveyCreator: null
       }
     },
     mounted() {
-      SurveyCreator.editorLocalization.currentLocale = 'zh-cn'
-      // You may use any of these: "default", "orange", "darkblue", "darkrose", "stone", "winter", "winterstone"
-      SurveyCreator.StylesManager.applyTheme('bootstrap')
-      const options = {
-        showTestSurveyTab: true,
-        showJSONEditorTab: false,
-        showEmbededSurveyTab: false,
-        generateValidJSON: true
-      }
       this.surveyCreator = new SurveyCreator.SurveyCreator(
         'surveyCreatorContainer',
         options
@@ -54,27 +43,54 @@
       this.surveyCreator.showToolbox = 'left'
       this.surveyCreator.showPropertyGrid = 'left'
       this.surveyCreator.leftContainerActiveItem('toolbox')
+      this.surveyCreator.toolbarItems.push({
+        id: 'clear-survey',
+        visible: true,
+        title: 'Clear Survey',
+        action: function() {
+          // modal.open()
+        }
+      })
+      this.surveyCreator.haveCommercialLicense = true
       this.surveyCreator.onModified.add(this.mySurveyModified)
       this.surveyCreator.saveSurveyFunc = this.saveMySurvey
-      // this.surveyCreator.text = JSON.stringify(this.questionnaireReport.report.survey || {})
-      // this.surveyCreator.text = "{ pages: [{ name:\'page1\', questions: [{ type: \'text\', name:\"q1\"}]}]}"
-    },
-    watch: {
-      questionnaireReport: {
-        handler(newVal, oldVal) {
-          this.$set(this.surveyCreator, 'text', JSON.stringify(this.questionnaireReport.report.survey || {}))
-          // this.surveyCreator.text = JSON.stringify(this.questionnaireReport.report.survey || {})
-        }
+      if (this.$route.params.id) {
+        this.getSurvey(this.$route.params.id)
       }
     },
     methods: {
       initEditor() {
       },
+      getSurvey(questionnaireId) {
+        const _this = this
+        getQuestionnaireWithReport(questionnaireId).then((response) => {
+          _this.questionnaireReport = response.data
+          if (_this.questionnaireReport.report && _this.questionnaireReport.report.survey) {
+            this.$set(_this.surveyCreator, 'text', _this.questionnaireReport.report.survey)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
       mySurveyModified() {},
       saveMySurvey() {
         const surveyJson = this.surveyCreator.text
-        saveWithReport(surveyJson)
         console.log(surveyJson)
+        if (this.questionnaireReport) {
+          this.questionnaireReport.report.survey = surveyJson
+        } else {
+          this.questionnaireReport = {
+            questionnaire: { projectId: this.$route.params.projectId },
+            report: {
+              title: this.surveyCreator.JSON.title,
+              survey: this.surveyCreator.text
+            }
+          }
+        }
+        saveWithReport(this.questionnaireReport).then(res => {
+          const questionnaire = res.data
+          this.getSurvey(questionnaire.id)
+        })
       }
     }
   }

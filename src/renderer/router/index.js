@@ -130,10 +130,6 @@ export const constantRouterMap = [
       {
         path: ':projectId/questionnaire/:id',
         component: () => import('@/views/questionnaire/QuestionnaireDetail'),
-        beforeEnter: (to, from, next) => {
-          console.log(to.params.id)
-          next()
-        },
         hidden: true
       }
     ]
