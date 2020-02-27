@@ -6,7 +6,7 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-table stripe :data='members.slice((currentPage-1)*pageSize, currentPage*pageSize)'
+            <el-table v-loading="loading" stripe :data='members.slice((currentPage-1)*pageSize, currentPage*pageSize)'
                       :default-sort = "{prop: 'id', order: 'descending'}" style='width: 100%'>
                 <el-table-column prop='id' label='ID' width='180' sortable></el-table-column>
                 <el-table-column label='用户名' width='180' sortable>
@@ -25,12 +25,14 @@
                         <el-divider direction="vertical"></el-divider>
                         <el-button type="text" @click="assignTask(scope.row)">分配任务</el-button>
                         <el-divider direction="vertical"></el-divider>
-                        <el-button type="text" @click="openDeleteDialog(scope.row)">删除</el-button>
+                        <el-button type="text" @click="deleteMember(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination background layout="total, sizes, prev, pager, next, jumper"
-                           :total="total" :page-size="pageSize" :page-sizes="[10,20,30,40,50]" :current-page="currentPage"
+        </el-row>
+        <el-row>
+            <el-pagination background layout="prev, pager, next, jumper"
+                           :total="total" :page-size="pageSize" :current-page="currentPage"
                            @current-change="currentChange" @size-change="sizeChange" class="pagination">
             </el-pagination>
         </el-row>
@@ -38,7 +40,7 @@
             <span>是否确认删除成员 '{{this.selectedMember.username}}'？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="deleteMemberDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteMember">删 除</el-button>
+                <el-button type="primary" @click="confirmDelete">删 除</el-button>
             </span>
         </el-dialog>
         <member-dialog-component :visible="newMemberDialogVisible" @closeDialog="closeDialog"></member-dialog-component>
@@ -59,6 +61,7 @@
     components: { AssignTaskDialog, AssignMemberDialog, MemberDialogComponent },
     data() {
       return {
+        loading: true,
         members: [],
         selectedMember: null,
         project: { id: 20002, name: 'ALK', open: false, reportId: 20000 },
@@ -94,9 +97,11 @@
       },
       getMembers(projectId) {
         getProjectMembers(projectId, { page: this.currentPage - 1, size: this.pageSize }).then((response) => {
+          this.loading = false
           this.members = response.data
           this.total = this.members.length
         }, (error) => {
+          this.loading = false
           console.log(error)
         })
       },
@@ -117,13 +122,17 @@
         this.selectedMember = member
         this.assignTaskDialogVisible = true
       },
-      openDeleteDialog(member) {
+      deleteMember(member) {
         this.selectedMember = member
         this.deleteMemberDialogVisible = true
       },
-      deleteMember() {
+      confirmDelete() {
         deleteMember(this.selectedMember.id).then(response => {
           console.log(response)
+          this.openMessage('成员删除成功', 'success')
+          this.closeDialog()
+          this.loading = true
+          this.getMembers(this.project.id)
         }, error => {
           console.log(error)
         })
@@ -142,6 +151,12 @@
           default:
             this.deleteMemberDialogVisible = false
         }
+      },
+      openMessage(message, type) {
+        this.$message({
+          message,
+          type
+        })
       }
     }
   }

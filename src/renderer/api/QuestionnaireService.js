@@ -65,6 +65,14 @@ export function getSurveyInvestigation(id) {
 export function deleteQuestionnaire(id) {
   return request({
     url: `/api/questionnaires/${id}`,
-    method: 'delete'
+    method: 'delete',
+    transformResponse: [function(data) {
+      try {
+        data = JSON.parse(data)
+      } catch (err) {
+        data = {}
+      }
+      return data
+    }]
   })
 }

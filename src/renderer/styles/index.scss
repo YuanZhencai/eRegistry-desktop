@@ -68,8 +68,9 @@ table th{
   background-color: #f2f2f2;
 }
 .pagination{
+  width: 100%;
   margin-top: 10px;
-  text-align: center;
+  text-align: right;
 }
 button:focus{
   outline: none;

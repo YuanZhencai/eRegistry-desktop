@@ -1,5 +1,5 @@
 <template>
-    <el-card>
+    <el-card style="width: 100%">
         <div slot="header">
             <span>调查问卷</span>
         </div>
@@ -13,18 +13,20 @@
   import * as SurveyCreator from 'survey-creator'
   import 'survey-creator/survey-creator.css'
   import * as SurveyKo from 'survey-knockout'
-  import { getQuestionnaireWithReport, saveWithReport } from '@/api/questionnaire'
+  import { getQuestionnaireWithReport, saveWithReport } from '@/api/QuestionnaireService'
 
   // 只读，不能修改
   SurveyKo.JsonObject.metaData.findProperty('survey', 'locale').readOnly = true
   SurveyCreator.editorLocalization.currentLocale = 'zh-cn'
-  // You may use any of these: "default", "orange", "darkblue", "darkrose", "stone", "winter", "winterstone"
+  // You may use any of these: "default", "bootstrap", "orange", "darkblue", "darkrose", "stone", "winter", "winterstone"
   SurveyCreator.StylesManager.applyTheme('bootstrap')
   const options = {
     showTestSurveyTab: true,
     showJSONEditorTab: false,
     showEmbededSurveyTab: false,
-    generateValidJSON: true
+    generateValidJSON: true,
+    showInvisibleElementsInTestSurveyTab: false,
+    showPagesInTestSurveyTab: true
   }
 
   export default {
@@ -43,16 +45,7 @@
       this.surveyCreator.showToolbox = 'left'
       this.surveyCreator.showPropertyGrid = 'left'
       this.surveyCreator.leftContainerActiveItem('toolbox')
-      this.surveyCreator.toolbarItems.push({
-        id: 'clear-survey',
-        visible: true,
-        title: 'Clear Survey',
-        action: function() {
-          // modal.open()
-        }
-      })
       this.surveyCreator.haveCommercialLicense = true
-      this.surveyCreator.onModified.add(this.mySurveyModified)
       this.surveyCreator.saveSurveyFunc = this.saveMySurvey
       if (this.$route.params.id) {
         this.getSurvey(this.$route.params.id)
@@ -72,24 +65,37 @@
           console.log(error)
         })
       },
-      mySurveyModified() {},
       saveMySurvey() {
-        const surveyJson = this.surveyCreator.text
-        console.log(surveyJson)
+        const surveyText = this.surveyCreator.text
+        console.log(surveyText)
+        let isUpdate = false
         if (this.questionnaireReport) {
-          this.questionnaireReport.report.survey = surveyJson
+          this.questionnaireReport.report.survey = surveyText
+          isUpdate = true
         } else {
           this.questionnaireReport = {
             questionnaire: { projectId: this.$route.params.projectId },
             report: {
-              title: this.surveyCreator.JSON.title,
+              title: this.surveyCreator.JSON.title || '未命名表单',
               survey: this.surveyCreator.text
             }
           }
+          isUpdate = false
         }
         saveWithReport(this.questionnaireReport).then(res => {
           const questionnaire = res.data
           this.getSurvey(questionnaire.id)
+          if (isUpdate) {
+            this.openMessage('问卷更新成功', 'success')
+          } else {
+            this.openMessage('问卷创建成功', 'success')
+          }
+        })
+      },
+      openMessage(message, type) {
+        this.$message({
+          message,
+          type
         })
       }
     }

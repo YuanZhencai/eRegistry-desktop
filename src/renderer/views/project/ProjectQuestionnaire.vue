@@ -6,7 +6,7 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-table stripe :data='questionnaires.slice((currentPage-1)*pageSize, currentPage*pageSize)'
+            <el-table v-loading="loading" stripe :data='questionnaires.slice((currentPage-1)*pageSize, currentPage*pageSize)'
                       :default-sort = "{prop: 'reportName', order: 'descending'}" height="250" style='width: 100%'>
                 <el-table-column prop='reportName' label='问卷名称' width='180' sortable></el-table-column>
                 <el-table-column prop='lastModifiedDate' label='更新时间' width='180' sortable></el-table-column>
@@ -27,8 +27,10 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination background layout="total, sizes, prev, pager, next, jumper"
-                           :total="total" :page-size="pageSize" :page-sizes="[10,20,30,40,50]" :current-page="currentPage"
+        </el-row>
+        <el-row>
+            <el-pagination background layout="prev, pager, next, jumper"
+                           :total="total" :page-size="pageSize" :current-page="currentPage"
                            @current-change="currentChange" @size-change="sizeChange" class="pagination">
             </el-pagination>
         </el-row>
@@ -36,18 +38,19 @@
             <span>是否确认删除问卷 '{{selectedQuestionnaire.reportName}}' ？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="deleteDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteDialogVisible = false">删 除</el-button>
+                <el-button type="primary" @click="confirmDelete">删 除</el-button>
             </span>
         </el-dialog>
     </div>
 </template>
 
 <script>
-  import { getProjectQuestionnaires } from '@/api/questionnaire'
+  import { getProjectQuestionnaires, deleteQuestionnaire } from '@/api/QuestionnaireService'
   export default {
     name: 'ProjectQuestionnaire',
     data() {
       return {
+        loading: true,
         projectId: 20002,
         questionnaires: [],
         selectedQuestionnaire: null,
@@ -69,9 +72,11 @@
       },
       getQuestionnaires() {
         getProjectQuestionnaires(this.projectId, { page: this.currentPage - 1, size: this.pageSize }).then(response => {
+          this.loading = false
           this.questionnaires = response.data
           this.total = this.questionnaires.length
         }).catch(error => {
+          this.loading = false
           console.log(error)
         })
       },
@@ -96,6 +101,20 @@
       },
       closeDialog() {
         this.deleteDialogVisible = false
+      },
+      confirmDelete() {
+        deleteQuestionnaire(this.selectedQuestionnaire.id).then((res) => {
+          this.openMessage('问卷删除成功', 'success')
+          this.closeDialog()
+          this.loading = true
+          this.getQuestionnaires()
+        })
+      },
+      openMessage(message, type) {
+        this.$message({
+          message,
+          type
+        })
       }
     }
   }

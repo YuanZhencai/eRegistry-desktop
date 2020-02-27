@@ -6,7 +6,7 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-table stripe :data='centers.slice((currentPage-1)*pageSize, currentPage*pageSize)'
+            <el-table v-loading="loading" stripe :data='centers.slice((currentPage-1)*pageSize, currentPage*pageSize)'
                       :default-sort = "{prop: 'id', order: 'descending'}" style='width: 100%'>
                 <el-table-column prop='id' label='ID' sortable></el-table-column>
                 <el-table-column prop='name' label='名称' sortable></el-table-column>
@@ -23,8 +23,10 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination background layout="total, sizes, prev, pager, next, jumper"
-                           :total="total" :page-size="pageSize" :page-sizes="[10,20,30,40,50]" :current-page="currentPage"
+        </el-row>
+        <el-row>
+            <el-pagination background layout="prev, pager, next, jumper"
+                           :total="total" :page-size="pageSize" :current-page="currentPage"
                            @current-change="currentChange" @size-change="sizeChange" class="pagination">
             </el-pagination>
         </el-row>
@@ -49,6 +51,7 @@
     components: { CenterDialogComponent },
     data() {
       return {
+        loading: true,
         centers: [],
         total: 0,
         pageSize: 10, // 单页数据量
@@ -65,12 +68,13 @@
     methods: {
       getCenters() {
         getProjectCenters(this.projectId, { page: this.currentPage - 1, size: this.pageSize }).then(response => {
+          this.loading = false
           this.centers = response.data
           this.total = this.centers.length
         })
       },
       newCenter() {
-        this.selectedCenter = { id: null, name: null, telephone: null, chargedBy: null }
+        this.selectedCenter = { name: '', telephone: '', no: '', chargedBy: '' }
         this.centerDialogVisible = true
       },
       editCenter(center) {
@@ -91,13 +95,25 @@
         switch (val) {
           case 'centerDialog':
             this.centerDialogVisible = false
+            this.getCenters()
             break
           default:
             this.deleteCenterDialogVisible = false
         }
       },
       confirmDelete() {
-        deleteCenter(this.selectedCenter.id)
+        deleteCenter(this.selectedCenter.id).then((res) => {
+          this.openMessage('分中心删除成功', 'success')
+          this.closeDialog()
+          this.loading = true
+          this.getCenters()
+        })
+      },
+      openMessage(message, type) {
+        this.$message({
+          message,
+          type
+        })
       }
     }
   }

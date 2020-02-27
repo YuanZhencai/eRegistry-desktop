@@ -2,14 +2,14 @@
     <el-dialog title="创建或编辑分中心" :visible.sync="visible" :before-close="closeDialog">
         <el-form label-width="80px">
             <el-form-item label="名称" prop="name"
-                          :rules="{ required: true, message: '名称不能为空', trigger: ['blur', 'change'] }"
+                          :rules="{ required: true, message: '名称不能为空', trigger: 'blur' }"
             >
                 <el-input v-model="center.name"></el-input>
             </el-form-item>
             <el-form-item label="电话" prop="telephone"
                           :rules="[
                             { required: true, message: '电话不能为空', trigger: 'blur' },
-                            { required: true, pattern: /^((13|14|15|16|17|18)[0-9]{1}\d{8})|((166|199|198)[0-9]{1}\d{7})$/, message: '请输入正确的电话号码', trigger: ['blur', 'change'] }
+                            { required: true, pattern: /^((13|14|15|16|17|18)[0-9]{1}\d{8})|([0-9]{1}\d{7})$/, message: '请输入正确的电话号码', trigger: ['blur', 'change'] }
                           ]"
             >
                 <el-input v-model="center.telephone" :maxlength="11"></el-input>
@@ -73,7 +73,7 @@
             this.center = res.data
           })
         } else {
-          this.center = { id: null, name: null, telephone: null, chargedBy: null }
+          this.center = { name: '', telephone: '', no: '', chargedBy: '', projectId: 20002 }
         }
       },
       closeDialog() {
@@ -82,11 +82,23 @@
       confirm() {
         if (this.centerId) {
           updateCenter(this.center).then(res => {
-            console.log(res)
+            console.log(res.data)
+            this.openMessage('中心更新成功', 'success')
+            this.closeDialog()
           })
         } else {
-          createCenter(this.center)
+          createCenter(this.center).then(res => {
+            console.log(res.data)
+            this.openMessage('中心创建成功', 'success')
+            this.closeDialog()
+          })
         }
+      },
+      openMessage(message, type) {
+        this.$message({
+          message,
+          type
+        })
       }
     }
   }

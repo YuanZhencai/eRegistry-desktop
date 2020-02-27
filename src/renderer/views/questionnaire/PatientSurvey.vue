@@ -1,11 +1,11 @@
 <template>
-    <div class="survey-container contentcontainer codecontainer" id='surveyElement'>
+    <div id='surveyElement'>
         <survey :survey='survey'></survey>
     </div>
 </template>
 
 <script>
-  import { getSurveyInvestigation } from '@/api/questionnaire'
+  import { getSurveyInvestigation } from '@/api/QuestionnaireService'
   import * as SurveyVue from 'survey-vue'
   import 'survey-vue/survey.css'
   import 'survey-vue/modern.css'
@@ -18,70 +18,40 @@
       Survey
     },
     data() {
-      // const surveyJson = {
-      //   title: 'Product Feedback Survey Example',
-      //   showProgressBar: 'top',
-      //   pages: [
-      //     {
-      //       questions: [
-      //         {
-      //           type: 'radiogroup',
-      //           name: 'price to competitors',
-      //           title: 'Compared to our competitors, do you feel the Product is',
-      //           choices: [
-      //             'Less expensive',
-      //             'Priced about the same',
-      //             'More expensive',
-      //             'Not sure'
-      //           ]
-      //         },
-      //         {
-      //           type: 'radiogroup',
-      //           name: 'price',
-      //           title: 'Do you feel our current price is merited by our product?',
-      //           choices: [
-      //             'correct|Yes, the price is about right',
-      //             'low|No, the price is too low for your product',
-      //             'high|No, the price is too high for your product'
-      //           ]
-      //         }
-      //       ]
-      //     },
-      //     {
-      //       questions: [
-      //         {
-      //           type: 'text',
-      //           name: 'email',
-      //           title:
-      //             "Thank you for taking our survey. Please enter your email address, then press the 'Submit' button."
-      //         }
-      //       ]
-      //     }
+      // var json = {
+      //   elements: [
+      //     { type: 'text', name: 'customerName', title: 'What is your name?', isRequired: true }
       //   ]
       // }
-      // var model = new SurveyVue.Model(surveyJson)
+      // var model = new SurveyVue.Model(json)
       return {
         survey: null,
-        json: null
+        jsonModel: null
       }
     },
-    created() {
+    mounted() {
       this.getInvestigation()
     },
     methods: {
       getInvestigation() {
+        const _this = this
         getSurveyInvestigation(this.$route.params.id).then(response => {
           console.log(response.data)
-          const jsonModel = JSON.parse(response.data.survey)
-          this.survey = new SurveyVue.Model(jsonModel)
-          this.survey.locale = 'zh-cn'
-          this.survey.onComplete.add(this.complete)
-          this.survey.onValueChanged.add(this.valueChanged)
+          _this.jsonModel = JSON.parse(response.data.survey)
+          _this.survey = new SurveyVue.Model(_this.jsonModel)
+          _this.survey.locale = 'zh-cn'
+          _this.survey.css = { matrix: {}, navigationButton: '' }
+          _this.survey.onComplete.add(function(result) {
+            console.log(result.data)
+          })
+          _this.survey.onValueChanged.add(function(result) {
+            console.log(result.data)
+          })
         }).catch(error => {
           console.log(error)
         })
       },
-      complete() {},
+      complete(result) {},
       valueChanged() {}
     }
   }
