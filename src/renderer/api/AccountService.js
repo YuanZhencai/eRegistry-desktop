@@ -1,8 +1,7 @@
 import request from '@/utils/request'
-
-export function getProject(id) {
+export function getAccount() {
   return request({
-    url: `/api/projects/${id}`,
+    url: `/api/account`,
     method: 'get',
     transformResponse: [function(data) {
       try {
@@ -15,10 +14,11 @@ export function getProject(id) {
   })
 }
 
-export function getMineProjects() {
+export function saveAccount(user) {
   return request({
-    url: `/api/projects/mine`,
-    method: 'get',
+    url: `/api/account`,
+    method: 'post',
+    data: user,
     transformResponse: [function(data) {
       try {
         data = JSON.parse(data)
@@ -30,25 +30,10 @@ export function getMineProjects() {
   })
 }
 
-export function getProjectUsers(id) {
+export function isAuthenticated() {
   return request({
-    url: `/api/projects/${id}/users`,
+    url: `/api/authenticate`,
     method: 'get',
-    transformResponse: [function(data) {
-      try {
-        data = JSON.parse(data)
-      } catch (err) {
-        data = {}
-      }
-      return data
-    }]
-  })
-}
-
-export function deleteProject(id) {
-  return request({
-    url: `/api/projects/${id}`,
-    method: 'delete',
     transformResponse: [function(data) {
       try {
         data = JSON.parse(data)

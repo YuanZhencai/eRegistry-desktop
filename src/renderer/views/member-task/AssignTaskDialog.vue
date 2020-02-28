@@ -71,9 +71,14 @@
         this.memberTask.projectId = this.member.projectId
         if (this.memberTask.id !== undefined) {
           updateMemberTask(this.memberTask).then(response => {
+            this.memberTask = response.data
+            this.closeDialog()
           })
         } else {
-          createMemberTask(this.memberTask).then(response => {})
+          createMemberTask(this.memberTask).then(response => {
+            this.memberTask = response.data
+            this.closeDialog()
+          })
         }
       }
     }

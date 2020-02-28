@@ -95,13 +95,13 @@ export const constantRouterMap = [
       {
         path: ':projectId',
         name: 'ProjectDetail',
-        component: () => import('@/views/project/index'),
+        component: () => import('@/views/project/ProjectHome'),
         hidden: true
       },
       {
         path: ':projectId/home',
         name: 'ProjectHome',
-        component: () => import('@/views/project/index'),
+        component: () => import('@/views/project/ProjectHome'),
         meta: { title: '项目概览', icon: 'el-icon-s-home' }
       },
       {

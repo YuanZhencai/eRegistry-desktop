@@ -64,10 +64,12 @@
         if (this.centerId) {
           updateCenterMember(this.centerMember).then(response => {
             this.centerMember = response.data
+            this.closeDialog()
           })
         } else {
           createCenterMember(this.centerMember).then(response => {
             this.centerMember = response.data
+            this.closeDialog()
           })
         }
       }
