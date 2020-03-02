@@ -16,6 +16,7 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
+
 Vue.use(VueAxios, axios)
 Vue.use(ElementUI, { locale })
 
