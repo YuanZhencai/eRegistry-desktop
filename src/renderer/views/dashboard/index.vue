@@ -1,12 +1,40 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name:{{name}}</div>
-    <div class="dashboard-text">roles:<span v-for='role in roles' :key='role'>{{role}}</span></div>
+    <el-card class="box-card" shadow="never">
+      <div slot="header" class="clearfix">
+        <span>进行中的项目</span>
+        <el-button style="float: right; padding: 3px 0" type="text">
+          <router-link :to="{path: '/project'}">全部项目</router-link>
+        </el-button>
+      </div>
+      <el-row :gutter="20" v-loading="loading">
+        <el-col :span="8" v-for="project in projects" :key="project.id">
+          <el-card  class="text item">
+            <div class="card-header"><router-link :to="{path: `/project/${project.id}/home`}">{{project.name}}</router-link></div>
+            <p class="project-intro">{{project.introduction}}</p>
+            <div class="project-info">
+              <div class="float-left">
+                <div class="row-flex">
+                  <el-avatar icon="el-icon-user-solid" size="small"></el-avatar>
+                  <span style="margin-left: 5px;">{{project.chargedBy}}</span>
+                </div>
+              </div>
+              <div class="float-right">{{project.lastModifiedDate | formatDate('YYYY-MM-DD')}}</div>
+              <div class="clearfix"></div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </el-card>
+    <!--<div class="dashboard-text">name:{{name}}</div>-->
+    <!--<div class="dashboard-text">roles:<span v-for='role in roles' :key='role'>{{role}}</span></div>-->
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import * as moment from 'moment'
+import { getMineProjects } from '@/api/ProjectResource'
 
 export default {
   name: 'dashboard',
@@ -15,6 +43,28 @@ export default {
       'name',
       'roles'
     ])
+  },
+  data() {
+    return {
+      projects: null,
+      loading: true
+    }
+  },
+  filters: {
+    formatDate: function(val, pattern) {
+      return moment(val).format(pattern)
+    }
+  },
+  created() {
+    this.getProjects()
+  },
+  methods: {
+    getProjects() {
+      getMineProjects({ all: false }).then(res => {
+        this.projects = res.data
+        this.loading = false
+      })
+    }
   }
 }
 </script>
@@ -29,4 +79,9 @@ export default {
     line-height: 46px;
   }
 }
+  .project-intro{
+    text-align: left;
+    height: 40px;
+    overflow: hidden;
+  }
 </style>

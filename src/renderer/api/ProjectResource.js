@@ -15,10 +15,11 @@ export function getProject(id) {
   })
 }
 
-export function getMineProjects() {
+export function getMineProjects(params) {
   return request({
     url: `/api/projects/mine`,
     method: 'get',
+    params: params,
     transformResponse: [function(data) {
       try {
         data = JSON.parse(data)
