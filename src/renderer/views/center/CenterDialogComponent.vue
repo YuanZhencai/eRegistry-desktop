@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑分中心" :visible.sync="visible" :before-close="closeDialog">
+    <el-dialog title="创建或编辑分中心" :visible.sync="visible" :before-close="cancel">
         <el-form label-width="80px">
             <el-form-item label="名称" prop="name"
                           :rules="{ required: true, message: '名称不能为空', trigger: 'blur' }"
@@ -9,7 +9,7 @@
             <el-form-item label="电话" prop="telephone"
                           :rules="[
                             { required: true, message: '电话不能为空', trigger: 'blur' },
-                            { required: true, pattern: /^((13|14|15|16|17|18)[0-9]{1}\d{8})|([0-9]{1}\d{7})$/, message: '请输入正确的电话号码', trigger: ['blur', 'change'] }
+                            { pattern: /^((13|14|15|16|17|18)[0-9]{1}\d{8})|([0-9]{1}\d{7})$/, message: '请输入正确的电话号码', trigger: ['blur', 'change'] }
                           ]"
             >
                 <el-input v-model="center.telephone" :maxlength="11"></el-input>
@@ -31,7 +31,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button size="mini" @click="closeDialog">取 消</el-button>
+            <el-button size="mini" @click="cancel">取 消</el-button>
             <el-button size="mini" type="primary" @click="confirm">保存</el-button>
         </div>
     </el-dialog>
@@ -51,7 +51,7 @@
     },
     data() {
       return {
-        center: null,
+        center: { name: null },
         formRules: {
           name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
           telephone: [
@@ -76,8 +76,11 @@
           this.center = { name: '', telephone: '', no: '', chargedBy: '', projectId: 20002 }
         }
       },
+      cancel() {
+        this.$emit('closeDialog', { page: 'centerDialog', type: 'cancel' })
+      },
       closeDialog() {
-        this.$emit('closeDialog', 'centerDialog')
+        this.$emit('closeDialog', { page: 'centerDialog', type: 'confirm' })
       },
       confirm() {
         if (this.centerId) {

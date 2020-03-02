@@ -60,3 +60,35 @@ export function deleteProject(id) {
     }]
   })
 }
+
+export function createProject(project) {
+  return request({
+    url: `/api/projects`,
+    method: 'post',
+    data: project,
+    transformResponse: [function(data) {
+      try {
+        data = JSON.parse(data)
+      } catch (err) {
+        data = {}
+      }
+      return data
+    }]
+  })
+}
+
+export function updateProject(project) {
+  return request({
+    url: `/api/projects`,
+    method: 'put',
+    data: project,
+    transformResponse: [function(data) {
+      try {
+        data = JSON.parse(data)
+      } catch (err) {
+        data = {}
+      }
+      return data
+    }]
+  })
+}

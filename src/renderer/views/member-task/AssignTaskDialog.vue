@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑任务" :visible.sync="visible" :before-close="closeDialog">
+    <el-dialog title="创建或编辑任务" :visible.sync="visible" :before-close="cancel">
         <el-form label-width="80px">
             <el-form-item label="成员">
                 <el-input v-model="member.username" :disabled="true"></el-input>
@@ -14,7 +14,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button size="mini" @click="closeDialog">取 消</el-button>
+            <el-button size="mini" @click="cancel">取 消</el-button>
             <el-button size="mini" type="primary" @click="confirm">确 定</el-button>
         </div>
     </el-dialog>
@@ -35,8 +35,8 @@
     },
     data() {
       return {
-        memberTask: null,
-        member: null,
+        memberTask: { type: null },
+        member: { username: null },
         tasks: [
           { label: '管理', value: 'MASTER' },
           { label: '录入', value: 'PATIENT' },
@@ -63,8 +63,11 @@
           }
         })
       },
+      cancel() {
+        this.$emit('closeDialog', { page: 'assignTask', type: 'cancel' })
+      },
       closeDialog() {
-        this.$emit('closeDialog', 'assignTask')
+        this.$emit('closeDialog', { page: 'assignTask', type: 'confirm' })
       },
       confirm() {
         this.memberTask.memberId = this.member.id
@@ -72,14 +75,22 @@
         if (this.memberTask.id !== undefined) {
           updateMemberTask(this.memberTask).then(response => {
             this.memberTask = response.data
+            this.openMessage('任务更新成功', 'success')
             this.closeDialog()
           })
         } else {
           createMemberTask(this.memberTask).then(response => {
             this.memberTask = response.data
+            this.openMessage('分配任务成功', 'success')
             this.closeDialog()
           })
         }
+      },
+      openMessage(message, type) {
+        this.$message({
+          message,
+          type
+        })
       }
     }
   }

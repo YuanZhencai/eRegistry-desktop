@@ -111,14 +111,18 @@
       },
       confirmDelete() {
         deleteProject(this.selectedProject.id).then(res => {
-          this.OpenMessage('项目删除成功', 'success')
-          this.closeDialog()
+          this.openMessage('项目删除成功', 'success')
+          this.deleteDialogVisible = false
           this.loading = true
           this.getProjects()
         })
       },
       closeDialog(val) {
         this.newDialogVisible = false
+        if (val.type === 'confirm') {
+          this.loading = true
+          this.getProjects()
+        }
       },
       openMessage(message, type) {
         this.$message({
