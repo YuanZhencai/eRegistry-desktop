@@ -1,7 +1,8 @@
 <template>
   <div id='surveyElement'>
     <div>进行调查</div>
-    <survey-view :info="info" @dataChange="complete"></survey-view>
+    <survey-creator :info="creatorInfo" @surveyChange="save"></survey-creator>
+    <survey-view :info="surveyInfo" @dataChange="complete"></survey-view>
   </div>
 </template>
 
@@ -17,11 +18,12 @@
     },
     data() {
       return {
-        info: {}
+        surveyInfo: {},
+        creatorInfo: {}
       }
     },
     mounted() {
-      this.info = {
+      this.surveyInfo = {
         survey: {
           title: 'Product Feedback Survey Example',
           showProgressBar: 'top',
@@ -152,10 +154,17 @@
         },
         data: {}
       }
+      this.creatorInfo = {
+        survey: this.surveyInfo.survey
+      }
     },
     methods: {
       complete(data) {
         console.info('complete', data)
+      },
+      save(survey) {
+        console.info('save', survey)
+        this.surveyInfo.survey = survey
       }
     }
   }
