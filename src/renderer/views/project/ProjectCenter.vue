@@ -92,10 +92,13 @@
         this.pageSize = val
       },
       closeDialog: function(val) {
-        switch (val) {
+        switch (val.page) {
           case 'centerDialog':
             this.centerDialogVisible = false
-            this.getCenters()
+            if (val.type === 'confirm') {
+              this.loading = true
+              this.getCenters()
+            }
             break
           default:
             this.deleteCenterDialogVisible = false

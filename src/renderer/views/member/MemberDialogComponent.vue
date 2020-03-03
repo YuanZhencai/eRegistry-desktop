@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑成员" :visible.sync="visible" :before-close="closeDialog">
+    <el-dialog title="创建或编辑成员" :visible.sync="visible" :before-close="cancel">
         <el-row :gutter="8">
             <el-col :span="8">
                 <div>
@@ -64,7 +64,7 @@
             </el-col>
         </el-row>
         <div slot="footer" class="dialog-footer">
-            <el-button size="mini" @click="closeDialog">取 消</el-button>
+            <el-button size="mini" @click="cancel">取 消</el-button>
             <el-button size="mini" type="primary" @click="confirm">确 定</el-button>
         </div>
     </el-dialog>
@@ -79,6 +79,7 @@
     name: 'MemberDialogComponent',
     props: ['visible'],
     data() {
+      const projectId = 20002 || this.$route.params.projectId
       return {
         login: '',
         email: '',
@@ -92,7 +93,7 @@
         users: [],
         members: {},
         selectedUsers: [],
-        projectId: 20002
+        projectId
       }
     },
     created() {
@@ -148,9 +149,11 @@
       remove(user) {
         this.$set(user, 'selected', false)
       },
+      cancel() {
+        this.$emit('closeDialog', { page: 'memberDialog', type: 'cancel' })
+      },
       closeDialog() {
-        // this.$refs.ruleForm.resetFields()
-        this.$emit('closeDialog', 'memberDialog')
+        this.$emit('closeDialog', { page: 'memberDialog', type: 'confirm' })
       },
       confirm() {
         this.selectedUsers = this.users.filter(item => item.selected)
@@ -159,7 +162,7 @@
           users: this.selectedUsers
         }
         createBatchMember(batchMember).then(response => {
-          this.$emit('closeDialog', 'memberDialog')
+          this.closeDialog()
         }, error => {
           console.log(error)
         })

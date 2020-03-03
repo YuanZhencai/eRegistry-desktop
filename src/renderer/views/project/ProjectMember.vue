@@ -132,7 +132,6 @@
       },
       confirmDelete() {
         deleteMember(this.selectedMember.id).then(response => {
-          console.log(response)
           this.openMessage('成员删除成功', 'success')
           this.closeDialog()
           this.loading = true
@@ -142,21 +141,23 @@
         })
       },
       closeDialog(val) {
-        switch (val) {
+        switch (val.page) {
           case 'memberDialog':
             this.newMemberDialogVisible = false
             break
           case 'assignMember':
-            this.openMessage('分配中心成功', 'success')
             this.assignCenterDialogVisible = false
-            this.loading = true
-            this.getMembers(this.project.id)
+            if (val.type === 'confirm') {
+              this.loading = true
+              this.getMembers(this.project.id)
+            }
             break
           case 'assignTask':
-            this.openMessage('分配任务成功', 'success')
             this.assignTaskDialogVisible = false
-            this.loading = true
-            this.getMembers(this.project.id)
+            if (val.type === 'confirm') {
+              this.loading = true
+              this.getMembers(this.project.id)
+            }
             break
           default:
             this.deleteMemberDialogVisible = false

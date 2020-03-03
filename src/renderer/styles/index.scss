@@ -57,7 +57,9 @@ a:hover {
 .app-container {
   padding: 20px;
 }
-
+.float-left{
+  float: left;
+}
 .float-right{
   float: right;
 }
@@ -78,4 +80,23 @@ button:focus{
 h1, h2, h3, h4, h5, h6 {
   color: rgba(0, 0, 0, .85);
   font-weight: 500
+}
+.row-flex{
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: row;
+}
+.col-flex{
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: column;
+}
+.justify-center{
+  justify-content: center;
+}
+.space-between{
+  justify-content: space-between;
+}
+.space-around{
+  justify-content: space-around;
 }

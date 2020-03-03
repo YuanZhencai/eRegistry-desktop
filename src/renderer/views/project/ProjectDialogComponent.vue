@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑项目" :visible.sync="visible" :before-close="closeDialog">
+    <el-dialog title="创建或编辑项目" :visible.sync="visible" :before-close="cancel">
         <el-form label-width="75px">
             <el-form-item label="项目名称">
                 <el-input v-model="project.name"></el-input>
@@ -29,7 +29,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button size="mini" @click="closeDialog">取 消</el-button>
+            <el-button size="mini" @click="cancel">取 消</el-button>
             <el-button size="mini" type="primary" @click="confirm">确 定</el-button>
         </div>
     </el-dialog>
@@ -37,7 +37,7 @@
 
 <script>
   import { getMineReports } from '@/api/ReportService'
-  import { getProject } from '@/api/ProjectResource'
+  import { getProject, createProject, updateProject } from '@/api/ProjectResource'
   export default {
     name: 'ProjectDialogComponent',
     props: {
@@ -46,8 +46,9 @@
     },
     data() {
       return {
-        project: null,
-        reports: []
+        project: { name: null, beginDate: null, endDate: null },
+        reports: [],
+        currentAccount: { id: '4', login: 'user' }
       }
     },
     created() {
@@ -70,9 +71,31 @@
         })
       },
       closeDialog() {
-        this.$emit('closeDialog', { type: 'newDialog' })
+        this.$emit('closeDialog', { page: 'newDialog', type: 'confirm' })
       },
-      confirm() {}
+      cancel() {
+        this.$emit('closeDialog', { page: 'newDialog', type: 'cancel' })
+      },
+      confirm() {
+        this.project.chargedBy = this.currentAccount.login
+        if (this.projectId) {
+          updateProject(this.project).then(() => {
+            this.openMessage('项目更新成功', 'success')
+            this.closeDialog()
+          })
+        } else {
+          createProject(this.project).then(() => {
+            this.openMessage('项目创建成功', 'success')
+            this.closeDialog()
+          })
+        }
+      },
+      openMessage(message, type) {
+        this.$message({
+          message,
+          type
+        })
+      }
     }
   }
 </script>
