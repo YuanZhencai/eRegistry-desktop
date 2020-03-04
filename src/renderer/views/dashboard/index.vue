@@ -10,7 +10,9 @@
       <el-row :gutter="20" v-loading="loading">
         <el-col :span="8" v-for="project in projects" :key="project.id">
           <el-card  class="text item">
-            <div class="card-header"><router-link :to="{path: `/project/${project.id}/home`}">{{project.name}}</router-link></div>
+            <div class="card-header">
+              <router-link :to="{path: `/project/${project.id}/home`}">{{project.name}}</router-link>
+            </div>
             <p class="project-intro">{{project.introduction}}</p>
             <div class="project-info">
               <div class="float-left">
@@ -26,14 +28,11 @@
         </el-col>
       </el-row>
     </el-card>
-    <!--<div class="dashboard-text">name:{{name}}</div>-->
-    <!--<div class="dashboard-text">roles:<span v-for='role in roles' :key='role'>{{role}}</span></div>-->
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import * as moment from 'moment'
 import { getMineProjects } from '@/api/ProjectResource'
 
 export default {
@@ -48,11 +47,6 @@ export default {
     return {
       projects: null,
       loading: true
-    }
-  },
-  filters: {
-    formatDate: function(val, pattern) {
-      return moment(val).format(pattern)
     }
   },
   created() {
@@ -79,9 +73,13 @@ export default {
     line-height: 46px;
   }
 }
-  .project-intro{
-    text-align: left;
-    height: 40px;
-    overflow: hidden;
-  }
+.card-header{
+  margin-bottom: 10px;
+}
+.project-intro{
+  font-size: 12px;
+  text-align: left;
+  height: 40px;
+  overflow: hidden;
+}
 </style>

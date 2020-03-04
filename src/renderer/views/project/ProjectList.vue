@@ -52,7 +52,6 @@
 </template>
 
 <script>
-  import moment from 'moment'
   import { getMineProjects, deleteProject } from '@/api/ProjectResource'
   import ProjectDialogComponent from './ProjectDialogComponent'
   export default {
@@ -70,17 +69,12 @@
         deleteDialogVisible: false
       }
     },
-    filters: {
-      formatDate: function(val, pattern) {
-        return moment(val).format(pattern)
-      }
-    },
     created() {
       this.getProjects()
     },
     methods: {
       getProjects() {
-        getMineProjects().then(res => {
+        getMineProjects({ page: this.currentPage - 1, size: this.pageSize }).then(res => {
           this.loading = false
           this.projects = res.data
           this.total = this.projects.length
