@@ -125,6 +125,10 @@ export const constantRouterMap = [
             component: () => import('@/views/project/ProjectQuestionnaire')
           },
           {
+            path: 'questionnaire/:questionnaireId',
+            component: () => import('@/views/questionnaire/QuestionnaireDetail')
+          },
+          {
             path: 'member',
             component: () => import('@/views/project/ProjectMember')
           },
