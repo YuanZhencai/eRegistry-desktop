@@ -5,6 +5,7 @@
 <script>
   import * as SurveyCreator from 'survey-creator'
   import 'survey-creator/survey-creator.css'
+  import uuidv1 from 'uuid/v1'
 
   export default {
     name: 'survey-creator',
@@ -44,6 +45,14 @@
         this.surveyCreator = new SurveyCreator.SurveyCreator('surveyCreatorContainer', options)
         this.surveyCreator.text = this.survey
         this.surveyCreator.saveSurveyFunc = this.saveMySurvey
+        this.tools.forEach(tool => {
+          this.surveyCreator.toolbarItems.push({
+            id: uuidv1(),
+            visible: true,
+            title: tool.title,
+            action: tool.action
+          })
+        })
       },
       saveMySurvey() {
         this.$emit('surveyChange', this.surveyCreator.text)

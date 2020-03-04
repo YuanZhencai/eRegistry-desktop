@@ -4,7 +4,7 @@
       <div slot="header" class="clearfix">
         <span>病例表单</span>
       </div>
-      <survey-creator :survey="report.survey" @surveyChange="save"></survey-creator>
+      <survey-creator :survey="report.survey" :tools="tools" @surveyChange="save"></survey-creator>
     </el-card>
   </div>
 </template>
@@ -23,7 +23,13 @@ export default {
       return {
         creatorInfo: {},
         projectId: this.$route.params.projectId,
-        report: {}
+        report: {},
+        tools: [
+          {
+            title: '选择问卷',
+            action: () => this.selectReport()
+          }
+        ]
       }
     },
     created() {
@@ -40,6 +46,9 @@ export default {
         findReport(this.projectId).then((response) => {
           this.report = response.data
         })
+      },
+      selectReport() {
+        console.info('selectReport')
       }
     }
   }
