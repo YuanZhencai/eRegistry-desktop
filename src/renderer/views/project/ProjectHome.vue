@@ -1,21 +1,14 @@
 <template>
-    <div class="app-container">project home{{projectId}}</div>
+  <div class="app-container">
+    <div>项目概览</div>
+  </div>
 </template>
 
 <script>
   export default {
-    name: 'ProjectHome',
-    data() {
-      const projectId = this.$route.params.projectId
-      return {
-        projectId
-      }
-    },
-    created() {
-    }
+    name: 'ProjectHome'
   }
 </script>
 
 <style scoped>
-
 </style>
