@@ -6,14 +6,6 @@ export function getUsersByLoginStartingWith(login) {
     method: 'get',
     params: {
       login
-    },
-    transformResponse: [function(data) {
-      try {
-        data = JSON.parse(data)
-      } catch (err) {
-        data = {}
-      }
-      return data
-    }]
+    }
   })
 }

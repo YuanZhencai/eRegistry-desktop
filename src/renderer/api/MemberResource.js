@@ -4,45 +4,21 @@ export function getProjectMembers(projectId, params) {
   return request({
     url: `/api/projects/${projectId}/members`,
     method: 'get',
-    params: params,
-    transformResponse: [function(data) {
-      try {
-        data = JSON.parse(data)
-      } catch (err) {
-        data = {}
-      }
-      return data
-    }]
+    params: params
   })
 }
 
 export function getMember(id) {
   return request({
     url: `/api/members/${id}`,
-    method: 'get',
-    transformResponse: [function(data) {
-      try {
-        data = JSON.parse(data)
-      } catch (err) {
-        data = {}
-      }
-      return data
-    }]
+    method: 'get'
   })
 }
 
 export function deleteMember(id) {
   return request({
     url: `/api/members/${id}`,
-    method: 'delete',
-    transformResponse: [function(data) {
-      try {
-        data = JSON.parse(data)
-      } catch (err) {
-        data = {}
-      }
-      return data
-    }]
+    method: 'delete'
   })
 }
 
@@ -50,15 +26,7 @@ export function createBatchMember(batchMember) {
   return request({
     url: `/api/members/batch`,
     method: 'post',
-    data: batchMember,
-    transformResponse: [function(data) {
-      try {
-        data = JSON.parse(data)
-      } catch (err) {
-        data = {}
-      }
-      return data
-    }]
+    data: batchMember
   })
 }
 
@@ -66,15 +34,7 @@ export function createMember(member) {
   return request({
     url: `/api/members`,
     method: 'post',
-    data: member,
-    transformResponse: [function(data) {
-      try {
-        data = JSON.parse(data)
-      } catch (err) {
-        data = {}
-      }
-      return data
-    }]
+    data: member
   })
 }
 
@@ -82,14 +42,6 @@ export function updateMember(member) {
   return request({
     url: `/api/members`,
     method: 'put',
-    data: member,
-    transformResponse: [function(data) {
-      try {
-        data = JSON.parse(data)
-      } catch (err) {
-        data = {}
-      }
-      return data
-    }]
+    data: member
   })
 }

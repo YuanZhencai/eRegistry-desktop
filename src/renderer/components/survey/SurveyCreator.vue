@@ -26,6 +26,7 @@
       return {}
     },
     mounted() {
+      this.render()
     },
     watch: {
       info: {

@@ -28,7 +28,7 @@
                         <el-divider direction="vertical"></el-divider>
                         <el-button type="text" @click="deleteProject(scope.row)">删除</el-button>
                         <el-divider direction="vertical"></el-divider>
-                        <el-button type="text">CRF</el-button>
+                        <el-button type="text" @click="report(scope.row.id)">CRF</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -95,6 +95,11 @@
       view(projectId) {
         this.$router.push({
           path: `/project/${projectId}/home`
+        })
+      },
+      report(projectId) {
+        this.$router.push({
+          path: `/project/${projectId}/report`
         })
       },
       edit(project) {
