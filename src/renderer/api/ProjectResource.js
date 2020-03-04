@@ -44,3 +44,17 @@ export function updateProject(project) {
     data: project
   })
 }
+
+export function findReport(id) {
+  return request({
+    url: `/api/projects/${id}/report`,
+    method: 'get'
+  })
+}
+export function saveReport(id, report) {
+  return request({
+    url: `/api/projects/${id}/report`,
+    method: 'put',
+    data: report
+  })
+}

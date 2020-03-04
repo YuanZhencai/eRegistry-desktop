@@ -9,16 +9,16 @@
   export default {
     name: 'survey-creator',
     props: {
-      info: {
-        type: Object,
+      survey: {
+        type: String,
         default: function() {
-          return {
-            survey: {
-              locale: 'zh-cn',
-              pages: []
-            },
-            tools: []
-          }
+          return ''
+        }
+      },
+      tools: {
+        type: Array,
+        default: function() {
+          return []
         }
       }
     },
@@ -26,10 +26,10 @@
       return {}
     },
     mounted() {
-      this.render()
+      // this.render()
     },
     watch: {
-      info: {
+      survey: {
         deep: true,
         handler(newValue, oldValue) {
           this.render()
@@ -42,11 +42,11 @@
           showEmbededSurveyTab: true
         }
         this.surveyCreator = new SurveyCreator.SurveyCreator('surveyCreatorContainer', options)
-        this.surveyCreator.text = JSON.stringify(this.info.survey || {})
+        this.surveyCreator.text = this.survey
         this.surveyCreator.saveSurveyFunc = this.saveMySurvey
       },
       saveMySurvey() {
-        this.$emit('surveyChange', JSON.parse(this.surveyCreator.text))
+        this.$emit('surveyChange', this.surveyCreator.text)
       }
     }
   }
