@@ -71,7 +71,70 @@ export const constantRouterMap = [
       }
     ]
   },
-
+  {
+    path: '/project',
+    component: Layout,
+    redirect: '/project/',
+    name: 'Project',
+    meta: {
+      title: '研究项目', icon: 'el-icon-bangzhu'
+    },
+    children: [
+      {
+        path: '',
+        name: 'ProjectList',
+        component: () => import('@/views/project/ProjectList'),
+        hidden: true
+      },
+      {
+        path: ':projectId',
+        name: 'ProjectDetail',
+        component: () => import('@/views/project/ProjectDetail'),
+        children: [
+          {
+            path: 'home',
+            component: () => import('@/views/project/ProjectHome')
+          },
+          {
+            path: 'patient',
+            component: () => import('@/views/project/ProjectPatient')
+          },
+          {
+            path: 'report',
+            component: () => import('@/views/project/ProjectReport')
+          },
+          {
+            path: 'questionnaire',
+            component: () => import('@/views/questionnaire/Questionnaire')
+          },
+          {
+            path: 'questionnaire/:questionnaireId',
+            component: () => import('@/views/questionnaire/QuestionnaireDetail')
+          },
+          {
+            path: 'questionnaire/:questionnaireId/investigation',
+            component: () => import('@/views/investigation/Investigation')
+          },
+          {
+            path: 'questionnaire/:questionnaireId/investigation-new',
+            component: () => import('@/views/investigation/InvestigationDetail')
+          },
+          {
+            path: 'member',
+            component: () => import('@/views/project/ProjectMember')
+          },
+          {
+            path: 'center',
+            component: () => import('@/views/project/ProjectCenter')
+          },
+          {
+            path: 'plan',
+            component: () => import('@/views/plan/index')
+          }
+        ]
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

@@ -1,7 +1,8 @@
 <template>
   <div class="app-container">
     <el-container style="height: 100%">
-      <el-aside width="135px" style="background-color: rgb(238, 241, 246)">
+      <el-aside width="135px"
+                style="background-color: rgb(238, 241, 246)">
         <el-menu>
           <el-menu-item @click="selectMenu('home')">
             <template slot="title">
@@ -33,7 +34,7 @@
               <span slot="title">项目中心</span>
             </template>
           </el-menu-item>
-          <el-menu-item>
+          <el-menu-item @click="selectMenu('plan')">
             <template slot="title">
               <i class="el-icon-menu"></i>
               <span slot="title">随访计划</span>
@@ -62,30 +63,30 @@
 </template>
 
 <script>
-  export default {
-    name: 'ProjectDetail',
-    data() {
-      const projectId = this.$route.params.projectId
-      return {
-        projectId: projectId,
-        isCollapse: true
-      }
-    },
-    created() {
-    },
-    methods: {
-      selectMenu(menu) {
-        this.$router.push({
-          path: `/project/${this.projectId}/${menu}`
-        })
-      }
+export default {
+  name: 'ProjectDetail',
+  data() {
+    const projectId = this.$route.params.projectId
+    return {
+      projectId: projectId,
+      isCollapse: true
+    }
+  },
+  created() {
+  },
+  methods: {
+    selectMenu(menu) {
+      this.$router.push({
+        path: `/project/${this.projectId}/${menu}`
+      })
     }
   }
+}
 </script>
 
 <style scoped>
-  .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
-    min-height: 400px;
-  }
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 200px;
+  min-height: 400px;
+}
 </style>
