@@ -88,17 +88,27 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/crf',
+    path: '/report',
     component: Layout,
-    name: 'Crf',
+    name: 'Report',
     meta: {
       title: 'CRF', icon: 'el-icon-word'
     },
     children: [
       {
         path: '',
-        name: 'Report',
+        name: 'ReportList',
         component: () => import('@/views/report/Report')
+      },
+      {
+        path: 'new',
+        name: 'ReportNew',
+        component: () => import('@/views/report/ReportDetail')
+      },
+      {
+        path: ':reportId',
+        name: 'ReportDetail',
+        component: () => import('@/views/report/ReportDetail')
       }
     ]
   },

@@ -14,3 +14,18 @@ export function getReports(req) {
     params: req
   })
 }
+
+export function getReport(id) {
+  return request({
+    url: `/api/reports/${id}`,
+    method: 'get'
+  })
+}
+
+export function saveReport(report) {
+  return request({
+    url: `/api/reports`,
+    method: 'put',
+    data: report
+  })
+}

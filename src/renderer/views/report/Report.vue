@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-button type="primary">
-      <router-link :to="''">
+      <router-link :to="'/report/new'">
         创建CRF
       </router-link>
     </el-button>
@@ -23,7 +23,11 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text">查看</el-button>
+          <el-button type="text">
+            <router-link :to="`/report/${scope.row.id}`">
+              查看
+            </router-link>
+          </el-button>
           <el-divider direction="vertical"></el-divider>
           <el-button type="text">删除</el-button>
           <el-divider direction="vertical"></el-divider>

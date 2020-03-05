@@ -12,7 +12,7 @@
             Home
           </el-dropdown-item>
         </router-link>
-        <router-link class="inlineBlock" to="/crf">
+        <router-link class="inlineBlock" to="/report">
           <el-dropdown-item>
             CRF
           </el-dropdown-item>
