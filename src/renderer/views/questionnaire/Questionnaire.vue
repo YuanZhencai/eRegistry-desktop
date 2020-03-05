@@ -1,8 +1,8 @@
 <template>
-  <div class='app-container'>
+  <div>
     <el-row>
       <el-col :span='24'>
-        <el-button type='primary' class='float-right' @click="newQuestionnaire">创建问卷</el-button>
+        <el-button type='primary' class='float-right' size="mini" @click="newQuestionnaire">创建问卷</el-button>
       </el-col>
     </el-row>
     <el-row>
@@ -11,8 +11,9 @@
                 :default-sort="{prop: 'reportName', order: 'descending'}" height="250"
                 style='width: 100%'>
         <el-table-column prop='reportName' label='问卷名称' width='180' sortable></el-table-column>
-        <el-table-column prop='lastModifiedDate' label='更新时间' width='180'
-                         sortable></el-table-column>
+        <el-table-column label='更新时间' width='180' sortable>
+          <template slot-scope="scope">{{scope.row.lastModifiedDate | formatDate('YYYY-MM-DD')}}</template>
+        </el-table-column>
         <el-table-column align="center">
           <template slot="header" slot-scope="scope">
             <span>操作</span>

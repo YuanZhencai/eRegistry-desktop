@@ -1,16 +1,16 @@
 <template>
-  <div class='app-container'>
+  <div>
     <el-row>
       <el-col :span='24'>
-        <el-button type='primary' class='float-right' @click="newMember()">添加成员</el-button>
+        <el-button type='primary' class='float-right' size="mini" @click="newMember()">添加成员</el-button>
       </el-col>
     </el-row>
     <el-row>
       <el-table v-loading="loading" stripe
                 :data='members.slice((currentPage-1)*pageSize, currentPage*pageSize)'
                 :default-sort="{prop: 'id', order: 'descending'}" style='width: 100%'>
-        <el-table-column prop='id' label='ID' width='180' sortable></el-table-column>
-        <el-table-column label='用户名' width='180' sortable>
+        <el-table-column prop='id' label='ID' sortable width="80"></el-table-column>
+        <el-table-column label='用户名' sortable>
           <template slot-scope="scope">
             {{scope.row.username}}
             <span v-if="project && scope.row.username === project.chargedBy">(负责人)</span>

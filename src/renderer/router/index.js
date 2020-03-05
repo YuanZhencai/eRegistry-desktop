@@ -112,6 +112,10 @@ export const constantRouterMap = [
             component: () => import('@/views/project/ProjectHome')
           },
           {
+            path: 'patient',
+            component: () => import('@/views/project/ProjectPatient')
+          },
+          {
             path: 'report',
             component: () => import('@/views/project/ProjectReport')
           },
