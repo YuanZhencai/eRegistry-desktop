@@ -88,6 +88,21 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/crf',
+    component: Layout,
+    name: 'Crf',
+    meta: {
+      title: 'CRF', icon: 'el-icon-word'
+    },
+    children: [
+      {
+        path: '',
+        name: 'Report',
+        component: () => import('@/views/report/Report')
+      }
+    ]
+  },
+  {
     path: '/project',
     component: Layout,
     redirect: '/project/',
