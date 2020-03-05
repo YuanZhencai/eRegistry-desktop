@@ -3,21 +3,24 @@
         <el-row>
             <el-form :inline="true" :model="form" size="mini">
                 <el-form-item label="">
-                    <el-input v-model="form.input" placeholder="搜索患者姓名"></el-input>
+                    <el-input v-model="form.queryString" placeholder="搜索患者姓名" size="mini" suffix-icon="el-icon-search"
+                              @change="searchPatient"></el-input>
                 </el-form-item>
                 <el-form-item label="入组时间">
                     <el-col :span="11">
-                        <el-date-picker type="date" placeholder="开始时间" v-model="form.startDate" style="width: 100%;"></el-date-picker>
+                        <el-date-picker type="date" v-model="form.startDate" placeholder="开始时间" style="width: 100%;"
+                                        clearable @change="searchPatient"></el-date-picker>
                     </el-col>
                     <el-col class="text-center" :span="2">至</el-col>
                     <el-col :span="11">
-                        <el-date-picker type="date" placeholder="结束时间" v-model="form.endDate" style="width: 100%;"></el-date-picker>
+                        <el-date-picker type="date" v-model="form.endDate" placeholder="结束时间" style="width: 100%;"
+                                        clearable @change="searchPatient"></el-date-picker>
                     </el-col>
                 </el-form-item>
             </el-form>
         </el-row>
         <el-row>
-            <el-button type="primary" size="mini" icon="el-icon-download">导出</el-button>
+            <el-button type="primary" size="mini" icon="el-icon-download" @click="exportPatient">导出</el-button>
             <el-button type="primary" size="mini" icon="el-icon-plus" @click="newPatient">新建患者</el-button>
         </el-row>
         <el-row>
@@ -54,12 +57,30 @@
         </el-row>
         <patient-dialog-component v-if="editDialogVisible" :visible="editDialogVisible" :patient-id="selectedPatient.id"
             @closeDialog="closeDialog"></patient-dialog-component>
+        <el-dialog v-if="exportDialogVisible" title="导出"
+                   :visible.sync="exportDialogVisible" :before-close="closeDialog">
+            <div>选择导出文件类型</div>
+            <div class="text-center">
+                <el-image style="width: 100px; height: 100px; margin-right: 50px;"
+                          :class="{'active': exportType === 'EXCEL'}"
+                        :src="img_excel" fit="fit" @click="exportType = 'EXCEL'"></el-image>
+                <el-image style="width: 100px; height: 100px"
+                          :class="{'active': exportType === 'CSV'}"
+                          :src="img_csv" fit="fit" @click="exportType = 'CSV'"></el-image>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="exportDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="confirmExport">导 出</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
   import { getProjectPatients, exportPatients } from '@/api/PatientService'
   import PatientDialogComponent from '../patient/PatientDialogComponent'
+  import img_excel from '@/assets/excel.png'
+  import img_csv from '@/assets/csv.png'
   export default {
     name: 'ProjectPatient',
     components: { PatientDialogComponent },
@@ -71,18 +92,22 @@
         pageSize: 10, // 单页数据量
         currentPage: 1, // 默认开始页面
         form: {
-          input: '',
-          startDate: '',
-          endDate: ''
+          queryString: null,
+          startDate: null,
+          endDate: null
         },
         selectedPatient: null,
         patients: [],
         projectId,
-        editDialogVisible: false
+        editDialogVisible: false,
+        exportDialogVisible: false,
+        img_excel,
+        img_csv,
+        exportType: ''
       }
     },
     created() {
-      this.getPatients()
+      this.getPatients({ page: this.currentPage - 1, size: this.pageSize })
     },
     methods: {
       currentChange: function(currentPage) {
@@ -91,11 +116,23 @@
       sizeChange: function(val) {
         this.pageSize = val
       },
-      getPatients() {
-        getProjectPatients(this.projectId, { page: this.currentPage - 1, size: this.pageSize }).then(res => {
+      getPatients(params) {
+        getProjectPatients(this.projectId, params).then(res => {
           this.patients = res.data
           this.loading = false
           this.total = this.patients.length
+        })
+      },
+      searchPatient() {
+        if (this.form.queryString === '') {
+          this.form.queryString = null
+        }
+        this.getPatients({
+          'EQ_patient.name': this.form.queryString,
+          'GT_patient.visitDate': this.form.startDate,
+          'LT_patient.visitDate': this.form.endDate,
+          page: this.currentPage - 1,
+          size: this.pageSize
         })
       },
       edit(patient) {
@@ -106,14 +143,21 @@
         this.selectedPatient = { id: null, name: '' }
         this.editDialogVisible = true
       },
-      export() {
-        exportPatients(this.projectId, 'csv')
+      exportPatient() {
+        this.exportDialogVisible = true
+      },
+      confirmExport() {
+        exportPatients(this.projectId, { type: this.exportType })
       },
       closeDialog(val) {
-        this.editDialogVisible = false
-        if (val.type === 'confirm') {
-          this.loading = true
-          this.getPatients()
+        if (val.page === 'editDialog') {
+          this.editDialogVisible = false
+          if (val.type === 'confirm') {
+            this.loading = true
+            this.getPatients()
+          }
+        } else {
+          this.exportDialogVisible = false
         }
       },
       openMessage(message, type) {
@@ -127,5 +171,7 @@
 </script>
 
 <style scoped>
-
+.el-image.active{
+    background-color: #d1eeff;
+}
 </style>

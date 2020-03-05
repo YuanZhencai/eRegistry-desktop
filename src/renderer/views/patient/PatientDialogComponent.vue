@@ -60,21 +60,21 @@
     },
     methods: {
       getPatient() {
-        const _this = this
-        if (_this.patientId) {
-          getPatient(_this.patientId).then(res => {
-            _this.patient = Object.assign({}, _this.patient, res.data)
+        const vm = this
+        if (vm.patientId) {
+          getPatient(vm.patientId).then(res => {
+            vm.patient = Object.assign({}, vm.patient, res.data)
             const cityList = []
-            if (_this.patient.province) {
-              _this.$set(cityList, 0, _this.patient.province)
+            if (vm.patient.province) {
+              vm.$set(cityList, 0, vm.patient.province)
             }
-            if (_this.patient.city) {
-              _this.$set(cityList, 1, _this.patient.city)
+            if (vm.patient.city) {
+              vm.$set(cityList, 1, vm.patient.city)
             }
             if (this.patient.area) {
-              _this.$set(cityList, 2, _this.patient.area)
+              vm.$set(cityList, 2, vm.patient.area)
             }
-            _this.provinceCity = cityList
+            vm.provinceCity = cityList
           })
         }
       },

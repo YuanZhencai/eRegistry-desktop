@@ -147,6 +147,7 @@ export const constantRouterMap = [
 
 export default new Router({
   // mode: 'history', //后端支持可开
+  linkActiveClass: 'active',
   scrollBehavior: () => ({
     y: 0
   }),
