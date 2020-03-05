@@ -21,6 +21,7 @@ Vue.use(VueAxios, axios)
 Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
+Vue.prototype.$axios = axios
 
 new Vue({
   components: { App },

@@ -88,11 +88,6 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/questionnaire/:id/investigation',
-    component: () => import('@/views/questionnaire/PatientSurvey'),
-    hidden: true
-  },
-  {
     path: '/project',
     component: Layout,
     redirect: '/project/',
@@ -122,11 +117,19 @@ export const constantRouterMap = [
           },
           {
             path: 'questionnaire',
-            component: () => import('@/views/project/ProjectQuestionnaire')
+            component: () => import('@/views/questionnaire/Questionnaire')
           },
           {
             path: 'questionnaire/:questionnaireId',
             component: () => import('@/views/questionnaire/QuestionnaireDetail')
+          },
+          {
+            path: 'questionnaire/:questionnaireId/investigation',
+            component: () => import('@/views/investigation/Investigation')
+          },
+          {
+            path: 'questionnaire/:questionnaireId/investigation-new',
+            component: () => import('@/views/investigation/InvestigationDetail')
           },
           {
             path: 'member',
