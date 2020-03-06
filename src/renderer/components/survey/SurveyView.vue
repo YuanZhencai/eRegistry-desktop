@@ -6,9 +6,11 @@
 
 <script>
   import * as SurveyVue from 'survey-vue'
+  import 'survey-vue/survey.css'
+  import 'survey-vue/modern.css'
 
   const Survey = SurveyVue.Survey
-  Survey.cssType = 'bootstrap'
+  Survey.cssType = 'winterstone'
 
   export default {
     name: 'survey-view',
