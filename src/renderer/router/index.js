@@ -121,6 +121,11 @@ export const constantRouterMap = [
             component: () => import('@/views/project/ProjectPatient')
           },
           {
+            path: 'patient/:patientId',
+            name: 'patientDetail',
+            component: () => import('@/views/patient/PatientDetail')
+          },
+          {
             path: 'report',
             component: () => import('@/views/project/ProjectReport')
           },
@@ -147,7 +152,6 @@ export const constantRouterMap = [
 
 export default new Router({
   // mode: 'history', //后端支持可开
-  linkActiveClass: 'active',
   scrollBehavior: () => ({
     y: 0
   }),

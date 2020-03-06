@@ -26,8 +26,16 @@
         <el-row>
             <el-table v-loading="loading" :data="patients.slice((currentPage-1)*pageSize, currentPage*pageSize)"
                       :default-sort="{prop: 'id', order: 'descending'}" style="width: 100%">
-                <el-table-column prop="id" label="ID" sortable></el-table-column>
-                <el-table-column prop="name" label="姓名" sortable></el-table-column>
+                <el-table-column label="ID" sortable>
+                    <template slot-scope="scope">
+                        <router-link :to="{name: 'patientDetail', params: { patientId: scope.row.id}}" class="linka">{{scope.row.id}}</router-link>
+                    </template>
+                </el-table-column>
+                <el-table-column label="姓名" sortable>
+                    <template slot-scope="scope">
+                        <router-link :to="{name: 'patientDetail', params: { patientId: scope.row.id}}" class="linka">{{scope.row.name}}</router-link>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="sex" label="性别" sortable></el-table-column>
                 <el-table-column prop="age" label="年龄" sortable></el-table-column>
                 <el-table-column label="就诊日期" sortable>
@@ -173,5 +181,8 @@
 <style scoped>
 .el-image.active{
     background-color: #d1eeff;
+}
+.linka{
+    color: #337ab7;
 }
 </style>
