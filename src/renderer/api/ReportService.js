@@ -44,3 +44,11 @@ export function copyReport(report) {
     data: report
   })
 }
+
+export function shareReport(report) {
+  return request({
+    url: `/api/reports/share`,
+    method: 'post',
+    data: report
+  })
+}

@@ -29,11 +29,11 @@
             </router-link>
           </el-button>
           <el-divider direction="vertical"></el-divider>
-          <el-button type="text" @click="openDeleteDialog(scope.row)">删除</el-button>
+          <el-button type="text" @click="openRemoveDialog(scope.row)">删除</el-button>
           <el-divider direction="vertical"></el-divider>
           <el-button type="text" @click="openCopyDialog(scope.row)">复制</el-button>
           <el-divider direction="vertical"></el-divider>
-          <el-button type="text">分享</el-button>
+          <el-button type="text" @click="openShareDialog(scope.row)">分享</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -48,31 +48,64 @@
     </el-pagination>
     <el-dialog
             title="删除问卷"
-            :visible.sync="deleteDialog"
-            width="30%">
-      <span>确定要删除 {{selected.title}} 吗?</span>
+            :visible.sync="removeDialog">
+      <span>确定要删除 {{remove.title}} 吗?</span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="deleteDialog = false">取 消</el-button>
-        <el-button type="primary" @click="remove">确 定</el-button>
+        <el-button @click="removeDialog = false">取 消</el-button>
+        <el-button type="primary" @click="removeReport">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog
             title="复制问卷"
-            :visible.sync="copyDialog"
-            width="30%">
-      <el-input v-model="copy.title"></el-input>
+            :visible.sync="copyDialog">
+      <el-form label-width="75px">
+        <el-form-item label="名称">
+          <el-input v-model="copy.title"></el-input>
+        </el-form-item>
+      </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="copyDialog = false">取 消</el-button>
         <el-button type="primary" @click="copyReport">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+            title="分享问卷"
+            :visible.sync="shareDialog">
+      <el-form label-width="75px">
+        <el-form-item label="CRF">
+          <el-input v-model="share.report.title" disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="用户">
+          <el-select
+                  v-model="share.username"
+                  filterable
+                  remote
+                  reserve-keyword
+                  placeholder="搜索用户"
+                  :remote-method="findUsers"
+                  :loading="loading">
+            <el-option
+                    v-for="user in users"
+                    :key="user.login"
+                    :label="user.login"
+                    :value="user.login">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="shareDialog = false">取 消</el-button>
+        <el-button type="primary" @click="shareReport">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import { copyReport, deleteReport, getReports } from '../../api/ReportService'
+  import { copyReport, deleteReport, getReports, shareReport } from '../../api/ReportService'
+  import { getUsersByLoginStartingWith } from '../../api/UserResource'
 
-  export default {
+export default {
     name: 'Report',
     data() {
       return {
@@ -85,10 +118,19 @@
         totalItems: null,
         queryCount: null,
         login: this.$store.getters.name,
-        deleteDialog: false,
-        selected: {},
+        removeDialog: false,
+        remove: {},
         copyDialog: false,
-        copy: {}
+        copy: {},
+        shareDialog: false,
+        share: {
+          report: {
+            title: null
+          },
+          username: null
+        },
+        loading: false,
+        users: []
       }
     },
     mounted() {
@@ -130,14 +172,15 @@
         this.size = size
         this.transition()
       },
-      openDeleteDialog(report) {
-        this.selected = report
-        this.deleteDialog = true
+      openRemoveDialog(report) {
+        this.remove = report
+        this.removeDialog = true
       },
-      remove() {
-        deleteReport(this.selected.id).then(res => {
-          this.deleteDialog = false
+      removeReport() {
+        deleteReport(this.remove.id).then(res => {
+          this.removeDialog = false
           this.loadAll()
+          this.remove = {}
         })
       },
       openCopyDialog(report) {
@@ -151,6 +194,31 @@
         copyReport(this.copy).then(res => {
           this.loadAll()
           this.copyDialog = false
+          this.copy = {}
+        })
+      },
+      openShareDialog(report) {
+        this.share = {
+          report: report,
+          username: null
+        }
+        this.shareDialog = true
+      },
+      findUsers(login) {
+        getUsersByLoginStartingWith(login).then(res => {
+          this.users = res.data
+        })
+      },
+      shareReport() {
+        shareReport(this.share).then(res => {
+          this.loadAll()
+          this.shareDialog = false
+          this.share = {
+            report: {
+              title: null
+            },
+            username: null
+          }
         })
       }
     }
