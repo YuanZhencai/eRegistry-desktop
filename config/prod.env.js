@@ -1,4 +1,3 @@
 module.exports = {
-  NODE_ENV: '"production"',
-  BASE_API: '"https://www.palandata.com/pdas"'
+  BASE_API: 'https://www.palandata.com/pdas'
 }
