@@ -58,24 +58,24 @@
     <el-dialog
             title="复制问卷"
             :visible.sync="copyDialog">
-      <el-form label-width="75px">
-        <el-form-item label="名称">
+      <el-form label-width="75px" :model="copy" ref="copyForm">
+        <el-form-item label="名称" prop="title" :rules="[{required: true, message: '名称不能为空'}]">
           <el-input v-model="copy.title"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="copyDialog = false">取 消</el-button>
-        <el-button type="primary" @click="copyReport">确 定</el-button>
+        <el-button type="primary" @click="copyReport('copyForm')">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog
             title="分享问卷"
             :visible.sync="shareDialog">
-      <el-form label-width="75px">
+      <el-form label-width="75px" :model="share" ref="shareForm">
         <el-form-item label="CRF">
-          <el-input v-model="share.report.title" disabled="true"></el-input>
+          <el-input v-model="share.report.title" :disabled="true"></el-input>
         </el-form-item>
-        <el-form-item label="用户">
+        <el-form-item label="用户" prop="username" :rules="[{required: true, message: '用户不能为空'}]">
           <el-select
                   v-model="share.username"
                   filterable
@@ -95,7 +95,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="shareDialog = false">取 消</el-button>
-        <el-button type="primary" @click="shareReport">确 定</el-button>
+        <el-button type="primary" @click="shareReport('shareForm')">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -190,11 +190,15 @@ export default {
         }
         this.copyDialog = true
       },
-      copyReport() {
-        copyReport(this.copy).then(res => {
-          this.loadAll()
-          this.copyDialog = false
-          this.copy = {}
+      copyReport(form) {
+        this.$refs[form].validate((valid) => {
+          if (valid) {
+            copyReport(this.copy).then(res => {
+              this.loadAll()
+              this.copyDialog = false
+              this.copy = {}
+            })
+          }
         })
       },
       openShareDialog(report) {
@@ -209,15 +213,19 @@ export default {
           this.users = res.data
         })
       },
-      shareReport() {
-        shareReport(this.share).then(res => {
-          this.loadAll()
-          this.shareDialog = false
-          this.share = {
-            report: {
-              title: null
-            },
-            username: null
+      shareReport(form) {
+        this.$refs[form].validate((valid) => {
+          if (valid) {
+            shareReport(this.share).then(res => {
+              this.loadAll()
+              this.shareDialog = false
+              this.share = {
+                report: {
+                  title: null
+                },
+                username: null
+              }
+            })
           }
         })
       }
