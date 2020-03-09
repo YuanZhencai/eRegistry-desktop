@@ -20,6 +20,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/webpack-configurations.html#white-listing-externals
  */
 let whiteListedModules = ['vue', 'element-ui', 'survey-vue']
+const env = process.env.NODE_ENV === 'production' ? config.build.env : config.dev.env
+process.env = Object.assign(env, process.env)
 
 let rendererConfig = {
   devtool: '#cheap-module-eval-source-map',
@@ -120,9 +122,6 @@ let rendererConfig = {
   },
   plugins: [
     new ExtractTextPlugin('styles.css'),
-    new webpack.DefinePlugin({
-      'process.env': process.env.NODE_ENV === 'production' ? config.build.env : config.dev.env
-    }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: path.resolve(__dirname, '../src/index.ejs'),
