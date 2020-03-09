@@ -29,3 +29,18 @@ export function saveReport(report) {
     data: report
   })
 }
+
+export function deleteReport(id) {
+  return request({
+    url: `/api/reports/${id}`,
+    method: 'delete'
+  })
+}
+
+export function copyReport(report) {
+  return request({
+    url: `/api/reports/copy`,
+    method: 'post',
+    data: report
+  })
+}
