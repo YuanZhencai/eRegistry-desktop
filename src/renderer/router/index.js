@@ -165,6 +165,10 @@ export const constantRouterMap = [
             component: () => import('@/views/investigation/InvestigationDetail')
           },
           {
+            path: 'questionnaire/:questionnaireId/investigation/:investigationId',
+            component: () => import('@/views/investigation/InvestigationDetail')
+          },
+          {
             path: 'member',
             component: () => import('@/views/project/ProjectMember')
           },

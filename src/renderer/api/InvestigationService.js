@@ -14,3 +14,18 @@ export function saveInvestigation(investigation) {
     data: investigation
   })
 }
+
+export function getInvestigations(req) {
+  return request({
+    url: `/api/investigations`,
+    method: 'get',
+    params: req
+  })
+}
+
+export function getInvestigation(id) {
+  return request({
+    url: `/api/investigations/${id}`,
+    method: 'get'
+  })
+}
