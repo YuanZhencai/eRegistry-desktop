@@ -1,3 +1,4 @@
+import {isString} from "util";import {isObject} from "util";
 <template>
   <div id="surveyCreatorContainer"></div>
 </template>
@@ -27,7 +28,7 @@
       return {}
     },
     mounted() {
-      // this.render()
+      this.render()
     },
     watch: {
       survey: {
@@ -55,7 +56,28 @@
         })
       },
       saveMySurvey() {
-        this.$emit('surveyChange', this.surveyCreator.text)
+        const text = this.surveyCreator.text
+        this.$emit('surveyChange', text, this.getTitle(text))
+      },
+      getTitle(text) {
+        let title = null
+        const survey = JSON.parse(text)
+        if (survey.title) {
+          if (typeof survey.title === 'string') {
+            title = survey.title
+          } else if (typeof survey.title === 'object') {
+            if (survey.locale) {
+              if (survey.title.hasOwnProperty(survey.locale)) {
+                title = survey.title[survey.locale]
+              } else {
+                title = survey.title['default']
+              }
+            } else {
+              title = survey.title['default']
+            }
+          }
+        }
+        return title || '未命名表单'
       }
     }
   }
