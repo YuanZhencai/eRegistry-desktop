@@ -20,6 +20,7 @@
     },
     data() {
       return {
+        projectId: this.$route.params.projectId,
         questionnaireId: this.$route.params.questionnaireId,
         questionnaireReport: null,
         report: {},
@@ -32,16 +33,30 @@
       }
     },
     created() {
-      this.findQuestionnaireWithReport(this.questionnaireId)
+      this.findQuestionnaireWithReport()
     },
     methods: {
-      findQuestionnaireWithReport(questionnaireId) {
-        getQuestionnaireWithReport(questionnaireId).then((response) => {
-          this.questionnaireReport = response.data
-          this.report = response.data.report
-        })
+      findQuestionnaireWithReport() {
+        if (this.questionnaireId) {
+          getQuestionnaireWithReport(this.questionnaireId).then((response) => {
+            this.questionnaireReport = response.data
+            this.report = response.data.report
+          })
+        } else {
+          this.report = {
+            survey: null,
+            title: null
+          }
+          this.questionnaireReport = {
+            questionnaire: {
+              projectId: this.projectId
+            },
+            report: this.report
+          }
+        }
       },
-      save(survey) {
+      save(survey, title) {
+        this.report.title = title
         this.report.survey = survey
         this.questionnaireReport.report = this.report
         saveWithReport(this.questionnaireReport).then(res => {
