@@ -27,7 +27,18 @@
             <el-divider direction="vertical"></el-divider>
             <el-button type="text" @click="investigation(scope.row.id)">调查结果</el-button>
             <el-divider direction="vertical"></el-divider>
-            <el-button type="text">分享调查</el-button>
+            <el-popover
+                    placement="left"
+                    title="调查二维码"
+                    width="200"
+                    trigger="hover">
+              <el-image
+                      style="width: 150px; height: 150px"
+                      :src="`${baseApi}/api/qrcode?uri=/questionnaire/investigation-new`"
+                      :fit="'fill'">
+              </el-image>
+              <el-button type="text" slot="reference">分享调查</el-button>
+            </el-popover>
           </template>
         </el-table-column>
       </el-table>
@@ -64,7 +75,8 @@
         total: 0,
         pageSize: 10, // 单页数据量
         currentPage: 1, // 默认开始页面
-        deleteDialogVisible: false
+        deleteDialogVisible: false,
+        baseApi: process.env.BASE_API
       }
     },
     created() {
