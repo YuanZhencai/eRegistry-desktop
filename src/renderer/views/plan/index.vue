@@ -100,6 +100,7 @@ import { PLAN } from '@/api/plan'
 import { fetch, deleteData, post, put } from '@/utils/request'
 export default {
   data() {
+    const projectId = this.$route.params.projectId
     return {
       followList: [],
       deleteDialoglist: [],
@@ -118,6 +119,7 @@ export default {
         update: '编辑随访计划',
         create: '创建随访计划'
       },
+      projectId,
       crflistData: {},
       dialogFormData: {},
       editCreateDialog: false,
@@ -137,9 +139,8 @@ export default {
       this.getplan()
     },
     async getplan() {
-      console.log('11122')
       const data = {
-        'EQ_plan.projectId': 19,
+        'EQ_plan.projectId': this.projectId,
         'EQ_plan.deleted': false,
         page: this.listQuery.page || 0,
         size: this.listQuery.size || 10
@@ -167,13 +168,16 @@ export default {
       try {
         const crflist = await fetch(PLAN.crflist())
         this.crflistData = crflist.res
-        post(PLAN.putData, this.dialogFormData)
-        this.editCreateDialog = false
-        this.$notify({
-          title: '成功',
-          message: '新建成功',
-          type: 'success',
-          duration: 2000
+        this.dialogFormData['projectId'] = this.projectId
+        await post(PLAN.putData, this.dialogFormData)
+        this.$nextTick(() => {
+          this.editCreateDialog = false
+          this.$notify({
+            title: '成功',
+            message: '新建成功',
+            type: 'success',
+            duration: 2000
+          })
         })
         this.getplan()
       } catch (e) {
@@ -203,13 +207,15 @@ export default {
         console.log(e)
       }
     },
-    updatePlan() {
-      put(PLAN.putData, this.dialogFormData)
-      this.$notify({
-        title: '成功',
-        message: '更新成功',
-        type: 'success',
-        duration: 2000
+    async updatePlan() {
+      await put(PLAN.putData, this.dialogFormData)
+      this.$nextTick(() => {
+        this.$notify({
+          title: '成功',
+          message: '更新成功',
+          type: 'success',
+          duration: 2000
+        })
       })
       this.editCreateDialog = false
       this.getplan()
@@ -220,12 +226,11 @@ export default {
     },
     async confirmDelete(id) {
       try {
-        deleteData(PLAN.deleteData(id))
+        await deleteData(PLAN.deleteData(id))
         this.deleteDialogVisible = false
       } catch (e) {
         console.log(e)
       }
-      console.log('11111')
       this.getplan()
     }
   }
