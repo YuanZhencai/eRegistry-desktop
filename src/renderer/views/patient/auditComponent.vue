@@ -2,7 +2,7 @@
     <ul>
         <li class="media row-flex" v-for="audit in audits">
             <div style="margin-right: 15px;">
-                <el-avatar icon="el-icon-user-solid" size="small"></el-avatar>
+                <user-avatar :username="audit.createdBy" :size="35"></user-avatar>
             </div>
             <div class="media-body">
                 <div>
@@ -16,7 +16,9 @@
 </template>
 
 <script>
+  import UserAvatar from '../../components/avatar/userAvatar'
   export default {
+    components: { UserAvatar },
     props: {
       audits: {
         type: Array,

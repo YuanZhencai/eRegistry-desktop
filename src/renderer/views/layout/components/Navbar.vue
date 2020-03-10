@@ -2,9 +2,10 @@
   <el-menu class="navbar" mode="horizontal">
     <breadcrumb></breadcrumb>
     <el-dropdown class="avatar-container" trigger="click">
-      <div class="avatar-wrapper">
-        <img class="user-avatar" :src="avatar">
-        <i class="el-icon-caret-bottom"></i>
+      <div class="row-flex" style="margin-top: 10px">
+        <el-avatar :src="avatar" :size="30"></el-avatar>
+        <span class="line-height30">{{name}}</span>
+        <i class="el-icon-caret-bottom line-height30"></i>
       </div>
       <el-dropdown-menu class="user-dropdown" slot="dropdown">
         <router-link class="inlineBlock" to="/">
@@ -33,7 +34,8 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'name'
     ])
   },
   methods: {
@@ -70,23 +72,10 @@ export default {
     height: 50px;
     display: inline-block;
     position: absolute;
-    right: 35px;
-    .avatar-wrapper {
-      cursor: pointer;
-      margin-top: 5px;
-      position: relative;
-      .user-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-      }
-      .el-icon-caret-bottom {
-        position: absolute;
-        right: -20px;
-        top: 25px;
-        font-size: 12px;
-      }
-    }
+    right: 30px;
+  }
+  .line-height30{
+    line-height: 30px
   }
 }
 </style>

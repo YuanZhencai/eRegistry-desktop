@@ -32,17 +32,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import { getMineProjects } from '@/api/ProjectResource'
 
 export default {
   name: 'dashboard',
-  computed: {
-    ...mapGetters([
-      'name',
-      'roles'
-    ])
-  },
   data() {
     return {
       projects: null,
