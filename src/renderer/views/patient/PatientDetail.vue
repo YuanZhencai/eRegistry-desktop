@@ -4,12 +4,72 @@
             <patient-info :patient="timeline.patient"></patient-info>
         </el-row>
         <el-row>
+            <div class="float-right" v-if="timeline">
+                <template>
+                    <el-dropdown trigger="hover" v-if="!follow && patientCase && 'SUBMITTED' === patientCase.state">
+                        <el-button type="primary" size="mini">
+                            审核病例<i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item>
+                                通过
+                            </el-dropdown-item>
+                            <el-dropdown-item>
+                                拒绝
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                    <el-dropdown v-if="!patientCase && follow && 'SUBMITTED' === follow.state">
+                        <el-button type="primary" size="mini">
+                        审核随访<i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item>
+                                通过
+                            </el-dropdown-item>
+                            <el-dropdown-item>
+                                拒绝
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                    <el-dropdown v-if="audit && 'CHANGE_SUBMIT' === audit.state">
+                        <el-button type="primary" size="mini">
+                        审核变更申请<i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item>
+                                <a>同意</a>
+                            </el-dropdown-item>
+                            <el-dropdown-item>
+                                <a>拒绝</a>
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </template>
+                <template>
+                    <el-button type="primary" size="mini" v-if="!follow && patientCase && 'SUBMITTED' === patientCase.state">
+                        撤回审核
+                    </el-button>
+                    <el-button type="primary" size="mini" v-if="!patientCase && follow && 'SUBMITTED' === follow.state">
+                        撤回审核
+                    </el-button>
+                    <el-button type="primary" size="mini" v-if="!follow && patientCase && 'APPROVED' === patientCase.state">
+                        申请数据变更
+                    </el-button>
+                    <el-button type="primary" size="mini" v-if="!patientCase && follow && 'APPROVED' === follow.state">
+                        申请数据变更
+                    </el-button>
+                </template>
+            </div>
+        </el-row>
+        <el-row :gutter="15">
             <el-col :span="18">
                 <survey-view :info="survey"></survey-view>
                 <audit-component :audits="audits"></audit-component>
             </el-col>
             <el-col :span="6">
-                <timeline v-if="timeline.steps" :timeline="timeline"></timeline>
+                <timeline v-if="timeline.steps" :timeline="timeline" :can-add-item="isRegister"
+                    @stepChange="stepChange"></timeline>
             </el-col>
         </el-row>
     </div>
@@ -66,6 +126,10 @@
             this.findStepDetail(this.timeline.steps[0])
           }
         })
+      },
+      stepChange(val) {
+        this.$set(this.timeline, 'current', val.current)
+        this.findStepDetail(val.step)
       },
       findStepDetail(step) {
         this.findReport(step.reportId).then((report) => {

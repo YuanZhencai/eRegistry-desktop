@@ -11,7 +11,7 @@
         <el-col :span="8" v-for="project in projects" :key="project.id">
           <el-card  class="text item">
             <div class="card-header">
-              <router-link :to="{path: `/project/${project.id}/home`}">{{project.name}}</router-link>
+              <router-link :to="{path: `/project/${project.id}/home`}" class="linka">{{project.name}}</router-link>
             </div>
             <p class="project-intro">{{project.introduction}}</p>
             <div class="project-info">

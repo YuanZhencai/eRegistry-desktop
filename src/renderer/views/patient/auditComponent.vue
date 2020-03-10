@@ -1,10 +1,12 @@
 <template>
     <ul>
         <li class="media row-flex" v-for="audit in audits">
-            <el-avatar icon="el-icon-user-solid"></el-avatar>{{audit.createdBy}}
+            <div style="margin-right: 15px;">
+                <el-avatar icon="el-icon-user-solid" size="small"></el-avatar>
+            </div>
             <div class="media-body">
                 <div>
-                    <h5>{{audit.createdBy}}<small>{{audit.createdDate | formatDate('YYYY-MM-DD')}}</small></h5>
+                    <h5 class="no-margin-top">{{audit.createdBy}}<small class="float-right">{{audit.createdDate | formatDate('YYYY-MM-DD HH:mm:ss')}}</small></h5>
                 </div>
                 <p v-if="audit.opinion"><span>{{AuditState[audit.state]}}</span>{{audit.opinion}}</p>
                 <p v-else>{{AuditState[audit.state]}}</p>

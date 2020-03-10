@@ -182,7 +182,5 @@
 .el-image.active{
     background-color: #d1eeff;
 }
-.linka{
-    color: #337ab7;
-}
+
 </style>
