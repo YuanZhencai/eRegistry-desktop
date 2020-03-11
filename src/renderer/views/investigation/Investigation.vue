@@ -2,19 +2,19 @@
   <div class="app-container">
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item>
-        <el-input v-model="content" placeholder="搜索内容" suffix-icon="el-icon-search"></el-input>
+        <el-input v-model="content" size="mini" placeholder="搜索内容" suffix-icon="el-icon-search"></el-input>
       </el-form-item>
       <el-form-item label="创建时间">
         <el-col :span="11">
-          <el-date-picker type="date" placeholder="开始时间" v-model="begin" style="width: 100%;"></el-date-picker>
+          <el-date-picker type="date" size="mini" placeholder="开始时间" v-model="begin" style="width: 100%;"></el-date-picker>
         </el-col>
         <el-col class="line" :span="2">-</el-col>
         <el-col :span="11">
-          <el-date-picker type="date" placeholder="结束时间" v-model="end" style="width: 100%;"></el-date-picker>
+          <el-date-picker type="date" size="mini" placeholder="结束时间" v-model="end" style="width: 100%;"></el-date-picker>
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button>导出</el-button>
+        <el-button type="primary" size="mini">导出</el-button>
       </el-form-item>
     </el-form>
     <el-table

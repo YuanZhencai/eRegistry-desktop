@@ -91,6 +91,7 @@ export const constantRouterMap = [
     path: '/report',
     component: Layout,
     name: 'Report',
+    redirect: '/report/',
     meta: {
       title: 'CRF', icon: 'el-icon-word'
     },

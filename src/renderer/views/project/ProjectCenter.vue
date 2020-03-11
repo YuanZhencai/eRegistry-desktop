@@ -2,7 +2,7 @@
     <div class='app-container'>
         <el-row>
             <el-col :span='24'>
-                <el-button type='primary' class='float-right' @click="newCenter()">创建分中心</el-button>
+                <el-button type='primary' size="mini" class='float-right' @click="newCenter()">创建分中心</el-button>
             </el-col>
         </el-row>
         <el-row>

@@ -48,4 +48,7 @@ export default {
       cursor: text;
     }
   }
+  a{
+    cursor: pointer !important;
+  }
 </style>

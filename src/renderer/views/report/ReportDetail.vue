@@ -11,7 +11,7 @@
 
 <script>
   import SurveyCreator from '@/components/survey/SurveyCreator'
-  import { getReport, saveReport } from '../../api/ReportService'
+  import { getReport, updateReport } from '../../api/ReportService'
 
 export default {
     name: 'ReportDetail',
@@ -41,7 +41,7 @@ export default {
       save(survey, title) {
         this.report.survey = survey
         this.report.title = title
-        saveReport(this.report).then(res => {
+        updateReport(this.report).then(res => {
           this.$router.push({
             path: `/report`
           })

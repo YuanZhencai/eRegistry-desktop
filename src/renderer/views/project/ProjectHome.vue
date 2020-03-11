@@ -49,7 +49,7 @@
               </el-radio-group>
               <div class="clearfix"></div>
               <div class="chart-container" v-if="patientOption">
-                <v-chart :options="patientOption"></v-chart>
+                <v-chart :options="patientOption" autoresize style="width: 100%"></v-chart>
               </div>
             </div>
           </el-card>
@@ -58,7 +58,7 @@
               <span>随访数据</span>
             </div>
             <div class="chart-container" v-if="planOption">
-              <v-chart :options="planOption"></v-chart>
+              <v-chart :options="planOption" autoresize style="width: 100%"></v-chart>
             </div>
           </el-card>
         </el-row>
@@ -69,8 +69,12 @@
             <span>快速开始 / 便捷导航</span>
           </div>
           <div class="card-body">
-            <el-button type="text" @click="setProject">项目设置</el-button>
-            <el-button type="text">CRF</el-button>
+            <el-button type="text" @click="setProject"
+                       v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">项目设置</el-button>
+            <el-button type="text"
+                       v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
+              <router-link :to="{ path: `/project/${projectId}/report`, params: {projectId} }">CRF</router-link>
+            </el-button>
           </div>
         </el-card>
         <el-card shadow="hover" class="panel-group">
@@ -79,7 +83,7 @@
           </div>
           <div class="card-body">
             <el-row :gutter="48">
-              <el-col :span="12" v-for="member in members" :key="member.id">
+              <el-col :span="12" v-for="(member, index) in members" :key="member.id" v-if="index < 6">
                 <user-avatar :username="member.username" :size="40"></user-avatar>
                 <span>
                   {{member.username}}
@@ -89,14 +93,19 @@
                 </span>
               </el-col>
             </el-row>
+            <div class="text-right" v-if="members.length > 6">
+              <el-button type="text" size="mini">
+                <router-link :to="{ path: `/project/${projectId}/member`, params: {projectId}}">更多...</router-link>
+              </el-button>
+            </div>
           </div>
         </el-card>
-        <el-card shadow="hover">
+        <el-card shadow="hover" :body-style="{ padding: '20px' }">
           <div slot="header" class="clearfix">
             <span>动态</span>
           </div>
           <div class="card-body">
-            <div v-for="(change, index) in changes" :key="index" >
+            <div v-for="(change, index) in changes" :key="index" v-if="index < 5">
               <div class="row-flex">
                 <user-avatar :username="change.author" :size="30"></user-avatar>
                 <div style="margin-left: 10px;">
@@ -105,6 +114,9 @@
                 </div>
               </div>
               <el-divider class="divider-margin"></el-divider>
+            </div>
+            <div class="text-right" v-if="changes.length > 5">
+              <el-button type="text" size="mini">更多...</el-button>
             </div>
           </div>
         </el-card>
@@ -177,12 +189,12 @@
         })
       },
       findMembers() {
-        getProjectMembers(this.projectId).then((res) => {
+        getProjectMembers(this.projectId, { page: 0, size: 7 }).then((res) => {
           this.members = res.data
         })
       },
       findChanges() {
-        getChanges(this.projectId).then((res) => {
+        getChanges(this.projectId, { page: 0, size: 6 }).then((res) => {
           this.changes = res.data
         })
       },
@@ -190,12 +202,6 @@
         getProjectStatistics(this.projectId).then((res) => {
           this.statistics = res.data
         })
-      },
-      initPatient(ec) {
-        this.patientChart = ec
-      },
-      initPlan(ec) {
-        this.planChart = ec
       },
       patient() {
         const req = {

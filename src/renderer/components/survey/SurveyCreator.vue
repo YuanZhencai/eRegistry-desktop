@@ -1,12 +1,15 @@
-import {isString} from "util";import {isObject} from "util";
+
 <template>
   <div id="surveyCreatorContainer"></div>
 </template>
 
 <script>
+  import * as SurveyKo from 'survey-knockout'
   import * as SurveyCreator from 'survey-creator'
   import 'survey-creator/survey-creator.css'
   import uuidv1 from 'uuid/v1'
+  SurveyCreator.editorLocalization.currentLocale = 'zh-cn'
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'locale')
 
   export default {
     name: 'survey-creator',
@@ -44,6 +47,7 @@ import {isString} from "util";import {isObject} from "util";
           showEmbededSurveyTab: true
         }
         this.surveyCreator = new SurveyCreator.SurveyCreator('surveyCreatorContainer', options)
+        this.surveyCreator.haveCommercialLicense = true
         this.surveyCreator.text = this.survey
         this.surveyCreator.saveSurveyFunc = this.saveMySurvey
         this.tools.forEach(tool => {
