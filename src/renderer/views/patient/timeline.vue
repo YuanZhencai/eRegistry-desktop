@@ -78,6 +78,11 @@ export default {
           })
           step.items.push(item)
           this.init()
+          for (let i = 0; i < this.steps.length; i++) {
+            if (this.steps[i] === item) {
+              this.selectItem(item, i)
+            }
+          }
         }
       },
       selectItem(step, index) {
