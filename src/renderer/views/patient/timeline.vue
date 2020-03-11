@@ -1,7 +1,6 @@
 <template>
     <div class="timeline">
-        <el-steps :space="70" direction="vertical" :active="active"
-                  finish-status="success">
+        <el-steps :space="70" direction="vertical" :active="active">
             <template v-for="(step, index) in steps">
                 <el-step :key="index" v-if="step.type === 'PATIENT'" icon="fa fa-user-o fa-2x"
                          @click.native="selectItem(step, index)">
