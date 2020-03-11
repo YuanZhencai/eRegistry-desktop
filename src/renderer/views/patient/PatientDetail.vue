@@ -106,11 +106,10 @@
       }
     },
     created() {
-      // this.isRegister = Principal.hasAnyAuthorityDirec([
-      //   'PROJECT_ADMIN_' + this.projectId,
-      //   'PROJECT_PATIENT_' + this.projectId
-      // ])
-      this.isRegister = true
+      this.isRegister = this.$hasAnyAuthority([
+        'PROJECT_ADMIN_' + this.projectId,
+        'PROJECT_PATIENT_' + this.projectId
+      ])
       this.findTimeline()
     },
     methods: {
