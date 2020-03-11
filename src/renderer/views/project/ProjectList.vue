@@ -58,10 +58,9 @@
 <script>
   import { getMineProjects, deleteProject } from '@/api/ProjectResource'
   import ProjectDialogComponent from './ProjectDialogComponent'
-  import VContainer from '../../components/container/VContainer'
 export default {
     name: 'ProjectList',
-    components: { VContainer, ProjectDialogComponent },
+    components: { ProjectDialogComponent },
     data() {
       return {
         loading: true,
