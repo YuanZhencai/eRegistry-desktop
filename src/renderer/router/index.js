@@ -129,7 +129,7 @@ export const constantRouterMap = [
           },
           {
             path: 'plan',
-            component: () => import('@/views/plan/index')
+            component: () => import('@/views/plan/plan')
           }
         ]
       }
