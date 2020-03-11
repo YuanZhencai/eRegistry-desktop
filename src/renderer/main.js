@@ -13,6 +13,8 @@ import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
 import * as config from './shared/config/config'
+import '@/utils/filter'
+import '@/assets/font-awesome-4.7.0/css/font-awesome.css'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 

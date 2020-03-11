@@ -1,5 +1,20 @@
 import request from '@/utils/request'
 
+export function getProjectReport(projectId) {
+  return request({
+    url: `/api/projects/${projectId}/report`,
+    method: 'get'
+  })
+}
+
+export function saveProjectReport(projectId, data) {
+  return request({
+    url: `/api/projects/${projectId}/report`,
+    method: 'put',
+    data
+  })
+}
+
 export function getMineReports() {
   return request({
     url: `/api/reports/mine`,

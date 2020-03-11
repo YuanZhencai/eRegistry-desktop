@@ -58,3 +58,19 @@ export function saveReport(id, report) {
     data: report
   })
 }
+
+export function getChanges(id, params) {
+  return request({
+    url: `/api/projects/${id}/changes`,
+    method: 'get',
+    params
+  })
+}
+
+export function exportChangesData(id, params) {
+  return request({
+    url: `/api/projects/${id}/changes/data`,
+    method: 'get',
+    params
+  })
+}
