@@ -38,7 +38,7 @@ export default {
     data() {
       return {
         steps: [],
-        active: 0
+        active: 1
       }
     },
     mounted() {
