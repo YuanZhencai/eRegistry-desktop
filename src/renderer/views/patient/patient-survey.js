@@ -12,6 +12,9 @@ export class PatientSurvey {
   }
 
   complete(data, state) {
+    if (!state) {
+      state = 'SAVED'
+    }
     if (this.patient) {
       this.patient.state = state
       this.patient.content = JSON.stringify(data)

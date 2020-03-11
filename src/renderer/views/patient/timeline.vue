@@ -1,6 +1,6 @@
 <template>
     <div class="timeline">
-        <el-steps :space="70" direction="vertical" :active="timeline.current"
+        <el-steps :space="70" direction="vertical" :active="active"
                   finish-status="success">
             <template v-for="(step, index) in steps">
                 <el-step :key="index" v-if="step.type === 'PATIENT'" icon="fa fa-user-o fa-2x"
@@ -26,7 +26,7 @@
 
 <script>
   import moment from 'moment'
-  export default {
+export default {
     name: 'timeline',
     props: {
       timeline: {
@@ -37,23 +37,29 @@
       }
     },
     data() {
-      const steps = []
-      if (this.timeline && this.timeline.steps) {
-        this.timeline.steps.forEach((step) => {
-          steps.push(step)
-          if (step.items) {
-            step.items.forEach((item) => {
-              steps.push(item)
-            })
-          }
-        })
-      }
       return {
-        steps
+        steps: [],
+        active: 0
       }
     },
-    created() {},
+    mounted() {
+      this.init()
+    },
     methods: {
+      init() {
+        const steps = []
+        if (this.timeline && this.timeline.steps) {
+          this.timeline.steps.forEach((step) => {
+            steps.push(step)
+            if (step.items) {
+              step.items.forEach((item) => {
+                steps.push(item)
+              })
+            }
+          })
+        }
+        this.steps = steps
+      },
       format(date) {
         if (!date) {
           return null
@@ -72,10 +78,12 @@
             reportId: step.reportId
           })
           step.items.push(item)
+          this.init()
         }
       },
       selectItem(step, index) {
-        this.$emit('stepChange', { current: index, step })
+        this.active = index + 1
+        this.$emit('stepChange', step)
       },
       reset() {
         this.timeline.steps.forEach((step) => {

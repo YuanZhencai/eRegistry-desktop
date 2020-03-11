@@ -127,9 +127,8 @@ export default {
           }
         })
       },
-      stepChange(val) {
-        this.$set(this.timeline, 'current', val.current)
-        this.findStepDetail(val.step)
+      stepChange(step) {
+        this.findStepDetail(step)
       },
       findStepDetail(step) {
         this.findReport(step.reportId).then((report) => {
@@ -200,22 +199,24 @@ export default {
           }
         })
       },
-      save() {
+      save(data, state) {
         if (this.patientCase) {
-          this.saveCase()
+          this.saveCase(data, state)
         } else if (this.follow) {
-          this.saveFollow()
+          this.saveFollow(data, state)
         }
       },
-      saveCase() {
+      saveCase(data, state) {
+        this.patientCase = this.survey.complete(data, state)
         if (this.patientCase.id !== undefined) {
           updatePatientCase(this.patientCase)
         } else {
           createPatientCase(this.patientCase)
         }
       },
-      saveFollow() {
+      saveFollow(data, state) {
         if (this.follow) {
+          this.follow = this.survey.complete(data, state)
           if (this.follow.id !== undefined) {
             updateFollow(this.follow)
           } else {

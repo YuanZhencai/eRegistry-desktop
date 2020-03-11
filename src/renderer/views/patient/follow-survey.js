@@ -12,6 +12,9 @@ export class FollowSurvey {
   }
 
   complete(data, state) {
+    if (!state) {
+      state = 'SAVED'
+    }
     if (this.follow) {
       this.follow.state = state
       this.follow.content = JSON.stringify(data)
