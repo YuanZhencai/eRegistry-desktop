@@ -64,7 +64,7 @@
         </el-row>
         <el-row :gutter="15">
             <el-col :span="18">
-                <survey-view :info="survey"></survey-view>
+                <survey-view :info="survey" @dataChange="save"></survey-view>
                 <audit-component :audits="audits"></audit-component>
             </el-col>
             <el-col :span="6">
@@ -85,7 +85,9 @@
   import SurveyView from '../../components/survey/SurveyView'
   import Timeline from './timeline'
   import AuditComponent from './auditComponent'
-  export default {
+  import { PatientSurvey } from './patient-survey'
+import { FollowSurvey } from './follow-survey'
+export default {
     name: 'PatientDetail',
     components: { AuditComponent, Timeline, SurveyView, PatientInfo },
     data() {
@@ -160,22 +162,14 @@
           getPatientCase(caseId).then(res => {
             this.patientCase = res.data
             this.patientCase.projectId = this.projectId
-            this.survey = {
-              survey: this.report.survey,
-              data: this.patientCase,
-              mode: this.mode()
-            }
+            this.survey = new PatientSurvey(this.report, this.patientCase, this.mode())
           })
           this.findAudits('PATIENT_CASE', caseId)
         } else {
           this.patientCase = {}
           this.patientCase.projectId = this.projectId
           this.patientCase.patientId = this.patientId
-          this.survey = {
-            survey: this.report.survey,
-            data: this.patientCase,
-            mode: this.mode()
-          }
+          this.survey = new PatientSurvey(this.report, this.patientCase, this.mode())
         }
       },
       findFollow(followId, planId) {
@@ -183,11 +177,7 @@
           getFollow(followId).then(res => {
             this.follow = res.data
             this.follow.projectId = this.projectId
-            this.survey = {
-              survey: this.report.survey,
-              data: this.follow,
-              mode: this.mode()
-            }
+            this.survey = new FollowSurvey(this.report, this.follow, this.mode())
           })
           this.findAudits('FOLLOW', followId)
         } else {
@@ -199,11 +189,7 @@
               projectId: this.projectId,
               planId: planId
             })
-          this.survey = {
-            survey: this.report.survey,
-            data: this.follow,
-            mode: this.mode()
-          }
+          this.survey = new FollowSurvey(this.report, this.follow, this.mode())
         }
       },
       findAudits(type, recordId) {
