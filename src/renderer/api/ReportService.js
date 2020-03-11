@@ -22,6 +22,14 @@ export function getMineReports() {
   })
 }
 
+export function getAllReports(req) {
+  return request({
+    url: `/api/reports`,
+    method: 'get',
+    params: req
+  })
+}
+
 export function getReport(id) {
   return request({
     url: `/api/reports/${id}`,
@@ -65,12 +73,5 @@ export function copyReport(data) {
     url: `/api/reports/copy`,
     method: 'post',
     data
-  })
-}
-
-export function getAllReports() {
-  return request({
-    url: `/api/reports`,
-    method: 'get'
   })
 }

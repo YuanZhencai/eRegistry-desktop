@@ -88,9 +88,29 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/questionnaire/:id/investigation',
-    component: () => import('@/views/questionnaire/PatientSurvey'),
-    hidden: true
+    path: '/report',
+    component: Layout,
+    name: 'Report',
+    meta: {
+      title: 'CRF', icon: 'el-icon-word'
+    },
+    children: [
+      {
+        path: '',
+        name: 'ReportList',
+        component: () => import('@/views/report/Report')
+      },
+      {
+        path: 'new',
+        name: 'ReportNew',
+        component: () => import('@/views/report/ReportDetail')
+      },
+      {
+        path: ':reportId',
+        name: 'ReportDetail',
+        component: () => import('@/views/report/ReportDetail')
+      }
+    ]
   },
   {
     path: '/project',
@@ -131,7 +151,27 @@ export const constantRouterMap = [
           },
           {
             path: 'questionnaire',
-            component: () => import('@/views/project/ProjectQuestionnaire')
+            component: () => import('@/views/questionnaire/Questionnaire')
+          },
+          {
+            path: 'questionnaire-new',
+            component: () => import('@/views/questionnaire/QuestionnaireDetail')
+          },
+          {
+            path: 'questionnaire/:questionnaireId',
+            component: () => import('@/views/questionnaire/QuestionnaireDetail')
+          },
+          {
+            path: 'questionnaire/:questionnaireId/investigation',
+            component: () => import('@/views/investigation/Investigation')
+          },
+          {
+            path: 'questionnaire/:questionnaireId/investigation-new',
+            component: () => import('@/views/investigation/InvestigationDetail')
+          },
+          {
+            path: 'questionnaire/:questionnaireId/investigation/:investigationId',
+            component: () => import('@/views/investigation/InvestigationDetail')
           },
           {
             path: 'member',

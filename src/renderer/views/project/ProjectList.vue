@@ -23,12 +23,16 @@
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button type="text" @click="view(scope.row.id)">查看</el-button>
-                        <el-divider direction="vertical"></el-divider>
-                        <el-button type="text" @click="edit(scope.row)">编辑</el-button>
-                        <el-divider direction="vertical"></el-divider>
-                        <el-button type="text" @click="deleteProject(scope.row)">删除</el-button>
-                        <el-divider direction="vertical"></el-divider>
-                        <el-button type="text" @click="report(scope.row.id)">CRF</el-button>
+                        <template v-if="$hasAnyAuthority([`PROJECT_ADMIN_${scope.row.id}`, `PROJECT_MASTER_${scope.row.id}`])">
+                            <el-divider direction="vertical"></el-divider>
+                            <el-button type="text" @click="edit(scope.row)">编辑</el-button>
+                            <el-divider direction="vertical"></el-divider>
+                            <el-button type="text" @click="deleteProject(scope.row)">删除</el-button>
+                        </template>
+                        <template v-if="$hasAnyAuthority([`PROJECT_ADMIN_${scope.row.id}`, `PROJECT_PATIENT_${scope.row.id}`])">
+                            <el-divider direction="vertical"></el-divider>
+                            <el-button type="text" @click="report(scope.row.id)">CRF</el-button>
+                        </template>
                     </template>
                 </el-table-column>
             </el-table>
@@ -54,7 +58,7 @@
 <script>
   import { getMineProjects, deleteProject } from '@/api/ProjectResource'
   import ProjectDialogComponent from './ProjectDialogComponent'
-  export default {
+export default {
     name: 'ProjectList',
     components: { ProjectDialogComponent },
     data() {
