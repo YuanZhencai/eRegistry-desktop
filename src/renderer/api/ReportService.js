@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 
-
 export function getProjectReport(projectId) {
   return request({
     url: `/api/projects/${projectId}/report`,
