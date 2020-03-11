@@ -36,16 +36,16 @@
     <el-dialog :title="textMap[dialogStatus]"
                :visible.sync="editCreateDialog"
                width="40%">
-      <el-form ref="dialogFormData"
-               :model="dialogFormData"
+      <el-form :model="dialogFormData"
                :rules="rules"
+               ref="headerCreatePlan"
                label-width="100px">
         <el-form-item label="名称:"
                       prop="name">
           <el-input v-model="dialogFormData.name"></el-input>
         </el-form-item>
         <el-form-item label="CRF模板:">
-          <el-select v-model="crflistData.title"
+          <el-select v-model="value"
                      placeholder="请选择CRF随访模板">
             <el-option v-for="item in crflistData"
                        :key="item.id"
@@ -120,10 +120,11 @@ export default {
         create: '创建随访计划'
       },
       projectId,
-      crflistData: {},
+      crflistData: [],
       dialogFormData: {},
       editCreateDialog: false,
-      deleteDialogVisible: false
+      deleteDialogVisible: false,
+      value: ''
     }
   },
   mounted() {
@@ -153,9 +154,10 @@ export default {
         console.log(e)
       }
     },
-    async headerCreatePlan() {
+    async headerCreatePlan(dialogFormData) {
       this.dialogStatus = 'create'
       this.dialogFormData = {}
+      this.value = ''
       try {
         const crflist = await fetch(PLAN.crflist())
         this.crflistData = crflist.res
@@ -169,6 +171,7 @@ export default {
         const crflist = await fetch(PLAN.crflist())
         this.crflistData = crflist.res
         this.dialogFormData['projectId'] = this.projectId
+        this.dialogFormData['reportId'] = this.value
         await post(PLAN.putData, this.dialogFormData)
         this.$nextTick(() => {
           this.editCreateDialog = false
@@ -192,22 +195,17 @@ export default {
         this.dialogFormData = editlist.res
         const crflist = await fetch(PLAN.crflist())
         this.crflistData = crflist.res
-
-        // for (let i = 0; i < this.crflistData.length; i++) {
-        //   console.log(this.dialogFormData.id, this.crflistData.id)
-        //   if (this.dialogFormData.id === this.crflistData.id) {
-        //     console.log('this.dialogFormData.id, this.crflistData.id')
-        //     console.log(this.dialogFormData.id, this.crflistData.id)
-        //     this.crflistData.title = this.crflistData.title
-        //   }
-        // }
-        // reportId
-        // console.log(this.crflistData)
+        for (let i = 0; i < this.crflistData.length; i++) {
+          if (this.dialogFormData.reportId === this.crflistData[i].id) {
+            this.value = this.crflistData[i].title
+          }
+        }
       } catch (e) {
         console.log(e)
       }
     },
     async updatePlan() {
+      this.dialogFormData['reportId'] = this.value
       await put(PLAN.putData, this.dialogFormData)
       this.$nextTick(() => {
         this.$notify({
