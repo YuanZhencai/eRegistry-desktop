@@ -117,12 +117,7 @@
 
 <script>
   import ECharts from 'vue-echarts'
-  import 'echarts/lib/chart/line'
-  import 'echarts/lib/chart/bar'
-  import 'echarts/lib/component/tooltip'
-  import 'echarts/lib/component/legend'
-  import 'echarts/lib/component/legendScroll'
-  import 'echarts/lib/component/title'
+  import 'echarts'
   import { mapGetters } from 'vuex'
   import { getAllCenters } from '@/api/CenterResource'
   import { getProjectMembers } from '@/api/MemberResource'
@@ -212,13 +207,11 @@
         }
         getDateChart(this.projectId, req).then((res) => {
           this.patientOption = res.data
-          // this.patientChart.setOption(res.data, false, false)
         })
       },
       plan() {
         getPlanChart(this.projectId).then(res => {
           this.planOption = res.data
-          // this.planChart.setOption(res.data, false, false)
         })
       },
       setProject() {
