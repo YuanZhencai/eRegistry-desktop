@@ -2,6 +2,7 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 import store from '../store'
 
+console.info('process.env.BASE_API', process.env.BASE_API)
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url

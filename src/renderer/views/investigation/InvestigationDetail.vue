@@ -4,7 +4,7 @@
 
 <script>
   import { InvestigationSurvey } from './investigation-survey'
-  import { getQuestionnaireReport, saveInvestigation } from '../../api/InvestigationService'
+  import { getInvestigation, getQuestionnaireReport, saveInvestigation } from '../../api/InvestigationService'
   import SurveyView from '@/components/survey/SurveyView'
 
   export default {
@@ -14,6 +14,7 @@
     },
     data() {
       return {
+        projectId: this.$route.params.projectId,
         questionnaireId: this.$route.params.questionnaireId,
         investigationId: this.$route.params.investigationId,
         report: {},
@@ -29,14 +30,18 @@
         return getQuestionnaireReport(this.questionnaireId)
       },
       findInvestigation() {
-        return new Promise((resolve, reject) => {
-          resolve({
-            data: {
-              questionnaireId: this.questionnaireId,
-              content: null
-            }
+        if (this.investigationId) {
+          return getInvestigation(this.investigationId)
+        } else {
+          return new Promise((resolve, reject) => {
+            resolve({
+              data: {
+                questionnaireId: this.questionnaireId,
+                content: null
+              }
+            })
           })
-        })
+        }
       },
       findInvestigationSurvey() {
         const vm = this
@@ -49,8 +54,10 @@
       },
       save(data, state) {
         this.investigation = this.survey.complete(data, state)
-        saveInvestigation(this.investigation).then((response) => {
-          this.investigation = response.data
+        saveInvestigation(this.investigation).then((res) => {
+          this.$router.push({
+            path: `/project/${this.projectId}/questionnaire/${this.questionnaireId}/investigation`
+          })
         })
       }
     }

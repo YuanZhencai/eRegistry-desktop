@@ -72,6 +72,31 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/report',
+    component: Layout,
+    name: 'Report',
+    meta: {
+      title: 'CRF', icon: 'el-icon-word'
+    },
+    children: [
+      {
+        path: '',
+        name: 'ReportList',
+        component: () => import('@/views/report/Report')
+      },
+      {
+        path: 'new',
+        name: 'ReportNew',
+        component: () => import('@/views/report/ReportDetail')
+      },
+      {
+        path: ':reportId',
+        name: 'ReportDetail',
+        component: () => import('@/views/report/ReportDetail')
+      }
+    ]
+  },
+  {
     path: '/project',
     component: Layout,
     redirect: '/project/',
@@ -108,6 +133,10 @@ export const constantRouterMap = [
             component: () => import('@/views/questionnaire/Questionnaire')
           },
           {
+            path: 'questionnaire-new',
+            component: () => import('@/views/questionnaire/QuestionnaireDetail')
+          },
+          {
             path: 'questionnaire/:questionnaireId',
             component: () => import('@/views/questionnaire/QuestionnaireDetail')
           },
@@ -117,6 +146,10 @@ export const constantRouterMap = [
           },
           {
             path: 'questionnaire/:questionnaireId/investigation-new',
+            component: () => import('@/views/investigation/InvestigationDetail')
+          },
+          {
+            path: 'questionnaire/:questionnaireId/investigation/:investigationId',
             component: () => import('@/views/investigation/InvestigationDetail')
           },
           {
