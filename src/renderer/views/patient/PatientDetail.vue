@@ -81,7 +81,6 @@
   import { getPatientCase, createPatientCase, updatePatientCase } from '@/api/PatientCaseService'
   import { getFollow, createFollow, updateFollow } from '@/api/FollowService'
   import { getAllAudits } from '@/api/AuditService'
-  // import { Principal } from '../../api/Principal'
   import PatientInfo from './PatientInfo'
   import SurveyView from '../../components/survey/SurveyView'
   import Timeline from './timeline'
