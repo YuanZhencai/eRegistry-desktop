@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 
+
 export function getProjectReport(projectId) {
   return request({
     url: `/api/projects/${projectId}/report`,
@@ -22,6 +23,14 @@ export function getMineReports() {
   })
 }
 
+export function getReports(req) {
+  return request({
+    url: `/api/reports`,
+    method: 'get',
+    params: req
+  })
+}
+
 export function getReport(id) {
   return request({
     url: `/api/reports/${id}`,
@@ -29,19 +38,11 @@ export function getReport(id) {
   })
 }
 
-export function createReport(data) {
-  return request({
-    url: `/api/reports`,
-    method: 'post',
-    data
-  })
-}
-
-export function updateReport(data) {
+export function saveReport(report) {
   return request({
     url: `/api/reports`,
     method: 'put',
-    data
+    data: report
   })
 }
 
@@ -52,25 +53,18 @@ export function deleteReport(id) {
   })
 }
 
-export function shareReport(data) {
-  return request({
-    url: `/api/reports/share`,
-    method: 'post',
-    data
-  })
-}
-
-export function copyReport(data) {
+export function copyReport(report) {
   return request({
     url: `/api/reports/copy`,
     method: 'post',
-    data
+    data: report
   })
 }
 
-export function getAllReports() {
+export function shareReport(report) {
   return request({
-    url: `/api/reports`,
-    method: 'get'
+    url: `/api/reports/share`,
+    method: 'post',
+    data: report
   })
 }

@@ -13,6 +13,11 @@
             Home
           </el-dropdown-item>
         </router-link>
+        <router-link class="inlineBlock" to="/report">
+          <el-dropdown-item>
+            CRF
+          </el-dropdown-item>
+        </router-link>
         <el-dropdown-item divided>
           <span @click="logout" style="display:block;">LogOut</span>
         </el-dropdown-item>
