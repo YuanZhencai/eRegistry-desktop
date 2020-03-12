@@ -6,17 +6,20 @@
         <div class="card-content">
             <survey-creator :survey="report.survey" :tools="tools" @surveyChange="save"></survey-creator>
         </div>
+        <select-report ref="select-report"></select-report>
     </el-card>
 </template>
 
 <script>
     import SurveyCreator from '../../components/survey/SurveyCreator'
     import { findWithReport, saveWithReport } from '../../api/PlanService'
+    import SelectReport from '../report/SelectReport'
 
-export default {
+    export default {
       name: 'PlanReport',
       components: {
-        SurveyCreator
+        SurveyCreator,
+        SelectReport
       },
       data() {
         return {
@@ -52,7 +55,9 @@ export default {
           }
         },
         selectReport() {
-          console.info('selectReport')
+          this.$refs['select-report'].show().then((report) => {
+            this.report = report
+          })
         },
         save(survey, title) {
           this.report.title = title

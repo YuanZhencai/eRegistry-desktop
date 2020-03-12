@@ -27,12 +27,17 @@
               sortable="custom"
               label="ID">
       </el-table-column>
+      <el-table-column v-for="(question, index) in questions" :label="question" :key="index">
+        <template slot-scope="scope">
+          {{JSON.parse(scope.row.content)[question]}}
+        </template>
+      </el-table-column>
       <el-table-column
               sortable="custom"
-              label="更新时间"
+              label="创建时间"
               width="180">
         <template slot-scope="scope">
-          {{scope.row.lastModifiedDate | formatDate('YYYY-MM-DD HH:ss')}}
+          {{scope.row.createdDate | formatDate('YYYY-MM-DD HH:mm:ss')}}
         </template>
       </el-table-column>
       <el-table-column label="操作">
@@ -64,6 +69,7 @@
         return {
           projectId: this.$route.params.projectId,
           investigations: [],
+          questions: [],
           page: 1,
           previousPage: 1,
           size: 10,
@@ -94,6 +100,12 @@
           }, this.query())
           ).then((res) => {
             this.investigations = res.data
+            if (this.investigations.length > 0 && this.investigations[0].content) {
+              const content = JSON.parse(this.investigations[0].content)
+              for (const key in content) {
+                this.questions.push(key)
+              }
+            }
             this.totalItems = Number(res.headers['x-total-count'])
             this.queryCount = this.totalItems
           })

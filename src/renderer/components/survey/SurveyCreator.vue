@@ -62,7 +62,9 @@
     methods: {
       render() {
         const options = {
-          showEmbededSurveyTab: true
+          showEmbededSurveyTab: false,
+          generateValidJSON: true,
+          showJSONEditorTab: false
         }
         this.surveyCreator = new SurveyCreator.SurveyCreator('surveyCreatorContainer', options)
         this.surveyCreator.haveCommercialLicense = true
