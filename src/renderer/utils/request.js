@@ -34,5 +34,66 @@ service.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+/**
+ * 封装post请求
+ * @param url
+ * @param data
+ * @returns {Promise}
+ */
 
+export function post(url, data = {}) {
+  return new Promise((resolve, reject) => {
+    service.post(url, data)
+      .then(response => {
+        resolve(response.data)
+      }, err => {
+        reject(err)
+      })
+  })
+}
+
+export function put(url, data = {}) {
+  return new Promise((resolve, reject) => {
+    service.put(url, data)
+      .then(response => {
+        resolve(response.data)
+      }, err => {
+        reject(err)
+      })
+  })
+}
+/**
+ * 封装get方法
+ * @param url
+ * @param params
+ * @returns {Promise}
+ */
+
+export function fetch(url, params = {}) {
+  return new Promise((resolve, reject) => {
+    service.get(url, {
+      params: params
+    })
+      .then(response => {
+        resolve({ res: response.data, headers: response.headers })
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+export function deleteData(url, params = {}) {
+  return new Promise((resolve, reject) => {
+    service.delete(url, {
+      params: params
+    })
+      .then(response => {
+        resolve(response.data)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
 export default service

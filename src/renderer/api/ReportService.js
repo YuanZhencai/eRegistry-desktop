@@ -60,18 +60,18 @@ export function deleteReport(id) {
   })
 }
 
-export function shareReport(data) {
-  return request({
-    url: `/api/reports/share`,
-    method: 'post',
-    data
-  })
-}
-
-export function copyReport(data) {
+export function copyReport(report) {
   return request({
     url: `/api/reports/copy`,
     method: 'post',
-    data
+    data: report
+  })
+}
+
+export function shareReport(report) {
+  return request({
+    url: `/api/reports/share`,
+    method: 'post',
+    data: report
   })
 }

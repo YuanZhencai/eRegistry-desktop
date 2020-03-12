@@ -64,7 +64,7 @@
         </el-row>
         <el-row :gutter="15">
             <el-col :span="18">
-                <survey-view :info="survey"></survey-view>
+                <survey-view :info="survey" @dataChange="save"></survey-view>
                 <audit-component :audits="audits"></audit-component>
             </el-col>
             <el-col :span="6">
@@ -81,12 +81,13 @@
   import { getPatientCase, createPatientCase, updatePatientCase } from '@/api/PatientCaseService'
   import { getFollow, createFollow, updateFollow } from '@/api/FollowService'
   import { getAllAudits } from '@/api/AuditService'
-  import { hasAnyAuthority } from '../../shared/security/security'
   import PatientInfo from './PatientInfo'
   import SurveyView from '../../components/survey/SurveyView'
   import Timeline from './timeline'
   import AuditComponent from './auditComponent'
-  export default {
+  import { PatientSurvey } from './patient-survey'
+import { FollowSurvey } from './follow-survey'
+export default {
     name: 'PatientDetail',
     components: { AuditComponent, Timeline, SurveyView, PatientInfo },
     data() {
@@ -106,7 +107,7 @@
       }
     },
     created() {
-      this.isRegister = hasAnyAuthority([
+      this.isRegister = this.$hasAnyAuthority([
         'PROJECT_ADMIN_' + this.projectId,
         'PROJECT_PATIENT_' + this.projectId
       ])
@@ -126,9 +127,8 @@
           }
         })
       },
-      stepChange(val) {
-        this.$set(this.timeline, 'current', val.current)
-        this.findStepDetail(val.step)
+      stepChange(step) {
+        this.findStepDetail(step)
       },
       findStepDetail(step) {
         this.findReport(step.reportId).then((report) => {
@@ -161,22 +161,14 @@
           getPatientCase(caseId).then(res => {
             this.patientCase = res.data
             this.patientCase.projectId = this.projectId
-            this.survey = {
-              survey: this.report.survey,
-              data: this.patientCase,
-              mode: this.mode()
-            }
+            this.survey = new PatientSurvey(this.report, this.patientCase, this.mode())
           })
           this.findAudits('PATIENT_CASE', caseId)
         } else {
           this.patientCase = {}
           this.patientCase.projectId = this.projectId
           this.patientCase.patientId = this.patientId
-          this.survey = {
-            survey: this.report.survey,
-            data: this.patientCase,
-            mode: this.mode()
-          }
+          this.survey = new PatientSurvey(this.report, this.patientCase, this.mode())
         }
       },
       findFollow(followId, planId) {
@@ -184,11 +176,7 @@
           getFollow(followId).then(res => {
             this.follow = res.data
             this.follow.projectId = this.projectId
-            this.survey = {
-              survey: this.report.survey,
-              data: this.follow,
-              mode: this.mode()
-            }
+            this.survey = new FollowSurvey(this.report, this.follow, this.mode())
           })
           this.findAudits('FOLLOW', followId)
         } else {
@@ -200,11 +188,7 @@
               projectId: this.projectId,
               planId: planId
             })
-          this.survey = {
-            survey: this.report.survey,
-            data: this.follow,
-            mode: this.mode()
-          }
+          this.survey = new FollowSurvey(this.report, this.follow, this.mode())
         }
       },
       findAudits(type, recordId) {
@@ -215,22 +199,24 @@
           }
         })
       },
-      save() {
+      save(data, state) {
         if (this.patientCase) {
-          this.saveCase()
+          this.saveCase(data, state)
         } else if (this.follow) {
-          this.saveFollow()
+          this.saveFollow(data, state)
         }
       },
-      saveCase() {
+      saveCase(data, state) {
+        this.patientCase = this.survey.complete(data, state)
         if (this.patientCase.id !== undefined) {
           updatePatientCase(this.patientCase)
         } else {
           createPatientCase(this.patientCase)
         }
       },
-      saveFollow() {
+      saveFollow(data, state) {
         if (this.follow) {
+          this.follow = this.survey.complete(data, state)
           if (this.follow.id !== undefined) {
             updateFollow(this.follow)
           } else {

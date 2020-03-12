@@ -33,7 +33,7 @@
               <span slot="title">项目中心</span>
             </template>
           </el-menu-item>
-          <el-menu-item>
+          <el-menu-item @click="selectMenu('plan')">
             <template slot="title">
               <i class="el-icon-menu"></i>
               <span slot="title">随访计划</span>
@@ -62,28 +62,28 @@
 </template>
 
 <script>
-  export default {
-    name: 'ProjectDetail',
-    data() {
-      const projectId = this.$route.params.projectId
-      const routerName = this.$route.path.split('/').reverse()[0]
-      return {
-        projectId: projectId,
-        isCollapse: true,
-        currentActive: routerName
-      }
-    },
-    created() {
-    },
-    methods: {
-      selectMenu(menu) {
-        this.currentActive = menu
-        this.$router.push({
-          path: `/project/${this.projectId}/${menu}`
-        })
-      }
+export default {
+  name: 'ProjectDetail',
+  data() {
+    const projectId = this.$route.params.projectId
+    const routerName = this.$route.path.split('/').reverse()[0]
+    return {
+      projectId: projectId,
+      isCollapse: true,
+      currentActive: routerName
+    }
+  },
+  created() {
+  },
+  methods: {
+    selectMenu(menu) {
+      this.currentActive = menu
+      this.$router.push({
+        path: `/project/${this.projectId}/${menu}`
+      })
     }
   }
+}
 </script>
 
 <style scoped>
