@@ -4,6 +4,7 @@
       <span>病例表单</span>
     </div>
     <survey-creator :survey="report.survey" :tools="tools" @surveyChange="save"></survey-creator>
+    <select-report ref="select-report"></select-report>
   </el-card>
 </template>
 
@@ -11,11 +12,13 @@
   import SurveyCreator from '@/components/survey/SurveyCreator'
   import { findReport } from '@/api/ProjectResource'
   import { saveReport } from '@/api/ProjectResource'
+  import SelectReport from '../report/SelectReport'
 
 export default {
     name: 'ProjectReport',
     components: {
-      SurveyCreator
+      SurveyCreator,
+      SelectReport
     },
     data() {
       return {
@@ -34,8 +37,9 @@ export default {
       this.findProjectReport()
     },
     methods: {
-      save(survey) {
+      save(survey, title) {
         this.report.survey = survey
+        this.report.title = title
         saveReport(this.projectId, this.report).then((response) => {
           this.report = response.data
         })
@@ -46,7 +50,9 @@ export default {
         })
       },
       selectReport() {
-        console.info('selectReport')
+        this.$refs['select-report'].show().then((report) => {
+          this.report = report
+        })
       }
     }
   }
