@@ -11,10 +11,10 @@
                             审核病例<i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item>
+                            <el-dropdown-item @click.native="recordAudit('PATIENT_CASE', 'APPROVE')">
                                 通过
                             </el-dropdown-item>
-                            <el-dropdown-item>
+                            <el-dropdown-item @click.native="recordAudit('PATIENT_CASE', 'REFUSE')">
                                 拒绝
                             </el-dropdown-item>
                         </el-dropdown-menu>
@@ -24,10 +24,10 @@
                         审核随访<i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item>
+                            <el-dropdown-item @click.native="recordAudit('FOLLOW', 'APPROVE')">
                                 通过
                             </el-dropdown-item>
-                            <el-dropdown-item>
+                            <el-dropdown-item @click.native="recordAudit('FOLLOW', 'REFUSE')">
                                 拒绝
                             </el-dropdown-item>
                         </el-dropdown-menu>
@@ -47,16 +47,22 @@
                     </el-dropdown>
                 </template>
                 <template v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
-                    <el-button type="primary" size="mini" v-if="!follow && patientCase && 'SUBMITTED' === patientCase.state">
+                    <el-button type="primary" size="mini"
+                               v-if="!follow && patientCase && 'SUBMITTED' === patientCase.state" @click="withdrawalAudit">
                         撤回审核
                     </el-button>
-                    <el-button type="primary" size="mini" v-if="!patientCase && follow && 'SUBMITTED' === follow.state">
+                    <el-button type="primary" size="mini"
+                               v-if="!patientCase && follow && 'SUBMITTED' === follow.state" @click="withdrawalAudit">
                         撤回审核
                     </el-button>
-                    <el-button type="primary" size="mini" v-if="!follow && patientCase && 'APPROVED' === patientCase.state">
+                    <el-button type="primary" size="mini" class="patient-case"
+                               v-if="!follow && patientCase && 'APPROVED' === patientCase.state"
+                               @click="changeData('PATIEMT_CASE')">
                         申请数据变更
                     </el-button>
-                    <el-button type="primary" size="mini" v-if="!patientCase && follow && 'APPROVED' === follow.state">
+                    <el-button type="primary" size="mini" class="follow"
+                               v-if="!patientCase && follow && 'APPROVED' === follow.state"
+                               @click="changeData('FOLLOW')">
                         申请数据变更
                     </el-button>
                 </template>
@@ -72,6 +78,9 @@
                     @stepChange="stepChange"></timeline>
             </el-col>
         </el-row>
+        <record-audit-dialog :dialog-visible="recordAuditDialogVisible" :audit="audit" @closeDialog="closeDialog"></record-audit-dialog>
+        <change-data-dialog :dialog-visible="changeDataDialogVisible" :audit="audit" @closeDialog="closeDialog"></change-data-dialog>
+        <withdrawal-audit-dialog :dialog-visible="withdrawalAuditDialogVisible" @closeDialog="closeDialog"></withdrawal-audit-dialog>
     </div>
 </template>
 
@@ -87,9 +96,12 @@
   import AuditComponent from './auditComponent'
   import { PatientSurvey } from './patient-survey'
 import { FollowSurvey } from './follow-survey'
+  import ChangeDataDialog from './ChangeDataDialog'
+  import RecordAuditDialog from './RecordAuditDialog'
+  import WithdrawalAuditDialog from './WithdrawalAuditDialog'
 export default {
     name: 'PatientDetail',
-    components: { AuditComponent, Timeline, SurveyView, PatientInfo },
+    components: { WithdrawalAuditDialog, RecordAuditDialog, ChangeDataDialog, AuditComponent, Timeline, SurveyView, PatientInfo },
     data() {
       const patientId = this.$route.params.patientId
       const projectId = this.$route.params.projectId
@@ -103,7 +115,10 @@ export default {
         follow: null, // 随访
         patientCase: null, // 病例
         survey: {},
-        audit: {}
+        audit: {},
+        changeDataDialogVisible: false, // 数据变更
+        withdrawalAuditDialogVisible: false, // 撤回审核
+        recordAuditDialogVisible: false // 审核病例/随访
       }
     },
     created() {
@@ -137,7 +152,7 @@ export default {
             this.timeline.current = 0 // 设置当前active step
             this.findCase(step.caseId) // 获取病例
             this.follow = null
-          } else { // 随访
+          } else { // 随访计划
             this.findFollow(step.followId, step.planId)
             this.patientCase = null
           }
@@ -236,6 +251,39 @@ export default {
         this.$router.push({
           path: `/project/${this.projectId}/patient`
         })
+      },
+      recordAudit(type, state) {
+        this.audit = {
+          projectId: this.projectId,
+          recordId: type === 'PATIENT_CASE' ? this.patientCase.id : this.follow.id,
+          type,
+          state
+        }
+        this.recordAuditDialogVisible = true
+      },
+      changeData(type) {
+        this.audit = {
+          projectId: this.projectId,
+          recordId: type === 'PATIENT_CASE' ? this.patientCase.id : this.follow.id,
+          type,
+          state: 'CHANGE_SUBMIT'
+        }
+        this.changeDataDialogVisible = true
+      },
+      withdrawalAudit() {
+        this.withdrawalAuditDialogVisible = true
+      },
+      closeDialog(val) {
+        switch (val.page) {
+          case 'recordAudit':
+            this.recordAuditDialogVisible = false
+            break
+          case 'changeData':
+            this.changeDataDialogVisible = false
+            break
+          case 'withdrawalAudit':
+            this.withdrawalAuditDialogVisible = false
+        }
       }
     }
   }
