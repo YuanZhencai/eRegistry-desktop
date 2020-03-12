@@ -209,18 +209,18 @@ export default {
       saveCase(data, state) {
         this.patientCase = this.survey.complete(data, state)
         if (this.patientCase.id !== undefined) {
-          updatePatientCase(this.patientCase)
+          updatePatientCase(this.patientCase).then(() => this.toPatient())
         } else {
-          createPatientCase(this.patientCase)
+          createPatientCase(this.patientCase).then(() => this.toPatient())
         }
       },
       saveFollow(data, state) {
         if (this.follow) {
           this.follow = this.survey.complete(data, state)
           if (this.follow.id !== undefined) {
-            updateFollow(this.follow)
+            updateFollow(this.follow).then(() => this.toPatient())
           } else {
-            createFollow(this.follow)
+            createFollow(this.follow).then(() => this.toPatient())
           }
         }
       },
@@ -231,6 +231,11 @@ export default {
         if (!this.patientCase && this.follow) {
           this.findFollow(this.follow.id)
         }
+      },
+      toPatient() {
+        this.$router.push({
+          path: `/project/${this.projectId}/patient`
+        })
       }
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <survey :survey="survey"></survey>
+    <survey v-if="survey" :survey="survey"></survey>
   </div>
 </template>
 
@@ -34,7 +34,7 @@
     },
     data() {
       return {
-        survey: new SurveyVue.Model(this.info.survey)
+        survey: null
       }
     },
     created() {
@@ -53,17 +53,49 @@
       render() {
         const surveyModel = new SurveyVue.Model(this.info.survey)
         surveyModel.locale = 'zh-cn'
-        surveyModel.data = this.info.data
         surveyModel.onComplete.add(this.complete)
         surveyModel.onValueChanged.add(this.onValueChanged)
+        if (this.info.mode === 'share') {
+          surveyModel.mode = 'edit'
+        } else {
+          surveyModel.mode = this.info.mode
+        }
+        surveyModel.onAfterRenderSurvey.add(this.addSaveButton)
+        surveyModel.data = this.info.data
         this.survey = surveyModel
       },
       complete(survey) {
-        this.$emit('dataChange', survey.data)
+        this.$emit('dataChange', survey.data, 'SUBMITTED')
       },
       onValueChanged(survey, options) {
         this.$emit('valueChange', survey.data)
+      },
+      addSaveButton(survey, options) {
+        console.info('addSaveButton')
+        const element = options.htmlElement
+        if (element && Array.isArray(element) && element.length > 2) {
+          const footer = element[1].querySelector('.sv_nav')
+          if (footer) {
+            let saveButton = footer.querySelector('#save-button')
+            if (saveButton) {
+              saveButton.remove()
+            }
+            if (survey.mode === 'edit') {
+              saveButton = document.createElement('input')
+              saveButton.setAttribute('id', 'save-button')
+              saveButton.setAttribute('type', 'button')
+              saveButton.setAttribute('value', '保存问卷')
+              saveButton.onclick = () => {
+                this.save(survey, options)
+              }
+              footer.appendChild(saveButton)
+            }
+          }
+        }
       }
+    },
+    save(survey, options) {
+      this.$emit('dataChange', survey.data, 'SAVED')
     }
   }
 </script>
