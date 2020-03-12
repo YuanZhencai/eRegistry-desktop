@@ -41,7 +41,7 @@ export class InvestigationSurvey {
   }
 
   get mode() {
-    return this._mode
+    return this._mode ? this._mode : (this.investigation && this.investigation.id) ? 'display' : 'share'
   }
 
   set mode(value) {

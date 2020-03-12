@@ -26,6 +26,9 @@
       this.findInvestigationSurvey()
     },
     methods: {
+      mode() {
+        return this.$hasAnyAuthority[`PROJECT_ADMIN_${this.projectId}`] ? 'share' : null
+      },
       findQuestionnaireReport() {
         return getQuestionnaireReport(this.questionnaireId)
       },
@@ -49,7 +52,7 @@
           .then(vm.$axios.spread(function(report, investigation) {
             vm.report = report.data
             vm.investigation = investigation.data
-            vm.survey = new InvestigationSurvey(vm.report, vm.investigation)
+            vm.survey = new InvestigationSurvey(vm.report, vm.investigation, vm.mode())
           }))
       },
       save(data, state) {

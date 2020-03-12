@@ -79,7 +79,6 @@
       },
       render() {
         this.survey = null
-        this.$forceUpdate()
         const surveyModel = new SurveyVue.Model(this.info.survey)
         surveyModel.locale = 'zh-cn'
         surveyModel.onComplete.add(this.complete)
@@ -88,11 +87,10 @@
           surveyModel.mode = 'edit'
         } else {
           surveyModel.mode = this.info.mode
+          surveyModel.onAfterRenderSurvey.add(this.addSaveButton)
         }
-        surveyModel.onAfterRenderSurvey.add(this.addSaveButton)
         surveyModel.data = this.info.data
         this.survey = surveyModel
-        this.$forceUpdate()
       },
       complete(survey) {
         this.$emit('dataChange', survey.data, 'SUBMITTED')
