@@ -1,12 +1,33 @@
-import {isString} from "util";import {isObject} from "util";
+
 <template>
   <div id="surveyCreatorContainer"></div>
 </template>
 
 <script>
+  import * as SurveyKo from 'survey-knockout'
   import * as SurveyCreator from 'survey-creator'
   import 'survey-creator/survey-creator.css'
   import uuidv1 from 'uuid/v1'
+  SurveyCreator.editorLocalization.currentLocale = 'zh-cn'
+  // 删掉编辑器survey中不需要的属性
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'locale')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'cookieName')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'mode')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'calculatedValues')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'triggers')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'focusOnFirstError')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'checkErrorsMode')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'navigateToUrl')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'showCompletedPage')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'completedHtml')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'navigateToUrlOnCondition')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'completedHtmlOnCondition')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'loadingHtml')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'completedBeforeHtml')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'maxTimeToFinish')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'maxTimeToFinishPage')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'showTimerPanel')
+  SurveyKo.JsonObject.metaData.removeProperty('survey', 'showTimerPanelMode')
 
   export default {
     name: 'survey-creator',
@@ -44,6 +65,7 @@ import {isString} from "util";import {isObject} from "util";
           showEmbededSurveyTab: true
         }
         this.surveyCreator = new SurveyCreator.SurveyCreator('surveyCreatorContainer', options)
+        this.surveyCreator.haveCommercialLicense = true
         this.surveyCreator.text = this.survey
         this.surveyCreator.saveSurveyFunc = this.saveMySurvey
         this.tools.forEach(tool => {

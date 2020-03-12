@@ -25,7 +25,7 @@
             <el-form-item label="地区">
                 <el-cascader
                         v-model="provinceCity"
-                        :options="options"
+                        :options="options" :props="{value: 'label'}"
                         @change="handleChange" style="width: 100%"></el-cascader>
             </el-form-item>
             <el-form-item label="地址">
@@ -79,7 +79,6 @@
         }
       },
       handleChange(value) {
-        console.log(value)
         this.$set(this.patient, 'province', value[0])
         this.$set(this.patient, 'city', value[1])
         this.$set(this.patient, 'area', value[2])

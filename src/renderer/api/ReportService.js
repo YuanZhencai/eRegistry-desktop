@@ -22,7 +22,7 @@ export function getMineReports() {
   })
 }
 
-export function getReports(req) {
+export function getAllReports(req) {
   return request({
     url: `/api/reports`,
     method: 'get',
@@ -37,11 +37,19 @@ export function getReport(id) {
   })
 }
 
-export function saveReport(report) {
+export function createReport(data) {
+  return request({
+    url: `/api/reports`,
+    method: 'post',
+    data
+  })
+}
+
+export function updateReport(data) {
   return request({
     url: `/api/reports`,
     method: 'put',
-    data: report
+    data
   })
 }
 

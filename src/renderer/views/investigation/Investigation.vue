@@ -2,19 +2,19 @@
   <div class="app-container">
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item>
-        <el-input v-model="content" placeholder="搜索内容" suffix-icon="el-icon-search"></el-input>
+        <el-input v-model="content" size="mini" placeholder="搜索内容" suffix-icon="el-icon-search"></el-input>
       </el-form-item>
       <el-form-item label="创建时间">
         <el-col :span="11">
-          <el-date-picker type="date" placeholder="开始时间" v-model="begin" style="width: 100%;"></el-date-picker>
+          <el-date-picker type="date" size="mini" placeholder="开始时间" v-model="begin" style="width: 100%;"></el-date-picker>
         </el-col>
         <el-col class="line" :span="2">-</el-col>
         <el-col :span="11">
-          <el-date-picker type="date" placeholder="结束时间" v-model="end" style="width: 100%;"></el-date-picker>
+          <el-date-picker type="date" size="mini" placeholder="结束时间" v-model="end" style="width: 100%;"></el-date-picker>
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button>导出</el-button>
+        <el-button type="primary" size="mini">导出</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -28,10 +28,12 @@
               label="ID">
       </el-table-column>
       <el-table-column
-              prop="lastModifiedDate"
               sortable="custom"
               label="更新时间"
               width="180">
+        <template slot-scope="scope">
+          {{scope.row.lastModifiedDate | formatDate('YYYY-MM-DD HH:ss')}}
+        </template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -84,10 +86,11 @@
           return (this.predicate && this.order) ? [this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc')] : []
         },
         loadAll() {
+          const sort = this.sort()
           getInvestigations(Object.assign({
             page: this.page - 1,
             size: this.size,
-            sort: this.sort()
+            sort
           }, this.query())
           ).then((res) => {
             this.investigations = res.data

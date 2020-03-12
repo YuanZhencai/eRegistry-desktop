@@ -3,9 +3,9 @@
         <el-row>
             <patient-info :patient="timeline.patient"></patient-info>
         </el-row>
-        <el-row>
+        <el-row style="margin-bottom: 10px">
             <div class="float-right" v-if="timeline">
-                <template>
+                <template v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_AUDIT_' + projectId])">
                     <el-dropdown trigger="hover" v-if="!follow && patientCase && 'SUBMITTED' === patientCase.state">
                         <el-button type="primary" size="mini">
                             审核病例<i class="el-icon-arrow-down el-icon--right"></i>
@@ -46,7 +46,7 @@
                         </el-dropdown-menu>
                     </el-dropdown>
                 </template>
-                <template>
+                <template v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
                     <el-button type="primary" size="mini" v-if="!follow && patientCase && 'SUBMITTED' === patientCase.state">
                         撤回审核
                     </el-button>

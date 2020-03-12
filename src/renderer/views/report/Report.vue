@@ -102,7 +102,7 @@
 </template>
 
 <script>
-  import { copyReport, deleteReport, getReports, shareReport } from '../../api/ReportService'
+  import { copyReport, deleteReport, getAllReports, shareReport } from '../../api/ReportService'
   import { getUsersByLoginStartingWith } from '../../api/UserResource'
 
 export default {
@@ -141,7 +141,7 @@ export default {
         return (this.predicate && this.order) ? [this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc')] : []
       },
       loadAll() {
-        getReports({
+        getAllReports({
           page: this.page - 1,
           size: this.size,
           sort: this.sort(),

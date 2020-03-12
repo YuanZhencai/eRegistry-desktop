@@ -59,7 +59,6 @@
 <script>
   import { getProjectMembers, deleteMember } from '@/api/MemberResource'
   import { getProject } from '@/api/ProjectResource'
-  import { isAuthenticated } from '@/api/AccountService'
   import MemberDialogComponent from '../member/MemberDialogComponent'
   import AssignMemberDialog from '../center-member/AssignMemberDialog'
   import AssignTaskDialog from '../member-task/AssignTaskDialog'
@@ -94,9 +93,6 @@
     created() {
       this.getMembers(this.project.id)
       this.findProject(this.project.id)
-      isAuthenticated().then(res => {
-        console.log(res)
-      })
     },
     methods: {
       findProject(projectId) {

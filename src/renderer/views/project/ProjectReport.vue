@@ -1,12 +1,10 @@
 <template>
-  <div class="app-container">
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>病例表单</span>
-      </div>
-      <survey-creator :survey="report.survey" :tools="tools" @surveyChange="save"></survey-creator>
-    </el-card>
-  </div>
+  <el-card class="box-card">
+    <div slot="header" class="clearfix">
+      <span>病例表单</span>
+    </div>
+    <survey-creator :survey="report.survey" :tools="tools" @surveyChange="save"></survey-creator>
+  </el-card>
 </template>
 
 <script>
