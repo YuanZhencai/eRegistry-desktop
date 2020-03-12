@@ -28,10 +28,12 @@
               label="ID">
       </el-table-column>
       <el-table-column
-              prop="lastModifiedDate"
               sortable="custom"
               label="更新时间"
               width="180">
+        <template slot-scope="scope">
+          {{scope.row.lastModifiedDate | formatDate('YYYY-MM-DD HH:ss')}}
+        </template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -84,10 +86,11 @@
           return (this.predicate && this.order) ? [this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc')] : []
         },
         loadAll() {
+          const sort = this.sort()
           getInvestigations(Object.assign({
             page: this.page - 1,
             size: this.size,
-            sort: this.sort()
+            sort
           }, this.query())
           ).then((res) => {
             this.investigations = res.data
