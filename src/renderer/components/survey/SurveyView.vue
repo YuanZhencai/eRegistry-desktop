@@ -1,6 +1,6 @@
 <template>
   <div>
-    <survey v-if="survey" :survey="survey"></survey>
+    <survey :key="key" v-if="survey" :survey="survey"></survey>
   </div>
 </template>
 
@@ -34,7 +34,8 @@
     },
     data() {
       return {
-        survey: null
+        survey: null,
+        key: null
       }
     },
     created() {
@@ -45,36 +46,19 @@
       info: {
         deep: true,
         handler(newValue, oldValue) {
+          this.key = Math.round(Math.random() * 1000)
           this.render()
         }
       }
     },
     methods: {
-      render() {
-        const surveyModel = new SurveyVue.Model(this.info.survey)
-        surveyModel.locale = 'zh-cn'
-        surveyModel.onComplete.add(this.complete)
-        surveyModel.onValueChanged.add(this.onValueChanged)
-        if (this.info.mode === 'share') {
-          surveyModel.mode = 'edit'
-        } else {
-          surveyModel.mode = this.info.mode
-        }
-        surveyModel.onAfterRenderSurvey.add(this.addSaveButton)
-        surveyModel.data = this.info.data
-        this.survey = surveyModel
-      },
-      complete(survey) {
-        this.$emit('dataChange', survey.data, 'SUBMITTED')
-      },
-      onValueChanged(survey, options) {
-        this.$emit('valueChange', survey.data)
+      save(survey, options) {
+        this.$emit('dataChange', survey.data, 'SAVED')
       },
       addSaveButton(survey, options) {
-        console.info('addSaveButton')
         const element = options.htmlElement
-        if (element && Array.isArray(element) && element.length > 2) {
-          const footer = element[1].querySelector('.sv_nav')
+        if (element) {
+          const footer = element.querySelector('.sv_nav')
           if (footer) {
             let saveButton = footer.querySelector('#save-button')
             if (saveButton) {
@@ -92,10 +76,30 @@
             }
           }
         }
+      },
+      render() {
+        this.survey = null
+        this.$forceUpdate()
+        const surveyModel = new SurveyVue.Model(this.info.survey)
+        surveyModel.locale = 'zh-cn'
+        surveyModel.onComplete.add(this.complete)
+        surveyModel.onValueChanged.add(this.onValueChanged)
+        if (this.info.mode === 'share') {
+          surveyModel.mode = 'edit'
+        } else {
+          surveyModel.mode = this.info.mode
+        }
+        surveyModel.onAfterRenderSurvey.add(this.addSaveButton)
+        surveyModel.data = this.info.data
+        this.survey = surveyModel
+        this.$forceUpdate()
+      },
+      complete(survey) {
+        this.$emit('dataChange', survey.data, 'SUBMITTED')
+      },
+      onValueChanged(survey, options) {
+        this.$emit('valueChange', survey.data)
       }
-    },
-    save(survey, options) {
-      this.$emit('dataChange', survey.data, 'SAVED')
     }
   }
 </script>
