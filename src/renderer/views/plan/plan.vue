@@ -27,7 +27,7 @@
                      @click="planDeleteDialog(scope.row)">删除</el-button>
           <el-button type="info"
                      size="small"
-                     @click="CRF(scope)">
+                     @click="report(scope.row)">
             <span>CRF</span>
           </el-button>
         </template>
@@ -230,6 +230,11 @@ export default {
         console.log(e)
       }
       this.getplan()
+    },
+    report(plan) {
+      this.$router.push({
+        path: `/project/${this.projectId}/plan/${plan.id}/report`
+      })
     }
   }
 }

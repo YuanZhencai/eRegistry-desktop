@@ -168,6 +168,10 @@ export const constantRouterMap = [
           {
             path: 'plan',
             component: () => import('@/views/plan/plan')
+          },
+          {
+            path: 'plan/:planId/report',
+            component: () => import('@/views/plan/PlanReport')
           }
         ]
       }
