@@ -29,21 +29,19 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/dashboard',
     name: 'Dashboard',
-    hidden: true,
     children: [{
       path: 'dashboard',
       component: () => import('@/views/dashboard/index')
     }]
   },
   {
-    path: '/setting',
+    path: 'settings',
     component: Layout,
-    redirect: '/user-setting',
-    name: 'Dashboard',
+    name: 'Settings',
     hidden: true,
     children: [{
-      path: 'userSettings',
-      component: () => import('@/views/user-setting/userSettings')
+      path: '/settings',
+      component: () => import('@/views/settings/Settings')
     }]
   },
   {

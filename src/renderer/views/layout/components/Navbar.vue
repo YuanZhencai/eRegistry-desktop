@@ -1,25 +1,39 @@
 <template>
-  <el-menu class="navbar" mode="horizontal">
+  <el-menu class="navbar"
+           mode="horizontal">
     <breadcrumb></breadcrumb>
-    <el-dropdown class="avatar-container" trigger="click">
-      <div class="row-flex" style="margin-top: 10px">
-        <el-avatar :src="avatar" :size="30"></el-avatar>
+    <el-dropdown class="avatar-container"
+                 trigger="click">
+      <div class="row-flex"
+           style="margin-top: 10px">
+        <el-avatar :src="avatar"
+                   :size="30"></el-avatar>
         <span class="line-height30">{{name}}</span>
         <i class="el-icon-caret-bottom line-height30"></i>
       </div>
-      <el-dropdown-menu class="user-dropdown" slot="dropdown">
-        <router-link class="inlineBlock" to="/">
+      <el-dropdown-menu class="user-dropdown"
+                        slot="dropdown">
+        <router-link class="inlineBlock"
+                     to="/">
           <el-dropdown-item>
             Home
           </el-dropdown-item>
         </router-link>
-        <router-link class="inlineBlock" to="/report">
+        <router-link class="inlineBlock"
+                     to="/report">
           <el-dropdown-item>
             CRF
           </el-dropdown-item>
         </router-link>
+        <router-link class="inlineBlock"
+                     to="/settings">
+          <el-dropdown-item>
+            setting
+          </el-dropdown-item>
+        </router-link>
         <el-dropdown-item divided>
-          <span @click="logout" style="display:block;">LogOut</span>
+          <span @click="logout"
+                style="display:block;">LogOut</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -79,8 +93,8 @@ export default {
     position: absolute;
     right: 30px;
   }
-  .line-height30{
-    line-height: 30px
+  .line-height30 {
+    line-height: 30px;
   }
 }
 </style>
