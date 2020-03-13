@@ -123,7 +123,7 @@ export default {
         size: this.listQuery.size || 10
       }
       try {
-        const { res, headers } = await fetch(LOGGING.ecord(data))
+        const { res, headers } = await fetch(LOGGING.changes(data))
         this.tableData = res
         this.total = Number(headers['x-total-count'])
       } catch (e) {

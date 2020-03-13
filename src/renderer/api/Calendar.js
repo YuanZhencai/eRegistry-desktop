@@ -1,6 +1,6 @@
 // import { buldeGetPath } from './plan.js'
 // data 請求的參數，path get請求的路徑, filterData 不進入請求的參數
-const buldeGetPath = (data, path, filterData) => {
+export const buldeGetPath = (data, path, filterData) => {
   // 獲取 有值的參數，過濾掉沒有值的參數
   const haveKeys = Object.keys(data).filter(i => {
     return data[i] && i !== filterData
