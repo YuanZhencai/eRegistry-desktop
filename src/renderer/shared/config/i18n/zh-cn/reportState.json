@@ -1,0 +1,9 @@
+{
+    "eRegistryApp": {
+        "ReportState" : {
+            "null": "",
+            "PUBLISHED": "已发布",
+            "SAVED": "已保存"
+        }
+    }
+}

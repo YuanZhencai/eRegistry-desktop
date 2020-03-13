@@ -1,0 +1,9 @@
+{
+    "eRegistryApp": {
+        "AuditType" : {
+            "null": "",
+            "PATIENT_CASE": "病例",
+            "FOLLOW": "随访"
+        }
+    }
+}

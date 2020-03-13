@@ -1,0 +1,9 @@
+{
+    "eRegistryApp": {
+        "InvitationType" : {
+            "null": "",
+            "REGISTER": "REGISTER",
+            "PROJECT": "PROJECT"
+        }
+    }
+}

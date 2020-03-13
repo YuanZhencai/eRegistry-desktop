@@ -1,0 +1,23 @@
+{
+    "eRegistryApp": {
+        "memberTask" : {
+            "home": {
+                "title": "任务",
+                "createLabel": "创建新任务",
+                "createOrEditLabel": "创建或编辑任务"
+            },
+            "created": "分配任务成功",
+            "updated": "分配任务成功",
+            "deleted": "取消任务成功",
+            "delete": {
+                "question": "你确定要取消任务 {{ id }} 吗？"
+            },
+            "detail": {
+                "title": "任务"
+            },
+            "taskId": "任务",
+            "type": "类型",
+            "memberId": "成员"
+        }
+    }
+}

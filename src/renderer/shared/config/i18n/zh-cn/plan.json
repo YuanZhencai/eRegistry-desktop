@@ -1,0 +1,27 @@
+{
+    "eRegistryApp": {
+        "plan" : {
+            "home": {
+                "titledate":"随访日期",
+                "title": "随访计划",
+                "createLabel": "创建随访计划",
+                "createOrEditLabel": "创建或编辑随访计划"
+            },
+            "created": "随访计划创建成功",
+            "updated": "随访计划更新成功",
+            "deleted": "随访计划删除成功",
+            "delete": {
+                "question": "你确定要删除随访计划 {{ name }} 吗？"
+            },
+            "detail": {
+                "title": "随访计划"
+            },
+            "name": "名称",
+            "condition": "第几天开始",
+            "remindingInterval": "提醒区间(天)",
+            "introduction": "简介",
+            "reportId": "CRF模板",
+            "projectId": "项目"
+        }
+    }
+}

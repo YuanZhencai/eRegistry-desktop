@@ -1,0 +1,14 @@
+{
+    "eRegistryApp": {
+        "AuditState" : {
+            "null": "",
+            "CHANGE_SUBMIT": "申请变更",
+            "CHANGE_APPROVE": "同意变更",
+            "CHANGE_REFUSE": "拒绝变更",
+            "SUBMIT": "提交审核",
+            "WITHDRAWAL": "撤回",
+            "APPROVE": "通过",
+            "REFUSE": "退回"
+        }
+    }
+}

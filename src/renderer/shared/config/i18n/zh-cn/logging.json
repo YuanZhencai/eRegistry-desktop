@@ -1,0 +1,17 @@
+{
+    "logging": {
+        "title": "日志记录",
+        "form": {
+            "filterbyevent": "根据事件过滤",
+            "filterbyusername": "按用户名筛选",
+            "filterbyrecord": "根据记录过滤",
+            "displayingevents": "显示事件(最近)"
+        },
+        "messages": {
+            "timedate": "时间",
+            "username": "用户名",
+            "action": "行动",
+            "listofdatachangesorfieldsexported": "导出的数据更改或字段列表"
+        }
+    }
+}

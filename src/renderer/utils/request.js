@@ -1,7 +1,6 @@
 import axios from 'axios'
 import store from '../store'
-
-import * as MessageService from '../shared/message/message-service'
+import MessageService from '../shared/message/message-service'
 
 // 创建axios实例
 const service = axios.create({
@@ -23,7 +22,19 @@ service.interceptors.request.use(config => {
 })
 
 // respone拦截器
-service.interceptors.response.use(MessageService.success, MessageService.error)
+
+const messageService = new MessageService()
+
+service.interceptors.response.use(
+  response => {
+    messageService.success(response)
+    return response
+  },
+  error => {
+    messageService.error(error)
+    return Promise.reject(error)
+  }
+)
 /**
  * 封装post请求
  * @param url

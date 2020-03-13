@@ -1,0 +1,22 @@
+{
+    "eRegistryApp": {
+        "investigation" : {
+            "home": {
+                "title": "派兰患者登记调查表",
+                "createLabel": "创建新调查",
+                "createOrEditLabel": "创建或编辑调查"
+            },
+            "created": "调查创建成功",
+            "updated": "调查更新成功",
+            "deleted": "调查删除成功",
+            "delete": {
+                "question": "你确定要删除调查吗？"
+            },
+            "detail": {
+                "title": "调查结果"
+            },
+            "questionnaireId": "问卷",
+            "content": "内容"
+        }
+    }
+}

@@ -24,9 +24,13 @@ Vue.config.productionTip = false
 
 config.initVueApp(Vue)
 
+const i18n = config.initI18N(Vue)
+
 new Vue({
   components: { App },
   router,
   store,
+  i18n,
   template: '<App/>'
 }).$mount('#app')
+

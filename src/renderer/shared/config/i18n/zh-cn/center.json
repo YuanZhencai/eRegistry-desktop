@@ -1,0 +1,29 @@
+{
+    "eRegistryApp": {
+        "center" : {
+            "home": {
+                "title": "分中心管理",
+                "createLabel": "创建分中心",
+                "createOrEditLabel": "创建或编辑分中心"
+            },
+            "created": "分中心创建成功",
+            "updated": "分中心更新成功",
+            "deleted": "分中心删除成功",
+            "delete": {
+                "question": "你确定要删除 分中心 {{ name }} 吗？"
+            },
+            "detail": {
+                "title": "Center"
+            },
+            "memberCount": "中心人数",
+            "name": "名称",
+            "telephone": "电话",
+            "no": "编号",
+            "chargedBy": "负责人",
+            "email": "邮箱",
+            "zipCode": "邮编",
+            "address": "地址",
+            "projectId": "项目"
+        }
+    }
+}

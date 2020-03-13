@@ -1,0 +1,29 @@
+{
+    "eRegistryApp": {
+        "invitation" : {
+            "home": {
+                "title": "Invitations",
+                "createLabel": "创建新 Invitation",
+                "createOrEditLabel": "创建或编辑 Invitation"
+            },
+            "active": {
+                "title": "激活"
+            },
+            "created": "Invitation {{ param }} 创建成功",
+            "updated": "Invitation {{ param }} 更新成功",
+            "deleted": "Invitation {{ param }} 删除成功",
+            "member": "成员邀请成功",
+            "activated": "激活成功",
+            "delete": {
+                "question": "你确定要删除 Invitation {{ id }} 吗？"
+            },
+            "detail": {
+                "title": "Invitation"
+            },
+            "key": "Key",
+            "type": "Type",
+            "email": "Email",
+            "params": "Params"
+        }
+    }
+}
