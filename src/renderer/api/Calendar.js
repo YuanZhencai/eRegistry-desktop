@@ -3,7 +3,7 @@
 export const buldeGetPath = (data, path, filterData) => {
   // 獲取 有值的參數，過濾掉沒有值的參數
   const haveKeys = Object.keys(data).filter(i => {
-    return data[i] && i !== filterData
+    return i !== filterData
   })
 
   let newPath = path

@@ -112,10 +112,10 @@ export default {
     async loadAll() {
       const data = {
         id: this.projectId,
-        type: this.form.region,
-        author: this.members.username,
-        page: this.listQuery.page,
-        size: this.listQuery.size
+        type: this.form.region || '',
+        author: this.members.username || '',
+        page: this.listQuery.page || 0,
+        size: this.listQuery.size || 10
       }
       try {
         const { res, headers } = await fetch(LOGGING.changes(data))
