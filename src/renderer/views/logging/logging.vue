@@ -15,11 +15,11 @@
                label-width="120px"
                size="mini">
         <el-form-item label="按用户名筛选">
-          <el-select v-model="userlist.username"
-                     clearable
+          <el-select v-model="members.username"
+                     :clearable="this.isAdmin"
                      placeholder="请选择用户名"
-                     @change="(e) => query(e, 'user')">
-            <el-option v-for="item in userlist"
+                     @change="loadAll()">
+            <el-option v-for="item in members"
                        :key="item.username"
                        :label="item.username"
                        :value="item.username">
@@ -30,7 +30,7 @@
           <el-select v-model="form.region"
                      clearable
                      placeholder="请选择过滤事件"
-                     @change="(e) => query(e, 'active')">
+                     @change="loadAll()">
             <el-option label="患者"
                        value="patient"></el-option>
             <el-option label="病例"
@@ -83,44 +83,39 @@ export default {
       total: 0,
       listQuery: {
         page: 0,
-        limit: 10,
-        login: undefined,
+        size: 10,
         sort: '+id'
       },
-      userlist: {
-        username: ''
-      },
+      members: [],
       form: {
         region: ''
       },
       tableData: [],
       projectId,
-      exportDialogVisible: false
+      isAdmin: false
     }
   },
   mounted() {
-    this.findData(this.projectId)
-    this.ecord(this.projectId)
+    this.findMembers(this.projectId)
+    this.loadAll(this.projectId)
   },
   methods: {
     sizeChange(size) {
-      this.listQuery.limit = size
-      this.query()
+      this.listQuery.size = size
+      this.loadAll()
     },
     currentChange(page) {
       this.listQuery.page = page - 1
-      this.query()
+      this.loadAll()
     },
-    query() {
-      this.ecord()
-    },
-    async ecord() {
+    // 渲染该项目所做的所有操作,根据渲染条件请求数据并且渲染
+    async loadAll() {
       const data = {
         id: this.projectId,
-        type: this.form.region || '',
-        author: this.userlist.username || '',
-        page: this.listQuery.page || 0,
-        size: this.listQuery.size || 10
+        type: this.form.region,
+        author: this.members.username,
+        page: this.listQuery.page,
+        size: this.listQuery.size
       }
       try {
         const { res, headers } = await fetch(LOGGING.changes(data))
@@ -130,10 +125,15 @@ export default {
         console.log(e)
       }
     },
-    async findData(id) {
+    // 获取用户名筛选并渲染
+    async findMembers(id) {
       try {
-        const res = await fetch(LOGGING.userFiltrate(id))
-        this.userlist = res.res
+        const res = await fetch(LOGGING.userFilter(id))
+        this.members = res.res
+        this.isAdmin = this.$hasAnyAuthority([`PROJECT_ADMIN_${this.projectId}`])
+        if (!this.isAdmin && this.members.length > 0) {
+          this.members.username = this.members[0].username
+        }
       } catch (e) {
         console.log(e)
       }
