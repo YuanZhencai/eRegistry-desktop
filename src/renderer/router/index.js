@@ -33,8 +33,18 @@ export const constantRouterMap = [
     children: [{
       path: 'dashboard',
       component: () => import('@/views/dashboard/index')
-    },
-    { path: '/settings', component: () => import('@/views/user-setting/userSettings'), hidden: true }]
+    }]
+  },
+  {
+    path: '/setting',
+    component: Layout,
+    redirect: '/user-setting',
+    name: 'Dashboard',
+    hidden: true,
+    children: [{
+      path: 'userSettings',
+      component: () => import('@/views/user-setting/userSettings')
+    }]
   },
   {
     path: '/example',
