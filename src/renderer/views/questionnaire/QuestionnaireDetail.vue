@@ -6,16 +6,19 @@
     <div class="card-content">
       <survey-creator :survey="report.survey" :tools="tools" @surveyChange="save"></survey-creator>
     </div>
+    <select-report ref="select-report"></select-report>
   </el-card>
 </template>
 
 <script>
   import { getQuestionnaireWithReport, saveWithReport } from '@/api/QuestionnaireService'
   import SurveyCreator from '@/components/survey/SurveyCreator'
+  import SelectReport from '../report/SelectReport'
 
-  export default {
+export default {
     name: 'QuestionnaireDetail',
     components: {
+      SelectReport,
       SurveyCreator
     },
     data() {
@@ -64,7 +67,9 @@
         })
       },
       selectReport() {
-        console.info('selectReport')
+        this.$refs['select-report'].show().then((report) => {
+          this.report = report
+        })
       }
     }
   }
