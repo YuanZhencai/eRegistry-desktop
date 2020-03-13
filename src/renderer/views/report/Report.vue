@@ -138,7 +138,7 @@ export default {
     },
     methods: {
       sort() {
-        return (this.predicate && this.order) ? [this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc')] : []
+        return (this.predicate && this.order) ? this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
       },
       loadAll() {
         getAllReports({
