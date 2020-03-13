@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
 import store from '../store'
 
-console.info('process.env.BASE_API', process.env.BASE_API)
+import * as MessageService from '../shared/message/message-service'
+
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
@@ -23,18 +23,7 @@ service.interceptors.request.use(config => {
 })
 
 // respone拦截器
-service.interceptors.response.use(
-  response => response,
-  error => {
-    console.log('err' + error)// for debug
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
-    })
-    return Promise.reject(error)
-  }
-)
+service.interceptors.response.use(MessageService.success, MessageService.error)
 /**
  * 封装post请求
  * @param url
