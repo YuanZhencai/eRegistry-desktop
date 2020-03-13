@@ -15,7 +15,7 @@
                label-width="120px"
                size="mini">
         <el-form-item label="按用户名筛选">
-          <el-select v-model="members.username"
+          <el-select v-model="userSelection.username"
                      :clearable="this.isAdmin"
                      placeholder="请选择用户名"
                      @change="loadAll()">
@@ -90,6 +90,9 @@ export default {
       form: {
         region: ''
       },
+      userSelection: {
+        username: ''
+      },
       tableData: [],
       projectId,
       isAdmin: false
@@ -132,7 +135,7 @@ export default {
         this.members = res.res
         this.isAdmin = this.$hasAnyAuthority([`PROJECT_ADMIN_${this.projectId}`])
         if (!this.isAdmin && this.members.length > 0) {
-          this.members.username = this.members[0].username
+          this.userSelection.username = this.members[0].username
         }
       } catch (e) {
         console.log(e)
