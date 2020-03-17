@@ -184,6 +184,10 @@ export const constantRouterMap = [
           {
             path: 'calendar',
             component: () => import('@/views/calendar/index')
+          },
+          {
+            path: 'log',
+            component: () => import('@/views/logging/logging')
           }
         ]
       }
