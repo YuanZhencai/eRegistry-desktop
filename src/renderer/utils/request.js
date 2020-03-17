@@ -42,9 +42,9 @@ service.interceptors.response.use(
  * @returns {Promise}
  */
 
-export function post(url, data = {}) {
+export function post(url, data = {}, config) {
   return new Promise((resolve, reject) => {
-    service.post(url, data)
+    service.post(url, data, config)
       .then(response => {
         resolve(response.data)
       }, err => {
