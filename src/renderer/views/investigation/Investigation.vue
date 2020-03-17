@@ -13,7 +13,7 @@
           <el-date-picker type="date" size="mini" placeholder="结束时间" v-model="end" style="width: 100%;"></el-date-picker>
         </el-col>
       </el-form-item>
-      <el-form-item>
+      <el-form-item v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId])">
         <el-button type="primary" size="mini">导出</el-button>
       </el-form-item>
     </el-form>
