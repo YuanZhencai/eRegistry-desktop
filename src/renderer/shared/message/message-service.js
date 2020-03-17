@@ -1,10 +1,10 @@
 import { Message } from 'element-ui'
 
 export default class MessageService {
-  vue
+  $i18n
 
-  constructor(vue) {
-    this.vue = vue
+  constructor(i18n) {
+    this.$i18n = i18n
   }
 
   success(response) {
@@ -76,7 +76,7 @@ export default class MessageService {
     if (key) {
       key = key.replace('studioApp', '')
       key = key.replace('eRegistryApp', '')
-      return this.vue.$t(key, data)
+      return this.$i18n.t(key, data)
     }
     return key
   }

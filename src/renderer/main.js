@@ -14,6 +14,7 @@ import '@/icons' // icon
 import '@/permission' // permission control
 import * as config from './shared/config/config'
 import '@/assets/font-awesome-4.7.0/css/font-awesome.css'
+import { setupAxiosInterceptors } from './shared/config/axios-interceptor'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 
@@ -21,9 +22,11 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
+config.initVueApp(Vue)
+
 const i18n = config.initI18N(Vue)
 
-config.initVueApp(Vue)
+setupAxiosInterceptors(i18n, () => console.log('Unauthorized!'))
 
 new Vue({
   components: { App },

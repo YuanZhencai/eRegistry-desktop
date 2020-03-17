@@ -18,8 +18,8 @@ const onRequestSuccess = config => {
   config.url = `${SERVER_API_URL}${config.url}`
   return config
 }
-const setupAxiosInterceptors = (vue, onUnauthenticated) => {
-  const messageService = new MessageService(vue)
+const setupAxiosInterceptors = (i18n, onUnauthenticated) => {
+  const messageService = new MessageService(i18n)
 
   const onResponseSuccess = res => {
     messageService.success(res)
