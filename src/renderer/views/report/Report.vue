@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-button type="primary">
+    <el-button type="primary" size="mini" class="float-right">
       <router-link :to="'/report/new'">
         创建CRF
       </router-link>
@@ -16,10 +16,10 @@
           label="标题">
       </el-table-column>
       <el-table-column
-          prop="lastModifiedDate"
           sortable="custom"
           label="更新时间"
           width="180">
+        <template slot-scope="scope">{{scope.row.lastModifiedDate | formatDate('YYYY-MM-DD HH:mm:ss')}}</template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">

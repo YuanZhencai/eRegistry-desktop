@@ -24,27 +24,27 @@
             <el-button type="primary" size="mini" icon="el-icon-plus" @click="newPatient">新建患者</el-button>
         </el-row>
         <el-row>
-            <el-table v-loading="loading" :data="patients.slice((currentPage-1)*pageSize, currentPage*pageSize)"
-                      :default-sort="{prop: 'id', order: 'descending'}" style="width: 100%">
-                <el-table-column label="ID" sortable>
+            <el-table v-loading="loading" :data="patients"
+                      @sort-change="changeOrder" style="width: 100%">
+                <el-table-column prop="id" label="ID" sortable="custom">
                     <template slot-scope="scope">
                         <router-link :to="{name: 'patientDetail', params: { patientId: scope.row.id}}" class="linka">{{scope.row.id}}</router-link>
                     </template>
                 </el-table-column>
-                <el-table-column label="姓名" sortable>
+                <el-table-column prop="name" label="姓名" sortable="custom">
                     <template slot-scope="scope">
                         <router-link :to="{name: 'patientDetail', params: { patientId: scope.row.id}}" class="linka">{{scope.row.name}}</router-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sex" label="性别" sortable></el-table-column>
-                <el-table-column prop="age" label="年龄" sortable></el-table-column>
-                <el-table-column label="就诊日期" sortable>
+                <el-table-column prop="sex" label="性别" sortable="custom"></el-table-column>
+                <el-table-column prop="age" label="年龄"></el-table-column>
+                <el-table-column prop="visitDate" label="就诊日期" sortable="custom">
                     <template slot-scope="scope">{{scope.row.visitDate | formatDate('YYYY-MM-DD')}}</template>
                 </el-table-column>
-                <el-table-column label="更新时间" sortable>
+                <el-table-column prop="lastModifiedDate" label="更新时间" sortable="custom">
                     <template slot-scope="scope">{{scope.row.lastModifiedDate | formatDate('YYYY-MM-DD')}}</template>
                 </el-table-column>
-                <el-table-column prop="createdBy" label="录入人" sortable></el-table-column>
+                <el-table-column prop="createdBy" label="录入人" sortable="custom"></el-table-column>
                 <el-table-column prop="caseCount" label="病例数"></el-table-column>
                 <el-table-column prop="followCount" label="随访数"></el-table-column>
                 <el-table-column align="center">
@@ -58,9 +58,14 @@
             </el-table>
         </el-row>
         <el-row>
-            <el-pagination background layout="prev, pager, next, jumper"
-                           :total="total" :page-size="pageSize" :current-page="currentPage"
-                           @current-change="currentChange" @size-change="sizeChange" class="pagination">
+            <el-pagination background
+                           :current-page="currentPage"
+                           :page-sizes="[10, 20, 30, 40]"
+                           :page-size="pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="total"
+                           @current-change="currentChange"
+                           @size-change="sizeChange" class="pagination">
             </el-pagination>
         </el-row>
         <patient-dialog-component v-if="editDialogVisible" :visible="editDialogVisible" :patient-id="selectedPatient.id"
@@ -96,9 +101,12 @@
       const projectId = this.$route.params.projectId
       return {
         loading: true,
+        predicate: 'id',
+        order: 'ascending',
         total: 0,
         pageSize: 10, // 单页数据量
         currentPage: 1, // 默认开始页面
+        previousPage: 1,
         form: {
           queryString: null,
           startDate: null,
@@ -115,33 +123,46 @@
       }
     },
     created() {
-      this.getPatients({ page: this.currentPage - 1, size: this.pageSize })
+      this.getPatients()
     },
     methods: {
+      sort() {
+        return (this.predicate && this.order) ? this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
+      },
+      changeOrder(sort) {
+        this.predicate = sort.prop
+        this.order = sort.order
+        this.getPatients()
+      },
       currentChange: function(currentPage) {
         this.currentPage = currentPage
+        this.getPatients()
       },
       sizeChange: function(val) {
         this.pageSize = val
+        this.getPatients()
       },
-      getPatients(params) {
-        getProjectPatients(this.projectId, params).then(res => {
-          this.patients = res.data
-          this.loading = false
-          this.total = this.patients.length
+      getPatients() {
+        const vm = this
+        vm.loading = true
+        getProjectPatients(this.projectId, {
+          page: this.currentPage - 1,
+          size: this.pageSize,
+          sort: this.sort(),
+          'EQ_patient.name': this.form.queryString,
+          'GT_patient.visitDate': this.form.startDate,
+          'LT_patient.visitDate': this.form.endDate
+        }).then((res) => {
+          vm.patients = res.data
+          vm.loading = false
+          vm.total = Number(res.headers['x-total-count'])
         })
       },
       searchPatient() {
         if (this.form.queryString === '') {
           this.form.queryString = null
         }
-        this.getPatients({
-          'EQ_patient.name': this.form.queryString,
-          'GT_patient.visitDate': this.form.startDate,
-          'LT_patient.visitDate': this.form.endDate,
-          page: this.currentPage - 1,
-          size: this.pageSize
-        })
+        this.getPatients()
       },
       edit(patient) {
         this.selectedPatient = patient
@@ -161,7 +182,6 @@
         if (val.page === 'editDialog') {
           this.editDialogVisible = false
           if (val.type === 'confirm') {
-            this.loading = true
             this.getPatients()
           }
         } else {
