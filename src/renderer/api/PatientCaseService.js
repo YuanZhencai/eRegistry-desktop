@@ -1,14 +1,14 @@
-import request from '@/utils/request'
+import axios from 'axios'
 
 export function getAllPatientCases() {
-  return request({
+  return axios({
     url: `/api/patient-cases`,
     method: 'get'
   })
 }
 
 export function createPatientCase(data) {
-  return request({
+  return axios({
     url: `/api/patient-cases`,
     method: 'post',
     data
@@ -16,7 +16,7 @@ export function createPatientCase(data) {
 }
 
 export function updatePatientCase(data) {
-  return request({
+  return axios({
     url: `/api/patient-cases`,
     method: 'put',
     data
@@ -24,14 +24,14 @@ export function updatePatientCase(data) {
 }
 
 export function deletePatientCase(id) {
-  return request({
+  return axios({
     url: `/api/patient-cases/${id}`,
     method: 'delete'
   })
 }
 
 export function getPatientCase(id) {
-  return request({
+  return axios({
     url: `/api/patient-cases/${id}`,
     method: 'get'
   })

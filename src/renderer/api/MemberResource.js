@@ -1,7 +1,7 @@
-import request from '@/utils/request'
+import axios from 'axios'
 
 export function getProjectMembers(projectId, params) {
-  return request({
+  return axios({
     url: `/api/projects/${projectId}/members`,
     method: 'get',
     params: params
@@ -9,21 +9,21 @@ export function getProjectMembers(projectId, params) {
 }
 
 export function getMember(id) {
-  return request({
+  return axios({
     url: `/api/members/${id}`,
     method: 'get'
   })
 }
 
 export function deleteMember(id) {
-  return request({
+  return axios({
     url: `/api/members/${id}`,
     method: 'delete'
   })
 }
 
 export function createBatchMember(batchMember) {
-  return request({
+  return axios({
     url: `/api/members/batch`,
     method: 'post',
     data: batchMember
@@ -31,7 +31,7 @@ export function createBatchMember(batchMember) {
 }
 
 export function createMember(member) {
-  return request({
+  return axios({
     url: `/api/members`,
     method: 'post',
     data: member
@@ -39,7 +39,7 @@ export function createMember(member) {
 }
 
 export function updateMember(member) {
-  return request({
+  return axios({
     url: `/api/members`,
     method: 'put',
     data: member

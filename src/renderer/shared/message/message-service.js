@@ -1,7 +1,12 @@
 import { Message } from 'element-ui'
-import Vue from 'vue'
 
 export default class MessageService {
+  vue
+
+  constructor(vue) {
+    this.vue = vue
+  }
+
   success(response) {
     const headers = this.responseHeaders(response)
     if (headers.length > 1) {
@@ -69,8 +74,9 @@ export default class MessageService {
 
   translate(key, data) {
     if (key) {
-      key = key.replace('studioApp', 'eRegistryApp')
-      return Vue.$t(key, data)
+      key = key.replace('studioApp', '')
+      key = key.replace('eRegistryApp', '')
+      return this.vue.$t(key, data)
     }
     return key
   }

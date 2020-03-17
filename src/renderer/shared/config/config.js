@@ -5,6 +5,7 @@ import VueAxios from 'vue-axios'
 import { hasAnyAuthority } from '../security/security'
 import VueI18n from 'vue-i18n'
 import JhiFormatter from './formatter'
+import { setupAxiosInterceptors } from './axios-interceptor'
 
 export function initVueApp(vue) {
   directives.initDirectives()
@@ -12,6 +13,7 @@ export function initVueApp(vue) {
   vue.use(VueAxios, axios)
   vue.prototype.$axios = axios
   vue.prototype.$hasAnyAuthority = hasAnyAuthority
+  setupAxiosInterceptors(vue, () => console.log('Unauthorized!'))
 }
 
 const dateTimeFormats = {
@@ -75,7 +77,7 @@ export function initI18N(vue) {
     silentTranslationWarn: true,
     formatter: new JhiFormatter(),
     messages: {
-      'zh-CN': require('./i18n/zh-cn')
+      'zh-CN': require('./i18n/zh-cn.json')
     }
   })
 }

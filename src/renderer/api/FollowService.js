@@ -1,7 +1,7 @@
-import request from '@/utils/request'
+import axios from 'axios'
 
 export function getAllFollows(params) {
-  return request({
+  return axios({
     url: `/api/follows`,
     method: 'get',
     params
@@ -9,7 +9,7 @@ export function getAllFollows(params) {
 }
 
 export function createFollow(data) {
-  return request({
+  return axios({
     url: `/api/follows`,
     method: 'post',
     data
@@ -17,7 +17,7 @@ export function createFollow(data) {
 }
 
 export function updateFollow(data) {
-  return request({
+  return axios({
     url: `/api/follows`,
     method: 'put',
     data
@@ -25,35 +25,35 @@ export function updateFollow(data) {
 }
 
 export function getFollow(id) {
-  return request({
+  return axios({
     url: `/api/follows/${id}`,
     method: 'get'
   })
 }
 
 export function deleteFollow(id) {
-  return request({
+  return axios({
     url: `/api/follows/${id}`,
     method: 'delete'
   })
 }
 
 export function getFollowEvents(projectId) {
-  return request({
+  return axios({
     url: `/api/follows/events/${projectId}`,
     method: 'get'
   })
 }
 
 export function getFollowRemindingCases() {
-  return request({
+  return axios({
     url: `/api/follows/reminds`,
     method: 'get'
   })
 }
 
 export function getPlanFollows(planId) {
-  return request({
+  return axios({
     url: `/api/plans/${planId}/follows`,
     method: 'get'
   })

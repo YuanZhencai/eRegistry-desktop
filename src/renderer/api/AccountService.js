@@ -1,7 +1,7 @@
-import request from '@/utils/request'
+import axios from 'axios'
 
 export function saveAccount(user) {
-  return request({
+  return axios({
     url: `/api/account`,
     method: 'post',
     data: user
@@ -9,7 +9,7 @@ export function saveAccount(user) {
 }
 
 export function isAuthenticated() {
-  return request({
+  return axios({
     url: `/api/authenticate`,
     method: 'get'
   })

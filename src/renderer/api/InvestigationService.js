@@ -1,14 +1,14 @@
-import request from '@/utils/request'
+import axios from 'axios'
 
 export function getQuestionnaireReport(questionnaireId) {
-  return request({
+  return axios({
     url: `/api/questionnaire-investigations/${questionnaireId}/report`,
     method: 'get'
   })
 }
 
 export function saveInvestigation(investigation) {
-  return request({
+  return axios({
     url: `/api/questionnaire-investigations`,
     method: 'post',
     data: investigation
@@ -16,7 +16,7 @@ export function saveInvestigation(investigation) {
 }
 
 export function getInvestigations(req) {
-  return request({
+  return axios({
     url: `/api/investigations`,
     method: 'get',
     params: req
@@ -24,7 +24,7 @@ export function getInvestigations(req) {
 }
 
 export function getInvestigation(id) {
-  return request({
+  return axios({
     url: `/api/investigations/${id}`,
     method: 'get'
   })

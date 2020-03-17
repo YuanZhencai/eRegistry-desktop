@@ -1,7 +1,7 @@
-import request from '@/utils/request'
+import axios from 'axios'
 
 export function getProjectCenters(projectId, params) {
-  return request({
+  return axios({
     url: `/api/projects/${projectId}/centers`,
     method: 'get',
     params: params
@@ -9,21 +9,21 @@ export function getProjectCenters(projectId, params) {
 }
 
 export function getCenter(id) {
-  return request({
+  return axios({
     url: `/api/centers/${id}`,
     method: 'get'
   })
 }
 
 export function deleteCenter(id) {
-  return request({
+  return axios({
     url: `/api/centers/${id}`,
     method: 'delete'
   })
 }
 
 export function updateCenter(center) {
-  return request({
+  return axios({
     url: `/api/centers`,
     method: 'put',
     data: center
@@ -31,7 +31,7 @@ export function updateCenter(center) {
 }
 
 export function createCenter(center) {
-  return request({
+  return axios({
     url: `/api/centers`,
     method: 'post',
     data: center
@@ -39,7 +39,7 @@ export function createCenter(center) {
 }
 
 export function getAllCenters(params) {
-  return request({
+  return axios({
     url: `/api/centers`,
     method: 'get',
     params: params

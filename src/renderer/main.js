@@ -13,7 +13,6 @@ import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
 import * as config from './shared/config/config'
-import '@/utils/filter'
 import '@/assets/font-awesome-4.7.0/css/font-awesome.css'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
@@ -22,9 +21,9 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
-config.initVueApp(Vue)
-
 const i18n = config.initI18N(Vue)
+
+config.initVueApp(Vue)
 
 new Vue({
   components: { App },

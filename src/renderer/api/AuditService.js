@@ -1,7 +1,7 @@
-import request from '@/utils/request'
+import axios from 'axios'
 
 export function getAllAudits(params) {
-  return request({
+  return axios({
     url: `/api/audits`,
     method: 'get',
     params
@@ -9,7 +9,7 @@ export function getAllAudits(params) {
 }
 
 export function createAudit(data) {
-  return request({
+  return axios({
     url: `/api/audits`,
     method: 'post',
     data
@@ -17,7 +17,7 @@ export function createAudit(data) {
 }
 
 export function updateAudit(data) {
-  return request({
+  return axios({
     url: `/api/audits`,
     method: 'put',
     data
@@ -25,21 +25,21 @@ export function updateAudit(data) {
 }
 
 export function getAudit(id) {
-  return request({
+  return axios({
     url: `/api/audits/${id}`,
     method: 'get'
   })
 }
 
 export function deleteAudit(id) {
-  return request({
+  return axios({
     url: `/api/audits/${id}`,
     method: 'delete'
   })
 }
 
 export function changeAudit(data) {
-  return request({
+  return axios({
     url: `/api/audits/change`,
     method: 'post',
     data
@@ -47,7 +47,7 @@ export function changeAudit(data) {
 }
 
 export function recordAudit(data) {
-  return request({
+  return axios({
     url: `/api/audits/record`,
     method: 'post',
     data
@@ -55,7 +55,7 @@ export function recordAudit(data) {
 }
 
 export function withdrawalAudit(data) {
-  return request({
+  return axios({
     url: `/api/audits/withdrawal`,
     method: 'post',
     data
