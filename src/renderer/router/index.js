@@ -39,6 +39,7 @@ export const constantRouterMap = [
     component: Layout,
     name: 'Settings',
     hidden: true,
+    meta: { title: '个人设置', icon: 'el-icon-settin' },
     children: [{
       path: '/settings',
       component: () => import('@/views/settings/Settings')
