@@ -31,7 +31,7 @@
             </el-pagination>
         </el-row>
         <el-dialog v-if="deleteCenterDialogVisible" title="确认删除项目中心" :visible.sync="deleteCenterDialogVisible" :before-close="closeDialog">
-            <span>是否确认删除项目 '{{this.selectedCenter.name}}' ？</span>
+            <span>是否确认删除中心 '{{this.selectedCenter.name}}' ？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="deleteCenterDialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="confirmDelete">删 除</el-button>
@@ -62,7 +62,13 @@
         deleteCenterDialogVisible: false,
         centerDialogVisible: false,
         selectedCenter: null,
-        projectId
+        projectId,
+        sortPropMap: {
+          id: 'c.id',
+          name: 'c.name',
+          no: 'c.no',
+          chargedBy: 'c.charged_by'
+        }
       }
     },
     created() {
@@ -125,7 +131,7 @@
       confirmDelete() {
         deleteCenter(this.selectedCenter.id).then((res) => {
           this.openMessage('分中心删除成功', 'success')
-          this.closeDialog()
+          this.closeDialog({ page: 'deleteDialog' })
           this.loading = true
           this.getCenters()
         })

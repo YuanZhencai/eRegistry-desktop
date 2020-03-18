@@ -1,23 +1,16 @@
 <template>
     <el-dialog title="创建或编辑分中心" :visible.sync="visible" :before-close="cancel">
-        <el-form label-width="80px">
-            <el-form-item label="名称" prop="name"
-                          :rules="{ required: true, message: '名称不能为空', trigger: 'blur' }"
-            >
+        <el-form label-width="80px" :model="center" :rules="rules" ref="centerForm" size="mini">
+            <el-form-item label="名称" prop="name">
                 <el-input v-model="center.name"></el-input>
             </el-form-item>
-            <el-form-item label="电话" prop="telephone"
-                          :rules="[
-                            { required: true, message: '电话不能为空', trigger: 'blur' },
-                            { pattern: /^((13|14|15|16|17|18)[0-9]{1}\d{8})|([0-9]{1}\d{7})$/, message: '请输入正确的电话号码', trigger: ['blur', 'change'] }
-                          ]"
-            >
+            <el-form-item label="电话" prop="telephone">
                 <el-input v-model="center.telephone" :maxlength="11"></el-input>
             </el-form-item>
-            <el-form-item label="编号" prop="no" :rules="{ required: true, message: '编号不能为空', trigger: 'blur' }">
+            <el-form-item label="编号" prop="no">
                 <el-input v-model="center.no"></el-input>
             </el-form-item>
-            <el-form-item label="负责人" prop="chargedBy" :rules="{ required: true, message: '负责人不能为空', trigger: 'blur' }">
+            <el-form-item label="负责人" prop="chargedBy">
                 <el-input v-model="center.chargedBy"></el-input>
             </el-form-item>
             <el-form-item label="邮箱" >
@@ -32,7 +25,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button size="mini" @click="cancel">取 消</el-button>
-            <el-button size="mini" type="primary" @click="confirm">保存</el-button>
+            <el-button size="mini" type="primary" @click="confirm('centerForm')">保存</el-button>
         </div>
     </el-dialog>
 </template>
@@ -53,15 +46,21 @@
       const projectId = this.$route.params.projectId
       return {
         projectId,
-        center: { name: null },
-        formRules: {
-          name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
+        center: {},
+        rules: {
+          name: [
+            { required: true, message: '名称不能为空', trigger: 'blur' }
+          ],
           telephone: [
             { required: true, message: '电话不能为空', trigger: 'blur' },
-            { type: 'tel', message: '请输入正确的电话号码', trigger: 'blur' }
+            { pattern: /^(1(3|4|5|6|7|8|9)\d{9})$/, message: '手机号码有误，请重填', trigger: 'blur' }
           ],
-          no: [{ required: true, message: '编号不能为空', trigger: 'blur' }],
-          chargedBy: [{ required: true, message: '负责人不能为空', trigger: 'blur' }]
+          no: [
+            { required: true, message: '编号不能为空', trigger: 'blur' }
+          ],
+          chargedBy: [
+            { required: true, message: '负责人不能为空', trigger: 'blur' }
+          ]
         }
       }
     },
@@ -84,20 +83,22 @@
       closeDialog() {
         this.$emit('closeDialog', { page: 'centerDialog', type: 'confirm' })
       },
-      confirm() {
-        if (this.centerId) {
-          updateCenter(this.center).then(res => {
-            console.log(res.data)
-            this.openMessage('中心更新成功', 'success')
-            this.closeDialog()
-          })
-        } else {
-          createCenter(this.center).then(res => {
-            console.log(res.data)
-            this.openMessage('中心创建成功', 'success')
-            this.closeDialog()
-          })
-        }
+      confirm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            if (this.centerId) {
+              updateCenter(this.center).then(res => {
+                this.openMessage('中心更新成功', 'success')
+                this.closeDialog()
+              })
+            } else {
+              createCenter(this.center).then(res => {
+                this.openMessage('中心创建成功', 'success')
+                this.closeDialog()
+              })
+            }
+          }
+        })
       },
       openMessage(message, type) {
         this.$message({
