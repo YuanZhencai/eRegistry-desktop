@@ -17,9 +17,13 @@ import * as config from './shared/config/config'
 import '@/assets/font-awesome-4.7.0/css/font-awesome.css'
 import { setupAxiosInterceptors } from './shared/config/axios-interceptor'
 
+import 'moment/locale/zh-cn'
+import moment from 'moment'
+moment.locale('zh-cn')
+
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 
-Vue.use(ElementUI, { locale })
+Vue.use(ElementUI, { locale: locale, size: 'mini' })
 Vue.use(Calendar)
 Vue.use(Badge)
 Vue.config.productionTip = false

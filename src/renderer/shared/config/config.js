@@ -4,7 +4,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { hasAnyAuthority } from '../security/security'
 import VueI18n from 'vue-i18n'
-import JhiFormatter from './formatter'
+import CustomFormatter from './formatter'
 
 export function initVueApp(vue) {
   directives.initDirectives()
@@ -73,7 +73,7 @@ export function initI18N(vue) {
     locale: 'zh-CN',
     dateTimeFormats,
     silentTranslationWarn: true,
-    formatter: new JhiFormatter(),
+    formatter: new CustomFormatter(),
     messages: {
       'zh-CN': require('./i18n/zh-cn.json')
     }
