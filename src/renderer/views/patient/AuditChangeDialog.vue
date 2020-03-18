@@ -1,22 +1,18 @@
 <template>
     <el-dialog
+            title="审核变更申请"
             width="30%"
             :visible.sync="dialogVisible"
             :before-close="cancel">
-        <div slot="title" class="dialog-header">
-            <h4>
-                <span v-if="audit">{{map[audit.type]}}</span>
-            </h4>
-        </div>
         <div class="dialog-body">
             <el-form :model="audit" :rules="rules" label-width="70px" ref="auditForm">
                 <el-form-item label="状态" prop="state">
                     <el-radio-group v-model="audit.state" size="mini">
-                        <el-radio-button label="APPROVE">同意</el-radio-button>
-                        <el-radio-button label="REFUSE">拒绝</el-radio-button>
+                        <el-radio-button label="CHANGE_APPROVE">同意</el-radio-button>
+                        <el-radio-button label="CHANGE_REFUSE">拒绝</el-radio-button>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="原因" prop="opinion" v-if="audit.state === 'REFUSE'">
+                <el-form-item label="原因" prop="opinion" v-if="audit.state === 'CHANGE_REFUSE'">
                     <el-input type="textarea" v-model="audit.opinion"></el-input>
                 </el-form-item>
             </el-form>
@@ -29,9 +25,9 @@
 </template>
 
 <script>
-  import { recordAudit } from '@/api/AuditService'
+  import { changeAudit } from '@/api/AuditService'
   export default {
-    name: 'RecordAuditDialog',
+    name: 'AuditChangeDialog',
     props: {
       dialogVisible: {
         type: Boolean
@@ -43,24 +39,22 @@
     data() {
       return {
         map: {
-          'PATIENT_CASE': '审核病例',
-          'FOLLOW': '审核随访',
-          'APPROVE': '通过',
-          'REFUSE': '拒绝'
+          'CHANGE_APPROVE': '同意',
+          'CHANGE_REFUSE': '拒绝'
         },
         rules: {
           state: [
             { required: true, message: '请先审核', trigger: 'blur' }
           ],
           opinion: [
-            { required: true, message: '请填写拒绝原因', trigger: 'blur' }
+            { required: true, message: '请填写数据变更原因', trigger: 'blur' }
           ]
         }
       }
     },
     methods: {
       handleClose(type, audit) {
-        this.$emit('closeDialog', { page: 'recordAudit', type, audit })
+        this.$emit('closeDialog', { page: 'auditChange', type, audit })
       },
       cancel() {
         this.handleClose('cancel')
@@ -68,9 +62,9 @@
       confirm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            recordAudit(this.audit).then(res => {
+            changeAudit(this.audit).then(res => {
               this.$message({
-                message: '已' + this.map[this.audit.state] + '您的' + this.map[this.audit.type] + '申请',
+                message: '已' + this.map[this.audit.state] + '您的审核变更申请',
                 type: 'success'
               })
               this.handleClose('confirm', res.data)

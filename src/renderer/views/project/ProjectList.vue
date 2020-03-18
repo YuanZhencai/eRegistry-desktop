@@ -6,20 +6,14 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-table v-loading="loading" stripe :data='projects.slice((currentPage-1)*pageSize, currentPage*pageSize)'
-                      :default-sort = "{prop: 'id', order: 'descending'}" style='width: 100%'>
-                <el-table-column prop='name' label='项目名称' sortable></el-table-column>
-                <el-table-column label='开始时间' sortable>
-                    <template slot-scope="scope">
-                        {{scope.row.beginDate | formatDate('YYYY-MM-DD')}}
-                    </template>
+            <el-table v-loading="loading" stripe :data='projects' @sort-change="changeOrder"
+                      style='width: 100%'>
+                <el-table-column prop='name' label='项目名称' sortable="custom"></el-table-column>
+                <el-table-column prop="beginDate" label='开始时间' sortable="custom" :formatter="formatBeginDate">
                 </el-table-column>
-                <el-table-column label='结束时间' sortable>
-                    <template slot-scope="scope">
-                        {{scope.row.endDate | formatDate('YYYY-MM-DD')}}
-                    </template>
+                <el-table-column prop="endDate" label='结束时间' sortable="custom" :formatter="formatEndDate">
                 </el-table-column>
-                <el-table-column prop='chargedBy' label='负责人' sortable></el-table-column>
+                <el-table-column prop='chargedBy' label='负责人' sortable="custom"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button type="text" @click="view(scope.row.id)">查看</el-button>
@@ -38,8 +32,8 @@
             </el-table>
         </el-row>
         <el-row>
-            <el-pagination background layout="prev, pager, next, jumper"
-                           :total="total" :page-size="pageSize" :current-page="currentPage"
+            <el-pagination background layout="total, sizes, prev, pager, next, jumper"
+                           :total="total" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" :current-page="currentPage"
                            @current-change="currentChange" @size-change="sizeChange" class="pagination">
             </el-pagination>
         </el-row>
@@ -58,12 +52,16 @@
 <script>
   import { getMineProjects, deleteProject } from '@/api/ProjectResource'
   import ProjectDialogComponent from './ProjectDialogComponent'
-export default {
+  import { formatDate } from '../../utils/filter'
+
+  export default {
     name: 'ProjectList',
     components: { ProjectDialogComponent },
     data() {
       return {
         loading: true,
+        predicate: '',
+        order: '',
         projects: [],
         selectedProject: null,
         total: 0,
@@ -77,18 +75,39 @@ export default {
       this.getProjects()
     },
     methods: {
+      formatBeginDate(row) {
+        return formatDate(row.beginDate, 'YYYY-MM-DD')
+      },
+      formatEndDate(row) {
+        return formatDate(row.endDate, 'YYYY-MM-DD')
+      },
+      sort() {
+        return (this.predicate && this.order) ? 'project.' + this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
+      },
+      changeOrder(sort) {
+        this.predicate = sort.prop
+        this.order = sort.order
+        this.getProjects()
+      },
       getProjects() {
-        getMineProjects({ page: this.currentPage - 1, size: this.pageSize }).then(res => {
+        this.loading = true
+        getMineProjects({
+          page: this.currentPage - 1,
+          size: this.pageSize,
+          sort: this.sort()
+        }).then(res => {
           this.loading = false
           this.projects = res.data
-          this.total = this.projects.length
+          this.total = Number(res.headers['x-total-count'])
         })
       },
       currentChange: function(currentPage) {
         this.currentPage = currentPage
+        this.getProjects()
       },
       sizeChange: function(val) {
         this.pageSize = val
+        this.getProjects()
       },
       view(projectId) {
         this.$router.push({

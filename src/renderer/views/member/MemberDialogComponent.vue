@@ -79,7 +79,7 @@
     name: 'MemberDialogComponent',
     props: ['visible'],
     data() {
-      const projectId = 20002 || this.$route.params.projectId
+      const projectId = this.$route.params.projectId
       return {
         login: '',
         email: '',

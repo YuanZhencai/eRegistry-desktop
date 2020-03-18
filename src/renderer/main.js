@@ -1,5 +1,6 @@
 import Vue from 'vue'
-
+import { Calendar, Badge } from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css'
 import 'normalize.css/normalize.css' // A modern alternative to CSS reset
 import 'bootstrap/dist/css/bootstrap.css'
 
@@ -19,7 +20,8 @@ import { setupAxiosInterceptors } from './shared/config/axios-interceptor'
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 
 Vue.use(ElementUI, { locale })
-
+Vue.use(Calendar)
+Vue.use(Badge)
 Vue.config.productionTip = false
 
 config.initVueApp(Vue)
@@ -35,4 +37,3 @@ new Vue({
   i18n,
   template: '<App/>'
 }).$mount('#app')
-

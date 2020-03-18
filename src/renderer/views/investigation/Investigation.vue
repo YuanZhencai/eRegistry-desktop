@@ -13,11 +13,11 @@
           <el-date-picker type="date" size="mini" placeholder="结束时间" v-model="end" style="width: 100%;"></el-date-picker>
         </el-col>
       </el-form-item>
-      <el-form-item>
+      <el-form-item v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId])">
         <el-button type="primary" size="mini">导出</el-button>
       </el-form-item>
     </el-form>
-    <el-table
+    <el-table v-loading="loading"
             :data="investigations"
             stripe
             @sort-change="changeOrder"
@@ -81,7 +81,8 @@
           questionnaireId: this.$route.params.questionnaireId,
           begin: null,
           end: null,
-          content: null
+          content: null,
+          loading: true
         }
       },
       mounted() {
@@ -89,9 +90,12 @@
       },
       methods: {
         sort() {
-          return (this.predicate && this.order) ? [this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc')] : []
+          return (this.predicate && this.order) ? this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
         },
         loadAll() {
+          this.loading = true
+          this.investigations = []
+          this.questions = []
           const sort = this.sort()
           getInvestigations(Object.assign({
             page: this.page - 1,
@@ -108,6 +112,7 @@
             }
             this.totalItems = Number(res.headers['x-total-count'])
             this.queryCount = this.totalItems
+            this.loading = false
           })
         },
         transition() {

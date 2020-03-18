@@ -50,7 +50,9 @@
       }
     },
     data() {
+      const projectId = this.$route.params.projectId
       return {
+        projectId,
         center: { name: null },
         formRules: {
           name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
@@ -73,7 +75,7 @@
             this.center = res.data
           })
         } else {
-          this.center = { name: '', telephone: '', no: '', chargedBy: '', projectId: 20002 }
+          this.center = { name: '', telephone: '', no: '', chargedBy: '', projectId: this.projectId }
         }
       },
       cancel() {

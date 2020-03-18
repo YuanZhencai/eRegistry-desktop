@@ -173,6 +173,14 @@ export const constantRouterMap = [
           {
             path: 'plan/:planId/report',
             component: () => import('@/views/plan/PlanReport')
+          },
+          {
+            path: 'calendar',
+            component: () => import('@/views/calendar/index')
+          },
+          {
+            path: 'log',
+            component: () => import('@/views/logging/logging')
           }
         ]
       }

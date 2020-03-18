@@ -34,9 +34,10 @@
       }
     },
     data() {
+      const projectId = this.$route.params.projectId
       return {
         centers: [],
-        projectId: 20002,
+        projectId,
         centerMember: { username: null },
         centerId: null
       }
