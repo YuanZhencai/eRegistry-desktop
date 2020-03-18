@@ -1,26 +1,26 @@
-import request from '@/utils/request'
+import axios from 'axios'
 export function getsettings() {
-  return request({
+  return axios({
     url: `/api/account`,
     method: 'get'
   })
 }
 export function createSettings(data) {
-  return request({
+  return axios({
     url: `/api/account`,
     method: 'post',
     data
   })
 }
 export function upload(data) {
-  return request({
+  return axios({
     url: `/api/images/upload`,
     method: 'post',
     data
   })
 }
 export function changePassword(data) {
-  return request({
+  return axios({
     url: `/api/account/change-password`,
     method: 'post',
     headers: { 'Content-Type': 'text/plain' },

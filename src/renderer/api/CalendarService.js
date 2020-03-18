@@ -1,6 +1,6 @@
-import request from '@/utils/request'
+import axios from 'axios'
 export function getCalendar(data) {
-  return request(`api/follows/events/${data.id}`, {
+  return axios(`/api/follows/events/${data.id}`, {
     params: data,
     method: 'get'
   })
