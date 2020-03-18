@@ -1,7 +1,7 @@
 <template>
     <el-dialog title="创建或编辑患者" :visible.sync="visible" :before-close="cancel">
-        <el-form label-width="75px">
-            <el-form-item label="姓名">
+        <el-form label-width="75px" size="mini" :model="patient" :rules="rules" ref="patientForm">
+            <el-form-item label="姓名" prop="name">
                 <el-input v-model="patient.name"></el-input>
             </el-form-item>
             <el-form-item label="性别">
@@ -34,7 +34,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button size="mini" @click="cancel">取 消</el-button>
-            <el-button size="mini" type="primary" @click="confirm">保 存</el-button>
+            <el-button size="mini" type="primary" @click="confirm('patientForm')">保 存</el-button>
         </div>
     </el-dialog>
 </template>
@@ -50,6 +50,11 @@
     },
     data() {
       return {
+        rules: {
+          name: [
+            { required: true, message: '请输入患者姓名', trigger: 'blur' }
+          ]
+        },
         patient: { name: '' },
         provinceCity: [],
         options: Cascader
@@ -86,21 +91,25 @@
       cancel() {
         this.$emit('closeDialog', { page: 'editDialog', type: 'cancel' })
       },
-      confirm() {
-        if (this.patientId) {
-          updatePatient(this.patient).then(res => {
-            this.patient = res.data
-            this.openMessage('患者信息更新成功', 'success')
-            this.$emit('closeDialog', { page: 'editDialog', type: 'confirm' })
-          })
-        } else {
-          this.patient.projectId = this.$route.params.projectId
-          createPatient(this.patient).then(res => {
-            this.patient = res.data
-            this.openMessage('患者创建成功', 'success')
-            this.$emit('closeDialog', { page: 'editDialog', type: 'confirm' })
-          })
-        }
+      confirm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            if (this.patientId) {
+              updatePatient(this.patient).then(res => {
+                this.patient = res.data
+                this.openMessage('患者信息更新成功', 'success')
+                this.$emit('closeDialog', { page: 'editDialog', type: 'confirm' })
+              })
+            } else {
+              this.patient.projectId = this.$route.params.projectId
+              createPatient(this.patient).then(res => {
+                this.patient = res.data
+                this.openMessage('患者创建成功', 'success')
+                this.$emit('closeDialog', { page: 'editDialog', type: 'confirm' })
+              })
+            }
+          }
+        })
       },
       openMessage(message, type) {
         this.$message({
