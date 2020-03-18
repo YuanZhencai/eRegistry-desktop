@@ -74,8 +74,8 @@ export default class MessageService {
 
   translate(key, data) {
     if (key) {
-      key = key.replace('studioApp', '')
-      key = key.replace('eRegistryApp', '')
+      key = key.replace('studioApp.', '')
+      key = key.replace('eRegistryApp.', '')
       return this.$i18n.t(key, data)
     }
     return key
