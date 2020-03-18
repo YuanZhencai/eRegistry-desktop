@@ -22,7 +22,7 @@
               <el-form-item label="用户头像:"
                             inline="false">
                 <el-upload class="avatar-uploader"
-                           action="https://www.palandata.com/reg/api/images/upload"
+                           action=""
                            :auto-upload="true"
                            :show-file-list="false"
                            :on-success="handleAvatarSuccess"
@@ -102,8 +102,7 @@
   </div>
 </template>
 <script>
-import { Settings } from '@/api/Settings'
-import { fetch, post } from '@/utils/request'
+import { getsettings, postsave, upload, changePassword } from '@/api/SettingsService'
 import { Base64 } from 'js-base64'
 import { mapGetters } from 'vuex'
 export default {
@@ -168,8 +167,9 @@ export default {
       this.fileReader = new FileReader()
       this.imageUrl = this.avatar
       try {
-        const res = await fetch(Settings.save)
-        this.settingsAccount = res.res
+        await getsettings().then((res) => {
+          this.settingsAccount = res.data
+        })
       } catch (e) {
         console.log(e)
       }
@@ -185,7 +185,7 @@ export default {
           blob: base64Str.split(',')[1],
           type: 'avatar'
         }
-        post(Settings.upload, data).then((res) => {
+        upload(data).then((res) => {
           this.imageUrl = base64Str
         })
       }
@@ -210,7 +210,7 @@ export default {
         blob: this.BaseUrl,
         type: 'avatar'
       }
-      await post(Settings.upload, data)
+      await upload(data).then((res) => { })
     },
     async save(settingsAccount) {
       const data = {
@@ -223,13 +223,14 @@ export default {
         imageUrl: ''
       }
       try {
-        await post(Settings.save, data)
-        this.$nextTick(() => {
-          this.$notify({
-            title: '成功',
-            message: '编辑成功',
-            type: 'success',
-            duration: 2000
+        await postsave(data).then((res) => {
+          this.$nextTick(() => {
+            this.$notify({
+              title: '成功',
+              message: '编辑成功',
+              type: 'success',
+              duration: 2000
+            })
           })
         })
         this.OnInit()
@@ -240,14 +241,18 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          const config = {
-            headers: {
-              'Content-Type': 'text/plain'
-            }
-          }
-          post(Settings.changePassword, this.rulePassForm.checkPass, config).then((res) => { })
+          changePassword(this.rulePassForm.checkPass).then((res) => { })
+          this.$nextTick(() => {
+            this.$notify({
+              title: '成功',
+              message: '重置成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
         }
       })
+      this.OnInit()
     }
   }
 }

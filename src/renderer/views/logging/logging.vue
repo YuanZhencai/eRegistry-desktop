@@ -74,8 +74,7 @@
   </div>
 </template>
 <script>
-import { LOGGING } from '@/api/logging'
-import { fetch } from '@/utils/request'
+import { userFilter, changes } from '@/api/logService'
 export default {
   data() {
     const projectId = this.$route.params.projectId
@@ -116,14 +115,15 @@ export default {
       const data = {
         id: this.projectId,
         type: this.form.region || '',
-        author: this.members.username || '',
+        author: this.userSelection.username || '',
         page: this.listQuery.page || 0,
         size: this.listQuery.size || 10
       }
       try {
-        const { res, headers } = await fetch(LOGGING.changes(data))
-        this.tableData = res
-        this.total = Number(headers['x-total-count'])
+        await changes(data).then((res) => {
+          this.tableData = res.data
+          this.total = Number(res.headers['x-total-count'])
+        })
       } catch (e) {
         console.log(e)
       }
@@ -131,11 +131,13 @@ export default {
     // 获取用户名筛选并渲染
     async findMembers(id) {
       try {
-        const res = await fetch(LOGGING.userFilter(id))
-        this.members = res.res
-        this.isAdmin = this.$hasAnyAuthority([`PROJECT_ADMIN_${this.projectId}`])
+        await userFilter(id).then((res) => {
+          this.members = res.data
+          this.isAdmin = this.$hasAnyAuthority([`PROJECT_ADMIN_${this.projectId}`])
+        })
         if (!this.isAdmin && this.members.length > 0) {
           this.userSelection.username = this.members[0].username
+          this.loadAll()
         }
       } catch (e) {
         console.log(e)
