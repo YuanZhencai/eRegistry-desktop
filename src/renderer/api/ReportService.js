@@ -1,14 +1,14 @@
-import request from '@/utils/request'
+import axios from 'axios'
 
 export function getProjectReport(projectId) {
-  return request({
+  return axios({
     url: `/api/projects/${projectId}/report`,
     method: 'get'
   })
 }
 
 export function saveProjectReport(projectId, data) {
-  return request({
+  return axios({
     url: `/api/projects/${projectId}/report`,
     method: 'put',
     data
@@ -16,14 +16,14 @@ export function saveProjectReport(projectId, data) {
 }
 
 export function getMineReports() {
-  return request({
+  return axios({
     url: `/api/reports/mine`,
     method: 'get'
   })
 }
 
 export function getAllReports(req) {
-  return request({
+  return axios({
     url: `/api/reports`,
     method: 'get',
     params: req
@@ -31,14 +31,14 @@ export function getAllReports(req) {
 }
 
 export function getReport(id) {
-  return request({
+  return axios({
     url: `/api/reports/${id}`,
     method: 'get'
   })
 }
 
 export function createReport(data) {
-  return request({
+  return axios({
     url: `/api/reports`,
     method: 'post',
     data
@@ -46,7 +46,7 @@ export function createReport(data) {
 }
 
 export function updateReport(data) {
-  return request({
+  return axios({
     url: `/api/reports`,
     method: 'put',
     data
@@ -54,14 +54,14 @@ export function updateReport(data) {
 }
 
 export function deleteReport(id) {
-  return request({
+  return axios({
     url: `/api/reports/${id}`,
     method: 'delete'
   })
 }
 
 export function copyReport(report) {
-  return request({
+  return axios({
     url: `/api/reports/copy`,
     method: 'post',
     data: report
@@ -69,7 +69,7 @@ export function copyReport(report) {
 }
 
 export function shareReport(report) {
-  return request({
+  return axios({
     url: `/api/reports/share`,
     method: 'post',
     data: report

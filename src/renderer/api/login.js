@@ -1,7 +1,7 @@
-import request from '@/utils/request'
+import axios from 'axios'
 
 export function login(username, password) {
-  return request({
+  return axios({
     url: '/api/authenticate',
     method: 'post',
     data: {
@@ -22,7 +22,7 @@ export function login(username, password) {
 }
 
 export function getInfo(token) {
-  return request({
+  return axios({
     url: '/api/account',
     method: 'get',
     params: { token },

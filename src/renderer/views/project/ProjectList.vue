@@ -9,9 +9,15 @@
             <el-table v-loading="loading" stripe :data='projects' @sort-change="changeOrder"
                       style='width: 100%'>
                 <el-table-column prop='name' label='项目名称' sortable="custom"></el-table-column>
-                <el-table-column prop="beginDate" label='开始时间' sortable="custom" :formatter="formatBeginDate">
+                <el-table-column label='开始时间' sortable="custom">
+                    <template slot-scope="scope">
+                        {{scope.row.beginDate | formatDate('YYYY-MM-DD')}}
+                    </template>
                 </el-table-column>
-                <el-table-column prop="endDate" label='结束时间' sortable="custom" :formatter="formatEndDate">
+                <el-table-column label='结束时间' sortable="custom">
+                    <template slot-scope="scope">
+                        {{scope.row.endDate | formatDate('YYYY-MM-DD')}}
+                    </template>
                 </el-table-column>
                 <el-table-column prop='chargedBy' label='负责人' sortable="custom"></el-table-column>
                 <el-table-column label="操作">
@@ -52,7 +58,6 @@
 <script>
   import { getMineProjects, deleteProject } from '@/api/ProjectResource'
   import ProjectDialogComponent from './ProjectDialogComponent'
-  import { formatDate } from '../../utils/filter'
 
   export default {
     name: 'ProjectList',
@@ -75,12 +80,6 @@
       this.getProjects()
     },
     methods: {
-      formatBeginDate(row) {
-        return formatDate(row.beginDate, 'YYYY-MM-DD')
-      },
-      formatEndDate(row) {
-        return formatDate(row.endDate, 'YYYY-MM-DD')
-      },
       sort() {
         return (this.predicate && this.order) ? 'project.' + this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
       },

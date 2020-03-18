@@ -159,6 +159,7 @@ export default {
       loadPage(page) {
         if (page !== this.previousPage) {
           this.previousPage = page
+          this.page = page
           this.transition()
         }
       },
