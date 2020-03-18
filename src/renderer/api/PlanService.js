@@ -46,7 +46,7 @@ export function deletePlan(id) {
   })
 }
 // 新建随访信息
-export function postPlan(data) {
+export function createPlan(data) {
   return request({
     url: `/api/plans`,
     method: 'post',
@@ -54,7 +54,7 @@ export function postPlan(data) {
   })
 }
 // 编辑随访信息
-export function putPlan(data) {
+export function updatePlan(data) {
   return request({
     url: `/api/plans`,
     method: 'put',

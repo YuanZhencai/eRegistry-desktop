@@ -5,7 +5,7 @@ export function getsettings() {
     method: 'get'
   })
 }
-export function postsave(data) {
+export function createSettings(data) {
   return request({
     url: `/api/account`,
     method: 'post',

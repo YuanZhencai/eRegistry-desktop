@@ -102,7 +102,7 @@
   </div>
 </template>
 <script>
-import { getsettings, postsave, upload, changePassword } from '@/api/SettingsService'
+import { getsettings, createSettings, upload, changePassword } from '@/api/SettingsService'
 import { Base64 } from 'js-base64'
 import { mapGetters } from 'vuex'
 export default {
@@ -223,7 +223,7 @@ export default {
         imageUrl: ''
       }
       try {
-        await postsave(data).then((res) => {
+        await createSettings(data).then((res) => {
           this.$nextTick(() => {
             this.$notify({
               title: '成功',

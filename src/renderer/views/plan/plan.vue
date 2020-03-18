@@ -96,7 +96,7 @@
   </div>
 </template>
 <script>
-import { getPlan, getPlans, getCrfList, deletePlan, putPlan, postPlan } from '@/api/PlanService'
+import { getPlan, getPlans, getCrfList, deletePlan, updatePlan, createPlan } from '@/api/PlanService'
 export default {
   data() {
     const projectId = this.$route.params.projectId
@@ -174,7 +174,7 @@ export default {
         })
         this.dialogFormData['projectId'] = this.projectId
         this.dialogFormData['reportId'] = this.value
-        await postPlan(this.dialogFormData).then((res) => { })
+        await createPlan(this.dialogFormData).then((res) => { })
         this.$nextTick(() => {
           this.editCreateDialog = false
           this.$notify({
@@ -211,7 +211,7 @@ export default {
     },
     async updatePlan() {
       this.dialogFormData['reportId'] = this.value
-      await putPlan(this.dialogFormData).then((res) => { })
+      await updatePlan(this.dialogFormData).then((res) => { })
       this.$nextTick(() => {
         this.$notify({
           title: '成功',
