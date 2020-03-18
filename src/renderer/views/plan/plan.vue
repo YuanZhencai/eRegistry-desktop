@@ -96,7 +96,7 @@
   </div>
 </template>
 <script>
-import { getplanData, getedit, crflist, deleteData, putData, postData } from '@/api/PlanService'
+import { getPlan, getPlans, getCrfList, deletePlan, putPlan, postPlan } from '@/api/PlanService'
 export default {
   data() {
     const projectId = this.$route.params.projectId
@@ -146,7 +146,7 @@ export default {
         size: this.listQuery.size || 10
       }
       try {
-        await getplanData(data).then((res) => {
+        await getPlan(data).then((res) => {
           this.followList = res.data
           this.total = Number(res.headers['x-total-count'])
         })
@@ -159,7 +159,7 @@ export default {
       this.dialogFormData = {}
       this.value = ''
       try {
-        await crflist().then((res) => {
+        await getCrfList().then((res) => {
           this.crflistData = res.data
           this.editCreateDialog = true
         })
@@ -169,12 +169,12 @@ export default {
     },
     async createPlan() {
       try {
-        await crflist().then((res) => {
+        await getCrfList().then((res) => {
           this.crflistData = res.data
         })
         this.dialogFormData['projectId'] = this.projectId
         this.dialogFormData['reportId'] = this.value
-        await postData(this.dialogFormData).then((res) => { })
+        await postPlan(this.dialogFormData).then((res) => { })
         this.$nextTick(() => {
           this.editCreateDialog = false
           this.$notify({
@@ -193,10 +193,11 @@ export default {
       this.dialogStatus = 'update'
       this.editCreateDialog = true
       try {
-        await getedit(id).then((res) => {
+        await getPlans(id).then((res) => {
           this.dialogFormData = res.data
+          console.log(this.dialogFormData)
         })
-        await crflist().then((res) => {
+        await getCrfList().then((res) => {
           this.crflistData = res.data
         })
         for (let i = 0; i < this.crflistData.length; i++) {
@@ -209,7 +210,8 @@ export default {
       }
     },
     async updatePlan() {
-      await putData(this.dialogFormData).then((res) => { })
+      this.dialogFormData['reportId'] = this.value
+      await putPlan(this.dialogFormData).then((res) => { })
       this.$nextTick(() => {
         this.$notify({
           title: '成功',
@@ -227,7 +229,7 @@ export default {
     },
     async confirmDelete(id) {
       try {
-        await deleteData(id).then((res) => { })
+        await deletePlan(id).then((res) => { })
         this.deleteDialogVisible = false
       } catch (e) {
         console.log(e)

@@ -5,9 +5,10 @@ export function userFilter(id) {
     method: 'get'
   })
 }
+
 export function changes(data) {
-  return request({
-    url: '/api/projects/' + data.id + '/changes?page=' + data.page + '&size=' + data.size + '&type=' + data.type + '&author=' + data.author,
+  return request(`/api/projects/${data.id}/changes`, {
+    params: data,
     method: 'get'
   })
 }
