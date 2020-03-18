@@ -1,28 +1,29 @@
 <template>
   <div>
-    <el-row>
+    <el-row v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
       <el-col :span='24'>
         <el-button type='primary' class='float-right' size="mini" @click="newQuestionnaire">创建问卷</el-button>
       </el-col>
     </el-row>
     <el-row>
       <el-table v-loading="loading" stripe
-                :data='questionnaires.slice((currentPage-1)*pageSize, currentPage*pageSize)'
-                :default-sort="{prop: 'reportName', order: 'descending'}" height="250"
-                style='width: 100%'>
-        <el-table-column prop='reportName' label='问卷名称' width='180' sortable></el-table-column>
-        <el-table-column label='更新时间' width='180' sortable>
-          <template slot-scope="scope">{{scope.row.lastModifiedDate | formatDate('YYYY-MM-DD')}}</template>
+                :data='questionnaires' @sort-change="changeOrder"
+                height="250" style='width: 100%'>
+        <el-table-column prop='reportName' label='问卷名称' width='180' sortable="custom"></el-table-column>
+        <el-table-column prop="lastModifiedDate" label='更新时间' width='180' sortable="custom">
+          <template slot-scope="scope">{{scope.row.lastModifiedDate | formatDate('YYYY-MM-DD HH:mm')}}</template>
         </el-table-column>
         <el-table-column align="center">
           <template slot="header" slot-scope="scope">
             <span>操作</span>
           </template>
           <template slot-scope="scope">
-            <el-button type="text" @click="editQuestionnaire(scope.row.id)">编辑</el-button>
-            <el-divider direction="vertical"></el-divider>
-            <el-button type="text" @click="deleteQuestionnaire(scope.row)">删除</el-button>
-            <el-divider direction="vertical"></el-divider>
+            <template v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
+              <el-button type="text" @click="editQuestionnaire(scope.row.id)">编辑</el-button>
+              <el-divider direction="vertical"></el-divider>
+              <el-button type="text" @click="deleteQuestionnaire(scope.row)">删除</el-button>
+              <el-divider direction="vertical"></el-divider>
+            </template>
             <el-button type="text" @click="newInvestigation(scope.row.id)">进行调查</el-button>
             <el-divider direction="vertical"></el-divider>
             <el-button type="text" @click="investigation(scope.row.id)">调查结果</el-button>
@@ -34,7 +35,7 @@
                     trigger="hover">
               <el-image
                       style="width: 150px; height: 150px"
-                      :src="`${baseApi}/api/qrcode?uri=/questionnaire/investigation-new`"
+                      :src="`${baseApi}/api/qrcode?uri=/questionnaire/${scope.row.id}/investigation-new`"
                       :fit="'fill'">
               </el-image>
               <el-button type="text" slot="reference">分享调查</el-button>
@@ -44,8 +45,8 @@
       </el-table>
     </el-row>
     <el-row>
-      <el-pagination background layout="prev, pager, next, jumper"
-                     :total="total" :page-size="pageSize" :current-page="currentPage"
+      <el-pagination background layout="total, sizes, prev, pager, next, jumper"
+                     :total="total" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" :current-page="currentPage"
                      @current-change="currentChange" @size-change="sizeChange" class="pagination">
       </el-pagination>
     </el-row>
@@ -69,6 +70,12 @@
       const projectId = this.$route.params.projectId
       return {
         loading: true,
+        predicate: 'reportName',
+        order: 'descending',
+        sortPropMap: {
+          reportName: 'report.title',
+          lastModifiedDate: 'questionnaire.lastModifiedDate'
+        },
         projectId: projectId,
         questionnaires: [],
         selectedQuestionnaire: null,
@@ -83,20 +90,32 @@
       this.getQuestionnaires()
     },
     methods: {
+      sort() {
+        return (this.predicate && this.order) ? this.sortPropMap[this.predicate] + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
+      },
+      changeOrder(sort) {
+        this.predicate = sort.prop
+        this.order = sort.order
+        this.getQuestionnaires()
+      },
       currentChange: function(currentPage) {
         this.currentPage = currentPage
+        this.getQuestionnaires()
       },
       sizeChange: function(val) {
         this.pageSize = val
+        this.getQuestionnaires()
       },
       getQuestionnaires() {
-        getProjectQuestionnaires(this.projectId, { page: this.currentPage - 1, size: this.pageSize }).then(response => {
+        this.loading = true
+        getProjectQuestionnaires(this.projectId, {
+          page: this.currentPage - 1,
+          size: this.pageSize,
+          sort: this.sort()
+        }).then(response => {
           this.loading = false
           this.questionnaires = response.data
-          this.total = this.questionnaires.length
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
+          this.total = Number(response.headers['x-total-count'])
         })
       },
       newQuestionnaire() {

@@ -20,8 +20,36 @@
             </el-form>
         </el-row>
         <el-row>
-            <el-button type="primary" size="mini" icon="el-icon-download" @click="exportPatient">导出</el-button>
-            <el-button type="primary" size="mini" icon="el-icon-plus" @click="newPatient">新建患者</el-button>
+            <el-button type="primary" size="mini" icon="el-icon-download"
+                       v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId, 'PROJECT_VIEW_' + projectId])"
+                       @click="exportPatient">导出</el-button>
+            <el-button type="primary" size="mini" icon="el-icon-plus"
+                       v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])"
+                       @click="newPatient">新建患者
+                <template v-if="$hasAnyAuthority(['PROJECT_PATIENT_' + projectId])">
+                    <el-popover
+                            placement="bottom"
+                            title="调查二维码"
+                            width="200"
+                            trigger="hover">
+                        <el-image
+                                style="width: 150px; height: 150px"
+                                :src="`${baseApi}/api/qrcode?uri=/questionnaire/investigation-new`"
+                                :fit="'fill'">
+                        </el-image>
+                        <el-button type="text" slot="reference">分享调查</el-button>
+                    </el-popover>
+                    <el-popover
+                            placement="bottom"
+                            title="添加患者二维码"
+                            trigger="hover"
+                            width="200"
+                            v-if="task">
+                        <el-image :src="`${baseApi}/api/qrcode?uri=/patient-task/${task.id}`"></el-image>
+                        <el-button type="text" slot="reference"><i class="fa fa-qrcode"></i></el-button>
+                    </el-popover>
+                </template>
+            </el-button>
         </el-row>
         <el-row>
             <el-table v-loading="loading" :data="patients"
@@ -51,7 +79,7 @@
                     <template slot="header" slot-scope="scope">
                         <span>操作</span>
                     </template>
-                    <template slot-scope="scope">
+                    <template slot-scope="scope" v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
                         <el-button type="text" @click="edit(scope.row)">编辑</el-button>
                     </template>
                 </el-table-column>
@@ -94,6 +122,7 @@
   import PatientDialogComponent from '../patient/PatientDialogComponent'
   import img_excel from '@/assets/excel.png'
   import img_csv from '@/assets/csv.png'
+  import { getCurrentProjectMemberTask } from '@/api/TaskService'
   export default {
     name: 'ProjectPatient',
     components: { PatientDialogComponent },
@@ -124,6 +153,7 @@
     },
     created() {
       this.getPatients()
+      this.findCurrentMemberTask()
     },
     methods: {
       sort() {
@@ -163,6 +193,13 @@
           this.form.queryString = null
         }
         this.getPatients()
+      },
+      findCurrentMemberTask() {
+        if (this.$hasAnyAuthority([`PROJECT_PATIENT_${this.projectId}`])) {
+          getCurrentProjectMemberTask(this.projectId).then(res => {
+            this.task = res.data
+          })
+        }
       },
       edit(patient) {
         this.selectedPatient = patient
