@@ -157,6 +157,7 @@ export default {
         this.loadAll()
       },
       loadPage(page) {
+        this.page = page
         if (page !== this.previousPage) {
           this.previousPage = page
           this.transition()

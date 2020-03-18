@@ -1,11 +1,11 @@
 <template>
     <el-dialog title="创建或编辑任务" :visible.sync="visible" :before-close="cancel">
-        <el-form label-width="80px">
+        <el-form label-width="80px" size="mini">
             <el-form-item label="成员">
                 <el-input v-model="member.username" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="任务">
-                <el-select placeholder="分配任务" v-model="memberTask.type">
+                <el-select placeholder="选择任务" v-model="memberTask.type">
                     <el-option v-for="task in tasks" :key="task.value"
                                :label="task.label"
                                :value="task.value">
@@ -56,10 +56,11 @@
         })
       },
       findMemberTask() {
+        const vm = this
         getTaskByMemberId(this.memberId).then(res => {
-          this.memberTask = res.data
-          if (this.memberTask == null) {
-            this.memberTask = {}
+          vm.memberTask = res.data
+          if (!vm.memberTask || !vm.memberTask.type) {
+            vm.memberTask = { type: null }
           }
         })
       },

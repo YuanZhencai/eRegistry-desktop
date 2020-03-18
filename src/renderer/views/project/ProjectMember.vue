@@ -38,14 +38,14 @@
       </el-pagination>
     </el-row>
     <el-dialog v-if="deleteMemberDialogVisible" title="确认删除成员"
-               :visible.sync="deleteMemberDialogVisible" :before-close="closeDialog">
+               :visible.sync="deleteMemberDialogVisible" :before-close="cancelDelete">
       <span>是否确认删除成员 '{{this.selectedMember.username}}'？</span>
       <span slot="footer" class="dialog-footer">
-                <el-button @click="deleteMemberDialogVisible = false">取 消</el-button>
+                <el-button @click="cancelDelete">取 消</el-button>
                 <el-button type="primary" @click="confirmDelete">删 除</el-button>
             </span>
     </el-dialog>
-    <member-dialog-component :visible="newMemberDialogVisible"
+    <member-dialog-component v-if="newMemberDialogVisible" :visible="newMemberDialogVisible"
                              @closeDialog="closeDialog"></member-dialog-component>
     <assign-member-dialog v-if="assignCenterDialogVisible" :visible="assignCenterDialogVisible"
                           :member-id="selectedMember.id"
@@ -161,12 +161,15 @@
       confirmDelete() {
         deleteMember(this.selectedMember.id).then(response => {
           this.openMessage('成员删除成功', 'success')
-          this.closeDialog()
+          this.closeDialog({ page: 'deleteDialog', type: 'confirm' })
           this.loading = true
           this.getMembers()
         }, error => {
           console.log(error)
         })
+      },
+      cancelDelete() {
+        this.closeDialog({ page: 'deleteDialog', type: 'cancel' })
       },
       closeDialog(val) {
         switch (val.page) {
@@ -175,20 +178,16 @@
             break
           case 'assignMember':
             this.assignCenterDialogVisible = false
-            if (val.type === 'confirm') {
-              this.loading = true
-              this.getMembers()
-            }
             break
           case 'assignTask':
             this.assignTaskDialogVisible = false
-            if (val.type === 'confirm') {
-              this.loading = true
-              this.getMembers()
-            }
             break
           default:
             this.deleteMemberDialogVisible = false
+        }
+        if (val.type === 'confirm') {
+          this.loading = true
+          this.getMembers()
         }
       },
       openMessage(message, type) {

@@ -41,12 +41,12 @@
             <el-col :span="16" v-if="users.length === 0" class="text-center">
                 <el-row><span>还不是用户，马上邀请注册？</span></el-row>
                 <el-row>
-                    <el-form :inline="true" :rules="rules" ref="ruleForm" class="demo-form-inline">
+                    <el-form :inline="true" :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-form-inline">
                         <el-form-item prop="email">
-                            <el-input v-model="email" size="mini" placeholder="电子邮箱"></el-input>
+                            <el-input v-model="ruleForm.email" size="mini" placeholder="电子邮箱"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" size="mini" @click="invite()">马上邀请好友</el-button>
+                            <el-button type="primary" size="mini" @click="inviteMember('ruleForm')">马上邀请好友</el-button>
                         </el-form-item>
                     </el-form>
                 </el-row>
@@ -72,21 +72,23 @@
 
 <script>
   import { getMineProjects, getProjectUsers } from '@/api/ProjectResource'
-  import { getProjectMembers, createBatchMember } from '@/api/MemberResource'
+  import { createBatchMember } from '@/api/MemberResource'
   import { getUsersByLoginStartingWith } from '@/api/UserResource'
+  import { createInvitation } from '@/api/InvitationService'
 
   export default {
     name: 'MemberDialogComponent',
     props: ['visible'],
     data() {
-      const projectId = this.$route.params.projectId
+      const projectId = Number(this.$route.params.projectId)
       return {
         login: '',
-        email: '',
+        ruleForm: {
+          email: null
+        },
         rules: {
           email: [
-            { required: true, message: '电子邮箱不能为空', triggle: 'blur' },
-            { type: 'email', message: '请输入正确的邮箱地址' }
+            { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
           ]
         },
         projects: [],
@@ -97,7 +99,7 @@
       }
     },
     created() {
-      this.findProjectMembers(this.projectId)
+      this.findProjectMembers()
       this.findProjects()
     },
     methods: {
@@ -109,13 +111,14 @@
         })
       },
       findProjects() {
+        const vm = this
         // 查找当前用户所创建的项目
         getMineProjects().then(response => {
           const data = response.data
           for (let i = 0; i < data.length; i++) {
             const project = data[i]
-            if (this.projectId !== project.id) {
-              this.projects.push(project) // 用户参与的其他项目
+            if (vm.projectId !== project.id) {
+              vm.projects.push(project) // 用户参与的其他项目
             }
           }
         })
@@ -128,15 +131,30 @@
           console.log(error)
         })
       },
-      findProjectMembers(projectId) {
+      findProjectMembers() {
         // 查找当前项目的成员
-        getProjectMembers(projectId).then(response => {
-          this.members = response.data
-        }, error => {
-          console.log(error)
+        const vm = this
+        getProjectUsers(this.projectId).then(response => {
+          response.data.forEach((member) => {
+            // vm.members[member.id] = member
+            this.$set(vm.members, member.id, member)
+          })
         })
       },
-      invite() {
+      inviteMember(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            createInvitation({
+              projectId: this.projectId,
+              email: this.ruleForm.email
+            }).then(() => {
+              this.$message({
+                message: '邀请已发送到对方邮箱中,请耐心等待对方回复',
+                type: 'success'
+              })
+            })
+          }
+        })
       },
       selectUser(user) {
         this.$forceUpdate()
@@ -161,10 +179,17 @@
           projectId: this.projectId,
           users: this.selectedUsers
         }
-        createBatchMember(batchMember).then(response => {
+        createBatchMember(batchMember).then((response) => {
+          this.$message({
+            message: '成员添加成功',
+            type: 'success'
+          })
           this.closeDialog()
-        }, error => {
-          console.log(error)
+        }, () => {
+          this.$message({
+            message: '成员添加失败',
+            type: 'error'
+          })
         })
       }
     }
