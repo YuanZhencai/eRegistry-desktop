@@ -14,23 +14,30 @@ import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
 import * as config from './shared/config/config'
-import '@/utils/filter'
 import '@/assets/font-awesome-4.7.0/css/font-awesome.css'
+import { setupAxiosInterceptors } from './shared/config/axios-interceptor'
+
 import 'moment/locale/zh-cn'
 import moment from 'moment'
 moment.locale('zh-cn')
+
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 
-Vue.use(ElementUI, { locale })
+Vue.use(ElementUI, { locale: locale, size: 'mini' })
 Vue.use(Calendar)
 Vue.use(Badge)
 Vue.config.productionTip = false
 
 config.initVueApp(Vue)
 
+const i18n = config.initI18N(Vue)
+
+setupAxiosInterceptors(i18n, () => console.log('Unauthorized!'))
+
 new Vue({
   components: { App },
   router,
   store,
+  i18n,
   template: '<App/>'
 }).$mount('#app')

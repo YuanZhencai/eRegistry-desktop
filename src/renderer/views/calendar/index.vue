@@ -23,8 +23,7 @@
   </a-calendar>
 </template>
 <script>
-import { calendarApi } from '@/api/Calendar'
-import { fetch } from '@/utils/request'
+import { getCalendar } from '@/api/CalendarService'
 import moment from 'moment'
 export default {
   data() {
@@ -138,8 +137,9 @@ export default {
         format: this.format,
         zoneId: Intl.DateTimeFormat().resolvedOptions().timeZone
       }
-      const response = await fetch(calendarApi.getCalendar(data))
-      this.calendarData = response.res
+      await getCalendar(data).then((res) => {
+        this.calendarData = res.data
+      })
     }
 
   }

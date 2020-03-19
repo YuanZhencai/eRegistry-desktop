@@ -1,21 +1,21 @@
-import request from '@/utils/request'
+import axios from 'axios'
 
 export function getCenterMember(id) {
-  return request({
+  return axios({
     url: `/api/center-members/${id}`,
     method: 'get'
   })
 }
 
 export function getCenterMemberByMemberId(memberId) {
-  return request({
+  return axios({
     url: `/api/members/${memberId}/center`,
     method: 'get'
   })
 }
 
 export function createCenterMember(centerMember) {
-  return request({
+  return axios({
     url: `/api/center-members`,
     method: 'post',
     data: centerMember
@@ -23,7 +23,7 @@ export function createCenterMember(centerMember) {
 }
 
 export function updateCenterMember(centerMember) {
-  return request({
+  return axios({
     url: `/api/center-members`,
     method: 'put',
     data: centerMember

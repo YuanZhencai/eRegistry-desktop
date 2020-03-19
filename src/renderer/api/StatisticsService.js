@@ -1,7 +1,7 @@
-import request from '@/utils/request'
+import axios from 'axios'
 
 export function getDateChart(projectId, params) {
-  return request({
+  return axios({
     url: `/api/projects/${projectId}/chart/date`,
     method: 'get',
     params
@@ -9,14 +9,14 @@ export function getDateChart(projectId, params) {
 }
 
 export function getPlanChart(projectId) {
-  return request({
+  return axios({
     url: `/api/projects/${projectId}/chart/plan`,
     method: 'get'
   })
 }
 
 export function getProjectStatistics(projectId) {
-  return request({
+  return axios({
     url: `/api/projects/${projectId}/statistics`,
     method: 'get'
   })

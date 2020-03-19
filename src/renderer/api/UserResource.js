@@ -1,7 +1,7 @@
-import request from '@/utils/request'
+import axios from 'axios'
 
 export function getUsersByLoginStartingWith(login) {
-  return request({
+  return axios({
     url: '/api/users/starting-with',
     method: 'get',
     params: {

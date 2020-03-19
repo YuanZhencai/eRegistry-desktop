@@ -40,19 +40,22 @@
               <span slot="title">项目中心</span>
             </template>
           </el-menu-item>
-          <el-menu-item index="plan" @click="selectMenu('plan')">
+          <el-menu-item index="plan"
+                        @click="selectMenu('plan')">
             <template slot="title">
               <i class="el-icon-menu"></i>
               <span slot="title">随访计划</span>
             </template>
           </el-menu-item>
-          <el-menu-item index="calendar" @click="selectMenu('calendar')">
+          <el-menu-item index="calendar"
+                        @click="selectMenu('calendar')">
             <template slot="title">
               <i class="el-icon-menu"></i>
               <span slot="title">随访日历</span>
             </template>
           </el-menu-item>
-          <el-menu-item>
+          <el-menu-item index="log"
+                        @click="selectMenu('log')">
             <template slot="title">
               <i class="el-icon-menu"></i>
               <span slot="title">日志记录</span>

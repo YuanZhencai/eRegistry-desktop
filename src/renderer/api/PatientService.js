@@ -1,7 +1,7 @@
-import request from '@/utils/request'
+import axios from 'axios'
 
 export function getProjectPatients(projectId, params) {
-  return request({
+  return axios({
     url: `/api/projects/${projectId}/patients`,
     method: 'get',
     params: params
@@ -9,7 +9,7 @@ export function getProjectPatients(projectId, params) {
 }
 
 export function exportPatients(projectId, type) {
-  return request({
+  return axios({
     url: `/api/projects/${projectId}/patients/data`,
     method: 'get',
     params: type
@@ -17,21 +17,21 @@ export function exportPatients(projectId, type) {
 }
 
 export function getPatient(id) {
-  return request({
+  return axios({
     url: `/api/patient/${id}`,
     method: 'get'
   })
 }
 
 export function deletePatient(id) {
-  return request({
+  return axios({
     url: `/api/patient/${id}`,
     method: 'delete'
   })
 }
 
 export function createPatient(patient) {
-  return request({
+  return axios({
     url: `/api/patient`,
     method: 'post',
     data: patient
@@ -39,7 +39,7 @@ export function createPatient(patient) {
 }
 
 export function updatePatient(patient) {
-  return request({
+  return axios({
     url: `/api/patient`,
     method: 'put',
     data: patient
@@ -47,7 +47,7 @@ export function updatePatient(patient) {
 }
 
 export function getTimeline(id) {
-  return request({
+  return axios({
     url: `/api/patient/${id}/timeline`,
     method: 'get'
   })
