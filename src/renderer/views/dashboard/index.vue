@@ -8,7 +8,7 @@
         </el-button>
       </div>
       <el-row :gutter="20" v-loading="loading">
-        <el-col :span="8" v-for="project in projects" :key="project.id">
+        <el-col :span="8" v-for="project in projects" :key="project.id" style="padding-bottom: 10px;">
           <el-card  class="text item">
             <div class="card-header">
               <router-link :to="{path: `/project/${project.id}/home`}" class="linka">{{project.name}}</router-link>
