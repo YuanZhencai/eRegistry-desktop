@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { getMineProjects } from '@/api/ProjectResource'
+import { getMineProjects } from '@/api/ProjectService'
 
 export default {
   name: 'dashboard',

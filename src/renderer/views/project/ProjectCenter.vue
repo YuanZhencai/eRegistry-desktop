@@ -43,8 +43,7 @@
 </template>
 
 <script>
-  import { getProjectCenters } from '@/api/CenterResource'
-  import { deleteCenter } from '../../api/CenterResource'
+  import { getProjectCenters, deleteCenter } from '@/api/CenterService'
   import CenterDialogComponent from '../center/CenterDialogComponent'
   export default {
     name: 'ProjectCenter',

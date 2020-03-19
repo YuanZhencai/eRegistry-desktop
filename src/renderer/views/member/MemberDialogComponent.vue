@@ -71,9 +71,9 @@
 </template>
 
 <script>
-  import { getMineProjects, getProjectUsers } from '@/api/ProjectResource'
-  import { createBatchMember } from '@/api/MemberResource'
-  import { getUsersByLoginStartingWith } from '@/api/UserResource'
+  import { getMineProjects, getProjectUsers } from '@/api/ProjectService'
+  import { createBatchMember } from '@/api/MemberService'
+  import { getUsersByLoginStartingWith } from '@/api/UserService'
   import { createInvitation } from '@/api/InvitationService'
 
   export default {

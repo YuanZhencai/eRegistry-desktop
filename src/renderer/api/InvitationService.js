@@ -1,7 +1,7 @@
-import request from '@/utils/request'
+import axios from 'axios'
 
 export function createInvitation(data) {
-  return request({
+  return axios({
     method: 'post',
     url: `/api/invitations/member`,
     data

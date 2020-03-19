@@ -103,7 +103,7 @@
 
 <script>
   import { copyReport, deleteReport, getAllReports, shareReport } from '../../api/ReportService'
-  import { getUsersByLoginStartingWith } from '../../api/UserResource'
+  import { getUsersByLoginStartingWith } from '../../api/UserService'
 
 export default {
     name: 'Report',

@@ -38,7 +38,7 @@
 <script>
   import { mapGetters } from 'vuex'
   import { getMineReports } from '@/api/ReportService'
-  import { getProject, createProject, updateProject } from '@/api/ProjectResource'
+  import { getProject, createProject, updateProject } from '@/api/ProjectService'
   export default {
     name: 'ProjectDialogComponent',
     props: {

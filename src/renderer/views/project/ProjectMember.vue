@@ -58,8 +58,8 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { getProjectMembers, deleteMember } from '@/api/MemberResource'
-  import { getProject } from '@/api/ProjectResource'
+  import { getProjectMembers, deleteMember } from '@/api/MemberService'
+  import { getProject } from '@/api/ProjectService'
   import MemberDialogComponent from '../member/MemberDialogComponent'
   import AssignMemberDialog from '../center-member/AssignMemberDialog'
   import AssignTaskDialog from '../member-task/AssignTaskDialog'

@@ -21,8 +21,8 @@
 </template>
 
 <script>
-  import { createMemberTask, updateMemberTask, getTaskByMemberId } from '@/api/MemberTaskResource'
-  import { getMember } from '@/api/MemberResource'
+  import { createMemberTask, updateMemberTask, getTaskByMemberId } from '@/api/MemberTaskService'
+  import { getMember } from '@/api/MemberService'
   export default {
     name: 'AssignTaskDialog',
     props: {

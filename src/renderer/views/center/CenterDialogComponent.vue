@@ -31,7 +31,7 @@
 </template>
 
 <script>
-  import { getCenter, createCenter, updateCenter } from '@/api/CenterResource'
+  import { getCenter, createCenter, updateCenter } from '@/api/CenterService'
   export default {
     name: 'CenterDialogComponent',
     props: {

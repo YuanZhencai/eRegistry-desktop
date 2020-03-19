@@ -56,7 +56,7 @@
 </template>
 
 <script>
-  import { getMineProjects, deleteProject } from '@/api/ProjectResource'
+  import { getMineProjects, deleteProject } from '@/api/ProjectService'
   import ProjectDialogComponent from './ProjectDialogComponent'
 
   export default {

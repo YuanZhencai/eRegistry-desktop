@@ -21,8 +21,8 @@
 </template>
 
 <script>
-  import { getAllCenters } from '@/api/CenterResource'
-  import { createCenterMember, updateCenterMember, getCenterMemberByMemberId } from '@/api/CenterMemberResource'
+  import { getAllCenters } from '@/api/CenterService'
+  import { createCenterMember, updateCenterMember, getCenterMemberByMemberId } from '@/api/CenterMemberService'
   export default {
     name: 'AssignMemberDialog',
     props: {
