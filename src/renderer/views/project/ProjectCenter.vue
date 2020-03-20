@@ -37,7 +37,7 @@
                 <el-button type="primary" @click="confirmDelete">删 除</el-button>
             </span>
         </el-dialog>
-        <center-dialog-component ref="center-dialog" :center-id="selectedCenter.id"></center-dialog-component>
+        <center-dialog-component ref="center-dialog"></center-dialog-component>
     </div>
 </template>
 
@@ -101,7 +101,7 @@
       },
       editCenter(center) {
         this.selectedCenter = center
-        this.$refs['center-dialog'].show().then(() => {
+        this.$refs['center-dialog'].show(center.id).then(() => {
           this.loading = true
           this.getCenters()
         }, () => {})

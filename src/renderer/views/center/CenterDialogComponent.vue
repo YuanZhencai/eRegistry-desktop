@@ -34,14 +34,10 @@
   import { getCenter, createCenter, updateCenter } from '@/api/CenterService'
   export default {
     name: 'CenterDialogComponent',
-    props: {
-      centerId: {
-        type: Number
-      }
-    },
     data() {
       const projectId = this.$route.params.projectId
       return {
+        centerId: null,
         display: false,
         reject: null,
         resolve: null,
@@ -65,10 +61,11 @@
       }
     },
     methods: {
-      show() {
+      show(centerId) {
         const that = this
-        this.getCenter()
+        this.centerId = centerId
         this.display = true
+        this.getCenter()
         return new Promise((resolve, reject) => {
           that.resolve = resolve
           that.reject = reject
