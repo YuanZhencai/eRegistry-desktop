@@ -1,24 +1,30 @@
 <template>
   <div class="app-container">
-    <el-button type="primary"
-               @click="headerCreatePlan">创建随访计划</el-button>
+    <el-row v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
+      <el-col :span='24'>
+        <el-button type="primary"
+                   @click="headerCreatePlan">创建随访计划</el-button>
+      </el-col>
+    </el-row>
     <el-table :data="followList"
+              @sort-change="changeOrder"
               style="width: 100%">
       <el-table-column prop="name"
                        label="名称"
-                       sortable
+                       sortable="custom"
                        width="180">
       </el-table-column>
       <el-table-column prop="condition"
                        label="第几天开始"
-                       sortable
+                       sortable="custom"
                        width="180">
       </el-table-column>
       <el-table-column prop="remindingInterval"
-                       sortable
+                       sortable="custom"
                        label="提醒区间">
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作"
+                       v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
         <template slot-scope="scope">
           <el-button size="small"
                      type="primary"
@@ -109,8 +115,7 @@ export default {
       total: 0,
       listQuery: {
         page: 0,
-        limit: 10,
-        sort: '+id'
+        limit: 10
       },
       rules: {
         name: [{ required: true, message: '本字段不能为空', trigger: 'change' }],
@@ -127,13 +132,27 @@ export default {
       editCreateDialog: false,
       deleteDialogVisible: false,
       crfValue: '',
-      reportId: ''
+      reportId: '',
+      sortPropMap: {
+        name: 'name',
+        condition: 'condition',
+        remindingInterval: 'remindingInterval'
+      }
     }
   },
   mounted() {
     this.getplan()
   },
   methods: {
+    sort() {
+      return (this.predicate && this.order) ? this.sortPropMap[this.predicate] + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
+    },
+    changeOrder(sort) {
+      console.info(sort)
+      this.predicate = sort.prop
+      this.order = sort.order
+      this.getplan()
+    },
     sizeChange(size) {
       this.listQuery.limit = size
       this.getplan()
@@ -147,7 +166,8 @@ export default {
         'EQ_plan.projectId': this.projectId,
         'EQ_plan.deleted': false,
         page: this.listQuery.page || 0,
-        size: this.listQuery.size || 10
+        size: this.listQuery.size || 10,
+        sort: this.sort()
       }
       try {
         await getPlan(data).then((res) => {
