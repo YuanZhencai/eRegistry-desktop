@@ -1,5 +1,7 @@
 <template>
-    <el-dialog title="创建或编辑项目" :visible.sync="visible" :before-close="cancel">
+    <el-dialog title="创建或编辑项目"
+               :visible.sync="display"
+               :before-close="close">
         <el-form label-width="80px" size="mini" ref="projectForm" :model="project" :rules="rules">
             <el-form-item label="项目名称" prop="name">
                 <el-input v-model="project.name"></el-input>
@@ -12,17 +14,20 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="开始时间" prop="beginDate">
-                <el-col :span="10">
-                    <el-date-picker v-model="project.beginDate" type="date" placeholder="请选择日期"
-                                    style="width: 100%"></el-date-picker>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="开始时间" prop="beginDate">
+                        <el-date-picker v-model="project.beginDate" type="date" placeholder="请选择日期"
+                                        style="width: 100%"></el-date-picker>
+                    </el-form-item>
                 </el-col>
-                <el-col :span="4" class="text-center">结束时间</el-col>
-                <el-col :span="10">
-                    <el-date-picker v-model="project.endDate" type="date" placeholder="请选择日期"
-                                    style="width: 100%"></el-date-picker>
+                <el-col :span="12">
+                    <el-form-item label="结束时间" prop="endDate">
+                        <el-date-picker v-model="project.endDate" type="date" placeholder="请选择日期"
+                                        style="width: 100%"></el-date-picker>
+                    </el-form-item>
                 </el-col>
-            </el-form-item>
+            </el-row>
 
             <el-form-item label="项目简介">
                 <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="project.introduction"></el-input>
@@ -36,13 +41,13 @@
 </template>
 
 <script>
+  import moment from 'moment'
   import { mapGetters } from 'vuex'
   import { getMineReports } from '@/api/ReportService'
   import { getProject, createProject, updateProject } from '@/api/ProjectService'
   export default {
     name: 'ProjectDialogComponent',
     props: {
-      visible: { type: Boolean },
       projectId: { type: Number }
     },
     computed: {
@@ -51,6 +56,14 @@
       ])
     },
     data() {
+      const vm = this
+      const validateEndDate = (rule, value, callback) => {
+        if (moment(value).isBefore(vm.project.beginDate)) {
+          callback(new Error('结束日期应该大于开始日期'))
+        } else {
+          callback()
+        }
+      }
       return {
         project: { name: null, beginDate: null, endDate: null },
         reports: [],
@@ -59,20 +72,43 @@
             { required: true, message: '请输入项目名称', trigger: 'blur' }
           ],
           beginDate: [
-            { required: true, message: '选择开始时间和结束时间', trigger: 'blur' }
+            { required: true, message: '选择开始时间', trigger: 'blur' }
+          ],
+          endDate: [
+            { required: true, message: '请选择结束日期', trigger: 'blur' },
+            { validator: validateEndDate, trigger: 'blur' }
           ]
-        }
+        },
+        display: false,
+        resolve: null,
+        reject: null
       }
     },
     created() {
-      if (this.projectId) {
-        this.getProject()
-      } else {
-        this.project = { name: '', beginDate: '', endDate: '' }
-      }
       this.getReports()
     },
     methods: {
+      show() {
+        const that = this
+        if (this.projectId) {
+          this.getProject()
+        } else {
+          this.project = { name: '', beginDate: '', endDate: '' }
+        }
+        this.display = true
+        return new Promise((resolve, reject) => {
+          that.resolve = resolve
+          that.reject = reject
+        })
+      },
+      cancel() {
+        this.display = false
+        this.reject('cancel')
+      },
+      close() {
+        this.display = false
+        this.reject('close')
+      },
       getProject() {
         getProject(this.projectId).then(res => {
           this.project = res.data
@@ -83,34 +119,23 @@
           this.reports = res.data
         })
       },
-      closeDialog() {
-        this.$emit('closeDialog', { page: 'newDialog', type: 'confirm' })
-      },
-      cancel() {
-        this.$emit('closeDialog', { page: 'newDialog', type: 'cancel' })
-      },
       confirm(formName) {
+        const that = this
         this.project.chargedBy = this.name
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (this.projectId) {
-              updateProject(this.project).then(() => {
-                this.openMessage('项目更新成功', 'success')
-                this.closeDialog()
+              updateProject(this.project).then((res) => {
+                that.display = false
+                that.resolve(res.data)
               })
             } else {
-              createProject(this.project).then(() => {
-                this.openMessage('项目创建成功', 'success')
-                this.closeDialog()
+              createProject(this.project).then((res) => {
+                that.display = false
+                that.resolve(res.data)
               })
             }
           }
-        })
-      },
-      openMessage(message, type) {
-        this.$message({
-          message,
-          type
         })
       }
     }
