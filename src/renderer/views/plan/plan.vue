@@ -6,13 +6,16 @@
               style="width: 100%">
       <el-table-column prop="name"
                        label="名称"
+                       sortable
                        width="180">
       </el-table-column>
       <el-table-column prop="condition"
                        label="第几天开始"
+                       sortable
                        width="180">
       </el-table-column>
       <el-table-column prop="remindingInterval"
+                       sortable
                        label="提醒区间">
       </el-table-column>
       <el-table-column label="操作">
@@ -45,7 +48,7 @@
           <el-input v-model="dialogFormData.name"></el-input>
         </el-form-item>
         <el-form-item label="CRF模板:">
-          <el-select v-model="value"
+          <el-select v-model="crfValue"
                      placeholder="请选择CRF随访模板">
             <el-option v-for="item in crflistData"
                        :key="item.id"
@@ -123,7 +126,8 @@ export default {
       dialogFormData: {},
       editCreateDialog: false,
       deleteDialogVisible: false,
-      value: ''
+      crfValue: '',
+      reportId: ''
     }
   },
   mounted() {
@@ -157,7 +161,7 @@ export default {
     async headerCreatePlan(dialogFormData) {
       this.dialogStatus = 'create'
       this.dialogFormData = {}
-      this.value = ''
+      this.crfValue = ''
       try {
         await getCrfList().then((res) => {
           this.crflistData = res.data
@@ -173,17 +177,9 @@ export default {
           this.crflistData = res.data
         })
         this.dialogFormData['projectId'] = this.projectId
-        this.dialogFormData['reportId'] = this.value
+        this.dialogFormData['reportId'] = this.crfValue
         await createPlan(this.dialogFormData).then((res) => { })
-        this.$nextTick(() => {
-          this.editCreateDialog = false
-          this.$notify({
-            title: '成功',
-            message: '新建成功',
-            type: 'success',
-            duration: 2000
-          })
-        })
+        this.editCreateDialog = false
         this.getplan()
       } catch (e) {
         console.log(e)
@@ -192,17 +188,17 @@ export default {
     async editPlan(id) {
       this.dialogStatus = 'update'
       this.editCreateDialog = true
+      this.crfValue = ''
       try {
         await getPlans(id).then((res) => {
           this.dialogFormData = res.data
-          console.log(this.dialogFormData)
         })
         await getCrfList().then((res) => {
           this.crflistData = res.data
         })
         for (let i = 0; i < this.crflistData.length; i++) {
           if (this.dialogFormData.reportId === this.crflistData[i].id) {
-            this.value = this.crflistData[i].title
+            this.crfValue = this.crflistData[i].id
           }
         }
       } catch (e) {
@@ -210,18 +206,12 @@ export default {
       }
     },
     async updatePlan() {
-      this.dialogFormData['reportId'] = this.value
+      this.dialogFormData['reportId'] = this.crfValue
       await updatePlan(this.dialogFormData).then((res) => { })
       this.$nextTick(() => {
-        this.$notify({
-          title: '成功',
-          message: '更新成功',
-          type: 'success',
-          duration: 2000
-        })
+        this.editCreateDialog = false
+        this.getplan()
       })
-      this.editCreateDialog = false
-      this.getplan()
     },
     planDeleteDialog(questionnaire) {
       this.deleteDialogVisible = true
