@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑成员" :visible.sync="visible" :before-close="cancel">
+    <el-dialog title="创建或编辑成员" :visible.sync="display" :before-close="close">
         <el-row :gutter="8">
             <el-col :span="8">
                 <div>
@@ -78,10 +78,12 @@
 
   export default {
     name: 'MemberDialogComponent',
-    props: ['visible'],
     data() {
       const projectId = Number(this.$route.params.projectId)
       return {
+        display: false,
+        reject: null,
+        resolve: null,
         login: '',
         ruleForm: {
           email: null
@@ -99,10 +101,18 @@
       }
     },
     created() {
-      this.findProjectMembers()
-      this.findProjects()
     },
     methods: {
+      show() {
+        const that = this
+        this.findProjectMembers()
+        this.findProjects()
+        this.display = true
+        return new Promise((resolve, reject) => {
+          that.resolve = resolve
+          that.reject = reject
+        })
+      },
       // 根据输入查找用户
       findUsers(login) {
         this.users = []
@@ -112,6 +122,7 @@
       },
       findProjects() {
         const vm = this
+        this.projects = []
         // 查找当前用户所创建的项目
         getMineProjects().then(response => {
           const data = response.data
@@ -134,6 +145,7 @@
       findProjectMembers() {
         // 查找当前项目的成员
         const vm = this
+        this.members = []
         getProjectUsers(this.projectId).then(response => {
           response.data.forEach((member) => {
             this.$set(vm.members, member.id, member)
@@ -162,21 +174,30 @@
         this.$set(user, 'selected', false)
       },
       cancel() {
-        this.$emit('closeDialog', { page: 'memberDialog', type: 'cancel' })
+        this.display = false
+        this.reject('cancel')
       },
-      closeDialog() {
-        this.$emit('closeDialog', { page: 'memberDialog', type: 'confirm' })
+      close() {
+        this.display = false
+        this.reject('close')
       },
       confirm() {
         this.selectedUsers = this.users.filter(item => item.selected)
-        const batchMember = {
-          projectId: this.projectId,
-          users: this.selectedUsers
+        if (this.selectedUsers.length > 0) {
+          const batchMember = {
+            projectId: this.projectId,
+            users: this.selectedUsers
+          }
+          createBatchMember(batchMember).then((response) => {
+            this.display = false
+            this.resolve(response.data)
+          })
+        } else {
+          this.$message({
+            message: '请选择要添加的成员',
+            type: 'error'
+          })
         }
-        createBatchMember(batchMember).then((response) => {
-          this.closeDialog()
-        }, () => {
-        })
       }
     }
   }

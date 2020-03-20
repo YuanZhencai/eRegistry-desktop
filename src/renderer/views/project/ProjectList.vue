@@ -130,9 +130,7 @@
           this.selectedProject = project
           this.loading = true
           this.getProjects()
-        }, (error) => {
-          console.log(error)
-        })
+        }, () => {})
       },
       deleteProject(project) {
         this.selectedProject = project

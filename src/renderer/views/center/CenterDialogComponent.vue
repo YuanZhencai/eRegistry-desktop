@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑分中心" :visible.sync="visible" :before-close="cancel">
+    <el-dialog title="创建或编辑分中心" :visible.sync="display" :before-close="close">
         <el-form label-width="80px" :model="center" :rules="rules" ref="centerForm" size="mini">
             <el-form-item label="名称" prop="name">
                 <el-input v-model="center.name"></el-input>
@@ -35,9 +35,6 @@
   export default {
     name: 'CenterDialogComponent',
     props: {
-      visible: {
-        type: Boolean
-      },
       centerId: {
         type: Number
       }
@@ -45,6 +42,9 @@
     data() {
       const projectId = this.$route.params.projectId
       return {
+        display: false,
+        reject: null,
+        resolve: null,
         projectId,
         center: {},
         rules: {
@@ -64,10 +64,16 @@
         }
       }
     },
-    created() {
-      this.getCenter()
-    },
     methods: {
+      show() {
+        const that = this
+        this.getCenter()
+        this.display = true
+        return new Promise((resolve, reject) => {
+          that.resolve = resolve
+          that.reject = reject
+        })
+      },
       getCenter() {
         if (this.centerId) {
           getCenter(this.centerId).then(res => {
@@ -78,21 +84,26 @@
         }
       },
       cancel() {
-        this.$emit('closeDialog', { page: 'centerDialog', type: 'cancel' })
+        this.display = false
+        this.reject('cancel')
       },
-      closeDialog() {
-        this.$emit('closeDialog', { page: 'centerDialog', type: 'confirm' })
+      close() {
+        this.display = false
+        this.reject('close')
       },
       confirm(formName) {
+        const that = this
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (this.centerId) {
               updateCenter(this.center).then(res => {
-                this.closeDialog()
+                that.display = false
+                that.resolve(res.data)
               })
             } else {
               createCenter(this.center).then(res => {
-                this.closeDialog()
+                that.display = false
+                that.resolve(res.data)
               })
             }
           }

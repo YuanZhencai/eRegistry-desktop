@@ -37,8 +37,7 @@
                 <el-button type="primary" @click="confirmDelete">删 除</el-button>
             </span>
         </el-dialog>
-        <center-dialog-component v-if="centerDialogVisible" :visible="centerDialogVisible"
-                                 :center-id="selectedCenter.id" @closeDialog="closeDialog"></center-dialog-component>
+        <center-dialog-component ref="center-dialog" :center-id="selectedCenter.id"></center-dialog-component>
     </div>
 </template>
 
@@ -59,8 +58,7 @@
         pageSize: 10, // 单页数据量
         currentPage: 1, // 默认开始页面
         deleteCenterDialogVisible: false,
-        centerDialogVisible: false,
-        selectedCenter: null,
+        selectedCenter: {},
         projectId,
         sortPropMap: {
           id: 'c.id',
@@ -96,11 +94,17 @@
       },
       newCenter() {
         this.selectedCenter = { name: '', telephone: '', no: '', chargedBy: '' }
-        this.centerDialogVisible = true
+        this.$refs['center-dialog'].show().then(() => {
+          this.loading = true
+          this.getCenters()
+        }, () => {})
       },
       editCenter(center) {
         this.selectedCenter = center
-        this.centerDialogVisible = true
+        this.$refs['center-dialog'].show().then(() => {
+          this.loading = true
+          this.getCenters()
+        }, () => {})
       },
       deleteCenter(center) {
         this.selectedCenter = center
@@ -114,22 +118,12 @@
         this.pageSize = val
         this.getCenters()
       },
-      closeDialog: function(val) {
-        switch (val.page) {
-          case 'centerDialog':
-            this.centerDialogVisible = false
-            if (val.type === 'confirm') {
-              this.loading = true
-              this.getCenters()
-            }
-            break
-          default:
-            this.deleteCenterDialogVisible = false
-        }
+      closeDialog: function() {
+        this.deleteCenterDialogVisible = false
       },
       confirmDelete() {
         deleteCenter(this.selectedCenter.id).then((res) => {
-          this.closeDialog({ page: 'deleteDialog' })
+          this.closeDialog()
           this.loading = true
           this.getCenters()
         })

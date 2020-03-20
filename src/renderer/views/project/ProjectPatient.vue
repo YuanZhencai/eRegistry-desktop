@@ -117,7 +117,6 @@
     components: { PatientDialogComponent },
     data() {
       const projectId = this.$route.params.projectId
-      console.log(SERVER_API_URL)
       return {
         BASE_API: SERVER_API_URL,
         loading: true,

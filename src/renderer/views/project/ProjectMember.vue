@@ -45,8 +45,7 @@
                 <el-button type="primary" @click="confirmDelete">删 除</el-button>
             </span>
     </el-dialog>
-    <member-dialog-component v-if="newMemberDialogVisible" :visible="newMemberDialogVisible"
-                             @closeDialog="closeDialog"></member-dialog-component>
+    <member-dialog-component ref="add-member-dialog"></member-dialog-component>
     <assign-member-dialog v-if="assignCenterDialogVisible" :visible="assignCenterDialogVisible"
                           :member-id="selectedMember.id"
                           @closeDialog="closeDialog"></assign-member-dialog>
@@ -98,7 +97,6 @@
           ADMIN: '负责人'
         },
         deleteMemberDialogVisible: false,
-        newMemberDialogVisible: false,
         assignCenterDialogVisible: false,
         assignTaskDialogVisible: false
       }
@@ -144,7 +142,10 @@
         this.getMembers()
       },
       newMember() {
-        this.newMemberDialogVisible = true
+        this.$refs['add-member-dialog'].show().then((res) => {
+          this.loading = true
+          this.getMembers()
+        }, () => {})
       },
       assignCenter(member) {
         this.selectedMember = member
@@ -172,9 +173,6 @@
       },
       closeDialog(val) {
         switch (val.page) {
-          case 'memberDialog':
-            this.newMemberDialogVisible = false
-            break
           case 'assignMember':
             this.assignCenterDialogVisible = false
             break

@@ -122,8 +122,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <project-dialog-component v-if="projectDialogVisible" :visible="projectDialogVisible" :project-id="Number(projectId)"
-                              @closeDialog="closeDialog"></project-dialog-component>
+    <project-dialog-component ref="project-dialog" :project-id="Number(projectId)"></project-dialog-component>
   </div>
 </template>
 
@@ -222,6 +221,7 @@
       },
       setProject() {
         this.projectDialogVisible = true
+        this.$refs['project-dialog'].show()
       },
       closeDialog(val) {
         this.projectDialogVisible = false
