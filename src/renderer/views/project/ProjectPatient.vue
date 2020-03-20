@@ -119,7 +119,7 @@
 
 <script>
   import { ipcRenderer } from 'electron'
-  import { getProjectPatients, exportPatients } from '@/api/PatientService'
+  import { getProjectPatients } from '@/api/PatientService'
   import PatientDialogComponent from '../patient/PatientDialogComponent'
   import img_excel from '@/assets/excel.png'
   import img_csv from '@/assets/csv.png'
@@ -214,8 +214,9 @@
         this.exportDialogVisible = true
       },
       confirmExport() {
-        exportPatients(this.projectId, { type: this.exportType })
-        ipcRenderer.send('downloadFiles', { url: `/Users/xuepeipei/Downloads/vue-dashboard.zip` })
+        // exportPatients(this.projectId, { type: this.exportType })
+        const newURL = 'http://a0.att.hudong.com/78/52/01200000123847134434529793168.jpg'
+        ipcRenderer.send('download-item', { url: newURL })
       },
       closeDialog(val) {
         if (val.page === 'editDialog') {

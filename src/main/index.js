@@ -1,6 +1,14 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
-const electronDl = require('electron-dl')
 import { download } from 'electron-dl'
+
+ipcMain.on('download-item', async(event, { url }) => {
+  console.log('download-item', url)
+  const win = BrowserWindow.getFocusedWindow()
+  download(win, url)
+    .then(dl => console.log(dl.getSavePath()))
+    .catch(console.error)
+})
+
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -31,8 +39,6 @@ function createWindow() {
   })
 }
 
-electronDl()
-
 app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {
@@ -45,18 +51,6 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
-})
-
-// const options = { saveAs: true }
-
-ipcMain.on('downloadFiles', (event, args) => {
-  const win = BrowserWindow.getFocusedWindow()
-  console.log(args.url)
-  download(win, args.url).then((dl) => {
-    console.log(dl.getSavePath())
-  }, (error) => {
-    console.log(error)
-  })
 })
 
 /**
