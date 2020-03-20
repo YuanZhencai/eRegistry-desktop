@@ -50,7 +50,7 @@
                 <el-button type="primary" @click="confirmDelete">删 除</el-button>
             </span>
         </el-dialog>
-        <project-dialog-component ref="project-dialog" :project-id="selectedProject.id"></project-dialog-component>
+        <project-dialog-component ref="project-dialog"></project-dialog-component>
     </div>
 </template>
 
@@ -118,7 +118,7 @@
       },
       edit(project) {
         this.selectedProject = project
-        this.$refs['project-dialog'].show().then((project) => {
+        this.$refs['project-dialog'].show(project.id).then((project) => {
           this.selectedProject = project
           this.loading = true
           this.getProjects()

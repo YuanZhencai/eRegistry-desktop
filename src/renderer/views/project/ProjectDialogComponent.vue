@@ -47,9 +47,6 @@
   import { getProject, createProject, updateProject } from '@/api/ProjectService'
   export default {
     name: 'ProjectDialogComponent',
-    props: {
-      projectId: { type: Number }
-    },
     computed: {
       ...mapGetters([
         'name'
@@ -65,6 +62,7 @@
         }
       }
       return {
+        projectId: null,
         project: { name: null, beginDate: null, endDate: null },
         reports: [],
         rules: {
@@ -88,8 +86,9 @@
       this.getReports()
     },
     methods: {
-      show() {
+      show(projectId) {
         const that = this
+        this.projectId = projectId
         if (this.projectId) {
           this.getProject()
         } else {
