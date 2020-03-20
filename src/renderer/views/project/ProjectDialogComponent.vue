@@ -1,7 +1,7 @@
 <template>
     <el-dialog title="创建或编辑项目" :visible.sync="visible" :before-close="cancel">
-        <el-form label-width="75px">
-            <el-form-item label="项目名称">
+        <el-form label-width="80px" size="mini" ref="projectForm" :model="project" :rules="rules">
+            <el-form-item label="项目名称" prop="name">
                 <el-input v-model="project.name"></el-input>
             </el-form-item>
             <el-form-item label="CRF模版">
@@ -12,7 +12,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="开始时间">
+            <el-form-item label="开始时间" prop="beginDate">
                 <el-col :span="10">
                     <el-date-picker v-model="project.beginDate" type="date" placeholder="请选择日期"
                                     style="width: 100%"></el-date-picker>
@@ -30,25 +30,38 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button size="mini" @click="cancel">取 消</el-button>
-            <el-button size="mini" type="primary" @click="confirm">确 定</el-button>
+            <el-button size="mini" type="primary" @click="confirm('projectForm')">确 定</el-button>
         </div>
     </el-dialog>
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import { getMineReports } from '@/api/ReportService'
-  import { getProject, createProject, updateProject } from '@/api/ProjectResource'
+  import { getProject, createProject, updateProject } from '@/api/ProjectService'
   export default {
     name: 'ProjectDialogComponent',
     props: {
       visible: { type: Boolean },
       projectId: { type: Number }
     },
+    computed: {
+      ...mapGetters([
+        'name'
+      ])
+    },
     data() {
       return {
         project: { name: null, beginDate: null, endDate: null },
         reports: [],
-        currentAccount: { id: '4', login: 'user' }
+        rules: {
+          name: [
+            { required: true, message: '请输入项目名称', trigger: 'blur' }
+          ],
+          beginDate: [
+            { required: true, message: '选择开始时间和结束时间', trigger: 'blur' }
+          ]
+        }
       }
     },
     created() {
@@ -76,19 +89,23 @@
       cancel() {
         this.$emit('closeDialog', { page: 'newDialog', type: 'cancel' })
       },
-      confirm() {
-        this.project.chargedBy = this.currentAccount.login
-        if (this.projectId) {
-          updateProject(this.project).then(() => {
-            this.openMessage('项目更新成功', 'success')
-            this.closeDialog()
-          })
-        } else {
-          createProject(this.project).then(() => {
-            this.openMessage('项目创建成功', 'success')
-            this.closeDialog()
-          })
-        }
+      confirm(formName) {
+        this.project.chargedBy = this.name
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            if (this.projectId) {
+              updateProject(this.project).then(() => {
+                this.openMessage('项目更新成功', 'success')
+                this.closeDialog()
+              })
+            } else {
+              createProject(this.project).then(() => {
+                this.openMessage('项目创建成功', 'success')
+                this.closeDialog()
+              })
+            }
+          }
+        })
       },
       openMessage(message, type) {
         this.$message({

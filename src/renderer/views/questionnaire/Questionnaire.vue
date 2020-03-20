@@ -8,7 +8,7 @@
     <el-row>
       <el-table v-loading="loading" stripe
                 :data='questionnaires' @sort-change="changeOrder"
-                height="250" style='width: 100%'>
+                style='width: 100%'>
         <el-table-column prop='reportName' label='问卷名称' width='180' sortable="custom"></el-table-column>
         <el-table-column prop="lastModifiedDate" label='更新时间' width='180' sortable="custom">
           <template slot-scope="scope">{{scope.row.lastModifiedDate | formatDate('YYYY-MM-DD HH:mm')}}</template>

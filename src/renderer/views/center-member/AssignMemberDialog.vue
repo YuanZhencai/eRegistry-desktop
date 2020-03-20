@@ -1,6 +1,6 @@
 <template>
     <el-dialog title="创建或编辑分中心成员" :visible.sync="visible" :before-close="cancel">
-        <el-form label-width="80px">
+        <el-form label-width="80px" size="mini">
             <el-form-item label="成员">
                 <el-input v-model="centerMember.username" :disabled="true"></el-input>
             </el-form-item>
@@ -21,8 +21,8 @@
 </template>
 
 <script>
-  import { getAllCenters } from '@/api/CenterResource'
-  import { createCenterMember, updateCenterMember, getCenterMemberByMemberId } from '@/api/CenterMemberResource'
+  import { getAllCenters } from '@/api/CenterService'
+  import { createCenterMember, updateCenterMember, getCenterMemberByMemberId } from '@/api/CenterMemberService'
   export default {
     name: 'AssignMemberDialog',
     props: {

@@ -10,8 +10,7 @@
 
 <script>
   import SurveyCreator from '@/components/survey/SurveyCreator'
-  import { findReport } from '@/api/ProjectResource'
-  import { saveReport } from '@/api/ProjectResource'
+  import { findReport, saveReport } from '@/api/ProjectService'
   import SelectReport from '../report/SelectReport'
 
 export default {

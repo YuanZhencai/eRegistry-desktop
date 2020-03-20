@@ -103,7 +103,7 @@
 
 <script>
   import { copyReport, deleteReport, getAllReports, shareReport } from '../../api/ReportService'
-  import { getUsersByLoginStartingWith } from '../../api/UserResource'
+  import { getUsersByLoginStartingWith } from '../../api/UserService'
 
 export default {
     name: 'Report',
@@ -157,6 +157,7 @@ export default {
         this.loadAll()
       },
       loadPage(page) {
+        this.page = page
         if (page !== this.previousPage) {
           this.previousPage = page
           this.page = page
