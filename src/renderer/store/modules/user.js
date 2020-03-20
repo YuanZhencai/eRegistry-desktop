@@ -1,3 +1,4 @@
+import { ipcRenderer } from 'electron'
 import { login, logout, getInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
@@ -33,6 +34,7 @@ const user = {
           const data = response.data
           setToken(data.token)
           commit('SET_TOKEN', data.token)
+          ipcRenderer.send('login', { token: data.token })
           resolve()
         }).catch(error => {
           reject(error)
