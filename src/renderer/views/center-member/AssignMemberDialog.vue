@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑分中心成员" :visible.sync="visible" :before-close="cancel">
+    <el-dialog title="创建或编辑分中心成员" :visible.sync="display" :before-close="close">
         <el-form label-width="80px" size="mini">
             <el-form-item label="成员">
                 <el-input v-model="centerMember.username" :disabled="true"></el-input>
@@ -25,28 +25,31 @@
   import { createCenterMember, updateCenterMember, getCenterMemberByMemberId } from '@/api/CenterMemberService'
   export default {
     name: 'AssignMemberDialog',
-    props: {
-      visible: {
-        type: Boolean
-      },
-      memberId: {
-        type: Number
-      }
-    },
     data() {
       const projectId = this.$route.params.projectId
       return {
         centers: [],
         projectId,
         centerMember: { username: null },
-        centerId: null
+        centerId: null,
+        display: false,
+        reject: null,
+        resolve: null,
+        memberId: null
       }
     },
-    created() {
-      this.findCenters()
-      this.findCenterMember()
-    },
     methods: {
+      show(memberId) {
+        const that = this
+        this.memberId = memberId
+        this.findCenters()
+        this.findCenterMember()
+        this.display = true
+        return new Promise((resolve, reject) => {
+          that.resolve = resolve
+          that.reject = reject
+        })
+      },
       findCenters: function() {
         getAllCenters({ 'EQ_center.projectId': this.projectId }).then((res) => {
           this.centers = res.data
@@ -59,21 +62,26 @@
         })
       },
       cancel() {
-        this.$emit('closeDialog', { page: 'assignMember', type: 'cancel' })
+        this.display = false
+        this.reject('cancel')
       },
-      closeDialog() {
-        this.$emit('closeDialog', { page: 'assignMember', type: 'confirm' })
+      close() {
+        this.display = false
+        this.reject('close')
       },
       confirm() {
+        const that = this
         if (this.centerId) {
           updateCenterMember(this.centerMember).then(response => {
             this.centerMember = response.data
-            this.closeDialog()
+            that.display = false
+            that.resolve(response.data)
           })
         } else {
           createCenterMember(this.centerMember).then(response => {
             this.centerMember = response.data
-            this.closeDialog()
+            that.display = false
+            that.resolve(response.data)
           })
         }
       }

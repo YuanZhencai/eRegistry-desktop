@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑任务" :visible.sync="visible" :before-close="cancel">
+    <el-dialog title="创建或编辑任务" :visible.sync="display" :before-close="close">
         <el-form label-width="80px" size="mini">
             <el-form-item label="成员">
                 <el-input v-model="member.username" :disabled="true"></el-input>
@@ -25,14 +25,6 @@
   import { getMember } from '@/api/MemberService'
   export default {
     name: 'AssignTaskDialog',
-    props: {
-      visible: {
-        type: Boolean
-      },
-      memberId: {
-        type: Number
-      }
-    },
     data() {
       return {
         memberTask: { type: null },
@@ -42,14 +34,25 @@
           { label: '录入', value: 'PATIENT' },
           { label: '审核', value: 'AUDIT' },
           { label: '查看', value: 'VIEW' }
-        ]
+        ],
+        display: false,
+        reject: null,
+        resolve: null,
+        memberId: null
       }
     },
-    created() {
-      this.findMember()
-      this.findMemberTask()
-    },
     methods: {
+      show(memberId) {
+        const that = this
+        this.memberId = memberId
+        this.display = true
+        this.findMember()
+        this.findMemberTask()
+        return new Promise((resolve, reject) => {
+          that.resolve = resolve
+          that.reject = reject
+        })
+      },
       findMember() {
         getMember(this.memberId).then(res => {
           this.member = res.data
@@ -65,23 +68,28 @@
         })
       },
       cancel() {
-        this.$emit('closeDialog', { page: 'assignTask', type: 'cancel' })
+        this.display = false
+        this.reject('cancel')
       },
-      closeDialog() {
-        this.$emit('closeDialog', { page: 'assignTask', type: 'confirm' })
+      close() {
+        this.display = false
+        this.reject('close')
       },
       confirm() {
+        const that = this
         this.memberTask.memberId = this.member.id
         this.memberTask.projectId = this.member.projectId
         if (this.memberTask.id !== undefined) {
           updateMemberTask(this.memberTask).then(response => {
             this.memberTask = response.data
-            this.closeDialog()
+            that.display = false
+            that.resolve(response.data)
           })
         } else {
           createMemberTask(this.memberTask).then(response => {
             this.memberTask = response.data
-            this.closeDialog()
+            that.display = false
+            that.resolve(response.data)
           })
         }
       }
