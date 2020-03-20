@@ -129,16 +129,9 @@
       },
       confirmDelete() {
         deleteCenter(this.selectedCenter.id).then((res) => {
-          this.openMessage('分中心删除成功', 'success')
           this.closeDialog({ page: 'deleteDialog' })
           this.loading = true
           this.getCenters()
-        })
-      },
-      openMessage(message, type) {
-        this.$message({
-          message,
-          type
         })
       }
     }

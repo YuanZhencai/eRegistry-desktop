@@ -88,22 +88,14 @@
           if (valid) {
             if (this.centerId) {
               updateCenter(this.center).then(res => {
-                this.openMessage('中心更新成功', 'success')
                 this.closeDialog()
               })
             } else {
               createCenter(this.center).then(res => {
-                this.openMessage('中心创建成功', 'success')
                 this.closeDialog()
               })
             }
           }
-        })
-      },
-      openMessage(message, type) {
-        this.$message({
-          message,
-          type
         })
       }
     }

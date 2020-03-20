@@ -76,22 +76,14 @@
         if (this.memberTask.id !== undefined) {
           updateMemberTask(this.memberTask).then(response => {
             this.memberTask = response.data
-            this.openMessage('任务更新成功', 'success')
             this.closeDialog()
           })
         } else {
           createMemberTask(this.memberTask).then(response => {
             this.memberTask = response.data
-            this.openMessage('分配任务成功', 'success')
             this.closeDialog()
           })
         }
-      },
-      openMessage(message, type) {
-        this.$message({
-          message,
-          type
-        })
       }
     }
   }

@@ -97,24 +97,16 @@
             if (this.patientId) {
               updatePatient(this.patient).then(res => {
                 this.patient = res.data
-                this.openMessage('患者信息更新成功', 'success')
                 this.$emit('closeDialog', { page: 'editDialog', type: 'confirm' })
               })
             } else {
               this.patient.projectId = this.$route.params.projectId
               createPatient(this.patient).then(res => {
                 this.patient = res.data
-                this.openMessage('患者创建成功', 'success')
                 this.$emit('closeDialog', { page: 'editDialog', type: 'confirm' })
               })
             }
           }
-        })
-      },
-      openMessage(message, type) {
-        this.$message({
-          message,
-          type
         })
       }
     }

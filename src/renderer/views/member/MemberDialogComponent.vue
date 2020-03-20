@@ -136,7 +136,6 @@
         const vm = this
         getProjectUsers(this.projectId).then(response => {
           response.data.forEach((member) => {
-            // vm.members[member.id] = member
             this.$set(vm.members, member.id, member)
           })
         })
@@ -147,12 +146,7 @@
             createInvitation({
               projectId: this.projectId,
               email: this.ruleForm.email
-            }).then(() => {
-              this.$message({
-                message: '邀请已发送到对方邮箱中,请耐心等待对方回复',
-                type: 'success'
-              })
-            })
+            }).then(() => {})
           }
         })
       },
@@ -180,16 +174,8 @@
           users: this.selectedUsers
         }
         createBatchMember(batchMember).then((response) => {
-          this.$message({
-            message: '成员添加成功',
-            type: 'success'
-          })
           this.closeDialog()
         }, () => {
-          this.$message({
-            message: '成员添加失败',
-            type: 'error'
-          })
         })
       }
     }

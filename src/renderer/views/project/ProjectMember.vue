@@ -160,7 +160,6 @@
       },
       confirmDelete() {
         deleteMember(this.selectedMember.id).then(response => {
-          this.openMessage('成员删除成功', 'success')
           this.closeDialog({ page: 'deleteDialog', type: 'confirm' })
           this.loading = true
           this.getMembers()
@@ -189,12 +188,6 @@
           this.loading = true
           this.getMembers()
         }
-      },
-      openMessage(message, type) {
-        this.$message({
-          message,
-          type
-        })
       }
     }
   }

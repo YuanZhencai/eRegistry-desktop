@@ -224,12 +224,6 @@
         } else {
           this.exportDialogVisible = false
         }
-      },
-      openMessage(message, type) {
-        this.$message({
-          message,
-          type
-        })
       }
     }
   }

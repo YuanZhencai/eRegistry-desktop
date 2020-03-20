@@ -122,7 +122,7 @@
           this.selectedProject = project
           this.loading = true
           this.getProjects()
-        })
+        }, () => {})
       },
       newProject() {
         this.selectedProject = { id: null }

@@ -68,22 +68,14 @@
         if (this.centerId) {
           updateCenterMember(this.centerMember).then(response => {
             this.centerMember = response.data
-            this.openMessage('中心更新成功', 'success')
             this.closeDialog()
           })
         } else {
           createCenterMember(this.centerMember).then(response => {
             this.centerMember = response.data
-            this.openMessage('分配中心成功', 'success')
             this.closeDialog()
           })
         }
-      },
-      openMessage(message, type) {
-        this.$message({
-          message,
-          type
-        })
       }
     }
   }
