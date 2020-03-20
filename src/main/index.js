@@ -1,5 +1,6 @@
-import { app, BrowserWindow } from 'electron'
-
+import { app, BrowserWindow, ipcMain } from 'electron'
+const electronDl = require('electron-dl')
+import { download } from 'electron-dl'
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -22,13 +23,15 @@ function createWindow() {
     useContentSize: true,
     width: 1000
   })
-
+  // 装载应用的index.html页面
   mainWindow.loadURL(winURL)
 
   mainWindow.on('closed', () => {
     mainWindow = null
   })
 }
+
+electronDl()
 
 app.on('ready', createWindow)
 
@@ -42,6 +45,18 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+// const options = { saveAs: true }
+
+ipcMain.on('downloadFiles', (event, args) => {
+  const win = BrowserWindow.getFocusedWindow()
+  console.log(args.url)
+  download(win, args.url).then((dl) => {
+    console.log(dl.getSavePath())
+  }, (error) => {
+    console.log(error)
+  })
 })
 
 /**

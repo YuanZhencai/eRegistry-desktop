@@ -118,6 +118,7 @@
 </template>
 
 <script>
+  import { ipcRenderer } from 'electron'
   import { getProjectPatients, exportPatients } from '@/api/PatientService'
   import PatientDialogComponent from '../patient/PatientDialogComponent'
   import img_excel from '@/assets/excel.png'
@@ -214,6 +215,7 @@
       },
       confirmExport() {
         exportPatients(this.projectId, { type: this.exportType })
+        ipcRenderer.send('downloadFiles', { url: `/Users/xuepeipei/Downloads/vue-dashboard.zip` })
       },
       closeDialog(val) {
         if (val.page === 'editDialog') {
