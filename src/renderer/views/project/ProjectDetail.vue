@@ -43,21 +43,21 @@
           <el-menu-item index="plan"
                         @click="selectMenu('plan')">
             <template slot="title">
-              <i class="el-icon-menu"></i>
+              <i class="el-icon-first-aid-kit"></i>
               <span slot="title">随访计划</span>
             </template>
           </el-menu-item>
           <el-menu-item index="calendar"
                         @click="selectMenu('calendar')">
             <template slot="title">
-              <i class="el-icon-menu"></i>
+              <i class="el-icon-date"></i>
               <span slot="title">随访日历</span>
             </template>
           </el-menu-item>
           <el-menu-item index="log"
                         @click="selectMenu('log')">
             <template slot="title">
-              <i class="el-icon-menu"></i>
+              <i class="el-icon-document"></i>
               <span slot="title">日志记录</span>
             </template>
           </el-menu-item>

@@ -29,25 +29,13 @@
                        @click="newPatient">新建患者
                 <template v-if="$hasAnyAuthority(['PROJECT_PATIENT_' + projectId])">
                     <el-popover
-                            placement="bottom"
-                            title="调查二维码"
-                            width="200"
-                            trigger="hover">
-                        <el-image
-                                style="width: 150px; height: 150px"
-                                :src="`${baseApi}/api/qrcode?uri=/questionnaire/investigation-new`"
-                                :fit="'fill'">
-                        </el-image>
-                        <el-button type="text" slot="reference">分享调查</el-button>
-                    </el-popover>
-                    <el-popover
-                            placement="bottom"
+                            placement="right-end"
                             title="添加患者二维码"
                             trigger="hover"
                             width="200"
                             v-if="task">
-                        <el-image :src="`${baseApi}/api/qrcode?uri=/patient-task/${task.id}`"></el-image>
-                        <el-button type="text" slot="reference"><i class="fa fa-qrcode"></i></el-button>
+                        <el-image :src="`${BASE_API}/api/qrcode?uri=/patient-task/${task.id}`"></el-image>
+                        <i class="fa fa-qrcode" slot="reference"></i>
                     </el-popover>
                 </template>
             </el-button>
@@ -261,6 +249,118 @@ export default {
         }
       }
     }
+  import { SERVER_API_URL } from '@/constants'
+  import { getProjectPatients, exportPatients } from '@/api/PatientService'
+  import PatientDialogComponent from '../patient/PatientDialogComponent'
+  import img_excel from '@/assets/excel.png'
+  import img_csv from '@/assets/csv.png'
+  import { getCurrentProjectMemberTask } from '@/api/TaskService'
+  export default {
+    name: 'ProjectPatient',
+    components: { PatientDialogComponent },
+    data() {
+      const projectId = this.$route.params.projectId
+      return {
+        BASE_API: SERVER_API_URL,
+        loading: true,
+        predicate: '',
+        order: '',
+        total: 0,
+        pageSize: 10, // 单页数据量
+        currentPage: 1, // 默认开始页面
+        previousPage: 1,
+        form: {
+          queryString: null,
+          startDate: null,
+          endDate: null
+        },
+        selectedPatient: null,
+        patients: [],
+        projectId,
+        editDialogVisible: false,
+        exportDialogVisible: false,
+        img_excel,
+        img_csv,
+        exportType: '',
+        task: {}
+      }
+    },
+    created() {
+      this.getPatients()
+      this.findCurrentMemberTask()
+    },
+    methods: {
+      sort() {
+        return (this.predicate && this.order) ? this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
+      },
+      changeOrder(sort) {
+        this.predicate = sort.prop
+        this.order = sort.order
+        this.getPatients()
+      },
+      currentChange: function(currentPage) {
+        this.currentPage = currentPage
+        this.getPatients()
+      },
+      sizeChange: function(val) {
+        this.pageSize = val
+        this.getPatients()
+      },
+      getPatients() {
+        const vm = this
+        vm.loading = true
+        getProjectPatients(this.projectId, {
+          page: this.currentPage - 1,
+          size: this.pageSize,
+          sort: this.sort(),
+          'EQ_patient.name': this.form.queryString,
+          'GT_patient.visitDate': this.form.startDate,
+          'LT_patient.visitDate': this.form.endDate
+        }).then((res) => {
+          vm.patients = res.data
+          vm.loading = false
+          vm.total = Number(res.headers['x-total-count'])
+        })
+      },
+      searchPatient() {
+        if (this.form.queryString === '') {
+          this.form.queryString = null
+        }
+        this.getPatients()
+      },
+      findCurrentMemberTask() {
+        if (this.$hasAnyAuthority([`PROJECT_PATIENT_${this.projectId}`])) {
+          getCurrentProjectMemberTask(this.projectId).then(res => {
+            this.task = res.data
+          })
+        }
+      },
+      edit(patient) {
+        this.selectedPatient = patient
+        this.editDialogVisible = true
+      },
+      newPatient() {
+        this.selectedPatient = { id: null, name: '' }
+        this.editDialogVisible = true
+      },
+      exportPatient() {
+        this.exportDialogVisible = true
+      },
+      confirmExport() {
+        exportPatients(this.projectId, { type: this.exportType })
+      },
+      closeDialog(val) {
+        if (val.page === 'editDialog') {
+          this.editDialogVisible = false
+          if (val.type === 'confirm') {
+            this.getPatients()
+          }
+        } else {
+          this.exportDialogVisible = false
+        }
+      }
+    }
+  }
 </script>
 
 <style scoped>

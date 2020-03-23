@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑分中心" :visible.sync="visible" :before-close="cancel">
+    <el-dialog title="创建或编辑分中心" :visible.sync="display" :before-close="close">
         <el-form label-width="80px" :model="center" :rules="rules" ref="centerForm" size="mini">
             <el-form-item label="名称" prop="name">
                 <el-input v-model="center.name"></el-input>
@@ -34,17 +34,13 @@
   import { getCenter, createCenter, updateCenter } from '@/api/CenterService'
   export default {
     name: 'CenterDialogComponent',
-    props: {
-      visible: {
-        type: Boolean
-      },
-      centerId: {
-        type: Number
-      }
-    },
     data() {
       const projectId = this.$route.params.projectId
       return {
+        centerId: null,
+        display: false,
+        reject: null,
+        resolve: null,
         projectId,
         center: {},
         rules: {
@@ -64,10 +60,17 @@
         }
       }
     },
-    created() {
-      this.getCenter()
-    },
     methods: {
+      show(centerId) {
+        const that = this
+        this.centerId = centerId
+        this.display = true
+        this.getCenter()
+        return new Promise((resolve, reject) => {
+          that.resolve = resolve
+          that.reject = reject
+        })
+      },
       getCenter() {
         if (this.centerId) {
           getCenter(this.centerId).then(res => {
@@ -78,32 +81,29 @@
         }
       },
       cancel() {
-        this.$emit('closeDialog', { page: 'centerDialog', type: 'cancel' })
+        this.display = false
+        this.reject('cancel')
       },
-      closeDialog() {
-        this.$emit('closeDialog', { page: 'centerDialog', type: 'confirm' })
+      close() {
+        this.display = false
+        this.reject('close')
       },
       confirm(formName) {
+        const that = this
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (this.centerId) {
               updateCenter(this.center).then(res => {
-                this.openMessage('中心更新成功', 'success')
-                this.closeDialog()
+                that.display = false
+                that.resolve(res.data)
               })
             } else {
               createCenter(this.center).then(res => {
-                this.openMessage('中心创建成功', 'success')
-                this.closeDialog()
+                that.display = false
+                that.resolve(res.data)
               })
             }
           }
-        })
-      },
-      openMessage(message, type) {
-        this.$message({
-          message,
-          type
         })
       }
     }

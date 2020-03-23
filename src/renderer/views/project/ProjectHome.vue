@@ -122,8 +122,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <project-dialog-component v-if="projectDialogVisible" :visible="projectDialogVisible" :project-id="Number(projectId)"
-                              @closeDialog="closeDialog"></project-dialog-component>
+    <project-dialog-component ref="project-dialog"></project-dialog-component>
   </div>
 </template>
 
@@ -170,19 +169,21 @@
           AUDIT: '审核',
           VIEW: '查看',
           ADMIN: '负责人'
-        },
-        projectDialogVisible: false
+        }
       }
     },
     created() {
-      this.findCenters()
-      this.findProjectStatistics()
-      this.patient()
-      this.plan()
-      this.findMembers()
-      this.findChanges()
+      this.loadAll()
     },
     methods: {
+      loadAll() {
+        this.findCenters()
+        this.findProjectStatistics()
+        this.patient()
+        this.plan()
+        this.findMembers()
+        this.findChanges()
+      },
       findCenters() {
         getAllCenters({ 'EQ_center.projectId': this.projectId }).then((res) => {
           this.centers = res.data
@@ -221,10 +222,9 @@
         })
       },
       setProject() {
-        this.projectDialogVisible = true
-      },
-      closeDialog(val) {
-        this.projectDialogVisible = false
+        this.$refs['project-dialog'].show(this.projectId).then(() => {
+          this.loadAll()
+        }, () => {})
       }
     }
   }

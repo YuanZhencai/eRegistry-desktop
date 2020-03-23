@@ -69,7 +69,7 @@ export default {
       selectReport() {
         this.$refs['select-report'].show().then((report) => {
           this.report = report
-        })
+        }, () => {})
       }
     }
   }
