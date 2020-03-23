@@ -35,11 +35,12 @@ function createWindow() {
 
 function onDownload() {
   ipcMain.on('download-item', async(event, { url, directory, filename }) => {
-    const filePath = unusedFilename.sync(path.join(directory, filename))
-    const basename = path.basename(filePath)
     const win = BrowserWindow.getFocusedWindow()
+    const dir = app.getPath(directory)
+    const filePath = unusedFilename.sync(path.join(dir, filename))
+    const basename = path.basename(filePath)
     const options = {
-      directory: directory,
+      directory: dir,
       filename: basename
     }
     const file = {
@@ -64,7 +65,6 @@ function onDownload() {
 
 function onLogin() {
   ipcMain.on('login', async(event, args) => {
-    console.log('login', args.token)
     const token = args.token
 
     const filter = {

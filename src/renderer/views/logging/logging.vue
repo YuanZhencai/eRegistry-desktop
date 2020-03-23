@@ -7,8 +7,12 @@
       </div>
       <el-button type="primary"
                  size="medium "
-                 icon="el-icon-download"
-                 class="export">导出</el-button>
+                 v-if="project && project.name"
+                 v-download="{name: `${project.name}.zip`, url: `/api/projects/${projectId}/changes/data`}"
+                 class="export">
+        <span class="fa fa-download"></span>
+        <span class="d-none d-md-inline">导出</span>
+      </el-button>
     </div>
     <el-card class="box-card">
       <el-form ref="form"
@@ -75,6 +79,7 @@
 </template>
 <script>
 import { userFilter, changes } from '@/api/logService'
+import { getProject } from '../../api/ProjectService'
 export default {
   data() {
     const projectId = this.$route.params.projectId
@@ -94,10 +99,12 @@ export default {
       },
       tableData: [],
       projectId,
-      isAdmin: false
+      isAdmin: false,
+      project: null
     }
   },
   mounted() {
+    this.findProject()
     this.findMembers(this.projectId)
     this.loadAll(this.projectId)
   },
@@ -142,6 +149,11 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    findProject() {
+      getProject(this.projectId).then((res) => {
+        this.project = res.data
+      })
     }
   }
 }

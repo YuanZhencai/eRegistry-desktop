@@ -4,10 +4,11 @@
 
 <script>
   import { InvestigationSurvey } from './investigation-survey'
-  import { getInvestigation, getQuestionnaireReport, saveInvestigation } from '../../api/InvestigationService'
+  import { getInvestigation, saveInvestigation } from '../../api/InvestigationService'
   import SurveyView from '@/components/survey/SurveyView'
+  import { getQuestionnaireReport } from '../../api/QuestionnaireService'
 
-  export default {
+export default {
     name: 'InvestigationDetail',
     components: {
       SurveyView

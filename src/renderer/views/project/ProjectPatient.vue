@@ -22,7 +22,8 @@
         <el-row>
             <el-button type="primary" size="mini" icon="el-icon-download"
                        v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId, 'PROJECT_VIEW_' + projectId])"
-                       @click="exportPatient">导出</el-button>
+                       @click="exportPatient">导出
+            </el-button>
             <el-button type="primary" size="mini" icon="el-icon-plus"
                        v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])"
                        @click="newPatient">新建患者
@@ -56,12 +57,16 @@
                       @sort-change="changeOrder" style="width: 100%">
                 <el-table-column prop="id" label="ID" sortable="custom">
                     <template slot-scope="scope">
-                        <router-link :to="{name: 'patientDetail', params: { patientId: scope.row.id}}" class="linka">{{scope.row.id}}</router-link>
+                        <router-link :to="{name: 'patientDetail', params: { patientId: scope.row.id}}" class="linka">
+                            {{scope.row.id}}
+                        </router-link>
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="姓名" sortable="custom">
                     <template slot-scope="scope">
-                        <router-link :to="{name: 'patientDetail', params: { patientId: scope.row.id}}" class="linka">{{scope.row.name}}</router-link>
+                        <router-link :to="{name: 'patientDetail', params: { patientId: scope.row.id}}" class="linka">
+                            {{scope.row.name}}
+                        </router-link>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sex" label="性别" sortable="custom"></el-table-column>
@@ -79,7 +84,8 @@
                     <template slot="header" slot-scope="scope">
                         <span>操作</span>
                     </template>
-                    <template slot-scope="scope" v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
+                    <template slot-scope="scope"
+                              v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
                         <el-button type="text" @click="edit(scope.row)">编辑</el-button>
                     </template>
                 </el-table-column>
@@ -97,156 +103,169 @@
             </el-pagination>
         </el-row>
         <patient-dialog-component v-if="editDialogVisible" :visible="editDialogVisible" :patient-id="selectedPatient.id"
-            @closeDialog="closeDialog"></patient-dialog-component>
+                                  @closeDialog="closeDialog"></patient-dialog-component>
         <el-dialog v-if="exportDialogVisible" title="导出"
                    :visible.sync="exportDialogVisible" :before-close="closeDialog">
-            <div>选择导出文件类型</div>
-            <div class="text-center">
-                <el-image style="width: 100px; height: 100px; margin-right: 50px;"
-                          :class="{'active': exportType === 'EXCEL'}"
-                        :src="img_excel" fit="fit" @click="exportType = 'EXCEL'"></el-image>
-                <el-image style="width: 100px; height: 100px"
-                          :class="{'active': exportType === 'CSV'}"
-                          :src="img_csv" fit="fit" @click="exportType = 'CSV'"></el-image>
+            <div class="text-center" v-if="project">
+                <el-image v-if="project.name"
+                        v-download="{url: `/api/projects/${projectId}/patients/data?type=EXCEL`, name: `${project.name}.zip`}"
+                        style="width: 100px; height: 100px; margin-right: 50px;"
+                        :src="img_excel" fit="fit">
+
+                </el-image>
+                <el-image v-if="project.name"
+                        v-download="{url: `/api/projects/${projectId}/patients/data?type=CSV`, name: `${project.name}.zip`}"
+                        style="width: 100px; height: 100px"
+                        :src="img_csv" fit="fit">
+
+                </el-image>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="exportDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="confirmExport">导 出</el-button>
             </span>
         </el-dialog>
     </div>
 </template>
 
 <script>
-  import { ipcRenderer } from 'electron'
-  import { getProjectPatients } from '@/api/PatientService'
-  import PatientDialogComponent from '../patient/PatientDialogComponent'
-  import img_excel from '@/assets/excel.png'
-  import img_csv from '@/assets/csv.png'
-  import { getCurrentProjectMemberTask } from '@/api/TaskService'
-  export default {
-    name: 'ProjectPatient',
-    components: { PatientDialogComponent },
-    data() {
-      const projectId = this.$route.params.projectId
-      return {
-        loading: true,
-        predicate: 'id',
-        order: 'ascending',
-        total: 0,
-        pageSize: 10, // 单页数据量
-        currentPage: 1, // 默认开始页面
-        previousPage: 1,
-        form: {
-          queryString: null,
-          startDate: null,
-          endDate: null
-        },
-        selectedPatient: null,
-        patients: [],
-        projectId,
-        editDialogVisible: false,
-        exportDialogVisible: false,
-        img_excel,
-        img_csv,
-        exportType: ''
-      }
-    },
-    created() {
-      this.getPatients()
-      this.findCurrentMemberTask()
-    },
-    methods: {
-      sort() {
-        return (this.predicate && this.order) ? this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
-      },
-      changeOrder(sort) {
-        this.predicate = sort.prop
-        this.order = sort.order
-        this.getPatients()
-      },
-      currentChange: function(currentPage) {
-        this.currentPage = currentPage
-        this.getPatients()
-      },
-      sizeChange: function(val) {
-        this.pageSize = val
-        this.getPatients()
-      },
-      getPatients() {
-        const vm = this
-        vm.loading = true
-        getProjectPatients(this.projectId, {
-          page: this.currentPage - 1,
-          size: this.pageSize,
-          sort: this.sort(),
-          'EQ_patient.name': this.form.queryString,
-          'GT_patient.visitDate': this.form.startDate,
-          'LT_patient.visitDate': this.form.endDate
-        }).then((res) => {
-          vm.patients = res.data
-          vm.loading = false
-          vm.total = Number(res.headers['x-total-count'])
-        })
-      },
-      searchPatient() {
-        if (this.form.queryString === '') {
-          this.form.queryString = null
+    import { ipcRenderer } from 'electron'
+    import { getProjectPatients } from '@/api/PatientService'
+    import PatientDialogComponent from '../patient/PatientDialogComponent'
+    import img_excel from '@/assets/excel.png'
+    import img_csv from '@/assets/csv.png'
+    import { getCurrentProjectMemberTask } from '@/api/TaskService'
+    import { getProject } from '../../api/ProjectService'
+
+export default {
+      name: 'ProjectPatient',
+      components: { PatientDialogComponent },
+      data() {
+        const projectId = this.$route.params.projectId
+        return {
+          loading: true,
+          predicate: 'id',
+          order: 'ascending',
+          total: 0,
+          pageSize: 10, // 单页数据量
+          currentPage: 1, // 默认开始页面
+          previousPage: 1,
+          form: {
+            queryString: null,
+            startDate: null,
+            endDate: null
+          },
+          selectedPatient: null,
+          patients: [],
+          projectId,
+          editDialogVisible: false,
+          exportDialogVisible: false,
+          img_excel,
+          img_csv,
+          exportType: '',
+          project: null
         }
-        this.getPatients()
       },
-      findCurrentMemberTask() {
-        if (this.$hasAnyAuthority([`PROJECT_PATIENT_${this.projectId}`])) {
-          getCurrentProjectMemberTask(this.projectId).then(res => {
-            this.task = res.data
+      created() {
+        this.findProject()
+        this.getPatients()
+        this.findCurrentMemberTask()
+      },
+      methods: {
+        sort() {
+          return (this.predicate && this.order) ? this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
+        },
+        changeOrder(sort) {
+          this.predicate = sort.prop
+          this.order = sort.order
+          this.getPatients()
+        },
+        currentChange: function(currentPage) {
+          this.currentPage = currentPage
+          this.getPatients()
+        },
+        sizeChange: function(val) {
+          this.pageSize = val
+          this.getPatients()
+        },
+        getPatients() {
+          const vm = this
+          vm.loading = true
+          getProjectPatients(this.projectId, {
+            page: this.currentPage - 1,
+            size: this.pageSize,
+            sort: this.sort(),
+            'EQ_patient.name': this.form.queryString,
+            'GT_patient.visitDate': this.form.startDate,
+            'LT_patient.visitDate': this.form.endDate
+          }).then((res) => {
+            vm.patients = res.data
+            vm.loading = false
+            vm.total = Number(res.headers['x-total-count'])
+          })
+        },
+        searchPatient() {
+          if (this.form.queryString === '') {
+            this.form.queryString = null
+          }
+          this.getPatients()
+        },
+        findProject() {
+          getProject(this.projectId).then((res) => {
+            this.project = res.data
+          })
+        },
+        findCurrentMemberTask() {
+          if (this.$hasAnyAuthority([`PROJECT_PATIENT_${this.projectId}`])) {
+            getCurrentProjectMemberTask(this.projectId).then(res => {
+              this.task = res.data
+            })
+          }
+        },
+        edit(patient) {
+          this.selectedPatient = patient
+          this.editDialogVisible = true
+        },
+        newPatient() {
+          this.selectedPatient = { id: null, name: '' }
+          this.editDialogVisible = true
+        },
+        exportPatient() {
+          this.exportDialogVisible = true
+        },
+        confirmExport() {
+          // exportPatients(this.projectId, { type: this.exportType })
+          const newURL = 'http://192.168.3.247:20002/reg/api/projects/1/patients/data?type=CSV'
+          const directory = 'rws'
+          const filename = 'sample.zip'
+          ipcRenderer.send('download-item', {
+            url: newURL,
+            directory: directory,
+            filename: filename
+          })
+        },
+        closeDialog(val) {
+          if (val.page === 'editDialog') {
+            this.editDialogVisible = false
+            if (val.type === 'confirm') {
+              this.getPatients()
+            }
+          } else {
+            this.exportDialogVisible = false
+          }
+        },
+        openMessage(message, type) {
+          this.$message({
+            message,
+            type
           })
         }
-      },
-      edit(patient) {
-        this.selectedPatient = patient
-        this.editDialogVisible = true
-      },
-      newPatient() {
-        this.selectedPatient = { id: null, name: '' }
-        this.editDialogVisible = true
-      },
-      exportPatient() {
-        this.exportDialogVisible = true
-      },
-      confirmExport() {
-        // exportPatients(this.projectId, { type: this.exportType })
-        const newURL = 'http://192.168.3.247:20002/reg/api/projects/1/patients/data?type=CSV'
-        const directory = 'rws'
-        const filename = 'sample.zip'
-        ipcRenderer.send('download-item', {
-          url: newURL,
-          directory: directory,
-          filename: filename
-        })
-      },
-      closeDialog(val) {
-        if (val.page === 'editDialog') {
-          this.editDialogVisible = false
-          if (val.type === 'confirm') {
-            this.getPatients()
-          }
-        } else {
-          this.exportDialogVisible = false
-        }
-      },
-      openMessage(message, type) {
-        this.$message({
-          message,
-          type
-        })
       }
     }
-  }
 </script>
 
 <style scoped>
-.el-image.active{
-    background-color: #d1eeff;
-}
+    .el-image.active {
+        background-color: #d1eeff;
+    }
 
 </style>
