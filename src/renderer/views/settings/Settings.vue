@@ -296,4 +296,22 @@ export default {
 .el-input {
   width: 210px;
 }
+.login-container .el-form-item {
+  background: #ffffff;
+}
+.login-container .el-input input {
+  background-color: #fff;
+  background-image: none;
+  border-radius: 4px;
+  border: 1px solid #dcdfe6;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #606266;
+  display: inline-block;
+  font-size: inherit;
+  height: 40px;
+  line-height: 40px;
+  outline: 0;
+  padding: 0 15px;
+}
 </style>

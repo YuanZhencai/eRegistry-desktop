@@ -1,21 +1,30 @@
 <template>
   <div class="app-container">
-    <el-button type="primary"
-               @click="headerCreatePlan">创建随访计划</el-button>
+    <el-row v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
+      <el-col :span='24'>
+        <el-button type="primary"
+                   @click="headerCreatePlan">创建随访计划</el-button>
+      </el-col>
+    </el-row>
     <el-table :data="followList"
+              @sort-change="changeOrder"
               style="width: 100%">
       <el-table-column prop="name"
                        label="名称"
+                       sortable="custom"
                        width="180">
       </el-table-column>
       <el-table-column prop="condition"
                        label="第几天开始"
+                       sortable="custom"
                        width="180">
       </el-table-column>
       <el-table-column prop="remindingInterval"
+                       sortable="custom"
                        label="提醒区间">
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作"
+                       v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
         <template slot-scope="scope">
           <el-button size="small"
                      type="primary"
@@ -45,7 +54,7 @@
           <el-input v-model="dialogFormData.name"></el-input>
         </el-form-item>
         <el-form-item label="CRF模板:">
-          <el-select v-model="value"
+          <el-select v-model="crfValue"
                      placeholder="请选择CRF随访模板">
             <el-option v-for="item in crflistData"
                        :key="item.id"
@@ -106,8 +115,7 @@ export default {
       total: 0,
       listQuery: {
         page: 0,
-        limit: 10,
-        sort: '+id'
+        limit: 10
       },
       rules: {
         name: [{ required: true, message: '本字段不能为空', trigger: 'change' }],
@@ -123,13 +131,28 @@ export default {
       dialogFormData: {},
       editCreateDialog: false,
       deleteDialogVisible: false,
-      value: ''
+      crfValue: '',
+      reportId: '',
+      sortPropMap: {
+        name: 'name',
+        condition: 'condition',
+        remindingInterval: 'remindingInterval'
+      }
     }
   },
   mounted() {
     this.getplan()
   },
   methods: {
+    sort() {
+      return (this.predicate && this.order) ? this.sortPropMap[this.predicate] + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
+    },
+    changeOrder(sort) {
+      console.info(sort)
+      this.predicate = sort.prop
+      this.order = sort.order
+      this.getplan()
+    },
     sizeChange(size) {
       this.listQuery.limit = size
       this.getplan()
@@ -143,7 +166,8 @@ export default {
         'EQ_plan.projectId': this.projectId,
         'EQ_plan.deleted': false,
         page: this.listQuery.page || 0,
-        size: this.listQuery.size || 10
+        size: this.listQuery.size || 10,
+        sort: this.sort()
       }
       try {
         await getPlan(data).then((res) => {
@@ -157,7 +181,7 @@ export default {
     async headerCreatePlan(dialogFormData) {
       this.dialogStatus = 'create'
       this.dialogFormData = {}
-      this.value = ''
+      this.crfValue = ''
       try {
         await getCrfList().then((res) => {
           this.crflistData = res.data
@@ -173,17 +197,9 @@ export default {
           this.crflistData = res.data
         })
         this.dialogFormData['projectId'] = this.projectId
-        this.dialogFormData['reportId'] = this.value
+        this.dialogFormData['reportId'] = this.crfValue
         await createPlan(this.dialogFormData).then((res) => { })
-        this.$nextTick(() => {
-          this.editCreateDialog = false
-          this.$notify({
-            title: '成功',
-            message: '新建成功',
-            type: 'success',
-            duration: 2000
-          })
-        })
+        this.editCreateDialog = false
         this.getplan()
       } catch (e) {
         console.log(e)
@@ -192,17 +208,17 @@ export default {
     async editPlan(id) {
       this.dialogStatus = 'update'
       this.editCreateDialog = true
+      this.crfValue = ''
       try {
         await getPlans(id).then((res) => {
           this.dialogFormData = res.data
-          console.log(this.dialogFormData)
         })
         await getCrfList().then((res) => {
           this.crflistData = res.data
         })
         for (let i = 0; i < this.crflistData.length; i++) {
           if (this.dialogFormData.reportId === this.crflistData[i].id) {
-            this.value = this.crflistData[i].title
+            this.crfValue = this.crflistData[i].id
           }
         }
       } catch (e) {
@@ -210,18 +226,12 @@ export default {
       }
     },
     async updatePlan() {
-      this.dialogFormData['reportId'] = this.value
+      this.dialogFormData['reportId'] = this.crfValue
       await updatePlan(this.dialogFormData).then((res) => { })
       this.$nextTick(() => {
-        this.$notify({
-          title: '成功',
-          message: '更新成功',
-          type: 'success',
-          duration: 2000
-        })
+        this.editCreateDialog = false
+        this.getplan()
       })
-      this.editCreateDialog = false
-      this.getplan()
     },
     planDeleteDialog(questionnaire) {
       this.deleteDialogVisible = true
