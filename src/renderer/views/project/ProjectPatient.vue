@@ -90,8 +90,7 @@
                            @size-change="sizeChange" class="pagination">
             </el-pagination>
         </el-row>
-        <patient-dialog-component v-if="editDialogVisible" :visible="editDialogVisible" :patient-id="selectedPatient.id"
-                                  @closeDialog="closeDialog"></patient-dialog-component>
+        <patient-dialog-component ref="patient-dialog"></patient-dialog-component>
         <el-dialog v-if="exportDialogVisible" title="导出"
                    :visible.sync="exportDialogVisible" :before-close="closeDialog">
             <div class="text-center" v-if="project">
@@ -144,7 +143,6 @@
         selectedPatient: null,
         patients: [],
         projectId,
-        editDialogVisible: false,
         exportDialogVisible: false,
         img_excel,
         img_csv,
@@ -204,24 +202,21 @@
       },
       edit(patient) {
         this.selectedPatient = patient
-        this.editDialogVisible = true
+        this.$refs['patient-dialog'].show(this.selectedPatient.id).then((res) => {
+          this.getPatients()
+        }, () => {})
       },
       newPatient() {
         this.selectedPatient = { id: null, name: '' }
-        this.editDialogVisible = true
+        this.$refs['patient-dialog'].show().then((res) => {
+          this.getPatients()
+        }, () => {})
       },
       exportPatient() {
         this.exportDialogVisible = true
       },
-      closeDialog(val) {
-        if (val.page === 'editDialog') {
-          this.editDialogVisible = false
-          if (val.type === 'confirm') {
-            this.getPatients()
-          }
-        } else {
-          this.exportDialogVisible = false
-        }
+      closeDialog() {
+        this.exportDialogVisible = false
       }
     }
   }

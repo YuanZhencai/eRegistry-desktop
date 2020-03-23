@@ -116,7 +116,9 @@
               <el-divider class="divider-margin"></el-divider>
             </div>
             <div class="text-right" v-if="changes.length > 5">
-              <el-button type="text" size="mini">更多...</el-button>
+              <el-button type="text" size="mini">
+                <router-link :to="{ path: `/project/${projectId}/log`, params: {projectId} }">更多...</router-link>
+              </el-button>
             </div>
           </div>
         </el-card>
