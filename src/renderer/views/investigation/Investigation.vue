@@ -16,7 +16,13 @@
         </el-col>
       </el-form-item>
       <el-form-item v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId])">
-        <el-button type="primary">导出</el-button>
+        <el-button v-if="report && report.title"
+                   v-download="{name: `${report.title}.xls`, url: `/api/projects/${projectId}/questionnaire/${questionnaireId}/data`}"
+                   type="primary"
+                   size="mini">
+          <span class="fa fa-download"></span>
+          <span class="d-none d-md-inline">导出</span>
+        </el-button>
       </el-form-item>
     </el-form>
     <el-table v-loading="loading"
