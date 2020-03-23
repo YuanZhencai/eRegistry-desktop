@@ -1,12 +1,5 @@
 import axios from 'axios'
 
-export function getQuestionnaireReport(questionnaireId) {
-  return axios({
-    url: `/api/questionnaire-investigations/${questionnaireId}/report`,
-    method: 'get'
-  })
-}
-
 export function saveInvestigation(investigation) {
   return axios({
     url: `/api/questionnaire-investigations`,

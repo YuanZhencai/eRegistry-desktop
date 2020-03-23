@@ -22,7 +22,8 @@
         <el-row>
             <el-button type="primary" size="mini" icon="el-icon-download"
                        v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId, 'PROJECT_VIEW_' + projectId])"
-                       @click="exportPatient">导出</el-button>
+                       @click="exportPatient">导出
+            </el-button>
             <el-button type="primary" size="mini" icon="el-icon-plus"
                        v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])"
                        @click="newPatient">新建患者
@@ -44,12 +45,16 @@
                       @sort-change="changeOrder" style="width: 100%">
                 <el-table-column prop="id" label="ID" sortable="custom">
                     <template slot-scope="scope">
-                        <router-link :to="{name: 'patientDetail', params: { patientId: scope.row.id}}" class="linka">{{scope.row.id}}</router-link>
+                        <router-link :to="{name: 'patientDetail', params: { patientId: scope.row.id}}" class="linka">
+                            {{scope.row.id}}
+                        </router-link>
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="姓名" sortable="custom">
                     <template slot-scope="scope">
-                        <router-link :to="{name: 'patientDetail', params: { patientId: scope.row.id}}" class="linka">{{scope.row.name}}</router-link>
+                        <router-link :to="{name: 'patientDetail', params: { patientId: scope.row.id}}" class="linka">
+                            {{scope.row.name}}
+                        </router-link>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sex" label="性别" sortable="custom"></el-table-column>
@@ -67,7 +72,8 @@
                     <template slot="header" slot-scope="scope">
                         <span>操作</span>
                     </template>
-                    <template slot-scope="scope" v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
+                    <template slot-scope="scope"
+                              v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
                         <el-button type="text" @click="edit(scope.row)">编辑</el-button>
                     </template>
                 </el-table-column>
@@ -87,18 +93,22 @@
         <patient-dialog-component ref="patient-dialog"></patient-dialog-component>
         <el-dialog v-if="exportDialogVisible" title="导出"
                    :visible.sync="exportDialogVisible" :before-close="closeDialog">
-            <div>选择导出文件类型</div>
-            <div class="text-center">
-                <el-image style="width: 100px; height: 100px; margin-right: 50px;"
-                          :class="{'active': exportType === 'EXCEL'}"
-                        :src="img_excel" fit="fit" @click="exportType = 'EXCEL'"></el-image>
-                <el-image style="width: 100px; height: 100px"
-                          :class="{'active': exportType === 'CSV'}"
-                          :src="img_csv" fit="fit" @click="exportType = 'CSV'"></el-image>
+            <div class="text-center" v-if="project">
+                <el-image v-if="project.name"
+                        v-download="{url: `/api/projects/${projectId}/patients/data?type=EXCEL`, name: `${project.name}.zip`}"
+                        style="width: 100px; height: 100px; margin-right: 50px;"
+                        :src="img_excel" fit="fit">
+
+                </el-image>
+                <el-image v-if="project.name"
+                        v-download="{url: `/api/projects/${projectId}/patients/data?type=CSV`, name: `${project.name}.zip`}"
+                        style="width: 100px; height: 100px"
+                        :src="img_csv" fit="fit">
+
+                </el-image>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="exportDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="confirmExport">导 出</el-button>
             </span>
         </el-dialog>
     </div>
@@ -106,7 +116,7 @@
 
 <script>
   import { SERVER_API_URL } from '@/constants'
-  import { getProjectPatients, exportPatients } from '@/api/PatientService'
+  import { getProjectPatients } from '@/api/PatientService'
   import PatientDialogComponent from '../patient/PatientDialogComponent'
   import img_excel from '@/assets/excel.png'
   import img_csv from '@/assets/csv.png'
@@ -205,9 +215,6 @@
       exportPatient() {
         this.exportDialogVisible = true
       },
-      confirmExport() {
-        exportPatients(this.projectId, { type: this.exportType })
-      },
       closeDialog() {
         this.exportDialogVisible = false
       }
@@ -216,8 +223,8 @@
 </script>
 
 <style scoped>
-.el-image.active{
-    background-color: #d1eeff;
-}
+    .el-image.active {
+        background-color: #d1eeff;
+    }
 
 </style>

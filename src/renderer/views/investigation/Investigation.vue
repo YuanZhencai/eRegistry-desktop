@@ -16,7 +16,13 @@
         </el-col>
       </el-form-item>
       <el-form-item v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId])">
-        <el-button type="primary">导出</el-button>
+        <el-button v-if="report && report.title"
+                   v-download="{name: `${report.title}.xls`, url: `/api/projects/${projectId}/questionnaire/${questionnaireId}/data`}"
+                   type="primary"
+                   size="mini">
+          <span class="fa fa-download"></span>
+          <span class="d-none d-md-inline">导出</span>
+        </el-button>
       </el-form-item>
     </el-form>
     <el-table v-loading="loading"
@@ -64,8 +70,9 @@
 
 <script>
     import { getInvestigations } from '../../api/InvestigationService'
+    import { getQuestionnaireReport } from '../../api/QuestionnaireService'
 
-    export default {
+export default {
       name: 'Investigation',
       data() {
         return {
@@ -84,10 +91,12 @@
           begin: null,
           end: null,
           content: null,
-          loading: true
+          loading: true,
+          report: null
         }
       },
       mounted() {
+        this.findQuestionnaireReport()
         this.loadAll()
       },
       methods: {
@@ -152,13 +161,18 @@
           this.$router.push({
             path: `/project/${this.projectId}/questionnaire/${this.questionnaireId}/investigation/${investigation.id}`
           })
+        },
+        findQuestionnaireReport() {
+          getQuestionnaireReport(this.questionnaireId).then((res) => {
+            this.report = res.data
+          })
         }
       }
     }
 </script>
 
 <style scoped>
-  .line{
-    text-align: center;
-  }
+    .line {
+        text-align: center;
+    }
 </style>

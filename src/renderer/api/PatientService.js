@@ -8,14 +8,6 @@ export function getProjectPatients(projectId, params) {
   })
 }
 
-export function exportPatients(projectId, type) {
-  return axios({
-    url: `/api/projects/${projectId}/patients/data`,
-    method: 'get',
-    params: type
-  })
-}
-
 export function getPatient(id) {
   return axios({
     url: `/api/patient/${id}`,

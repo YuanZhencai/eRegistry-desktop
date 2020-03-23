@@ -15,18 +15,18 @@ export function getQuestionnaireWithReport(id) {
   })
 }
 
+export function getQuestionnaireReport(questionnaireId) {
+  return axios({
+    url: `/api/questionnaire-investigations/${questionnaireId}/report`,
+    method: 'get'
+  })
+}
+
 export function saveWithReport(questionnaireDTO) {
   return axios({
     url: `/api/questionnaires/report`,
     method: 'put',
     data: questionnaireDTO
-  })
-}
-
-export function getSurveyInvestigation(id) {
-  return axios({
-    url: `/api/questionnaire-investigations/${id}/report`,
-    method: 'get'
   })
 }
 
