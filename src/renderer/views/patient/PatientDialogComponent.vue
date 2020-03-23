@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑患者" :visible.sync="visible" :before-close="cancel">
+    <el-dialog title="创建或编辑患者" :visible.sync="display" :before-close="close">
         <el-form label-width="75px" size="mini" :model="patient" :rules="rules" ref="patientForm">
             <el-form-item label="姓名" prop="name">
                 <el-input v-model="patient.name"></el-input>
@@ -44,12 +44,12 @@
   const Cascader = require('./pca-code.json')
   export default {
     name: 'PatientDialogComponent',
-    props: {
-      visible: { type: Boolean },
-      patientId: { type: Number }
-    },
     data() {
       return {
+        patientId: null,
+        display: false,
+        resolve: null,
+        reject: null,
         rules: {
           name: [
             { required: true, message: '请输入患者姓名', trigger: 'blur' }
@@ -60,10 +60,21 @@
         options: Cascader
       }
     },
-    created() {
-      this.getPatient()
-    },
     methods: {
+      show(patientId) {
+        const that = this
+        this.patientId = patientId
+        if (this.patientId) {
+          this.getPatient()
+        } else {
+          this.patient = { name: '' }
+        }
+        this.display = true
+        return new Promise((resolve, reject) => {
+          that.resolve = resolve
+          that.reject = reject
+        })
+      },
       getPatient() {
         const vm = this
         if (vm.patientId) {
@@ -89,21 +100,29 @@
         this.$set(this.patient, 'area', value[2])
       },
       cancel() {
-        this.$emit('closeDialog', { page: 'editDialog', type: 'cancel' })
+        this.display = false
+        this.reject('cancel')
+      },
+      close() {
+        this.display = false
+        this.reject('close')
       },
       confirm(formName) {
+        const that = this
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (this.patientId) {
               updatePatient(this.patient).then(res => {
-                this.patient = res.data
-                this.$emit('closeDialog', { page: 'editDialog', type: 'confirm' })
+                that.patient = res.data
+                that.display = false
+                that.resolve(res.data)
               })
             } else {
               this.patient.projectId = this.$route.params.projectId
               createPatient(this.patient).then(res => {
-                this.patient = res.data
-                this.$emit('closeDialog', { page: 'editDialog', type: 'confirm' })
+                that.patient = res.data
+                that.display = false
+                that.resolve(res.data)
               })
             }
           }
