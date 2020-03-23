@@ -24,18 +24,18 @@
                        label="提醒区间">
       </el-table-column>
       <el-table-column label="操作"
+                       align="center"
                        v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
         <template slot-scope="scope">
-          <el-button size="small"
-                     type="primary"
+          <el-button type="text"
                      @click="editPlan(scope.row.id)">
             编辑
           </el-button>
-          <el-button size="small"
-                     type="danger"
+          <el-divider direction="vertical"></el-divider>
+          <el-button type="text"
                      @click="planDeleteDialog(scope.row)">删除</el-button>
-          <el-button type="info"
-                     size="small"
+          <el-divider direction="vertical"></el-divider>
+          <el-button type="text"
                      @click="report(scope.row)">
             <span>CRF</span>
           </el-button>
@@ -148,7 +148,6 @@ export default {
       return (this.predicate && this.order) ? this.sortPropMap[this.predicate] + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
     },
     changeOrder(sort) {
-      console.info(sort)
       this.predicate = sort.prop
       this.order = sort.order
       this.getplan()
