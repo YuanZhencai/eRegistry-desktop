@@ -157,6 +157,7 @@ $light_gray: #606266;
     color: #454545;
   }
 }
+
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
