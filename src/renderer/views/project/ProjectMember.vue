@@ -45,14 +45,9 @@
                 <el-button type="primary" @click="confirmDelete">删 除</el-button>
             </span>
     </el-dialog>
-    <member-dialog-component v-if="newMemberDialogVisible" :visible="newMemberDialogVisible"
-                             @closeDialog="closeDialog"></member-dialog-component>
-    <assign-member-dialog v-if="assignCenterDialogVisible" :visible="assignCenterDialogVisible"
-                          :member-id="selectedMember.id"
-                          @closeDialog="closeDialog"></assign-member-dialog>
-    <assign-task-dialog v-if="assignTaskDialogVisible" :visible="assignTaskDialogVisible"
-                        :member-id="selectedMember.id"
-                        @closeDialog="closeDialog"></assign-task-dialog>
+    <member-dialog-component ref="add-member-dialog"></member-dialog-component>
+    <assign-member-dialog ref="assign-member-dialog"></assign-member-dialog>
+    <assign-task-dialog ref="assign-task-dialog"></assign-task-dialog>
   </div>
 </template>
 
@@ -83,7 +78,7 @@
           centerName: 'center.name'
         },
         members: [],
-        selectedMember: null,
+        selectedMember: {},
         projectId,
         project: { id: projectId, name: null, open: null, reportId: null },
         total: 0,
@@ -97,10 +92,7 @@
           VIEW: '查看',
           ADMIN: '负责人'
         },
-        deleteMemberDialogVisible: false,
-        newMemberDialogVisible: false,
-        assignCenterDialogVisible: false,
-        assignTaskDialogVisible: false
+        deleteMemberDialogVisible: false
       }
     },
     created() {
@@ -144,15 +136,24 @@
         this.getMembers()
       },
       newMember() {
-        this.newMemberDialogVisible = true
+        this.$refs['add-member-dialog'].show().then((res) => {
+          this.loading = true
+          this.getMembers()
+        }, () => {})
       },
       assignCenter(member) {
         this.selectedMember = member
-        this.assignCenterDialogVisible = true
+        this.$refs['assign-member-dialog'].show(this.selectedMember.id).then(() => {
+          this.loading = true
+          this.getMembers()
+        }, () => {})
       },
       assignTask(member) {
         this.selectedMember = member
-        this.assignTaskDialogVisible = true
+        this.$refs['assign-task-dialog'].show(this.selectedMember.id).then(() => {
+          this.loading = true
+          this.getMembers()
+        }, () => {})
       },
       deleteMember(member) {
         this.selectedMember = member
@@ -160,8 +161,6 @@
       },
       confirmDelete() {
         deleteMember(this.selectedMember.id).then(response => {
-          this.openMessage('成员删除成功', 'success')
-          this.closeDialog({ page: 'deleteDialog', type: 'confirm' })
           this.loading = true
           this.getMembers()
         }, error => {
@@ -169,32 +168,7 @@
         })
       },
       cancelDelete() {
-        this.closeDialog({ page: 'deleteDialog', type: 'cancel' })
-      },
-      closeDialog(val) {
-        switch (val.page) {
-          case 'memberDialog':
-            this.newMemberDialogVisible = false
-            break
-          case 'assignMember':
-            this.assignCenterDialogVisible = false
-            break
-          case 'assignTask':
-            this.assignTaskDialogVisible = false
-            break
-          default:
-            this.deleteMemberDialogVisible = false
-        }
-        if (val.type === 'confirm') {
-          this.loading = true
-          this.getMembers()
-        }
-      },
-      openMessage(message, type) {
-        this.$message({
-          message,
-          type
-        })
+        this.deleteMemberDialogVisible = false
       }
     }
   }

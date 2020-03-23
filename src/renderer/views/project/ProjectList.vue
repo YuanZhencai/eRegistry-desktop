@@ -50,8 +50,7 @@
                 <el-button type="primary" @click="confirmDelete">删 除</el-button>
             </span>
         </el-dialog>
-        <project-dialog-component v-if="newDialogVisible" :visible="newDialogVisible" :project-id="selectedProject.id"
-            @closeDialog="closeDialog"></project-dialog-component>
+        <project-dialog-component ref="project-dialog"></project-dialog-component>
     </div>
 </template>
 
@@ -68,11 +67,10 @@
         predicate: '',
         order: '',
         projects: [],
-        selectedProject: null,
+        selectedProject: { id: null },
         total: 0,
         pageSize: 10, // 单页数据量
         currentPage: 1, // 默认开始页面
-        newDialogVisible: false,
         deleteDialogVisible: false
       }
     },
@@ -120,36 +118,33 @@
       },
       edit(project) {
         this.selectedProject = project
-        this.newDialogVisible = true
+        this.$refs['project-dialog'].show(project.id).then((project) => {
+          this.selectedProject = project
+          this.loading = true
+          this.getProjects()
+        }, () => {})
+      },
+      newProject() {
+        this.selectedProject = { id: null }
+        this.$refs['project-dialog'].show().then((project) => {
+          this.selectedProject = project
+          this.loading = true
+          this.getProjects()
+        }, () => {})
       },
       deleteProject(project) {
         this.selectedProject = project
         this.deleteDialogVisible = true
       },
-      newProject() {
-        this.selectedProject = { id: null }
-        this.newDialogVisible = true
-      },
       confirmDelete() {
         deleteProject(this.selectedProject.id).then(res => {
-          this.openMessage('项目删除成功', 'success')
           this.deleteDialogVisible = false
           this.loading = true
           this.getProjects()
         })
       },
-      closeDialog(val) {
-        this.newDialogVisible = false
-        if (val.type === 'confirm') {
-          this.loading = true
-          this.getProjects()
-        }
-      },
-      openMessage(message, type) {
-        this.$message({
-          message,
-          type
-        })
+      closeDialog() {
+        this.deleteDialogVisible = false
       }
     }
   }

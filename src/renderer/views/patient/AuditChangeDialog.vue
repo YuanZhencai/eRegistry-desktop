@@ -63,10 +63,6 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             changeAudit(this.audit).then(res => {
-              this.$message({
-                message: '已' + this.map[this.audit.state] + '您的审核变更申请',
-                type: 'success'
-              })
               this.handleClose('confirm', res.data)
             })
           }

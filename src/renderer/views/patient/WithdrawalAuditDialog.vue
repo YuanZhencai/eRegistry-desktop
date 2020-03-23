@@ -36,10 +36,6 @@
       },
       confirm() {
         withdrawalAudit(this.audit).then(res => {
-          this.$message({
-            message: '审核撤回成功',
-            type: 'success'
-          })
           this.handleClose('confirm', res.data)
         })
       }

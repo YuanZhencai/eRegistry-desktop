@@ -147,16 +147,9 @@
       },
       confirmDelete() {
         deleteQuestionnaire(this.selectedQuestionnaire.id).then((res) => {
-          this.openMessage('问卷删除成功', 'success')
           this.closeDialog()
           this.loading = true
           this.getQuestionnaires()
-        })
-      },
-      openMessage(message, type) {
-        this.$message({
-          message,
-          type
         })
       }
     }
