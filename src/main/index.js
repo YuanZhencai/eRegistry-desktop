@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain, session } from 'electron'
+import { download } from 'electron-dl'
 const path = require('path')
-// import { download } from 'electron-dl'
+const unusedFilename = require('unused-filename')
 
 /**
  * Set `__static` path to static files in production
@@ -32,40 +33,32 @@ function createWindow() {
   })
 }
 
-function download(win, url) {
-  win.webContents.session.on('will-download', (event, item, webContents) => {
-    // 设置文件存放位置
-    console.info('download', item.getFilename())
-    const dir = app.getPath('downloads')
-    const filePath = path.join(dir, 'sample.zip')
-    item.setSavePath(filePath)
-    item.on('updated', (event, state) => {
-      if (state === 'interrupted') {
-        console.log('Download is interrupted but can be resumed')
-      } else if (state === 'progressing') {
-        if (item.isPaused()) {
-          console.log('Download is paused')
-        } else {
-          console.log(`Received bytes: ${item.getReceivedBytes()}`)
-        }
-      }
-    })
-    item.once('done', (event, state) => {
-      if (state === 'completed') {
-        console.log('Download successfully')
-      } else {
-        console.log(`Download failed: ${state}`)
-      }
-    })
-  })
-  win.webContents.downloadURL(url)
-}
-
 function onDownload() {
-  ipcMain.on('download-item', async(event, { url }) => {
-    console.log('download-item', url)
+  ipcMain.on('download-item', async(event, { url, directory, filename }) => {
+    const filePath = unusedFilename.sync(path.join(directory, filename))
+    const basename = path.basename(filePath)
     const win = BrowserWindow.getFocusedWindow()
-    download(win, url)
+    const options = {
+      directory: directory,
+      filename: basename
+    }
+    const file = {
+      name: basename,
+      url: url,
+      path: null,
+      state: null
+    }
+    download(win, url, options)
+      .then(dl => {
+        file.state = 'success'
+        file.path = dl.getSavePath()
+        event.sender.send('download-finish', file)
+      })
+      .catch((e) => {
+        file.state = 'error'
+        event.sender.send('download-finish', file)
+        console.error(e)
+      })
   })
 }
 

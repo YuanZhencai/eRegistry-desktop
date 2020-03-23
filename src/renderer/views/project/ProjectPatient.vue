@@ -216,7 +216,13 @@
       confirmExport() {
         // exportPatients(this.projectId, { type: this.exportType })
         const newURL = 'http://192.168.3.247:20002/reg/api/projects/1/patients/data?type=CSV'
-        ipcRenderer.send('download-item', { url: newURL })
+        const directory = 'rws'
+        const filename = 'sample.zip'
+        ipcRenderer.send('download-item', {
+          url: newURL,
+          directory: directory,
+          filename: filename
+        })
       },
       closeDialog(val) {
         if (val.page === 'editDialog') {
