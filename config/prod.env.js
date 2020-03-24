@@ -1,3 +1,3 @@
 module.exports = {
-  BASE_API: 'https://www.palandata.com/pdas'
+  BASE_API: 'https://www.palandata.com/reg'
 }
