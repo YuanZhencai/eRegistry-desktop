@@ -36,7 +36,7 @@ function createWindow() {
     mainWindow = null
   })
 
-  tray = new Tray(path.join(__dirname, '/tray/logo.png'))
+  tray = new Tray(path.join(__dirname, '/tray/palan.png'))
   const trayContextMenu = Menu.buildFromTemplate([
     {
       label: '打开',
@@ -54,7 +54,9 @@ function createWindow() {
   tray.on('click', () => {
     mainWindow.show()
   })
-  tray.setContextMenu(trayContextMenu)
+  tray.on('right-click', () => {
+    tray.popUpContextMenu(trayContextMenu)
+  })
 }
 
 function onDownload() {
