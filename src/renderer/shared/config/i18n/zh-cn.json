@@ -174,7 +174,7 @@
   "error": {
     "internalServerError": "服务器内部错误",
     "server_not_reachable": "服务器无法访问",
-    "url.not.found": "Not found",
+    "url_not_found": "地址无法访问",
     "NotNull": "本字段不能为空!",
     "Size": "不满足最大/最小值限制!",
     "userexists": "该用户名已存在!",
