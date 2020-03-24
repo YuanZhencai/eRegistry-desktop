@@ -7,11 +7,11 @@ export function getProject(id) {
   })
 }
 
-export function getMineProjects(params) {
+export function getMineProjects(req) {
   return axios({
     url: `/api/projects/mine`,
     method: 'get',
-    params: params
+    params: req
   })
 }
 
