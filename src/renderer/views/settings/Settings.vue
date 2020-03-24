@@ -166,13 +166,9 @@ export default {
     async OnInit() {
       this.fileReader = new FileReader()
       this.imageUrl = this.avatar
-      try {
-        await getsettings().then((res) => {
-          this.settingsAccount = res.data
-        })
-      } catch (e) {
-        console.log(e)
-      }
+      await getsettings().then((res) => {
+        this.settingsAccount = res.data
+      })
     },
     httpRequest(options) {
       const file = options.file
@@ -222,21 +218,17 @@ export default {
         login: this.settingsAccount.login,
         imageUrl: ''
       }
-      try {
-        await createSettings(data).then((res) => {
-          this.$nextTick(() => {
-            this.$notify({
-              title: '成功',
-              message: '编辑成功',
-              type: 'success',
-              duration: 2000
-            })
+      await createSettings(data).then((res) => {
+        this.$nextTick(() => {
+          this.$notify({
+            title: '成功',
+            message: '编辑成功',
+            type: 'success',
+            duration: 2000
           })
         })
-        this.OnInit()
-      } catch (e) {
-        console.log(e)
-      }
+      })
+      this.OnInit()
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {

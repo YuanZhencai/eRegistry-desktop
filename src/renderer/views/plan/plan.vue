@@ -168,60 +168,44 @@ export default {
         size: this.listQuery.size || 10,
         sort: this.sort()
       }
-      try {
-        await getPlan(data).then((res) => {
-          this.followList = res.data
-          this.total = Number(res.headers['x-total-count'])
-        })
-      } catch (e) {
-        console.log(e)
-      }
+      await getPlan(data).then((res) => {
+        this.followList = res.data
+        this.total = Number(res.headers['x-total-count'])
+      })
     },
     async headerCreatePlan(dialogFormData) {
       this.dialogStatus = 'create'
       this.dialogFormData = {}
       this.crfValue = ''
-      try {
-        await getCrfList().then((res) => {
-          this.crflistData = res.data
-          this.editCreateDialog = true
-        })
-      } catch (e) {
-        console.log(e)
-      }
+      await getCrfList().then((res) => {
+        this.crflistData = res.data
+        this.editCreateDialog = true
+      })
     },
     async createPlan() {
-      try {
-        await getCrfList().then((res) => {
-          this.crflistData = res.data
-        })
-        this.dialogFormData['projectId'] = this.projectId
-        this.dialogFormData['reportId'] = this.crfValue
-        await createPlan(this.dialogFormData).then((res) => { })
-        this.editCreateDialog = false
-        this.getplan()
-      } catch (e) {
-        console.log(e)
-      }
+      await getCrfList().then((res) => {
+        this.crflistData = res.data
+      })
+      this.dialogFormData['projectId'] = this.projectId
+      this.dialogFormData['reportId'] = this.crfValue
+      await createPlan(this.dialogFormData).then((res) => { })
+      this.editCreateDialog = false
+      this.getplan()
     },
     async editPlan(id) {
       this.dialogStatus = 'update'
       this.editCreateDialog = true
       this.crfValue = ''
-      try {
-        await getPlans(id).then((res) => {
-          this.dialogFormData = res.data
-        })
-        await getCrfList().then((res) => {
-          this.crflistData = res.data
-        })
-        for (let i = 0; i < this.crflistData.length; i++) {
-          if (this.dialogFormData.reportId === this.crflistData[i].id) {
-            this.crfValue = this.crflistData[i].id
-          }
+      await getPlans(id).then((res) => {
+        this.dialogFormData = res.data
+      })
+      await getCrfList().then((res) => {
+        this.crflistData = res.data
+      })
+      for (let i = 0; i < this.crflistData.length; i++) {
+        if (this.dialogFormData.reportId === this.crflistData[i].id) {
+          this.crfValue = this.crflistData[i].id
         }
-      } catch (e) {
-        console.log(e)
       }
     },
     async updatePlan() {
@@ -237,12 +221,8 @@ export default {
       this.deleteDialoglist = questionnaire
     },
     async confirmDelete(id) {
-      try {
-        await deletePlan(id).then((res) => { })
-        this.deleteDialogVisible = false
-      } catch (e) {
-        console.log(e)
-      }
+      await deletePlan(id).then((res) => { })
+      this.deleteDialogVisible = false
       this.getplan()
     },
     report(plan) {

@@ -126,28 +126,20 @@ export default {
         page: this.listQuery.page || 0,
         size: this.listQuery.size || 10
       }
-      try {
-        await changes(data).then((res) => {
-          this.tableData = res.data
-          this.total = Number(res.headers['x-total-count'])
-        })
-      } catch (e) {
-        console.log(e)
-      }
+      await changes(data).then((res) => {
+        this.tableData = res.data
+        this.total = Number(res.headers['x-total-count'])
+      })
     },
     // 获取用户名筛选并渲染
     async findMembers(id) {
-      try {
-        await userFilter(id).then((res) => {
-          this.members = res.data
-          this.isAdmin = this.$hasAnyAuthority([`PROJECT_ADMIN_${this.projectId}`])
-        })
-        if (!this.isAdmin && this.members.length > 0) {
-          this.userSelection.username = this.members[0].username
-          this.loadAll()
-        }
-      } catch (e) {
-        console.log(e)
+      await userFilter(id).then((res) => {
+        this.members = res.data
+        this.isAdmin = this.$hasAnyAuthority([`PROJECT_ADMIN_${this.projectId}`])
+      })
+      if (!this.isAdmin && this.members.length > 0) {
+        this.userSelection.username = this.members[0].username
+        this.loadAll()
       }
     },
     findProject() {
