@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, session } from 'electron'
+import { app, BrowserWindow, ipcMain, session, Tray, Menu } from 'electron'
 import { download } from 'electron-dl'
 const path = require('path')
 const unusedFilename = require('unused-filename')
@@ -12,6 +12,7 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 let mainWindow
+let tray = null
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
@@ -23,14 +24,36 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     height: 563,
     useContentSize: true,
-    width: 1000
+    width: 1000,
+    icon: path.join(__dirname, '/tray/128x128.png')
   })
+
   // 装载应用的index.html页面
   mainWindow.loadURL(winURL)
 
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  tray = new Tray(path.join(__dirname, '/tray/128x128.png'))
+  const trayContextMenu = Menu.buildFromTemplate([
+    {
+      label: '打开',
+      click: () => {
+        mainWindow.show()
+      }
+    }, {
+      label: '退出',
+      click: () => {
+        app.quit()
+      }
+    }
+  ])
+  tray.setToolTip('eregistry-desktop')
+  tray.on('click', () => {
+    mainWindow.show()
+  })
+  tray.setContextMenu(trayContextMenu)
 }
 
 function onDownload() {
