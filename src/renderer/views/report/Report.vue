@@ -165,7 +165,6 @@ export default {
         }
       },
       changeOrder(sort) {
-        console.info(sort)
         this.predicate = sort.prop
         this.order = sort.order
         this.transition()
