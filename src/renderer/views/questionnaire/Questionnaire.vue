@@ -35,7 +35,7 @@
                     trigger="hover">
               <el-image
                       style="width: 150px; height: 150px"
-                      :src="`${baseApi}/api/qrcode?uri=/questionnaire/${scope.row.id}/investigation-new`"
+                      :src="`/#/questionnaire/${scope.row.id}/investigation-new` | qrcode"
                       :fit="'fill'">
               </el-image>
               <el-button type="text" slot="reference">分享调查</el-button>
