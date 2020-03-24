@@ -29,6 +29,7 @@ function createWindow() {
   })
   // 装载应用的index.html页面
   mainWindow.loadURL(winURL)
+  mainWindow.webContents.openDevTools()
 
   mainWindow.on('closed', () => {
     mainWindow = null
