@@ -121,7 +121,8 @@
   import img_excel from '@/assets/excel.png'
   import img_csv from '@/assets/csv.png'
   import { getCurrentProjectMemberTask } from '@/api/TaskService'
-  export default {
+  import { getProject } from '../../api/ProjectService'
+export default {
     name: 'ProjectPatient',
     components: { PatientDialogComponent },
     data() {
@@ -147,10 +148,12 @@
         img_excel,
         img_csv,
         exportType: '',
-        task: {}
+        task: {},
+        project: null
       }
     },
     created() {
+      this.findProject()
       this.getPatients()
       this.findCurrentMemberTask()
     },
@@ -217,6 +220,11 @@
       },
       closeDialog() {
         this.exportDialogVisible = false
+      },
+      findProject() {
+        getProject(this.projectId).then((res) => {
+          this.project = res.data
+        })
       }
     }
   }
