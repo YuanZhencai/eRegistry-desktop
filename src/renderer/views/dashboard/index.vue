@@ -50,6 +50,8 @@ export default {
       getMineProjects({ all: false }).then(res => {
         this.projects = res.data
         this.loading = false
+      }, () => {
+        this.loading = false
       })
     }
   }

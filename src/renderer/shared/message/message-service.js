@@ -8,7 +8,7 @@ export default class MessageService {
   }
 
   success(response) {
-    const headers = this.responseHeaders(response)
+    const headers = this.successHeaders(response)
     if (headers.length > 1) {
       headers.sort()
       const alertKey = response.headers[headers[0]]
@@ -20,19 +20,19 @@ export default class MessageService {
   }
   error(error) {
     const response = error.response
+    if (response.status === 0) {
+      // connection refused, server not reachable
+      this.addErrorAlert('Server not reachable', 'error.server_not_reachable')
+      return
+    }
     if (response.status === 401) {
       return
     }
     if (!(((response.data.path && response.data.path.indexOf('/api/account') === 0)))) {
       switch (response.status) {
-        // connection refused, server not reachable
-        case 0:
-          this.addErrorAlert('Server not reachable', 'error.server.not.reachable')
-          break
-
         case 400:
           {
-            const headers = this.responseHeaders(response)
+            const headers = this.errorHeaders(response)
             headers.sort()
             let errorHeader = null
             let entityKey = null
@@ -56,7 +56,7 @@ export default class MessageService {
           break
 
         case 404:
-          this.addErrorAlert('Not found', 'error.url.not.found')
+          this.addErrorAlert('Not found', 'error.url_not_found')
           break
 
         default:
@@ -81,10 +81,19 @@ export default class MessageService {
     return key
   }
 
-  responseHeaders(response) {
+  successHeaders(response) {
     const headers = []
     for (const name in response.headers) {
       if (name.toLowerCase().endsWith('app-alert') || name.toLowerCase().endsWith('app-params')) {
+        headers.push(name)
+      }
+    }
+    return headers
+  }
+  errorHeaders(response) {
+    const headers = []
+    for (const name in response.headers) {
+      if (name.toLowerCase().endsWith('app-error') || name.toLowerCase().endsWith('app-params')) {
         headers.push(name)
       }
     }

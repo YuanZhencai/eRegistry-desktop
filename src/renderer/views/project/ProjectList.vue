@@ -9,12 +9,12 @@
             <el-table v-loading="loading" stripe :data='projects' @sort-change="changeOrder"
                       style='width: 100%'>
                 <el-table-column prop='name' label='项目名称' sortable="custom"></el-table-column>
-                <el-table-column label='开始时间' sortable="custom">
+                <el-table-column prop='beginDate' label='开始时间' sortable="custom">
                     <template slot-scope="scope">
                         {{scope.row.beginDate | formatDate('YYYY-MM-DD')}}
                     </template>
                 </el-table-column>
-                <el-table-column label='结束时间' sortable="custom">
+                <el-table-column prop='endDate' label='结束时间' sortable="custom">
                     <template slot-scope="scope">
                         {{scope.row.endDate | formatDate('YYYY-MM-DD')}}
                     </template>
@@ -55,17 +55,17 @@
 </template>
 
 <script>
-  import { getMineProjects, deleteProject } from '@/api/ProjectService'
   import ProjectDialogComponent from './ProjectDialogComponent'
+  import { deleteProject, getMineProjects } from '../../api/ProjectService'
 
-  export default {
+export default {
     name: 'ProjectList',
     components: { ProjectDialogComponent },
     data() {
       return {
         loading: true,
-        predicate: '',
-        order: '',
+        predicate: 'createdDate',
+        order: 'desc',
         projects: [],
         selectedProject: { id: null },
         total: 0,
@@ -79,7 +79,7 @@
     },
     methods: {
       sort() {
-        return (this.predicate && this.order) ? 'project.' + this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
+        return (this.predicate && this.order) ? `project.${this.predicate}` + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
       },
       changeOrder(sort) {
         this.predicate = sort.prop
@@ -88,14 +88,17 @@
       },
       getProjects() {
         this.loading = true
-        getMineProjects({
+        const req = {
           page: this.currentPage - 1,
           size: this.pageSize,
           sort: this.sort()
-        }).then(res => {
+        }
+        getMineProjects(req).then(res => {
           this.loading = false
           this.projects = res.data
           this.total = Number(res.headers['x-total-count'])
+        }, () => {
+          this.loading = false
         })
       },
       currentChange: function(currentPage) {

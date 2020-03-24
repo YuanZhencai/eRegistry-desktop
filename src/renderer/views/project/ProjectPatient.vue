@@ -34,7 +34,7 @@
                             trigger="hover"
                             width="200"
                             v-if="task">
-                        <el-image :src="`${BASE_API}/api/qrcode?uri=/patient-task/${task.id}`"></el-image>
+                        <el-image :src="`/#/patient-task/${task.id}` | qrcode"></el-image>
                         <i class="fa fa-qrcode" slot="reference"></i>
                     </el-popover>
                 </template>
@@ -121,7 +121,8 @@
   import img_excel from '@/assets/excel.png'
   import img_csv from '@/assets/csv.png'
   import { getCurrentProjectMemberTask } from '@/api/TaskService'
-  export default {
+  import { getProject } from '../../api/ProjectService'
+export default {
     name: 'ProjectPatient',
     components: { PatientDialogComponent },
     data() {
@@ -147,10 +148,12 @@
         img_excel,
         img_csv,
         exportType: '',
-        task: {}
+        task: null,
+        project: null
       }
     },
     created() {
+      this.findProject()
       this.getPatients()
       this.findCurrentMemberTask()
     },
@@ -217,6 +220,11 @@
       },
       closeDialog() {
         this.exportDialogVisible = false
+      },
+      findProject() {
+        getProject(this.projectId).then((res) => {
+          this.project = res.data
+        })
       }
     }
   }
