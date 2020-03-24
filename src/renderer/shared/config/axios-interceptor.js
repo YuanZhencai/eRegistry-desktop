@@ -18,7 +18,7 @@ const onRequestSuccess = config => {
   config.url = `${SERVER_API_URL}${config.url}`
   return config
 }
-const setupAxiosInterceptors = (i18n, onUnauthenticated) => {
+const setupAxiosInterceptors = (i18n) => {
   const messageService = new MessageService(i18n)
 
   const onResponseSuccess = res => {
@@ -27,11 +27,14 @@ const setupAxiosInterceptors = (i18n, onUnauthenticated) => {
   }
 
   const onResponseError = err => {
-    const status = err.status || err.response.status
-    if (status === 403 || status === 401) {
-      onUnauthenticated()
-    } else {
+    if (err.response) {
       messageService.error(err)
+    } else {
+      messageService.error({
+        response: {
+          status: 0
+        }
+      })
     }
     return Promise.reject(err)
   }

@@ -20,16 +20,16 @@ export default class MessageService {
   }
   error(error) {
     const response = error.response
+    if (response.status === 0) {
+      // connection refused, server not reachable
+      this.addErrorAlert('Server not reachable', 'error.server_not_reachable')
+      return
+    }
     if (response.status === 401) {
       return
     }
     if (!(((response.data.path && response.data.path.indexOf('/api/account') === 0)))) {
       switch (response.status) {
-        // connection refused, server not reachable
-        case 0:
-          this.addErrorAlert('Server not reachable', 'error.server.not.reachable')
-          break
-
         case 400:
           {
             const headers = this.responseHeaders(response)
