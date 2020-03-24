@@ -50,7 +50,8 @@
   import { mapGetters } from 'vuex'
   import { getMineReports } from '@/api/ReportService'
   import { getProject, createProject, updateProject } from '@/api/ProjectService'
-  export default {
+  import store from '../../store'
+export default {
     name: 'ProjectDialogComponent',
     computed: {
       ...mapGetters([
@@ -129,13 +130,17 @@
           if (valid) {
             if (this.projectId) {
               updateProject(this.project).then((res) => {
-                that.display = false
-                that.resolve(res.data)
+                this.findUserRoles(() => {
+                  that.display = false
+                  that.resolve(res.data)
+                })
               })
             } else {
               createProject(this.project).then((res) => {
-                that.display = false
-                that.resolve(res.data)
+                this.findUserRoles(() => {
+                  that.display = false
+                  that.resolve(res.data)
+                })
               })
             }
           }
@@ -152,6 +157,11 @@
           return false
         }
         return endDate.getTime() <= this.project.beginDate.getTime()
+      },
+      findUserRoles(callback) {
+        store.dispatch('GetInfo').then(res => { // 拉取用户信息
+          callback()
+        })
       }
     }
   }
