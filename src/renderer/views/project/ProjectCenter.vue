@@ -6,12 +6,11 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-table v-loading="loading" stripe :data='centers'
-                      @sort-change="changeOrder" style='width: 100%'>
-                <el-table-column prop='id' label='ID' sortable="custom"></el-table-column>
-                <el-table-column prop='name' label='名称' sortable="custom"></el-table-column>
-                <el-table-column prop='no' label='编号' sortable="custom"></el-table-column>
-                <el-table-column prop='chargedBy' label='负责人' sortable="custom"></el-table-column>
+            <el-table v-loading="loading" stripe :data='centers' style='width: 100%'>
+                <el-table-column prop='id' label='ID'></el-table-column>
+                <el-table-column prop='name' label='名称'></el-table-column>
+                <el-table-column prop='no' label='编号'></el-table-column>
+                <el-table-column prop='chargedBy' label='负责人'></el-table-column>
                 <el-table-column label='中心人数'>
                     <template slot-scope="scope">{{ scope.row.memberCount || 0 }}</template>
                 </el-table-column>
