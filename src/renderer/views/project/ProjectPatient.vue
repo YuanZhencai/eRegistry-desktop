@@ -34,7 +34,7 @@
                             trigger="hover"
                             width="200"
                             v-if="task">
-                        <el-image :src="`${BASE_API}/api/qrcode?uri=/patient-task/${task.id}`"></el-image>
+                        <el-image :src="`/#/patient-task/${task.id}` | qrcode"></el-image>
                         <i class="fa fa-qrcode" slot="reference"></i>
                     </el-popover>
                 </template>
@@ -148,7 +148,7 @@ export default {
         img_excel,
         img_csv,
         exportType: '',
-        task: {},
+        task: null,
         project: null
       }
     },

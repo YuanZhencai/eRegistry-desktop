@@ -9,38 +9,44 @@
               placement="bottom">
       </el-tooltip>
       <div class="right-menu-item">
-        <ExportHistory ></ExportHistory>
+        <ExportHistory></ExportHistory>
       </div>
       <el-dropdown class="right-menu-item avatar-container"
                    trigger="click">
         <div class="row-flex"
              style="margin-top: 10px">
-          <span class="line-height30">{{name}}</span>
-          <i class="el-icon-caret-bottom line-height30"></i>
+          <div class="line-height30">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            <span >{{name}}</span>
+            <i class="el-icon-caret-bottom"></i>
+          </div>
         </div>
         <el-dropdown-menu class="user-dropdown"
                           slot="dropdown">
           <router-link class="inlineBlock"
                        to="/">
             <el-dropdown-item>
-              Home
+              <i class="fa fa-home" aria-hidden="true"></i>
+              <span>首页</span>
             </el-dropdown-item>
           </router-link>
           <router-link class="inlineBlock"
                        to="/report">
             <el-dropdown-item>
-              CRF
+              <i class="fa fa-fw fa-file-word-o" aria-hidden="true"></i>
+              <span>CRF设计</span>
             </el-dropdown-item>
           </router-link>
           <router-link class="inlineBlock"
                        to="/settings">
             <el-dropdown-item>
-              setting
+              <i class="fa fa-fw fa-wrench" aria-hidden="true"></i>
+              <span>个人设置</span>
             </el-dropdown-item>
           </router-link>
           <el-dropdown-item divided>
-          <span @click="logout"
-                style="display:block;">LogOut</span>
+            <i class="fa fa-fw fa-sign-out" aria-hidden="true"></i>
+            <span @click="logout">退出</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>

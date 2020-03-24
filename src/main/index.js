@@ -11,6 +11,8 @@ if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
+const referrer = `${process.env.BASE_API}`
+
 let mainWindow
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
@@ -74,7 +76,10 @@ function onLogin() {
     session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
       const authorization = details.requestHeaders['authorization']
       if (!authorization) {
-        details.requestHeaders['authorization'] = `Bearer ${token}`
+        details.requestHeaders['Authorization'] = `Bearer ${token}`
+      }
+      if (referrer) {
+        details.requestHeaders['Referer'] = referrer
       }
       callback({ requestHeaders: details.requestHeaders })
     })
