@@ -6,6 +6,7 @@
       </router-link>
     </el-button>
     <el-table
+            v-loading="loading"
         :data="reports"
         stripe
         @sort-change="changeOrder"
@@ -141,6 +142,7 @@ export default {
         return (this.predicate && this.order) ? this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
       },
       loadAll() {
+        this.loading = true
         getAllReports({
           page: this.page - 1,
           size: this.size,
@@ -148,9 +150,12 @@ export default {
           'EQ_report.createdBy': this.login,
           'EQ_report.deleted': false
         }).then((res) => {
+          this.loading = false
           this.reports = res.data
           this.totalItems = Number(res.headers['x-total-count'])
           this.queryCount = this.totalItems
+        }, () => {
+          this.loading = false
         })
       },
       transition() {

@@ -97,6 +97,8 @@ export default {
           this.loading = false
           this.projects = res.data
           this.total = Number(res.headers['x-total-count'])
+        }, () => {
+          this.loading = false
         })
       },
       currentChange: function(currentPage) {
