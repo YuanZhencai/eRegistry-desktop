@@ -24,8 +24,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     height: 563,
     useContentSize: true,
-    width: 1000,
-    icon: path.join(__dirname, '/tray/128x128.png')
+    width: 1000
   })
 
   // 装载应用的index.html页面
@@ -35,7 +34,7 @@ function createWindow() {
     mainWindow = null
   })
 
-  tray = new Tray(path.join(__dirname, '/tray/128x128.png'))
+  tray = new Tray(path.join(__dirname, '/tray/logo.png'))
   const trayContextMenu = Menu.buildFromTemplate([
     {
       label: '打开',
