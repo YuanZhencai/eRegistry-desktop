@@ -32,7 +32,7 @@ config.initVueApp(Vue)
 
 const i18n = config.initI18N(Vue)
 
-setupAxiosInterceptors(i18n, () => console.log('Unauthorized!'))
+setupAxiosInterceptors(i18n)
 
 new Vue({
   components: { App },
