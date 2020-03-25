@@ -1,6 +1,5 @@
 <template>
     <el-dialog
-            width="30%"
             :visible.sync="dialogVisible"
             :before-close="cancel">
         <div slot="title" class="dialog-header">

@@ -1,7 +1,6 @@
 <template>
     <el-dialog
             title="撤回审核"
-            width="30%"
             :visible.sync="dialogVisible"
             :before-close="handleClose">
         <div>确定撤回审核吗</div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div style="padding-top: 20px;">
     <el-container style="height: 100%">
       <el-aside width="115px">
         <el-menu :default-active="currentActive"
@@ -63,7 +63,7 @@
         </el-menu>
       </el-aside>
 
-      <el-main style="padding-top: 0; padding-right: 0">
+      <el-main style="padding-top: 0;">
         <router-view></router-view>
       </el-main>
     </el-container>
