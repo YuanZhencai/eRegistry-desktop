@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <el-row class="">
       <div class="float-left row-flex">
         <div class="avatar" style="margin-right: 15px;">

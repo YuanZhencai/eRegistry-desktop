@@ -40,7 +40,7 @@
       return {
         img_bell,
         currentPage: 1,
-        pageSize: 3,
+        pageSize: 10,
         reminds: [],
         loading: false,
         total: 0
@@ -59,11 +59,9 @@
     },
     methods: {
       load() {
-        if (this.total > this.reminds.length) {
+        if (!this.noMore) {
           this.currentPage = this.currentPage + 1
           this.findReminds()
-        } else {
-          this.disabled = true
         }
       },
       findReminds() {

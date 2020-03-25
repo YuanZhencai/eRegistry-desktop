@@ -74,7 +74,11 @@ export default {
 .project-intro{
   font-size: 12px;
   text-align: left;
-  height: 40px;
+  height: 32px;
   overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient: vertical;
 }
 </style>

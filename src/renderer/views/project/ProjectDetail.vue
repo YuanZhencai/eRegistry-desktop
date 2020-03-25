@@ -1,8 +1,7 @@
 <template>
   <div class="app-container">
     <el-container style="height: 100%">
-      <el-aside width="135px"
-                style="background-color: rgb(238, 241, 246)">
+      <el-aside width="115px">
         <el-menu :default-active="currentActive"
                  :active="currentActive">
           <el-menu-item index="home"

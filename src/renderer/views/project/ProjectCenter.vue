@@ -1,5 +1,5 @@
 <template>
-    <div class='app-container'>
+    <div>
         <el-row v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">
             <el-col :span='24'>
                 <el-button type='primary' size="mini" class='float-right' @click="newCenter()">创建分中心</el-button>
