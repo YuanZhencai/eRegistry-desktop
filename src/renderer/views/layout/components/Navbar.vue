@@ -3,11 +3,12 @@
            mode="horizontal">
     <breadcrumb></breadcrumb>
     <div class="right-menu">
-      <el-tooltip
-              :content="'导出记录'"
-              effect="dark"
-              placement="bottom">
-      </el-tooltip>
+      <div class="right-menu-item">
+        <el-tooltip content="帮助" effect="light">
+          <i class="el-icon-question" @click="openHelpPage" style="cursor: pointer"></i>
+        </el-tooltip>
+      </div>
+      <message-component class="right-menu-item"></message-component>
       <div class="right-menu-item">
         <ExportHistory></ExportHistory>
       </div>
@@ -51,18 +52,20 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-
   </el-menu>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import { shell } from 'electron'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import ExportHistory from '../../export/ExportHistory'
+import MessageComponent from '../../../components/message/MessageComponent'
 
 export default {
   components: {
+    MessageComponent,
     ExportHistory,
     Breadcrumb,
     Hamburger
@@ -82,6 +85,9 @@ export default {
       this.$store.dispatch('LogOut').then(() => {
         location.reload() // 为了重新实例化vue-router对象 避免bug
       })
+    },
+    openHelpPage() {
+      shell.openExternal(`${process.env.BASE_API}/help/index.html`)
     }
   }
 }
