@@ -2,9 +2,9 @@
     <el-dialog
             title="选择问卷"
             :visible.sync="display"
-            width="500"
+            width="500px"
             :before-close="close">
-        <el-form ref="form" :model="form" label-width="80px">
+        <el-form ref="form" label-width="80px">
             <el-form-item label="CRF模版">
                 <el-select style="width: 100%" placeholder="选择已经发布的CRF模版" v-model="reportId">
                     <el-option v-for="report in reports" :key="report.id"
@@ -42,6 +42,7 @@ export default {
           })
         },
         show() {
+          this.reportId = null
           this.findReports()
           this.display = true
           return new Promise((resolve, reject) => {
