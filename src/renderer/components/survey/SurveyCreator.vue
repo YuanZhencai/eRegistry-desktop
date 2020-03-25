@@ -67,6 +67,8 @@
           showJSONEditorTab: false
         }
         this.surveyCreator = new SurveyCreator.SurveyCreator('surveyCreatorContainer', options)
+        this.surveyCreator.showToolbox = 'right'
+        this.surveyCreator.showPropertyGrid = 'none'
         this.surveyCreator.haveCommercialLicense = true
         this.surveyCreator.text = this.survey
         this.surveyCreator.saveSurveyFunc = this.saveMySurvey

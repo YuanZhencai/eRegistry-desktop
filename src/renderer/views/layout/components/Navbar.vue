@@ -10,7 +10,7 @@
       </div>
       <message-component class="right-menu-item"></message-component>
       <div class="right-menu-item">
-        <ExportHistory></ExportHistory>
+        <export-history></export-history>
       </div>
       <el-dropdown class="right-menu-item avatar-container"
                    trigger="click">

@@ -23,13 +23,16 @@ function createWindow() {
      * Initial window options
      */
   mainWindow = new BrowserWindow({
-    height: 563,
     useContentSize: true,
-    width: 1000
+    width: 1440,
+    height: 760,
+    minWidth: 1000,
+    minHeight: 600
   })
 
   // 装载应用的index.html页面
   mainWindow.loadURL(winURL)
+  mainWindow.webContents.openDevTools()
 
   mainWindow.on('closed', () => {
     mainWindow = null
