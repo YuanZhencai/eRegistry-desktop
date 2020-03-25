@@ -1,3 +1,4 @@
+import {app} from "electron";
 <template>
   <el-popover @show="findExportFiles"
               placement="bottom"
@@ -15,24 +16,27 @@
     <div v-if="files.length > 0"
          v-for="(file, index) in files"
          :key="index">
-      <div class="list-group-title">
-        <a-icon class="iconZip"
-                theme="filled"
-                :style="{ fontSize: '24px',color: '#50749A' }"
-                type="file-zip" />
+      <div class="list-group-title" @click="revealInFinder(file)">
         <div style="width: 170px;float: left">
+          <file-icon :filename="file.path"></file-icon>
+
           <p class="list-group-item-shared list-group-item-heading">{{file.name}}</p>
-          <p class="list-group-item-shared list-group-item-text"><i class="el-icon-download"></i>318.5  KB  ZIP压缩文件{{file.length}} {{file.type}} </p>
+          <p class="list-group-item-shared list-group-item-text">
+            <i class="el-icon-download"></i>
+            <span v-if="file.stats">{{file.stats.size | bytes}}</span>
+            <span v-if="file.path">{{file.path | extension}}</span>
+          </p>
         </div>
         <el-popover placement="bottom"
                     width="150"
+                    v-model="file.visible"
                     trigger="hover">
           <span slot="reference"
                 class="ellipsis">···</span>
           <div class="operation">
             <p class="openFile font-size"
                @click="revealInFinder(file)">打开文件夹</p>
-            <p class="deleteLog font-size">删除记录</p>
+            <p class="deleteLog font-size" @click="remove(index, file)" >删除记录</p>
           </div>
         </el-popover>
       </div>
@@ -45,18 +49,22 @@
 
 <script>
 import { ipcRenderer, shell } from 'electron'
-import { addExportFile, clearExportFiles, findExportFiles } from '../../api/ExportService'
-
+import { addExportFile, clearExportFiles, findExportFiles, saveExportFiles } from '../../api/ExportService'
+import FileIcon from './file-icon'
+const fs = require('fs')
 export default {
-  name: 'ExportHistory',
+  name: 'export-history',
+  components: { FileIcon },
   data() {
     return {
       files: []
     }
   },
+  created() {
+    this.findExportFiles()
+  },
   mounted() {
     this.onDownloadFinish()
-    this.findExportFiles()
   },
   methods: {
     onDownloadFinish() {
@@ -83,13 +91,31 @@ export default {
     },
     findExportFiles() {
       this.files = findExportFiles()
+      this.files.forEach((file) => {
+        const exists = fs.existsSync(file.path)
+        if (exists) {
+          file.stats = fs.statSync(file.path)
+        }
+      })
     },
     clear() {
       clearExportFiles()
       this.findExportFiles()
     },
     revealInFinder(file) {
-      shell.showItemInFolder(file.path)
+      file.visible = false
+      fs.exists(file.path, (exists) => {
+        if (exists) {
+          shell.showItemInFolder(file.path)
+        } else {
+          this.$message.error('文件已经删除，请重新导出')
+        }
+      })
+    },
+    remove(index, file) {
+      file.visible = false
+      this.files.splice(index, 1)
+      saveExportFiles(this.files)
     }
   }
 }
@@ -125,10 +151,7 @@ export default {
   background: #f9fafc;
   cursor: pointer;
 }
-.iconZip {
-  margin: 2px 3px 0 0;
-  float: left;
-}
+
 .list-group-title:hover .list-group-item-heading {
   color: #409eff;
 }

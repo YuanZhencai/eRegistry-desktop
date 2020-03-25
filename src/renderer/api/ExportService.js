@@ -3,7 +3,16 @@ const ExportFileKey = 'export-files'
 export function addExportFile(file) {
   const files = findExportFiles()
   files.push(file)
-  localStorage.setItem(ExportFileKey, JSON.stringify(files))
+  saveExportFiles(files)
+}
+
+export function saveExportFiles(files) {
+  const parse = JSON.parse(JSON.stringify(files))
+  parse.forEach((file) => {
+    delete file.stats
+    delete file.visible
+  })
+  localStorage.setItem(ExportFileKey, JSON.stringify(parse))
 }
 
 export function findExportFiles() {
