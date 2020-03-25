@@ -51,6 +51,7 @@
         </el-pagination>
         <el-dialog
                 title="删除问卷"
+                width="500px"
                 :visible.sync="removeDialog">
             <span>确定要删除 {{remove.title}} 吗?</span>
             <span slot="footer" class="dialog-footer">
@@ -60,6 +61,7 @@
         </el-dialog>
         <el-dialog
                 title="复制问卷"
+                width="500px"
                 :visible.sync="copyDialog">
             <el-form label-width="75px" :model="copy" ref="copyForm">
                 <el-form-item label="名称" prop="title" :rules="[{required: true, message: '名称不能为空'}]">
@@ -73,6 +75,7 @@
         </el-dialog>
         <el-dialog
                 title="分享问卷"
+                width="500px"
                 :visible.sync="shareDialog">
             <el-form label-width="75px" :model="share" ref="shareForm">
                 <el-form-item label="CRF">
@@ -80,6 +83,7 @@
                 </el-form-item>
                 <el-form-item label="用户" prop="username" :rules="[{required: true, message: '用户不能为空'}]">
                     <el-select
+                            style="width: 100%"
                             v-model="share.username"
                             filterable
                             remote
