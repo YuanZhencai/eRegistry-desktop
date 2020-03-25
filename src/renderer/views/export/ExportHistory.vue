@@ -12,31 +12,34 @@
       <div>暂无记录</div>
       <div>导出的记录会在这边显示</div>
     </div>
-    <div v-if="files.length > 0"
-         v-for="(file, index) in files"
-         :key="index">
-      <div class="list-group-title">
-        <a-icon class="iconZip"
-                theme="filled"
-                :style="{ fontSize: '24px',color: '#50749A' }"
-                type="file-zip" />
-        <div style="width: 170px;float: left">
-          <p class="list-group-item-shared list-group-item-heading">{{file.name}}</p>
-          <p class="list-group-item-shared list-group-item-text"><i class="el-icon-download"></i>318.5  KB  ZIP压缩文件{{file.length}} {{file.type}} </p>
-        </div>
-        <el-popover placement="bottom"
-                    width="150"
-                    trigger="hover">
-          <span slot="reference"
-                class="ellipsis">···</span>
-          <div class="operation">
-            <p class="openFile font-size"
-               @click="revealInFinder(file)">打开文件夹</p>
-            <p class="deleteLog font-size">删除记录</p>
+    <div class="content">
+      <div v-if="files.length > 0"
+           v-for="(file, index) in files"
+           :key="index">
+        <div class="list-group-title">
+          <a-icon class="iconZip"
+                  theme="filled"
+                  :style="{ fontSize: '24px',color: '#50749A' }"
+                  type="file-zip" />
+          <div style="width: 170px;float: left">
+            <p class="list-group-item-shared list-group-item-heading">{{file.name}}</p>
+            <p class="list-group-item-shared list-group-item-text"><i class="el-icon-download"></i>318.5 KB ZIP压缩文件{{file.length}} {{file.type}} </p>
           </div>
-        </el-popover>
+          <el-popover placement="bottom"
+                      width="150"
+                      trigger="hover">
+            <span slot="reference"
+                  class="ellipsis">···</span>
+            <div class="operation">
+              <p class="openFile font-size"
+                 @click="revealInFinder(file)">打开文件夹</p>
+              <p class="deleteLog font-size">删除记录</p>
+            </div>
+          </el-popover>
+        </div>
       </div>
     </div>
+
     <i slot="reference"
        class="fa fa-cloud-download"
        aria-hidden="true"></i>
@@ -156,7 +159,7 @@ export default {
   padding: 10px 0;
   margin: 0px;
 }
-.font-size{
+.font-size {
   font-size: 13px;
 }
 .openFile:hover {
@@ -169,4 +172,9 @@ export default {
   color: #409eff;
   cursor: pointer;
 }
+  .content{
+    width: 250px;
+    height: 280px;
+    overflow: auto;
+  }
 </style>
