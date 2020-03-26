@@ -43,6 +43,12 @@
         default: function() {
           return []
         }
+      },
+      jsonTab: {
+        type: Boolean,
+        default: function() {
+          return false
+        }
       }
     },
     data() {
@@ -64,7 +70,7 @@
         const options = {
           showEmbededSurveyTab: false,
           generateValidJSON: true,
-          showJSONEditorTab: false
+          showJSONEditorTab: this.jsonTab
         }
         this.surveyCreator = new SurveyCreator.SurveyCreator('surveyCreatorContainer', options)
         this.surveyCreator.showToolbox = 'right'
