@@ -44,7 +44,7 @@
     </el-table>
     <el-dialog :title="textMap[dialogStatus]"
                :visible.sync="editCreateDialog"
-               width="40%">
+               width="500px">
       <el-form :model="dialogFormData"
                :rules="rules"
                ref="headerCreatePlan"
@@ -66,8 +66,10 @@
                       prop="condition">
           <el-input v-model="dialogFormData.condition"></el-input>
         </el-form-item>
-        <el-form-item label="提醒区间(天):">
-          <el-input v-model="dialogFormData.remindingInterval"></el-input>
+        <el-form-item label="提醒区间(天):"
+                      prop="remindingInterval">
+          <el-input v-model="dialogFormData.remindingInterval"
+                    placeholder="开始前的第几天天开始提醒"></el-input>
         </el-form-item>
         <el-form-item label="简介">
           <el-input type="textarea"
@@ -78,6 +80,7 @@
             class="dialog-footer">
         <el-button @click="editCreateDialog = false">取 消</el-button>
         <el-button type="primary"
+                   :disabled="isButtonDisabled"
                    @click="dialogStatus==='create'?createPlan():updatePlan()">确 定</el-button>
       </span>
     </el-dialog>
@@ -93,14 +96,14 @@
                    @click="confirmDelete(deleteDialoglist.id)">确 定</el-button>
       </span>
     </el-dialog>
-    <!-- 分页 -->
-    <el-pagination background
-                   :page-size="listQuery.limit"
-                   :current-page="listQuery.page+1"
-                   @size-change="sizeChange"
+    <el-pagination @size-change="sizeChange"
                    @current-change="currentChange"
-                   layout="prev, pager, next"
-                   :total="total">
+                   :current-page="listQuery.page+1"
+                   :page-size="listQuery.size"
+                   layout="total, prev, pager, next, jumper"
+                   :total="total"
+                   background
+                   class="pagination">
     </el-pagination>
   </div>
 </template>
@@ -108,18 +111,37 @@
 import { getPlan, getPlans, getCrfList, deletePlan, updatePlan, createPlan } from '@/api/PlanService'
 export default {
   data() {
+    const remindingInterval = (rule, value, callback) => {
+      if (this.dialogFormData.condition > 7) {
+        if (value > 7) {
+          this.isButtonDisabled = true
+          callback(new Error('提醒区间为 0 - 7'))
+        } else {
+          this.isButtonDisabled = false
+        }
+      } else {
+        if (value > this.dialogFormData.condition) {
+          this.isButtonDisabled = true
+          callback(new Error('提醒区间为 0 - ' + this.dialogFormData.condition))
+        } else {
+          this.isButtonDisabled = false
+        }
+      }
+    }
     const projectId = this.$route.params.projectId
     return {
+      isButtonDisabled: false,
       followList: [],
       deleteDialoglist: [],
       total: 0,
       listQuery: {
         page: 0,
-        limit: 10
+        size: 10
       },
       rules: {
-        name: [{ required: true, message: '本字段不能为空', trigger: 'change' }],
-        condition: [{ required: true, message: '本字段不能为空', trigger: 'change' }]
+        name: [{ required: true, message: '本字段不能为空', trigger: 'blur' }],
+        condition: [{ required: true, message: '本字段不能为空', trigger: 'blur' }],
+        remindingInterval: [{ required: false, trigger: 'change', validator: remindingInterval }]
       },
       dialogStatus: '',
       textMap: {
@@ -153,7 +175,7 @@ export default {
       this.getplan()
     },
     sizeChange(size) {
-      this.listQuery.limit = size
+      this.listQuery.size = size
       this.getplan()
     },
     currentChange(page) {
@@ -174,6 +196,7 @@ export default {
       })
     },
     async headerCreatePlan(dialogFormData) {
+      this.isButtonDisabled = false
       this.dialogStatus = 'create'
       this.dialogFormData = {}
       this.crfValue = ''
@@ -232,4 +255,6 @@ export default {
     }
   }
 }
-</script> 
+</script>
+<style scoped>
+</style>

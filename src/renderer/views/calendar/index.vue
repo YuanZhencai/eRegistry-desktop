@@ -159,7 +159,7 @@ export default {
   font-size: 12px;
 }
 .notes-month {
-  text-align: center;
+  text-align: left;
   font-size: 28px;
 }
 .notes-month section {
