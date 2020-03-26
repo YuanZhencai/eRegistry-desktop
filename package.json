@@ -53,6 +53,7 @@
     }
   },
   "dependencies": {
+    "distpicker": "2.0.2",
     "ace-builds": "^1.4.8",
     "ant-design-vue": "^1.4.12",
     "axios": "^0.17.1",

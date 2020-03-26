@@ -1,4 +1,5 @@
 import * as widgets from 'surveyjs-widgets'
+import * as AddressPicker from './widgets/address-picker'
 
 window.jQuery = window.$ = require('jquery')
 import 'jquery-ui/themes/base/all.css'
@@ -13,6 +14,7 @@ import 'nouislider/distribute/nouislider.css'
 import 'nouislider/distribute/nouislider'
 import 'signature_pad/dist/signature_pad'
 import 'sortablejs/Sortable'
+import 'distpicker/dist/distpicker'
 
 export function init(Survey) {
   widgets.icheck(Survey)
@@ -26,5 +28,6 @@ export function init(Survey) {
   widgets.sortablejs(Survey)
   widgets.ckeditor(Survey)
   widgets.autocomplete(Survey)
-// widgets.bootstrapslider(Survey)
+  // widgets.bootstrapslider(Survey)
+  AddressPicker.init(Survey)
 }
