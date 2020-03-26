@@ -100,7 +100,7 @@
             </div>
           </div>
         </el-card>
-        <el-card shadow="hover" :body-style="{ padding: '20px' }">
+        <el-card shadow="hover" :body-style="{ padding: '10px' }">
           <div slot="header" class="clearfix">
             <span>动态</span>
           </div>

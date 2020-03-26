@@ -39,12 +39,10 @@
       </el-table-column>
     </el-table>
     <el-pagination
-        @size-change="sizeChange"
         @current-change="loadPage"
         :current-page="page"
-        :page-sizes="[10, 20, 30, 40]"
         :page-size="size"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="total, prev, pager, next, jumper"
         :total="totalItems">
     </el-pagination>
     <el-dialog
@@ -172,10 +170,6 @@ export default {
       changeOrder(sort) {
         this.predicate = sort.prop
         this.order = sort.order
-        this.transition()
-      },
-      sizeChange(size) {
-        this.size = size
         this.transition()
       },
       openRemoveDialog(report) {

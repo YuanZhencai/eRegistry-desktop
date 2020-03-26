@@ -57,12 +57,12 @@
       </el-table-column>
     </el-table>
     <el-pagination
+            background
             @current-change="loadPage"
             :current-page="page"
-            :page-sizes="[10, 20, 30, 40]"
             :page-size="size"
             layout="total, prev, pager, next, jumper"
-            :total="totalItems">
+            :total="totalItems" class="pagination">
     </el-pagination>
   </div>
 </template>
@@ -126,6 +126,7 @@
       loadPage(page) {
         if (page !== this.previousPage) {
           this.previousPage = page
+          this.page = page
           this.transition()
         }
       },
