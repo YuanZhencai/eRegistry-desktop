@@ -35,7 +35,7 @@
   import img_bell from '@/assets/bell.png'
   import { getFollowRemindingCases } from '@/api/FollowService'
   export default {
-    name: 'MessageComponent',
+    name: 'RemindComponent',
     data() {
       return {
         img_bell,

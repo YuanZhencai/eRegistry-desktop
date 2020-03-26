@@ -8,7 +8,7 @@
           <i class="el-icon-question" @click="openHelpPage" style="cursor: pointer"></i>
         </el-tooltip>
       </div>
-      <message-component class="right-menu-item"></message-component>
+      <remind-component class="right-menu-item"></remind-component>
       <div class="right-menu-item">
         <export-history></export-history>
       </div>
@@ -61,11 +61,11 @@ import { shell } from 'electron'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import ExportHistory from '../../export/ExportHistory'
-import MessageComponent from '../../../components/message/MessageComponent'
+import RemindComponent from '@/components/remind/RemindComponent'
 
 export default {
   components: {
-    MessageComponent,
+    RemindComponent,
     ExportHistory,
     Breadcrumb,
     Hamburger
