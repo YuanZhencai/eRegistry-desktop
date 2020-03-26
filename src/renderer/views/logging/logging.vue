@@ -1,10 +1,6 @@
 <template>
   <div class="app-container">
-    <div class="header">
-      <div class="title">
-        <h1>日志记录</h1>
-        <p>此模块列出了对该项目所做的所有更改，包括数据导出、数据更改以及用户的创建或删除</p>
-      </div>
+    <el-card class="box-card">
       <el-button type="primary"
                  size="medium "
                  v-if="project && project.name"
@@ -13,9 +9,8 @@
         <span class="fa fa-download"></span>
         <span class="d-none d-md-inline">导出</span>
       </el-button>
-    </div>
-    <el-card class="box-card">
       <el-form ref="form"
+               :inline="true"
                label-width="120px"
                size="mini">
         <el-form-item label="按用户名筛选">
@@ -66,14 +61,14 @@
                        label="导出的数据更改或字段列表">
       </el-table-column>
     </el-table>
-    <!-- 分页 -->
-    <el-pagination background
-                   :page-size="listQuery.limit"
-                   :current-page="listQuery.page+1"
-                   @size-change="sizeChange"
+    <el-pagination @size-change="sizeChange"
                    @current-change="currentChange"
-                   layout="prev, pager, next"
-                   :total="total">
+                   :current-page="listQuery.page+1"
+                   :page-size="listQuery.size"
+                   layout="total, prev, pager, next, jumper"
+                   :total="total"
+                   background
+                   class="pagination">
     </el-pagination>
   </div>
 </template>
@@ -87,8 +82,7 @@ export default {
       total: 0,
       listQuery: {
         page: 0,
-        size: 10,
-        sort: '+id'
+        size: 10
       },
       members: [],
       form: {
@@ -151,11 +145,8 @@ export default {
 }
 </script>
 <style scoped>
-.header {
+.box-card {
   overflow: hidden;
-}
-.header > .title {
-  float: left;
 }
 .export {
   float: right;

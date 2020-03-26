@@ -4,14 +4,18 @@
       <span>问卷表单</span>
     </div>
     <div class="card-content">
-      <survey-creator :survey="report.survey" @surveyChange="save"></survey-creator>
+      <survey-creator
+              :json-tab="isAdmin"
+              :survey="report.survey" 
+              @surveyChange="save">
+      </survey-creator>
     </div>
   </el-card>
 </template>
 
 <script>
-  import SurveyCreator from '@/components/survey/SurveyCreator'
   import { getReport, updateReport } from '../../api/ReportService'
+  import SurveyCreator from '../../components/survey/SurveyCreator'
 
 export default {
     name: 'ReportDetail',
@@ -24,7 +28,8 @@ export default {
         report: {
           title: null,
           survey: null
-        }
+        },
+        isAdmin: this.$hasAnyAuthority('ROLE_ADMIN')
       }
     },
     created() {

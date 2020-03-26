@@ -13,8 +13,8 @@ import {app} from "electron";
       <div>暂无记录</div>
       <div>导出的记录会在这边显示</div>
     </div>
-    <div v-if="files.length > 0"
-         v-for="(file, index) in files"
+    <div v-if="files.length > 0" class="content">
+    <div v-for="(file, index) in files"
          :key="index">
       <div class="list-group-title" @click="revealInFinder(file)">
         <div style="width: 170px;float: left">
@@ -41,7 +41,8 @@ import {app} from "electron";
         </el-popover>
       </div>
     </div>
-    <i slot="reference"
+      </div>
+      <i slot="reference"
        class="fa fa-cloud-download"
        aria-hidden="true"></i>
   </el-popover>
@@ -138,7 +139,7 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  margin: 20px;
+  margin: 50px 20px;
   font-size: 15px;
 }
 
@@ -192,4 +193,8 @@ export default {
   color: #409eff;
   cursor: pointer;
 }
+  .content{
+    height: 200px;
+    overflow: auto;
+  }
 </style>
