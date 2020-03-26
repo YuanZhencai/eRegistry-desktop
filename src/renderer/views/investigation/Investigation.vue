@@ -1,78 +1,79 @@
 <template>
-  <div class="app-container">
-    <el-form :inline="true" class="demo-form-inline" size="mini">
-      <el-form-item>
-        <el-input v-model="content" placeholder="搜索内容" suffix-icon="el-icon-search" @change="transition"></el-input>
-      </el-form-item>
-      <el-form-item label="创建时间">
-        <el-col :span="11">
-          <el-date-picker type="date" placeholder="开始时间" v-model="begin" @change="transition"
-                          style="width: 100%;"></el-date-picker>
-        </el-col>
-        <el-col class="line" :span="2">-</el-col>
-        <el-col :span="11">
-          <el-date-picker type="date" placeholder="结束时间" v-model="end" @change="transition"
-                          style="width: 100%;"></el-date-picker>
-        </el-col>
-      </el-form-item>
-      <el-form-item v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId])">
-        <el-button v-if="report && report.title"
-                   v-download="{name: `${report.title}.xls`, url: `/api/projects/${projectId}/questionnaire/${questionnaireId}/data`}"
-                   type="primary"
-                   size="mini">
-          <span class="fa fa-download"></span>
-          <span class="d-none d-md-inline">导出</span>
-        </el-button>
-      </el-form-item>
-    </el-form>
-    <el-table v-loading="loading"
-            :data="investigations"
-            stripe
-            @sort-change="changeOrder"
-            style="width: 100%">
-      <el-table-column
-              prop="id"
-              sortable="custom"
-              label="ID">
-      </el-table-column>
-      <el-table-column v-for="(question, index) in questions" :label="question" :key="index">
-        <template slot-scope="scope">
-          {{JSON.parse(scope.row.content)[question]}}
-        </template>
-      </el-table-column>
-      <el-table-column
-              sortable="custom"
-              label="创建时间"
-              width="180">
-        <template slot-scope="scope">
-          {{scope.row.createdDate | formatDate('YYYY-MM-DD HH:mm:ss')}}
-        </template>
-      </el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button type="text" @click="view(scope.row)">
-              查看
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination
-            @size-change="sizeChange"
-            @current-change="loadPage"
-            :current-page="page"
-            :page-sizes="[10, 20, 30, 40]"
-            :page-size="size"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalItems">
-    </el-pagination>
-  </div>
+    <div class="app-container">
+        <el-form :inline="true" class="demo-form-inline" size="mini">
+            <el-form-item>
+                <el-input v-model="content" placeholder="搜索内容" suffix-icon="el-icon-search"
+                          @change="transition"></el-input>
+            </el-form-item>
+            <el-form-item label="创建时间">
+                <el-col :span="11">
+                    <el-date-picker type="date" placeholder="开始时间" v-model="begin" @change="transition"
+                                    style="width: 100%;"></el-date-picker>
+                </el-col>
+                <el-col class="line" :span="2">-</el-col>
+                <el-col :span="11">
+                    <el-date-picker type="date" placeholder="结束时间" v-model="end" @change="transition"
+                                    style="width: 100%;"></el-date-picker>
+                </el-col>
+            </el-form-item>
+            <el-form-item v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId])">
+                <el-button v-if="report && report.title"
+                           v-download="{name: `${report.title}.xls`, url: `/api/projects/${projectId}/questionnaire/${questionnaireId}/data`}"
+                           type="primary"
+                           size="mini">
+                    <span class="fa fa-download"></span>
+                    <span class="d-none d-md-inline">导出</span>
+                </el-button>
+            </el-form-item>
+        </el-form>
+        <el-table v-loading="loading"
+                  :data="investigations"
+                  stripe
+                  @sort-change="changeOrder"
+                  style="width: 100%">
+            <el-table-column
+                    prop="id"
+                    sortable="custom"
+                    label="ID">
+            </el-table-column>
+            <el-table-column v-for="(question, index) in questions" :label="question" :key="index">
+                <template slot-scope="scope">
+                    {{JSON.parse(scope.row.content)[question]}}
+                </template>
+            </el-table-column>
+            <el-table-column
+                    sortable="custom"
+                    label="创建时间"
+                    width="180">
+                <template slot-scope="scope">
+                    {{scope.row.createdDate | formatDate('YYYY-MM-DD HH:mm:ss')}}
+                </template>
+            </el-table-column>
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button type="text" @click="view(scope.row)">
+                        查看
+                    </el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <el-pagination
+                background
+                class="pagination"
+                @current-change="loadPage"
+                :current-page="page"
+                :page-size="size"
+                layout="total, prev, pager, next, jumper"
+                :total="totalItems">
+        </el-pagination>
+    </div>
 </template>
 
 <script>
     import { getInvestigations } from '../../api/InvestigationService'
     import { getQuestionnaireReport } from '../../api/QuestionnaireService'
 
-export default {
+    export default {
       name: 'Investigation',
       data() {
         return {
