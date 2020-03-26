@@ -86,7 +86,7 @@
     </el-dialog>
     <el-dialog title="确认删除"
                :visible.sync="deleteDialogVisible"
-               width="30%"
+               width="500px"
                :data="deleteDialoglist">
       <p>你确定要删除随访计划<span style="color:red"> {{deleteDialoglist.name}} </span>吗？</p>
       <span slot="footer"

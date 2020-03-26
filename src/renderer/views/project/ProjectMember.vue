@@ -37,7 +37,7 @@
                      @current-change="currentChange" class="pagination">
       </el-pagination>
     </el-row>
-    <el-dialog v-if="deleteMemberDialogVisible" title="确认删除成员"
+    <el-dialog v-if="deleteMemberDialogVisible" title="确认删除成员" width="500px"
                :visible.sync="deleteMemberDialogVisible" :before-close="cancelDelete">
       <span>是否确认删除成员 '{{this.selectedMember.username}}'？</span>
       <span slot="footer" class="dialog-footer">

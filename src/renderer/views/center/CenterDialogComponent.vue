@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑分中心" :visible.sync="display" :before-close="close">
+    <el-dialog title="创建或编辑分中心" width="500px" :visible.sync="display" :before-close="close">
         <el-form label-width="80px" :model="center" :rules="rules" ref="centerForm" size="mini">
             <el-form-item label="名称" prop="name">
                 <el-input v-model="center.name"></el-input>

@@ -1,5 +1,5 @@
 <template>
-    <el-dialog
+    <el-dialog width="500px"
             title="审核变更申请"
             :visible.sync="dialogVisible"
             :before-close="cancel">

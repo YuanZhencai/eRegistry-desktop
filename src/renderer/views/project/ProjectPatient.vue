@@ -90,7 +90,7 @@
             </el-pagination>
         </el-row>
         <patient-dialog-component ref="patient-dialog"></patient-dialog-component>
-        <el-dialog v-if="exportDialogVisible" title="导出"
+        <el-dialog v-if="exportDialogVisible" title="导出" width="500px"
                    :visible.sync="exportDialogVisible" :before-close="closeDialog">
             <div class="text-center" v-if="project">
                 <el-image v-if="project.name"

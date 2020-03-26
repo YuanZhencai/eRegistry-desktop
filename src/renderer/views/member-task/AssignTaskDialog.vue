@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑任务" :visible.sync="display" :before-close="close">
+    <el-dialog title="创建或编辑任务" width="500px" :visible.sync="display" :before-close="close">
         <el-form label-width="80px" size="mini">
             <el-form-item label="成员">
                 <el-input v-model="member.username" :disabled="true"></el-input>

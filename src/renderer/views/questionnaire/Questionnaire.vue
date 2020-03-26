@@ -50,7 +50,7 @@
                      @current-change="currentChange" class="pagination">
       </el-pagination>
     </el-row>
-    <el-dialog title="确认删除问卷" v-if="deleteDialogVisible" :visible.sync="deleteDialogVisible"
+    <el-dialog title="确认删除问卷" width="500px" v-if="deleteDialogVisible" :visible.sync="deleteDialogVisible"
                :before-close="closeDialog">
       <span>是否确认删除问卷 '{{selectedQuestionnaire.reportName}}' ？</span>
       <span slot="footer" class="dialog-footer">

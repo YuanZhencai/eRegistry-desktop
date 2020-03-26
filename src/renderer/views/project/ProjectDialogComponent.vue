@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑项目"
+    <el-dialog title="创建或编辑项目" width="500px"
                :visible.sync="display"
                :before-close="close">
         <el-form label-width="80px" size="mini" ref="projectForm" :model="project" :rules="rules">

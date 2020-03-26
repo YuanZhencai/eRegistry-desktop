@@ -29,7 +29,7 @@
                            @current-change="currentChange" class="pagination">
             </el-pagination>
         </el-row>
-        <el-dialog v-if="deleteCenterDialogVisible" title="确认删除项目中心" :visible.sync="deleteCenterDialogVisible" :before-close="closeDialog">
+        <el-dialog v-if="deleteCenterDialogVisible" width="500px" title="确认删除项目中心" :visible.sync="deleteCenterDialogVisible" :before-close="closeDialog">
             <span>是否确认删除中心 '{{this.selectedCenter.name}}' ？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="deleteCenterDialogVisible = false">取 消</el-button>

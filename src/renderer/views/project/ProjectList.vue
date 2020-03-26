@@ -43,7 +43,7 @@
                            @current-change="currentChange" class="pagination">
             </el-pagination>
         </el-row>
-        <el-dialog v-if="deleteDialogVisible" title="确认删除项目" :visible.sync="deleteDialogVisible" :before-close="closeDialog">
+        <el-dialog v-if="deleteDialogVisible" width="500px" title="确认删除项目" :visible.sync="deleteDialogVisible" :before-close="closeDialog">
             <span>是否确认删除项目 '{{this.selectedProject.name}}'？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="deleteDialogVisible = false">取 消</el-button>
