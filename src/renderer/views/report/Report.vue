@@ -41,12 +41,10 @@
         </el-table>
         <el-pagination class="pagination"
                        background
-                       @size-change="sizeChange"
                        @current-change="loadPage"
                        :current-page="page"
-                       :page-sizes="[10, 20, 30, 40]"
                        :page-size="size"
-                       layout="total, sizes, prev, pager, next, jumper"
+                       layout="total, prev, pager, next, jumper"
                        :total="totalItems">
         </el-pagination>
         <el-dialog
