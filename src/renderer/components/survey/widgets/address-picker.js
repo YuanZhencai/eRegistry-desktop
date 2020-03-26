@@ -3,7 +3,7 @@ export function init(Survey, $) {
   const widget = {
     name: 'address',
     title: 'address',
-    iconName: 'actionaddtosharedrepo',
+    iconName: '',
     htmlTemplate: '' +
         '<div>' +
         "   <div class='form-inline'>" +
