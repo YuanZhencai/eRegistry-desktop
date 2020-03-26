@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { Calendar, Badge, Icon } from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 import 'normalize.css/normalize.css' // A modern alternative to CSS reset
+
 import 'bootstrap/dist/css/bootstrap.css'
 
 import ElementUI from 'element-ui'

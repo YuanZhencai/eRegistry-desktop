@@ -119,6 +119,10 @@ let rendererConfig = {
     __filename: process.env.NODE_ENV !== 'production'
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      jQuery: 'jquery',
+      $: 'jquery'
+    }),
     new ExtractTextPlugin('styles.css'),
     new webpack.DefinePlugin({
       'process.env': process.env.NODE_ENV === 'production' ? config.build.env : config.dev.env
@@ -145,6 +149,8 @@ let rendererConfig = {
   },
   resolve: {
     alias: {
+      'jquery': 'jquery',
+      'jquery-ui': 'jquery-ui',
       '@': path.join(__dirname, '../src/renderer'),
       'vue$': 'vue/dist/vue.esm.js'
     },

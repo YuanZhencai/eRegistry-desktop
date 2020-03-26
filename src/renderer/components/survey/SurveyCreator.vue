@@ -3,25 +3,13 @@
 </template>
 
 <script>
-import * as SurveyKo from 'survey-knockout'
-import * as widgets from 'surveyjs-widgets'
-import * as SurveyCreator from 'survey-creator'
-import 'survey-creator/survey-creator.css'
 import uuidv1 from 'uuid/v1'
-import 'inputmask/dist/inputmask/phone-codes/phone.js'
+import * as SurveyKo from 'survey-knockout'
+import * as SurveyCreator from 'survey-creator'
+import * as widgets from './widgets'
+import 'survey-creator/survey-creator.css'
 
-widgets.icheck(SurveyKo)
-widgets.select2(SurveyKo)
-widgets.inputmask(SurveyKo)
-widgets.jquerybarrating(SurveyKo)
-widgets.jqueryuidatepicker(SurveyKo)
-widgets.nouislider(SurveyKo)
-widgets.select2tagbox(SurveyKo)
-widgets.signaturepad(SurveyKo)
-widgets.sortablejs(SurveyKo)
-widgets.ckeditor(SurveyKo)
-widgets.autocomplete(SurveyKo)
-widgets.bootstrapslider(SurveyKo)
+widgets.init(SurveyKo)
 
 SurveyCreator.editorLocalization.currentLocale = 'zh-cn'
 // 删掉编辑器survey中不需要的属性
