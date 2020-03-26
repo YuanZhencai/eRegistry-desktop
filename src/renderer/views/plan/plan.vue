@@ -3,6 +3,8 @@
     <el-row v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
       <el-col :span='24'>
         <el-button type="primary"
+                   size="mini"
+                   class='float-right'
                    @click="headerCreatePlan">创建随访计划</el-button>
       </el-col>
     </el-row>
