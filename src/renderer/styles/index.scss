@@ -118,3 +118,25 @@ h1, h2, h3, h4, h5, h6 {
 .col-scrollable{
   overflow-y: auto;
 }
+.mtb-10{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.text-ellipsis{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.notification-popper{
+  padding-right: 0;
+}
+.notification-popper .el-popover__title{
+  font-size: 12px;
+}
+.notification-badge .el-badge__content.is-fixed {
+  top: 14px;
+}
+.el-card__header{
+  padding: 5px 20px;
+  font-size: 12px;
+}

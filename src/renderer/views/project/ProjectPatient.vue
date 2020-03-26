@@ -17,28 +17,28 @@
                                         clearable @change="searchPatient"></el-date-picker>
                     </el-col>
                 </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" size="mini" icon="el-icon-download"
+                               v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId, 'PROJECT_VIEW_' + projectId])"
+                               @click="exportPatient">导出
+                    </el-button>
+                    <el-button type="primary" size="mini" icon="el-icon-plus"
+                               v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])"
+                               @click="newPatient">新建患者
+                        <template v-if="$hasAnyAuthority(['PROJECT_PATIENT_' + projectId])">
+                            <el-popover
+                                    placement="right-end"
+                                    title="添加患者二维码"
+                                    trigger="hover"
+                                    width="200"
+                                    v-if="task">
+                                <el-image :src="`/#/patient-task/${task.id}` | qrcode"></el-image>
+                                <i class="fa fa-qrcode" slot="reference"></i>
+                            </el-popover>
+                        </template>
+                    </el-button>
+                </el-form-item>
             </el-form>
-        </el-row>
-        <el-row>
-            <el-button type="primary" size="mini" icon="el-icon-download"
-                       v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId, 'PROJECT_VIEW_' + projectId])"
-                       @click="exportPatient">导出
-            </el-button>
-            <el-button type="primary" size="mini" icon="el-icon-plus"
-                       v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])"
-                       @click="newPatient">新建患者
-                <template v-if="$hasAnyAuthority(['PROJECT_PATIENT_' + projectId])">
-                    <el-popover
-                            placement="right-end"
-                            title="添加患者二维码"
-                            trigger="hover"
-                            width="200"
-                            v-if="task">
-                        <el-image :src="`/#/patient-task/${task.id}` | qrcode"></el-image>
-                        <i class="fa fa-qrcode" slot="reference"></i>
-                    </el-popover>
-                </template>
-            </el-button>
         </el-row>
         <el-row>
             <el-table v-loading="loading" :data="patients"

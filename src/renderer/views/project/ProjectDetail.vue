@@ -1,8 +1,7 @@
 <template>
-  <div class="app-container">
+  <div style="padding-top: 20px;">
     <el-container style="height: 100%">
-      <el-aside width="135px"
-                style="background-color: rgb(238, 241, 246)">
+      <el-aside width="115px">
         <el-menu :default-active="currentActive"
                  :active="currentActive">
           <el-menu-item index="home"
@@ -64,7 +63,7 @@
         </el-menu>
       </el-aside>
 
-      <el-main style="padding-top: 0; padding-right: 0">
+      <el-main style="padding-top: 0;">
         <router-view></router-view>
       </el-main>
     </el-container>

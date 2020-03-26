@@ -1,6 +1,6 @@
 <template>
-  <div class="">
-    <el-row class="">
+  <div>
+    <el-row>
       <div class="float-left row-flex">
         <div class="avatar" style="margin-right: 15px;">
           <el-avatar :size="50" :src="avatar"></el-avatar>
@@ -49,7 +49,7 @@
               </el-radio-group>
               <div class="clearfix"></div>
               <div class="chart-container" v-if="patientOption">
-                <v-chart :options="patientOption" autoresize style="width: 100%"></v-chart>
+                <v-chart :options="patientOption" autoresize style="width: 100%; height: 200px"></v-chart>
               </div>
             </div>
           </el-card>
@@ -58,7 +58,7 @@
               <span>随访数据</span>
             </div>
             <div class="chart-container" v-if="planOption">
-              <v-chart :options="planOption" autoresize style="width: 100%"></v-chart>
+              <v-chart :options="planOption" autoresize style="width: 100%; height: 200px;"></v-chart>
             </div>
           </el-card>
         </el-row>
@@ -82,9 +82,9 @@
             <span>项目成员</span>
           </div>
           <div class="card-body">
-            <el-row :gutter="48">
-              <el-col :span="12" v-for="(member, index) in members" :key="member.id" v-if="index < 6">
-                <user-avatar :username="member.username" :size="40"></user-avatar>
+            <el-row :gutter="10">
+              <el-col :span="8" v-for="(member, index) in members" :key="member.id" v-if="index < 6">
+                <user-avatar :username="member.username" :size="30"></user-avatar>
                 <span>
                   {{member.username}}
                   <template v-if="member.task">
@@ -109,7 +109,7 @@
               <div class="row-flex">
                 <user-avatar :username="change.author" :size="30"></user-avatar>
                 <div style="margin-left: 10px;">
-                  <p >{{change.author}} {{change.action}}</p>
+                  <p class="no-margin-bottom">{{change.author}} {{change.action}}</p>
                   <p class="no-margin-bottom">{{change.commitDate | formatDate('YYYY-MM-DD hh:mm:ss')}}</p>
                 </div>
               </div>
@@ -239,5 +239,8 @@
   }
   .divider-margin{
     margin: 10px 0;
+  }
+  .card-body{
+    font-size: 12px;
   }
 </style>

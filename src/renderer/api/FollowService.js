@@ -45,10 +45,11 @@ export function getFollowEvents(projectId) {
   })
 }
 
-export function getFollowRemindingCases() {
+export function getFollowRemindingCases(params) {
   return axios({
     url: `/api/follows/reminds`,
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 
