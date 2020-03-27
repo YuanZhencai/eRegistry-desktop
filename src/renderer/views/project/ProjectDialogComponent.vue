@@ -25,8 +25,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="结束时间" prop="endDate">
-                        <el-date-picker v-model="project.endDate"
+                    <el-form-item label="结束时间">
+                        <el-date-picker v-model="endDate"
                                         :picker-options="endDateOptions"
                                         type="date"
                                         placeholder="请选择日期"
@@ -61,7 +61,8 @@ export default {
     data() {
       return {
         projectId: null,
-        project: { name: null, beginDate: null, endDate: null },
+        project: {},
+        endDate: null,
         reports: [],
         rules: {
           name: [
@@ -97,7 +98,8 @@ export default {
         if (this.projectId) {
           this.getProject()
         } else {
-          this.project = { name: '', beginDate: '', endDate: '' }
+          this.project = { name: '', beginDate: '' }
+          this.endDate = null
         }
         this.display = true
         return new Promise((resolve, reject) => {
@@ -116,6 +118,7 @@ export default {
       getProject() {
         getProject(this.projectId).then(res => {
           this.project = res.data
+          this.endDate = this.project.endDate
         })
       },
       getReports() {
@@ -125,6 +128,7 @@ export default {
       },
       confirm(formName) {
         this.project.chargedBy = this.name
+        this.project.endDate = this.endDate
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (this.projectId) {
@@ -146,16 +150,18 @@ export default {
         })
       },
       disableBeginDate(beginDate) {
-        if (!beginDate || !this.project.endDate) {
+        if (!beginDate || !this.endDate) {
           return false
+        } else if (this.endDate) {
+          return beginDate.getTime() >= new Date(this.endDate).getTime()
         }
-        return beginDate.getTime() >= this.project.endDate.getTime()
       },
       disableEndDate(endDate) {
         if (!endDate || !this.project.beginDate) {
           return false
+        } else if (this.project.beginDate) {
+          return endDate.getTime() <= new Date(this.project.beginDate).getTime()
         }
-        return endDate.getTime() <= this.project.beginDate.getTime()
       },
       findUserRoles(callback) {
         store.dispatch('GetInfo').then(res => { // 拉取用户信息
