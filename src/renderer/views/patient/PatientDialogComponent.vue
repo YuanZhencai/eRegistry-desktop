@@ -11,13 +11,13 @@
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="出生日期">
-                <el-date-picker type="date" placeholder="开始时间" v-model="patient.birthday" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="请填写出生日期" v-model="patient.birthday" style="width: 100%;"></el-date-picker>
             </el-form-item>
             <el-form-item label="就诊日期">
-                <el-date-picker type="date" placeholder="开始时间" v-model="patient.visitDate" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="请填写就诊日期" v-model="patient.visitDate" style="width: 100%;"></el-date-picker>
             </el-form-item>
-            <el-form-item label="电话">
-                <el-input v-model="patient.telephone"></el-input>
+            <el-form-item label="电话" prop="telephone">
+                <el-input v-model="patient.telephone" placeholder="请填写手机号码"></el-input>
             </el-form-item>
             <el-form-item label="备用电话">
                 <el-input v-model="patient.reserveTelephone"></el-input>
@@ -53,6 +53,9 @@
         rules: {
           name: [
             { required: true, message: '请输入患者姓名', trigger: 'blur' }
+          ],
+          telephone: [
+            { pattern: /^(1(3|4|5|6|7|8|9)\d{9})$/, message: '手机号码有误，请重填', trigger: 'blur' }
           ]
         },
         patient: { name: '' },
