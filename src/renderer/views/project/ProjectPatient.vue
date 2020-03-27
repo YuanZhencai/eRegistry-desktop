@@ -82,16 +82,15 @@
         <el-row>
             <el-pagination background
                            :current-page="currentPage"
-                           :page-sizes="[10, 20, 30, 40]"
                            :page-size="pageSize"
-                           layout="total, sizes, prev, pager, next, jumper"
+                           layout="total, prev, pager, next, jumper"
                            :total="total"
                            @current-change="currentChange"
-                           @size-change="sizeChange" class="pagination">
+                           class="pagination">
             </el-pagination>
         </el-row>
         <patient-dialog-component ref="patient-dialog"></patient-dialog-component>
-        <el-dialog v-if="exportDialogVisible" title="导出"
+        <el-dialog v-if="exportDialogVisible" title="导出" width="500px"
                    :visible.sync="exportDialogVisible" :before-close="closeDialog">
             <div class="text-center" v-if="project">
                 <el-image v-if="project.name"
@@ -168,10 +167,6 @@ export default {
       },
       currentChange: function(currentPage) {
         this.currentPage = currentPage
-        this.getPatients()
-      },
-      sizeChange: function(val) {
-        this.pageSize = val
         this.getPatients()
       },
       getPatients() {

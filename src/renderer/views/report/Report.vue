@@ -178,10 +178,6 @@
           this.order = sort.order
           this.transition()
         },
-        sizeChange(size) {
-          this.size = size
-          this.transition()
-        },
         openRemoveDialog(report) {
           this.remove = report
           this.removeDialog = true

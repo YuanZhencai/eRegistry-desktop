@@ -1,5 +1,5 @@
 <template>
-    <el-dialog
+    <el-dialog width="500px"
             title="撤回审核"
             :visible.sync="dialogVisible"
             :before-close="handleClose">

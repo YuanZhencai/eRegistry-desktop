@@ -11,7 +11,7 @@
   import 'survey-vue/modern.css'
 
   const Survey = SurveyVue.Survey
-  Survey.cssType = 'winterstone'
+  SurveyVue.StylesManager.applyTheme('winterstone')
 
   widgets.init(SurveyVue)
 

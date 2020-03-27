@@ -24,12 +24,12 @@
             </el-table>
         </el-row>
         <el-row>
-            <el-pagination background layout="total, sizes, prev, pager, next, jumper"
-                           :total="total" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" :current-page="currentPage"
-                           @current-change="currentChange" @size-change="sizeChange" class="pagination">
+            <el-pagination background layout="total, prev, pager, next, jumper"
+                           :total="total" :page-size="pageSize" :current-page="currentPage"
+                           @current-change="currentChange" class="pagination">
             </el-pagination>
         </el-row>
-        <el-dialog v-if="deleteCenterDialogVisible" title="确认删除项目中心" :visible.sync="deleteCenterDialogVisible" :before-close="closeDialog">
+        <el-dialog v-if="deleteCenterDialogVisible" width="500px" title="确认删除项目中心" :visible.sync="deleteCenterDialogVisible" :before-close="closeDialog">
             <span>是否确认删除中心 '{{this.selectedCenter.name}}' ？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="deleteCenterDialogVisible = false">取 消</el-button>
@@ -111,10 +111,6 @@
       },
       currentChange: function(currentPage) {
         this.currentPage = currentPage
-        this.getCenters()
-      },
-      sizeChange: function(val) {
-        this.pageSize = val
         this.getCenters()
       },
       closeDialog: function() {

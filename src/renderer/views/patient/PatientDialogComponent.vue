@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑患者" :visible.sync="display" :before-close="close">
+    <el-dialog title="创建或编辑患者" width="500px" :visible.sync="display" :before-close="close">
         <el-form label-width="75px" size="mini" :model="patient" :rules="rules" ref="patientForm">
             <el-form-item label="姓名" prop="name">
                 <el-input v-model="patient.name"></el-input>

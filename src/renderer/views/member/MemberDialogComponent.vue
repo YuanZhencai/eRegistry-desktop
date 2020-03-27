@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑成员" :visible.sync="display" :before-close="close">
+    <el-dialog title="创建或编辑成员" width="500px" :visible.sync="display" :before-close="close">
         <el-row :gutter="8">
             <el-col :span="8">
                 <div>

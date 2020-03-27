@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="创建或编辑分中心成员" :visible.sync="display" :before-close="close">
+    <el-dialog title="创建或编辑分中心成员" width="500px" :visible.sync="display" :before-close="close">
         <el-form label-width="80px" size="mini">
             <el-form-item label="成员">
                 <el-input v-model="centerMember.username" :disabled="true"></el-input>

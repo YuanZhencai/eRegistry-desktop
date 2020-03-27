@@ -38,12 +38,12 @@
             </el-table>
         </el-row>
         <el-row>
-            <el-pagination background layout="total, sizes, prev, pager, next, jumper"
-                           :total="total" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" :current-page="currentPage"
-                           @current-change="currentChange" @size-change="sizeChange" class="pagination">
+            <el-pagination background layout="total, prev, pager, next, jumper"
+                           :total="total" :page-size="pageSize" :current-page="currentPage"
+                           @current-change="currentChange" class="pagination">
             </el-pagination>
         </el-row>
-        <el-dialog v-if="deleteDialogVisible" title="确认删除项目" :visible.sync="deleteDialogVisible" :before-close="closeDialog">
+        <el-dialog v-if="deleteDialogVisible" width="500px" title="确认删除项目" :visible.sync="deleteDialogVisible" :before-close="closeDialog">
             <span>是否确认删除项目 '{{this.selectedProject.name}}'？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="deleteDialogVisible = false">取 消</el-button>
@@ -103,10 +103,6 @@ export default {
       },
       currentChange: function(currentPage) {
         this.currentPage = currentPage
-        this.getProjects()
-      },
-      sizeChange: function(val) {
-        this.pageSize = val
         this.getProjects()
       },
       view(projectId) {
