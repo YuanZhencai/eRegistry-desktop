@@ -30,7 +30,6 @@ function createWindow() {
 
   // 装载应用的index.html页面
   mainWindow.loadURL(winURL)
-  mainWindow.webContents.openDevTools()
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -71,7 +70,6 @@ function onLogin() {
   ipcMain.on('login', async(event, args) => {
     const token = args.token
     const referrer = args.baseApi
-    console.info('referrer', referrer)
 
     const filter = {
       urls: ['*']
