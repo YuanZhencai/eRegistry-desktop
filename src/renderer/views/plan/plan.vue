@@ -224,6 +224,7 @@ export default {
       })
     },
     async editPlan(id) {
+      this.isButtonDisabled = false
       this.dialogStatus = 'update'
       this.editCreateDialog = true
       this.crfValue = ''
@@ -240,6 +241,7 @@ export default {
       }
     },
     async updatePlan() {
+      this.isButtonDisabled = true
       this.dialogFormData['reportId'] = this.crfValue
       await updatePlan(this.dialogFormData).then((res) => { })
       this.$nextTick(() => {
