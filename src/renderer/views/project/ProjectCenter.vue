@@ -33,7 +33,7 @@
             <span>是否确认删除中心 '{{this.selectedCenter.name}}' ？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="deleteCenterDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="confirmDelete">删 除</el-button>
+                <el-button type="primary" @click="confirmDelete" :disabled="isSaving">删 除</el-button>
             </span>
         </el-dialog>
         <center-dialog-component ref="center-dialog"></center-dialog-component>
@@ -64,7 +64,8 @@
           name: 'c.name',
           no: 'c.no',
           chargedBy: 'c.charged_by'
-        }
+        },
+        isSaving: false
       }
     },
     created() {
@@ -117,10 +118,14 @@
         this.deleteCenterDialogVisible = false
       },
       confirmDelete() {
+        this.isSaving = true
         deleteCenter(this.selectedCenter.id).then((res) => {
+          this.isSaving = false
           this.closeDialog()
           this.loading = true
           this.getCenters()
+        }, () => {
+          this.isSaving = false
         })
       }
     }

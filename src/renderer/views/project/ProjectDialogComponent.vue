@@ -41,7 +41,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button size="mini" @click="cancel">取 消</el-button>
-            <el-button size="mini" type="primary" @click="confirm('projectForm')">确 定</el-button>
+            <el-button size="mini" type="primary" :disabled="isSaving" @click="confirm('projectForm')">确 定</el-button>
         </div>
     </el-dialog>
 </template>
@@ -60,6 +60,7 @@ export default {
     },
     data() {
       return {
+        isSaving: false,
         projectId: null,
         project: {},
         endDate: null,
@@ -131,18 +132,25 @@ export default {
         this.project.endDate = this.endDate
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            this.isSaving = true
             if (this.projectId) {
               updateProject(this.project).then((res) => {
                 this.findUserRoles(() => {
+                  this.isSaving = false
                   this.display = false
                   this.resolve(res.data)
+                }, () => {
+                  this.isSaving = false
                 })
               })
             } else {
               createProject(this.project).then((res) => {
                 this.findUserRoles(() => {
+                  this.isSaving = false
                   this.display = false
                   this.resolve(res.data)
+                }, () => {
+                  this.isSaving = false
                 })
               })
             }

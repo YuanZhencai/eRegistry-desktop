@@ -22,7 +22,7 @@
         </div>
         <span slot="footer" class="dialog-footer">
             <el-button size="mini" @click="cancel">取 消</el-button>
-            <el-button size="mini" type="primary" @click="confirm('auditForm')">确 定</el-button>
+            <el-button size="mini" type="primary" :disabled="isSaving" @click="confirm('auditForm')">确 定</el-button>
         </span>
     </el-dialog>
 </template>
@@ -54,7 +54,8 @@
           opinion: [
             { required: true, message: '请填写拒绝原因', trigger: 'blur' }
           ]
-        }
+        },
+        isSaving: false
       }
     },
     methods: {
@@ -67,8 +68,12 @@
       confirm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            this.isSaving = true
             recordAudit(this.audit).then(res => {
+              this.isSaving = false
               this.handleClose('confirm', res.data)
+            }, () => {
+              this.isSaving = false
             })
           }
         })

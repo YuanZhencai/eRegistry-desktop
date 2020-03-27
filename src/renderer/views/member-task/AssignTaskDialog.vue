@@ -15,7 +15,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button size="mini" @click="cancel">取 消</el-button>
-            <el-button size="mini" type="primary" @click="confirm">确 定</el-button>
+            <el-button size="mini" type="primary" :disabled="isSaving" @click="confirm">确 定</el-button>
         </div>
     </el-dialog>
 </template>
@@ -38,7 +38,8 @@
         display: false,
         reject: null,
         resolve: null,
-        memberId: null
+        memberId: null,
+        isSaving: false
       }
     },
     methods: {
@@ -76,17 +77,24 @@
       confirm() {
         this.memberTask.memberId = this.member.id
         this.memberTask.projectId = this.member.projectId
+        this.isSaving = true
         if (this.memberTask.id !== undefined) {
           updateMemberTask(this.memberTask).then(response => {
+            this.isSaving = false
             this.memberTask = response.data
             this.display = false
             this.resolve(response.data)
+          }, () => {
+            this.isSaving = false
           })
         } else {
           createMemberTask(this.memberTask).then(response => {
+            this.isSaving = false
             this.memberTask = response.data
             this.display = false
             this.resolve(response.data)
+          }, () => {
+            this.isSaving = false
           })
         }
       }

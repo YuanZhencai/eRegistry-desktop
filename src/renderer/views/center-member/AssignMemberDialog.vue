@@ -15,7 +15,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button size="mini" @click="cancel">取 消</el-button>
-            <el-button size="mini" type="primary" @click="confirm">确 定</el-button>
+            <el-button size="mini" type="primary" :disabled="isSaving" @click="confirm">确 定</el-button>
         </div>
     </el-dialog>
 </template>
@@ -35,7 +35,8 @@
         display: false,
         reject: null,
         resolve: null,
-        memberId: null
+        memberId: null,
+        isSaving: false
       }
     },
     methods: {
@@ -69,17 +70,24 @@
         this.reject('close')
       },
       confirm() {
+        this.isSaving = true
         if (this.centerId) {
           updateCenterMember(this.centerMember).then(response => {
+            this.isSaving = false
             this.centerMember = response.data
             this.display = false
             this.resolve(response.data)
+          }, () => {
+            this.isSaving = false
           })
         } else {
           createCenterMember(this.centerMember).then(response => {
+            this.isSaving = false
             this.centerMember = response.data
             this.display = false
             this.resolve(response.data)
+          }, () => {
+            this.isSaving = false
           })
         }
       }

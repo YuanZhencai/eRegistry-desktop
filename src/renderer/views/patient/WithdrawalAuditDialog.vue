@@ -6,7 +6,7 @@
         <div>确定撤回审核吗</div>
         <span slot="footer" class="dialog-footer">
             <el-button size="mini" @click="handleClose">取 消</el-button>
-            <el-button size="mini" type="primary" @click="confirm">确 定</el-button>
+            <el-button size="mini" type="primary" :disabled="isSaving" @click="confirm">确 定</el-button>
         </span>
     </el-dialog>
 </template>
@@ -24,7 +24,9 @@
       }
     },
     data() {
-      return {}
+      return {
+        isSaving: false
+      }
     },
     methods: {
       handleClose(type, audit) {
@@ -34,8 +36,12 @@
         this.handleClose('cancel')
       },
       confirm() {
+        this.isSaving = true
         withdrawalAudit(this.audit).then(res => {
+          this.isSaving = false
           this.handleClose('confirm', res.data)
+        }, () => {
+          this.isSaving = false
         })
       }
     }

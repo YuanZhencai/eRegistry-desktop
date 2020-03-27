@@ -65,7 +65,7 @@
         </el-row>
         <div slot="footer" class="dialog-footer">
             <el-button size="mini" @click="cancel">取 消</el-button>
-            <el-button size="mini" type="primary" @click="confirm">确 定</el-button>
+            <el-button size="mini" type="primary" :disabled="isSaving" @click="confirm">确 定</el-button>
         </div>
     </el-dialog>
 </template>
@@ -97,7 +97,8 @@
         users: [],
         members: {},
         selectedUsers: [],
-        projectId
+        projectId,
+        isSaving: false
       }
     },
     created() {
@@ -185,9 +186,13 @@
             projectId: this.projectId,
             users: this.selectedUsers
           }
+          this.isSaving = true
           createBatchMember(batchMember).then((response) => {
+            this.isSaving = false
             this.display = false
             this.resolve(response.data)
+          }, () => {
+            this.isSaving = false
           })
         } else {
           this.$message({

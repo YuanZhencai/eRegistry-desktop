@@ -25,7 +25,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button size="mini" @click="cancel">取 消</el-button>
-            <el-button size="mini" type="primary" @click="confirm('centerForm')">保存</el-button>
+            <el-button size="mini" type="primary" :disabled="isSaving" @click="confirm('centerForm')">保存</el-button>
         </div>
     </el-dialog>
 </template>
@@ -57,7 +57,8 @@
           chargedBy: [
             { required: true, message: '负责人不能为空', trigger: 'blur' }
           ]
-        }
+        },
+        isSaving: false
       }
     },
     methods: {
@@ -90,15 +91,22 @@
       confirm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            this.isSaving = true
             if (this.centerId) {
               updateCenter(this.center).then(res => {
+                this.isSaving = false
                 this.display = false
                 this.resolve(res.data)
+              }, () => {
+                this.isSaving = false
               })
             } else {
               createCenter(this.center).then(res => {
+                this.isSaving = false
                 this.display = false
                 this.resolve(res.data)
+              }, () => {
+                this.isSaving = false
               })
             }
           }
