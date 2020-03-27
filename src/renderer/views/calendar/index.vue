@@ -1,31 +1,35 @@
 <template>
-  <a-calendar @panelChange="panelChange"
-              local="local"
-              ref='calendar'>
-    <ul class="events"
-        slot="dateCellRender"
-        slot-scope="value">
-      <li v-for="(items,index) in getListData(value)"
-          :key="index">
-        <a-badge :status="items.state"
-                 :text="items.text" />
-      </li>
-    </ul>
-    <template slot="monthCellRender"
-              slot-scope="value">
-      <div v-for="(items,index) in getMonthData(value)"
-           :key="index"
-           class="notes-month">
-        <a-badge :status="items.state"
-                 :text="items.text" />
-      </div>
-    </template>
-  </a-calendar>
+  <a-locale-provider :locale="local">
+    <a-calendar @panelChange="panelChange"
+                local="local"
+                ref='calendar'>
+      <ul class="events"
+          slot="dateCellRender"
+          slot-scope="value">
+        <li v-for="(items,index) in getListData(value)"
+            :key="index">
+          <a-badge :status="items.state"
+                   :text="items.text" />
+        </li>
+      </ul>
+      <template slot="monthCellRender"
+                slot-scope="value">
+        <div v-for="(items,index) in getMonthData(value)"
+             :key="index"
+             class="notes-month">
+          <a-badge :status="items.state"
+                   :text="items.text" />
+        </div>
+      </template>
+    </a-calendar>
+  </a-locale-provider>
 </template>
 <script>
 import { getCalendar } from '@/api/CalendarService'
 import moment from 'moment'
+import zhCN from 'ant-design-vue/es/locale-provider/zh_CN'
 export default {
+  name: 'calendar',
   data() {
     return {
       projectId: this.$route.params.projectId,
@@ -33,7 +37,8 @@ export default {
       begin: '',
       end: '',
       calendarData: [],
-      arrayObject: []
+      arrayObject: [],
+      local: zhCN
     }
   },
   mounted() {
