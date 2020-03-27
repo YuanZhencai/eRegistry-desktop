@@ -65,17 +65,16 @@
         }
       },
       findReminds() {
-        const that = this
         this.loading = true
         getFollowRemindingCases({
           page: this.currentPage - 1,
           size: this.pageSize
         }).then((res) => {
           res.data.forEach((item) => {
-            that.reminds.push(item)
+            this.reminds.push(item)
           })
-          that.loading = false
-          that.total = Number(res.headers['x-total-count'])
+          this.loading = false
+          this.total = Number(res.headers['x-total-count'])
         })
       }
     }

@@ -104,13 +104,12 @@
     },
     methods: {
       show() {
-        const that = this
         this.findProjectMembers()
         this.findProjects()
         this.display = true
         return new Promise((resolve, reject) => {
-          that.resolve = resolve
-          that.reject = reject
+          this.resolve = resolve
+          this.reject = reject
         })
       },
       // 根据输入查找用户
@@ -121,15 +120,14 @@
         })
       },
       findProjects() {
-        const vm = this
         this.projects = []
         // 查找当前用户所创建的项目
         getMineProjects().then(response => {
           const data = response.data
           for (let i = 0; i < data.length; i++) {
             const project = data[i]
-            if (vm.projectId !== project.id) {
-              vm.projects.push(project) // 用户参与的其他项目
+            if (this.projectId !== project.id) {
+              this.projects.push(project) // 用户参与的其他项目
             }
           }
         })
@@ -144,11 +142,10 @@
       },
       findProjectMembers() {
         // 查找当前项目的成员
-        const vm = this
         this.members = []
         getProjectUsers(this.projectId).then(response => {
           response.data.forEach((member) => {
-            this.$set(vm.members, member.id, member)
+            this.$set(this.members, member.id, member)
           })
         })
       },

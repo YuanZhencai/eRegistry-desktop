@@ -93,7 +93,6 @@ export default {
     },
     methods: {
       show(projectId) {
-        const that = this
         this.projectId = projectId
         if (this.projectId) {
           this.getProject()
@@ -102,8 +101,8 @@ export default {
         }
         this.display = true
         return new Promise((resolve, reject) => {
-          that.resolve = resolve
-          that.reject = reject
+          this.resolve = resolve
+          this.reject = reject
         })
       },
       cancel() {
@@ -125,22 +124,21 @@ export default {
         })
       },
       confirm(formName) {
-        const that = this
         this.project.chargedBy = this.name
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (this.projectId) {
               updateProject(this.project).then((res) => {
                 this.findUserRoles(() => {
-                  that.display = false
-                  that.resolve(res.data)
+                  this.display = false
+                  this.resolve(res.data)
                 })
               })
             } else {
               createProject(this.project).then((res) => {
                 this.findUserRoles(() => {
-                  that.display = false
-                  that.resolve(res.data)
+                  this.display = false
+                  this.resolve(res.data)
                 })
               })
             }

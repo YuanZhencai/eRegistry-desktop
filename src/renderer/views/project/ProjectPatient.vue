@@ -170,8 +170,7 @@ export default {
         this.getPatients()
       },
       getPatients() {
-        const vm = this
-        vm.loading = true
+        this.loading = true
         getProjectPatients(this.projectId, {
           page: this.currentPage - 1,
           size: this.pageSize,
@@ -180,9 +179,9 @@ export default {
           'GT_patient.visitDate': this.form.startDate,
           'LT_patient.visitDate': this.form.endDate
         }).then((res) => {
-          vm.patients = res.data
-          vm.loading = false
-          vm.total = Number(res.headers['x-total-count'])
+          this.patients = res.data
+          this.loading = false
+          this.total = Number(res.headers['x-total-count'])
         })
       },
       searchPatient() {

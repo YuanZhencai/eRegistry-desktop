@@ -62,13 +62,12 @@
     },
     methods: {
       show(centerId) {
-        const that = this
         this.centerId = centerId
         this.display = true
         this.getCenter()
         return new Promise((resolve, reject) => {
-          that.resolve = resolve
-          that.reject = reject
+          this.resolve = resolve
+          this.reject = reject
         })
       },
       getCenter() {
@@ -89,18 +88,17 @@
         this.reject('close')
       },
       confirm(formName) {
-        const that = this
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (this.centerId) {
               updateCenter(this.center).then(res => {
-                that.display = false
-                that.resolve(res.data)
+                this.display = false
+                this.resolve(res.data)
               })
             } else {
               createCenter(this.center).then(res => {
-                that.display = false
-                that.resolve(res.data)
+                this.display = false
+                this.resolve(res.data)
               })
             }
           }

@@ -40,14 +40,13 @@
     },
     methods: {
       show(memberId) {
-        const that = this
         this.memberId = memberId
         this.findCenters()
         this.findCenterMember()
         this.display = true
         return new Promise((resolve, reject) => {
-          that.resolve = resolve
-          that.reject = reject
+          this.resolve = resolve
+          this.reject = reject
         })
       },
       findCenters: function() {
@@ -70,18 +69,17 @@
         this.reject('close')
       },
       confirm() {
-        const that = this
         if (this.centerId) {
           updateCenterMember(this.centerMember).then(response => {
             this.centerMember = response.data
-            that.display = false
-            that.resolve(response.data)
+            this.display = false
+            this.resolve(response.data)
           })
         } else {
           createCenterMember(this.centerMember).then(response => {
             this.centerMember = response.data
-            that.display = false
-            that.resolve(response.data)
+            this.display = false
+            this.resolve(response.data)
           })
         }
       }

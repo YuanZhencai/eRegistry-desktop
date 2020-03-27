@@ -43,14 +43,13 @@
     },
     methods: {
       show(memberId) {
-        const that = this
         this.memberId = memberId
         this.display = true
         this.findMember()
         this.findMemberTask()
         return new Promise((resolve, reject) => {
-          that.resolve = resolve
-          that.reject = reject
+          this.resolve = resolve
+          this.reject = reject
         })
       },
       findMember() {
@@ -59,11 +58,10 @@
         })
       },
       findMemberTask() {
-        const vm = this
         getTaskByMemberId(this.memberId).then(res => {
-          vm.memberTask = res.data
-          if (!vm.memberTask || !vm.memberTask.type) {
-            vm.memberTask = { type: null }
+          this.memberTask = res.data
+          if (!this.memberTask || !this.memberTask.type) {
+            this.memberTask = { type: null }
           }
         })
       },
@@ -76,20 +74,19 @@
         this.reject('close')
       },
       confirm() {
-        const that = this
         this.memberTask.memberId = this.member.id
         this.memberTask.projectId = this.member.projectId
         if (this.memberTask.id !== undefined) {
           updateMemberTask(this.memberTask).then(response => {
             this.memberTask = response.data
-            that.display = false
-            that.resolve(response.data)
+            this.display = false
+            this.resolve(response.data)
           })
         } else {
           createMemberTask(this.memberTask).then(response => {
             this.memberTask = response.data
-            that.display = false
-            that.resolve(response.data)
+            this.display = false
+            this.resolve(response.data)
           })
         }
       }

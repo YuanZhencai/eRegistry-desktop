@@ -62,7 +62,6 @@
     },
     methods: {
       show(patientId) {
-        const that = this
         this.patientId = patientId
         if (this.patientId) {
           this.getPatient()
@@ -71,26 +70,25 @@
         }
         this.display = true
         return new Promise((resolve, reject) => {
-          that.resolve = resolve
-          that.reject = reject
+          this.resolve = resolve
+          this.reject = reject
         })
       },
       getPatient() {
-        const vm = this
-        if (vm.patientId) {
-          getPatient(vm.patientId).then(res => {
-            vm.patient = Object.assign({}, vm.patient, res.data)
+        if (this.patientId) {
+          getPatient(this.patientId).then(res => {
+            this.patient = Object.assign({}, this.patient, res.data)
             const cityList = []
-            if (vm.patient.province) {
-              vm.$set(cityList, 0, vm.patient.province)
+            if (this.patient.province) {
+              this.$set(cityList, 0, this.patient.province)
             }
-            if (vm.patient.city) {
-              vm.$set(cityList, 1, vm.patient.city)
+            if (this.patient.city) {
+              this.$set(cityList, 1, this.patient.city)
             }
             if (this.patient.area) {
-              vm.$set(cityList, 2, vm.patient.area)
+              this.$set(cityList, 2, this.patient.area)
             }
-            vm.provinceCity = cityList
+            this.provinceCity = cityList
           })
         }
       },
@@ -108,21 +106,20 @@
         this.reject('close')
       },
       confirm(formName) {
-        const that = this
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (this.patientId) {
               updatePatient(this.patient).then(res => {
-                that.patient = res.data
-                that.display = false
-                that.resolve(res.data)
+                this.patient = res.data
+                this.display = false
+                this.resolve(res.data)
               })
             } else {
               this.patient.projectId = this.$route.params.projectId
               createPatient(this.patient).then(res => {
-                that.patient = res.data
-                that.display = false
-                that.resolve(res.data)
+                this.patient = res.data
+                this.display = false
+                this.resolve(res.data)
               })
             }
           }

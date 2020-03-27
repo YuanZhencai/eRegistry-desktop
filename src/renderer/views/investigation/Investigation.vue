@@ -104,7 +104,6 @@
         return (this.predicate && this.order) ? this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
       },
       loadAll() {
-        const that = this
         this.loading = true
         this.investigations = []
         const sort = this.sort()
@@ -114,10 +113,10 @@
           sort
         }, this.query())
         ).then((res) => {
-          that.investigations = res.data
-          that.totalItems = Number(res.headers['x-total-count'])
-          that.queryCount = that.totalItems
-          that.loading = false
+          this.investigations = res.data
+          this.totalItems = Number(res.headers['x-total-count'])
+          this.queryCount = this.totalItems
+          this.loading = false
         })
       },
       transition() {
@@ -150,11 +149,10 @@
         })
       },
       findQuestionnaireReport() {
-        const that = this
         getQuestionnaireReport(this.questionnaireId).then((res) => {
-          that.report = res.data
-          that.reportKeys()
-          that.loadAll()
+          this.report = res.data
+          this.reportKeys()
+          this.loadAll()
         })
       },
       reportKeys() {

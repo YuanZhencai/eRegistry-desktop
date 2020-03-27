@@ -12,7 +12,7 @@
   // 删掉编辑器survey中不需要的属性
   SurveyKo.JsonObject.metaData.removeProperty('survey', 'locale')
   SurveyKo.JsonObject.metaData.removeProperty('survey', 'cookieName')
-  SurveyKo.JsonObject.metaData.removeProperty('survey', 'mode')
+  SurveyKo.Serializer.findProperty('survey', 'mode').showMode = 'edit'
   SurveyKo.JsonObject.metaData.removeProperty('survey', 'calculatedValues')
   SurveyKo.JsonObject.metaData.removeProperty('survey', 'triggers')
   SurveyKo.JsonObject.metaData.removeProperty('survey', 'focusOnFirstError')
