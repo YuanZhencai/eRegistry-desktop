@@ -635,7 +635,8 @@
       "home": "首页",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
-        "main": "数据",
+        "main": "首页",
+        "patient": "患者",
         "report": "CRF设计",
         "project": "研究项目",
         "follow": "随访管理",
