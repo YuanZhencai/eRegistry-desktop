@@ -54,7 +54,7 @@
             <span>确定要删除 {{remove.title}} 吗?</span>
             <span slot="footer" class="dialog-footer">
         <el-button @click="removeDialog = false">取 消</el-button>
-        <el-button type="primary" @click="removeReport">确 定</el-button>
+        <el-button type="primary" :disabled="isRemoving" @click="removeReport">确 定</el-button>
       </span>
         </el-dialog>
         <el-dialog
@@ -68,7 +68,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
         <el-button @click="copyDialog = false">取 消</el-button>
-        <el-button type="primary" @click="copyReport('copyForm')">确 定</el-button>
+        <el-button type="primary" :disabled="isCoping" @click="copyReport('copyForm')">确 定</el-button>
       </span>
         </el-dialog>
         <el-dialog
@@ -124,10 +124,13 @@
           queryCount: null,
           login: this.$store.getters.name,
           removeDialog: false,
+          isRemoving: false,
           remove: {},
           copyDialog: false,
+          isCoping: false,
           copy: {},
           shareDialog: false,
+          isSharing: false,
           share: {
             report: {
               title: null
@@ -183,10 +186,14 @@
           this.removeDialog = true
         },
         removeReport() {
+          this.isRemoving = true
           deleteReport(this.remove.id).then(res => {
             this.removeDialog = false
+            this.isRemoving = false
             this.loadAll()
             this.remove = {}
+          }, () => {
+            this.isRemoving = false
           })
         },
         openCopyDialog(report) {
@@ -199,10 +206,14 @@
         copyReport(form) {
           this.$refs[form].validate((valid) => {
             if (valid) {
+              this.isCoping = true
               copyReport(this.copy).then(res => {
+                this.isCoping = false
                 this.loadAll()
                 this.copyDialog = false
                 this.copy = {}
+              }, () => {
+                this.isCoping = false
               })
             }
           })
@@ -222,7 +233,9 @@
         shareReport(form) {
           this.$refs[form].validate((valid) => {
             if (valid) {
+              this.isSharing = true
               shareReport(this.share).then(res => {
+                this.isSharing = false
                 this.loadAll()
                 this.shareDialog = false
                 this.share = {
@@ -231,6 +244,8 @@
                   },
                   username: null
                 }
+              }, () => {
+                this.isSharing = false
               })
             }
           })
