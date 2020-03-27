@@ -11,13 +11,13 @@
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="出生日期">
-                <el-date-picker type="date" placeholder="开始时间" v-model="patient.birthday" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="请填写出生日期" v-model="patient.birthday" style="width: 100%;"></el-date-picker>
             </el-form-item>
             <el-form-item label="就诊日期">
-                <el-date-picker type="date" placeholder="开始时间" v-model="patient.visitDate" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="请填写就诊日期" v-model="patient.visitDate" style="width: 100%;"></el-date-picker>
             </el-form-item>
-            <el-form-item label="电话">
-                <el-input v-model="patient.telephone"></el-input>
+            <el-form-item label="电话" prop="telephone">
+                <el-input v-model="patient.telephone" placeholder="请填写手机号码"></el-input>
             </el-form-item>
             <el-form-item label="备用电话">
                 <el-input v-model="patient.reserveTelephone"></el-input>
@@ -41,7 +41,7 @@
 
 <script>
   import { getPatient, createPatient, updatePatient } from '@/api/PatientService'
-  const Cascader = require('./pca-code.json')
+  const codes = require('./pca-code.json')
   export default {
     name: 'PatientDialogComponent',
     data() {
@@ -53,51 +53,51 @@
         rules: {
           name: [
             { required: true, message: '请输入患者姓名', trigger: 'blur' }
+          ],
+          telephone: [
+            { pattern: /^(1(3|4|5|6|7|8|9)\d{9})$/, message: '手机号码有误，请重填', trigger: 'blur' }
           ]
         },
         patient: { name: '' },
         provinceCity: [],
-        options: Cascader
+        options: []
       }
     },
     methods: {
       show(patientId) {
-        const that = this
-        this.patientId = patientId
-        if (this.patientId) {
-          this.getPatient()
-        } else {
-          this.patient = { name: '' }
-        }
+        this.patient = { name: '' }
+        this.provinceCity = []
+        this.options = JSON.parse(JSON.stringify(codes))
         this.display = true
+        this.patientId = patientId
+        this.findPatient()
         return new Promise((resolve, reject) => {
-          that.resolve = resolve
-          that.reject = reject
+          this.resolve = resolve
+          this.reject = reject
         })
       },
-      getPatient() {
-        const vm = this
-        if (vm.patientId) {
-          getPatient(vm.patientId).then(res => {
-            vm.patient = Object.assign({}, vm.patient, res.data)
+      findPatient() {
+        if (this.patientId) {
+          getPatient(this.patientId).then(res => {
+            this.patient = res.data
             const cityList = []
-            if (vm.patient.province) {
-              vm.$set(cityList, 0, vm.patient.province)
+            if (this.patient.province) {
+              cityList.push(this.patient.province)
             }
-            if (vm.patient.city) {
-              vm.$set(cityList, 1, vm.patient.city)
+            if (this.patient.city) {
+              cityList.push(this.patient.city)
             }
             if (this.patient.area) {
-              vm.$set(cityList, 2, vm.patient.area)
+              cityList.push(this.patient.area)
             }
-            vm.provinceCity = cityList
+            this.provinceCity = cityList
           })
         }
       },
       handleChange(value) {
-        this.$set(this.patient, 'province', value[0])
-        this.$set(this.patient, 'city', value[1])
-        this.$set(this.patient, 'area', value[2])
+        this.patient.province = value[0]
+        this.patient.city = value[1]
+        this.patient.area = value[2]
       },
       cancel() {
         this.display = false
@@ -108,21 +108,18 @@
         this.reject('close')
       },
       confirm(formName) {
-        const that = this
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (this.patientId) {
               updatePatient(this.patient).then(res => {
-                that.patient = res.data
-                that.display = false
-                that.resolve(res.data)
+                this.display = false
+                this.resolve(res.data)
               })
             } else {
               this.patient.projectId = this.$route.params.projectId
               createPatient(this.patient).then(res => {
-                that.patient = res.data
-                that.display = false
-                that.resolve(res.data)
+                this.display = false
+                this.resolve(res.data)
               })
             }
           }
