@@ -95,6 +95,7 @@
             class="dialog-footer">
         <el-button @click="deleteDialogVisible = false">取 消</el-button>
         <el-button type="primary"
+                   :disabled="isButtonDisabled"
                    @click="confirmDelete(deleteDialoglist.id)">确 定</el-button>
       </span>
     </el-dialog>
@@ -248,9 +249,11 @@ export default {
     },
     planDeleteDialog(questionnaire) {
       this.deleteDialogVisible = true
+      this.isButtonDisabled = false
       this.deleteDialoglist = questionnaire
     },
     async confirmDelete(id) {
+      this.isButtonDisabled = true
       await deletePlan(id).then((res) => { })
       this.deleteDialogVisible = false
       this.getplan()
