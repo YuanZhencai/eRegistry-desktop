@@ -141,7 +141,7 @@ export default {
         size: 10
       },
       rules: {
-        name: [{ required: true, message: '本字段不能为空', trigger: 'blur' }],
+        name: [{ required: true, message: '本字段不能为空', trigger: 'change' }],
         condition: [{ required: true, message: '本字段不能为空', trigger: 'blur' }],
         remindingInterval: [{ required: false, trigger: 'change', validator: remindingInterval }]
       },
@@ -208,14 +208,19 @@ export default {
       })
     },
     async createPlan() {
+      try {
+        this.isButtonDisabled = true
+        this.dialogFormData['projectId'] = this.projectId
+        this.dialogFormData['reportId'] = this.crfValue
+        await createPlan(this.dialogFormData).then((res) => { })
+        this.editCreateDialog = false
+        this.getplan()
+      } catch (e) {
+        this.isButtonDisabled = false
+      }
       await getCrfList().then((res) => {
         this.crflistData = res.data
       })
-      this.dialogFormData['projectId'] = this.projectId
-      this.dialogFormData['reportId'] = this.crfValue
-      await createPlan(this.dialogFormData).then((res) => { })
-      this.editCreateDialog = false
-      this.getplan()
     },
     async editPlan(id) {
       this.dialogStatus = 'update'
