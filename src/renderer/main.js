@@ -1,7 +1,8 @@
 import Vue from 'vue'
-import { Calendar, Badge, Icon } from 'ant-design-vue'
+import { Calendar, Badge, Icon, LocaleProvider } from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 import 'normalize.css/normalize.css' // A modern alternative to CSS reset
+
 import 'bootstrap/dist/css/bootstrap.css'
 
 import ElementUI from 'element-ui'
@@ -25,6 +26,7 @@ if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 
 Vue.use(ElementUI, { locale: locale, size: 'mini' })
 Vue.use(Calendar)
+Vue.use(LocaleProvider)
 Vue.use(Badge)
 Vue.use(Icon)
 Vue.config.productionTip = false

@@ -11,8 +11,6 @@ if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
-const referrer = `${process.env.BASE_API}`
-
 let mainWindow
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
@@ -72,14 +70,15 @@ function onDownload() {
 function onLogin() {
   ipcMain.on('login', async(event, args) => {
     const token = args.token
+    const referrer = args.baseApi
+    console.info('referrer', referrer)
 
     const filter = {
       urls: ['*']
     }
 
     session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
-      const authorization = details.requestHeaders['authorization']
-      if (!authorization) {
+      if (token) {
         details.requestHeaders['Authorization'] = `Bearer ${token}`
       }
       if (referrer) {

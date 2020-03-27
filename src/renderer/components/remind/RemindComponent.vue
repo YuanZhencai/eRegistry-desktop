@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-badge class="notification-badge" :value="total" style="cursor: pointer">
+        <el-badge class="notification-badge" :value="total" :max="99" :hidden="total===0" style="cursor: pointer">
             <el-popover
                     title="随访提醒"
                     placement="bottom"

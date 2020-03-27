@@ -1,14 +1,16 @@
 <template>
   <div class="app-container">
-    <el-card class="box-card">
-      <el-button type="primary"
-                 size="medium "
-                 v-if="project && project.name"
-                 v-download="{name: `${project.name}.zip`, url: `/api/projects/${projectId}/changes/data`}"
-                 class="export">
-        <span class="fa fa-download"></span>
-        <span class="d-none d-md-inline">导出</span>
-      </el-button>
+    <el-card>
+      <div v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId, 'PROJECT_VIEW_' + projectId])">
+        <el-button type="primary"
+                   size="mini "
+                   v-if="project && project.name"
+                   v-download="{name: `${project.name}.zip`, url: `/api/projects/${projectId}/changes/data`}"
+                   class="float-right">
+          <span class="fa fa-download"></span>
+          <span class="d-none d-md-inline">导出</span>
+        </el-button>
+      </div>
       <el-form ref="form"
                :inline="true"
                label-width="120px"
@@ -147,8 +149,5 @@ export default {
 <style scoped>
 .box-card {
   overflow: hidden;
-}
-.export {
-  float: right;
 }
 </style>

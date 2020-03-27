@@ -6,11 +6,14 @@
 
 <script>
   import * as SurveyVue from 'survey-vue'
+  import * as widgets from './widgets'
   import 'survey-vue/survey.css'
   import 'survey-vue/modern.css'
 
   const Survey = SurveyVue.Survey
   SurveyVue.StylesManager.applyTheme('winterstone')
+
+  widgets.init(SurveyVue)
 
   export default {
     name: 'survey-view',
