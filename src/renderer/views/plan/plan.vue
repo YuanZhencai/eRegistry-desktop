@@ -5,7 +5,7 @@
         <el-button type="primary"
                    size="mini"
                    class='float-right'
-                   @click="headerCreatePlan">创建随访计划</el-button>
+                   @click="headerCreatePlan('projectForm')">创建随访计划</el-button>
       </el-col>
     </el-row>
     <el-table :data="followList"
@@ -30,7 +30,7 @@
                        v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
         <template slot-scope="scope">
           <el-button type="text"
-                     @click="editPlan(scope.row.id)">
+                     @click="editPlan(scope.row.id,'projectForm')">
             编辑
           </el-button>
           <el-divider direction="vertical"></el-divider>
@@ -49,7 +49,7 @@
                width="500px">
       <el-form :model="dialogFormData"
                :rules="rules"
-               ref="headerCreatePlan"
+               ref="projectForm"
                label-width="100px">
         <el-form-item label="名称:"
                       prop="name">
@@ -83,7 +83,7 @@
         <el-button @click="editCreateDialog = false">取 消</el-button>
         <el-button type="primary"
                    :disabled="isButtonDisabled"
-                   @click="dialogStatus==='create'?createPlan():updatePlan()">确 定</el-button>
+                   @click="dialogStatus==='create'?createPlan('projectForm'):updatePlan('projectForm')">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog title="确认删除"
@@ -121,6 +121,7 @@ export default {
           callback(new Error('提醒区间为 0 - 7'))
         } else {
           this.isButtonDisabled = false
+          callback()
         }
       } else {
         if (value > this.dialogFormData.condition) {
@@ -128,6 +129,7 @@ export default {
           callback(new Error('提醒区间为 0 - ' + this.dialogFormData.condition))
         } else {
           this.isButtonDisabled = false
+          callback()
         }
       }
     }
@@ -142,9 +144,9 @@ export default {
         size: 10
       },
       rules: {
-        name: [{ required: true, message: '本字段不能为空', trigger: 'change' }],
+        name: [{ required: true, message: '本字段不能为空', trigger: 'blur' }],
         condition: [{ required: true, message: '本字段不能为空', trigger: 'blur' }],
-        remindingInterval: [{ required: false, trigger: 'change', validator: remindingInterval }]
+        remindingInterval: [{ required: false, trigger: 'blur', validator: remindingInterval }]
       },
       dialogStatus: '',
       textMap: {
@@ -198,7 +200,8 @@ export default {
         this.total = Number(res.headers['x-total-count'])
       })
     },
-    async headerCreatePlan(dialogFormData) {
+    async headerCreatePlan(formName) {
+      this.$refs[formName].resetFields()
       this.isButtonDisabled = false
       this.dialogStatus = 'create'
       this.dialogFormData = {}
@@ -223,7 +226,7 @@ export default {
         this.crflistData = res.data
       })
     },
-    async editPlan(id) {
+    async editPlan(id, formName) {
       this.isButtonDisabled = false
       this.dialogStatus = 'update'
       this.editCreateDialog = true
@@ -239,14 +242,19 @@ export default {
           this.crfValue = this.crflistData[i].id
         }
       }
+      this.$nextTick(() => {
+        this.$refs[formName].clearValidate()
+      })
     },
-    async updatePlan() {
+    updatePlan(formName) {
       this.isButtonDisabled = true
       this.dialogFormData['reportId'] = this.crfValue
-      await updatePlan(this.dialogFormData).then((res) => { })
-      this.$nextTick(() => {
-        this.editCreateDialog = false
-        this.getplan()
+      this.$refs[formName].validate(async(valid) => {
+        if (valid) {
+          await updatePlan(this.dialogFormData).then((res) => { })
+          this.editCreateDialog = false
+          this.getplan()
+        }
       })
     },
     planDeleteDialog(questionnaire) {
