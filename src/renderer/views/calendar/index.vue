@@ -8,8 +8,10 @@
           slot-scope="value">
         <li v-for="(items,index) in getListData(value)"
             :key="index">
-          <a-badge :status="items.state"
-                   :text="items.text" />
+          <router-link :to="{name: 'patientDetail',params:{patientId:items.id}}">
+            <a-badge :status="items.state"
+                     :text="items.text" />
+          </router-link>
         </li>
       </ul>
       <template slot="monthCellRender"
@@ -17,8 +19,10 @@
         <div v-for="(items,index) in getMonthData(value)"
              :key="index"
              class="notes-month">
-          <a-badge :status="items.state"
-                   :text="items.text" />
+          <router-link :to="{name: 'patientDetail',params:{patientId:items.id}}">
+            <a-badge :status="items.state"
+                     :text="items.text" />
+          </router-link>
         </div>
       </template>
     </a-calendar>
@@ -109,7 +113,8 @@ export default {
       const returnData = followEvents.length ? followEvents.map(i => {
         return {
           state: i.state,
-          text: `${i.name} (${i.plan})`
+          text: `${i.name} (${i.plan})`,
+          id: i.patientId
         }
       }) : []
       return returnData

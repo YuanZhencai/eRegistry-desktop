@@ -95,6 +95,7 @@
             class="dialog-footer">
         <el-button @click="deleteDialogVisible = false">取 消</el-button>
         <el-button type="primary"
+                   :disabled="isButtonDisabled"
                    @click="confirmDelete(deleteDialoglist.id)">确 定</el-button>
       </span>
     </el-dialog>
@@ -141,7 +142,7 @@ export default {
         size: 10
       },
       rules: {
-        name: [{ required: true, message: '本字段不能为空', trigger: 'blur' }],
+        name: [{ required: true, message: '本字段不能为空', trigger: 'change' }],
         condition: [{ required: true, message: '本字段不能为空', trigger: 'blur' }],
         remindingInterval: [{ required: false, trigger: 'change', validator: remindingInterval }]
       },
@@ -208,16 +209,22 @@ export default {
       })
     },
     async createPlan() {
+      try {
+        this.isButtonDisabled = true
+        this.dialogFormData['projectId'] = this.projectId
+        this.dialogFormData['reportId'] = this.crfValue
+        await createPlan(this.dialogFormData).then((res) => { })
+        this.editCreateDialog = false
+        this.getplan()
+      } catch (e) {
+        this.isButtonDisabled = false
+      }
       await getCrfList().then((res) => {
         this.crflistData = res.data
       })
-      this.dialogFormData['projectId'] = this.projectId
-      this.dialogFormData['reportId'] = this.crfValue
-      await createPlan(this.dialogFormData).then((res) => { })
-      this.editCreateDialog = false
-      this.getplan()
     },
     async editPlan(id) {
+      this.isButtonDisabled = false
       this.dialogStatus = 'update'
       this.editCreateDialog = true
       this.crfValue = ''
@@ -234,6 +241,7 @@ export default {
       }
     },
     async updatePlan() {
+      this.isButtonDisabled = true
       this.dialogFormData['reportId'] = this.crfValue
       await updatePlan(this.dialogFormData).then((res) => { })
       this.$nextTick(() => {
@@ -243,9 +251,11 @@ export default {
     },
     planDeleteDialog(questionnaire) {
       this.deleteDialogVisible = true
+      this.isButtonDisabled = false
       this.deleteDialoglist = questionnaire
     },
     async confirmDelete(id) {
+      this.isButtonDisabled = true
       await deletePlan(id).then((res) => { })
       this.deleteDialogVisible = false
       this.getplan()
