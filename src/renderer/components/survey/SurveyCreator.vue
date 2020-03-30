@@ -7,15 +7,17 @@ import uuidv1 from 'uuid/v1'
 import * as SurveyKo from 'survey-knockout'
 import * as SurveyCreator from 'survey-creator'
 import * as widgets from './widgets'
+import { SurveyZhCnModel } from './survey-zh-cn.model'
 import 'survey-creator/survey-creator.css'
 
 widgets.init(SurveyKo)
-
+const _local = new SurveyZhCnModel().zhcnStrings
+SurveyCreator.editorLocalization.locales['zh-cn'] = _local
 SurveyCreator.editorLocalization.currentLocale = 'zh-cn'
 // 删掉编辑器survey中不需要的属性
 SurveyKo.JsonObject.metaData.removeProperty('survey', 'locale')
 SurveyKo.JsonObject.metaData.removeProperty('survey', 'cookieName')
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'mode')
+SurveyKo.Serializer.findProperty('survey', 'mode').showMode = 'edit'
 SurveyKo.JsonObject.metaData.removeProperty('survey', 'calculatedValues')
 SurveyKo.JsonObject.metaData.removeProperty('survey', 'triggers')
 SurveyKo.JsonObject.metaData.removeProperty('survey', 'focusOnFirstError')
@@ -55,7 +57,8 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+    }
   },
   mounted() {
     this.render()

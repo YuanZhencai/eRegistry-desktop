@@ -15,7 +15,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button size="mini" @click="cancel">取 消</el-button>
-            <el-button size="mini" type="primary" @click="confirm">确 定</el-button>
+            <el-button size="mini" type="primary" :disabled="isSaving" @click="confirm">确 定</el-button>
         </div>
     </el-dialog>
 </template>
@@ -38,19 +38,19 @@
         display: false,
         reject: null,
         resolve: null,
-        memberId: null
+        memberId: null,
+        isSaving: false
       }
     },
     methods: {
       show(memberId) {
-        const that = this
         this.memberId = memberId
         this.display = true
         this.findMember()
         this.findMemberTask()
         return new Promise((resolve, reject) => {
-          that.resolve = resolve
-          that.reject = reject
+          this.resolve = resolve
+          this.reject = reject
         })
       },
       findMember() {
@@ -59,11 +59,10 @@
         })
       },
       findMemberTask() {
-        const vm = this
         getTaskByMemberId(this.memberId).then(res => {
-          vm.memberTask = res.data
-          if (!vm.memberTask || !vm.memberTask.type) {
-            vm.memberTask = { type: null }
+          this.memberTask = res.data
+          if (!this.memberTask || !this.memberTask.type) {
+            this.memberTask = { type: null }
           }
         })
       },
@@ -76,20 +75,26 @@
         this.reject('close')
       },
       confirm() {
-        const that = this
         this.memberTask.memberId = this.member.id
         this.memberTask.projectId = this.member.projectId
+        this.isSaving = true
         if (this.memberTask.id !== undefined) {
           updateMemberTask(this.memberTask).then(response => {
+            this.isSaving = false
             this.memberTask = response.data
-            that.display = false
-            that.resolve(response.data)
+            this.display = false
+            this.resolve(response.data)
+          }, () => {
+            this.isSaving = false
           })
         } else {
           createMemberTask(this.memberTask).then(response => {
+            this.isSaving = false
             this.memberTask = response.data
-            that.display = false
-            that.resolve(response.data)
+            this.display = false
+            this.resolve(response.data)
+          }, () => {
+            this.isSaving = false
           })
         }
       }

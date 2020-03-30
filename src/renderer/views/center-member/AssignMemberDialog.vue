@@ -15,7 +15,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button size="mini" @click="cancel">取 消</el-button>
-            <el-button size="mini" type="primary" @click="confirm">确 定</el-button>
+            <el-button size="mini" type="primary" :disabled="isSaving" @click="confirm">确 定</el-button>
         </div>
     </el-dialog>
 </template>
@@ -35,19 +35,19 @@
         display: false,
         reject: null,
         resolve: null,
-        memberId: null
+        memberId: null,
+        isSaving: false
       }
     },
     methods: {
       show(memberId) {
-        const that = this
         this.memberId = memberId
         this.findCenters()
         this.findCenterMember()
         this.display = true
         return new Promise((resolve, reject) => {
-          that.resolve = resolve
-          that.reject = reject
+          this.resolve = resolve
+          this.reject = reject
         })
       },
       findCenters: function() {
@@ -70,18 +70,24 @@
         this.reject('close')
       },
       confirm() {
-        const that = this
+        this.isSaving = true
         if (this.centerId) {
           updateCenterMember(this.centerMember).then(response => {
+            this.isSaving = false
             this.centerMember = response.data
-            that.display = false
-            that.resolve(response.data)
+            this.display = false
+            this.resolve(response.data)
+          }, () => {
+            this.isSaving = false
           })
         } else {
           createCenterMember(this.centerMember).then(response => {
+            this.isSaving = false
             this.centerMember = response.data
-            that.display = false
-            that.resolve(response.data)
+            this.display = false
+            this.resolve(response.data)
+          }, () => {
+            this.isSaving = false
           })
         }
       }

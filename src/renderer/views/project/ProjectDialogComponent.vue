@@ -25,8 +25,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="结束时间" prop="endDate">
-                        <el-date-picker v-model="project.endDate"
+                    <el-form-item label="结束时间">
+                        <el-date-picker v-model="endDate"
                                         :picker-options="endDateOptions"
                                         type="date"
                                         placeholder="请选择日期"
@@ -41,7 +41,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button size="mini" @click="cancel">取 消</el-button>
-            <el-button size="mini" type="primary" @click="confirm('projectForm')">确 定</el-button>
+            <el-button size="mini" type="primary" :disabled="isSaving" @click="confirm('projectForm')">确 定</el-button>
         </div>
     </el-dialog>
 </template>
@@ -60,8 +60,10 @@ export default {
     },
     data() {
       return {
+        isSaving: false,
         projectId: null,
-        project: { name: null, beginDate: null, endDate: null },
+        project: {},
+        endDate: null,
         reports: [],
         rules: {
           name: [
@@ -93,17 +95,17 @@ export default {
     },
     methods: {
       show(projectId) {
-        const that = this
         this.projectId = projectId
         if (this.projectId) {
           this.getProject()
         } else {
-          this.project = { name: '', beginDate: '', endDate: '' }
+          this.project = { name: '', beginDate: '' }
+          this.endDate = null
         }
         this.display = true
         return new Promise((resolve, reject) => {
-          that.resolve = resolve
-          that.reject = reject
+          this.resolve = resolve
+          this.reject = reject
         })
       },
       cancel() {
@@ -117,6 +119,7 @@ export default {
       getProject() {
         getProject(this.projectId).then(res => {
           this.project = res.data
+          this.endDate = this.project.endDate
         })
       },
       getReports() {
@@ -125,22 +128,29 @@ export default {
         })
       },
       confirm(formName) {
-        const that = this
         this.project.chargedBy = this.name
+        this.project.endDate = this.endDate
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            this.isSaving = true
             if (this.projectId) {
               updateProject(this.project).then((res) => {
                 this.findUserRoles(() => {
-                  that.display = false
-                  that.resolve(res.data)
+                  this.isSaving = false
+                  this.display = false
+                  this.resolve(res.data)
+                }, () => {
+                  this.isSaving = false
                 })
               })
             } else {
               createProject(this.project).then((res) => {
                 this.findUserRoles(() => {
-                  that.display = false
-                  that.resolve(res.data)
+                  this.isSaving = false
+                  this.display = false
+                  this.resolve(res.data)
+                }, () => {
+                  this.isSaving = false
                 })
               })
             }
@@ -148,16 +158,18 @@ export default {
         })
       },
       disableBeginDate(beginDate) {
-        if (!beginDate || !this.project.endDate) {
+        if (!beginDate || !this.endDate) {
           return false
+        } else if (this.endDate) {
+          return beginDate.getTime() >= new Date(this.endDate).getTime()
         }
-        return beginDate.getTime() >= this.project.endDate.getTime()
       },
       disableEndDate(endDate) {
         if (!endDate || !this.project.beginDate) {
           return false
+        } else if (this.project.beginDate) {
+          return endDate.getTime() <= new Date(this.project.beginDate).getTime()
         }
-        return endDate.getTime() <= this.project.beginDate.getTime()
       },
       findUserRoles(callback) {
         store.dispatch('GetInfo').then(res => { // 拉取用户信息

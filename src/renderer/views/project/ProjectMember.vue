@@ -42,7 +42,7 @@
       <span>是否确认删除成员 '{{this.selectedMember.username}}'？</span>
       <span slot="footer" class="dialog-footer">
                 <el-button @click="cancelDelete">取 消</el-button>
-                <el-button type="primary" @click="confirmDelete">删 除</el-button>
+                <el-button type="primary" :disabled="isSaving" @click="confirmDelete">删 除</el-button>
             </span>
     </el-dialog>
     <member-dialog-component ref="add-member-dialog"></member-dialog-component>
@@ -70,6 +70,7 @@
       const projectId = this.$route.params.projectId
       return {
         loading: true,
+        isSaving: false,
         predicate: '',
         order: '',
         sortPropMap: {
@@ -156,11 +157,13 @@
         this.deleteMemberDialogVisible = true
       },
       confirmDelete() {
+        this.isSaving = true
         deleteMember(this.selectedMember.id).then(response => {
+          this.isSaving = false
           this.loading = true
           this.getMembers()
-        }, error => {
-          console.log(error)
+        }, () => {
+          this.isSaving = false
         })
       },
       cancelDelete() {

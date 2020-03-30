@@ -55,7 +55,7 @@
       <span>是否确认删除问卷 '{{selectedQuestionnaire.reportName}}' ？</span>
       <span slot="footer" class="dialog-footer">
                 <el-button @click="deleteDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="confirmDelete">删 除</el-button>
+                <el-button type="primary" :disabled="isSaving" @click="confirmDelete">删 除</el-button>
             </span>
     </el-dialog>
   </div>
@@ -83,7 +83,8 @@
         pageSize: 10, // 单页数据量
         currentPage: 1, // 默认开始页面
         deleteDialogVisible: false,
-        baseApi: process.env.BASE_API
+        baseApi: process.env.BASE_API,
+        isSaving: false
       }
     },
     created() {
@@ -142,10 +143,14 @@
         this.deleteDialogVisible = false
       },
       confirmDelete() {
+        this.isSaving = true
         deleteQuestionnaire(this.selectedQuestionnaire.id).then((res) => {
+          this.isSaving = false
           this.closeDialog()
           this.loading = true
           this.getQuestionnaires()
+        }, () => {
+          this.isSaving = false
         })
       }
     }

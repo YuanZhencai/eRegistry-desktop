@@ -34,7 +34,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button size="mini" @click="cancel">取 消</el-button>
-            <el-button size="mini" type="primary" @click="confirm('patientForm')">保 存</el-button>
+            <el-button size="mini" type="primary" :disabled="isSaving" @click="confirm('patientForm')">保 存</el-button>
         </div>
     </el-dialog>
 </template>
@@ -60,7 +60,8 @@
         },
         patient: { name: '' },
         provinceCity: [],
-        options: []
+        options: [],
+        isSaving: false
       }
     },
     methods: {
@@ -110,16 +111,23 @@
       confirm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            this.isSaving = true
             if (this.patientId) {
               updatePatient(this.patient).then(res => {
+                this.isSaving = false
                 this.display = false
                 this.resolve(res.data)
+              }, () => {
+                this.isSaving = false
               })
             } else {
               this.patient.projectId = this.$route.params.projectId
               createPatient(this.patient).then(res => {
+                this.isSaving = false
                 this.display = false
                 this.resolve(res.data)
+              }, () => {
+                this.isSaving = false
               })
             }
           }
