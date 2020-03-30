@@ -145,8 +145,8 @@ export default {
       },
       rules: {
         name: [{ required: true, message: '本字段不能为空', trigger: 'blur' }],
-        condition: [{ required: true, message: '本字段不能为空', trigger: 'blur' }],
-        remindingInterval: [{ required: false, trigger: 'blur', validator: remindingInterval }]
+        condition: [{ required: true, message: '本字段不能为空', trigger: 'change' }],
+        remindingInterval: [{ required: false, trigger: 'change', validator: remindingInterval }]
       },
       dialogStatus: '',
       textMap: {
