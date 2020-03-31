@@ -57,11 +57,15 @@
                        width="180">
       </el-table-column>
       <el-table-column prop="action"
-                       label="行动"
-                       width="180">
+                       label="行动">
       </el-table-column>
       <el-table-column prop="values"
                        label="导出的数据更改或字段列表">
+          <template slot-scope="scope">
+              <div class="textOVerFlow" @click="show(scope.$index)":class="{ active: isActive, 'text-danger': hasError }">
+                  {{ scope.row.values }}
+              </div>
+          </template>
       </el-table-column>
     </el-table>
     <el-pagination @size-change="sizeChange"
@@ -97,6 +101,8 @@ export default {
       tableData: [],
       projectId,
       isAdmin: false,
+      isActive: false,
+      hasError: true,
       project: null
     }
   },
@@ -147,6 +153,9 @@ export default {
       getProject(this.projectId).then((res) => {
         this.project = res.data
       })
+    },
+    show(index) {
+      this.isActive = !this.isActive
     }
   }
 }
@@ -154,5 +163,14 @@ export default {
 <style scoped>
 .box-card {
   overflow: hidden;
+}
+.textOVerFlow {
+    width: 450px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+.active {
+    color: red !important;
 }
 </style>
