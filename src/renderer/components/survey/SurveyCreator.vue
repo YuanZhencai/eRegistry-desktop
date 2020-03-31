@@ -15,24 +15,36 @@ const _local = new SurveyZhCnModel().zhcnStrings
 SurveyCreator.editorLocalization.locales['zh-cn'] = _local
 SurveyCreator.editorLocalization.currentLocale = 'zh-cn'
 // 删掉编辑器survey中不需要的属性
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'locale')
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'cookieName')
+SurveyKo.Serializer.removeProperty('survey', 'locale')
+SurveyKo.Serializer.removeProperty('survey', 'cookieName')
 SurveyKo.Serializer.findProperty('survey', 'mode').showMode = 'edit'
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'calculatedValues')
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'triggers')
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'focusOnFirstError')
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'checkErrorsMode')
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'navigateToUrl')
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'showCompletedPage')
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'completedHtml')
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'navigateToUrlOnCondition')
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'completedHtmlOnCondition')
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'loadingHtml')
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'completedBeforeHtml')
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'maxTimeToFinish')
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'maxTimeToFinishPage')
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'showTimerPanel')
-SurveyKo.JsonObject.metaData.removeProperty('survey', 'showTimerPanelMode')
+SurveyKo.Serializer.removeProperty('survey', 'calculatedValues')
+SurveyKo.Serializer.removeProperty('survey', 'triggers')
+SurveyKo.Serializer.removeProperty('survey', 'focusOnFirstError')
+SurveyKo.Serializer.removeProperty('survey', 'checkErrorsMode')
+SurveyKo.Serializer.removeProperty('survey', 'navigateToUrl')
+const showCompletedPageSetter = Object.getOwnPropertyDescriptor(SurveyKo.SurveyModel.prototype, 'showCompletedPage').set
+Object.defineProperty(SurveyKo.SurveyModel.prototype, 'showCompletedPage', {
+  get: function() {
+    return this.getPropertyValue('showCompletedPage', false)
+  },
+  set: function(value) {
+    showCompletedPageSetter.call(this, value)
+  },
+  enumerable: true,
+  configurable: true
+})
+SurveyKo.JsonObject.metaData.findProperty('survey', 'showCompletedPage').defaultValue = false
+SurveyKo.Serializer.removeProperty('survey', 'showCompletedPage')
+SurveyKo.Serializer.removeProperty('survey', 'completedHtml')
+SurveyKo.Serializer.removeProperty('survey', 'navigateToUrlOnCondition')
+SurveyKo.Serializer.removeProperty('survey', 'completedHtmlOnCondition')
+SurveyKo.Serializer.removeProperty('survey', 'loadingHtml')
+SurveyKo.Serializer.removeProperty('survey', 'completedBeforeHtml')
+SurveyKo.Serializer.removeProperty('survey', 'maxTimeToFinish')
+SurveyKo.Serializer.removeProperty('survey', 'maxTimeToFinishPage')
+SurveyKo.Serializer.removeProperty('survey', 'showTimerPanel')
+SurveyKo.Serializer.removeProperty('survey', 'showTimerPanelMode')
 
 export default {
   name: 'survey-creator',

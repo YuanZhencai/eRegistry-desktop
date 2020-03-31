@@ -270,6 +270,11 @@ export class SurveyZhCnModel {
         totalDisplayStyle: '总显示风格',
         totalCurrency: '总金额',
         totalFormat: '总格式',
+        titlePlaceholder: '页面标题',
+        descriptionPlaceholder: '页面描述',
+        add: '添加',
+        remove: '删除',
+        propertyNameIsNotUnique: '请输入唯一值',
         tabs: {
           triggers: '触发器',
           templateTitle: '模板标题',
