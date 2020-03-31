@@ -160,6 +160,7 @@
         this.isSaving = true
         deleteMember(this.selectedMember.id).then(response => {
           this.isSaving = false
+          this.deleteMemberDialogVisible = false
           this.loading = true
           this.getMembers()
         }, () => {
