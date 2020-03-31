@@ -63,7 +63,9 @@ export default {
         this.report.survey = survey
         this.questionnaireReport.report = this.report
         saveWithReport(this.questionnaireReport).then(res => {
-          this.findQuestionnaireWithReport(res.data.id)
+          this.$router.push({
+            path: `/project/${this.projectId}/questionnaire`
+          })
         })
       },
       selectReport() {
