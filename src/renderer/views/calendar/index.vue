@@ -1,32 +1,48 @@
 <template>
-  <a-locale-provider :locale="local">
-    <a-calendar @panelChange="panelChange"
-                local="local"
-                ref='calendar'>
-      <ul class="events"
-          slot="dateCellRender"
-          slot-scope="value">
-        <li v-for="(items,index) in getListData(value)"
-            :key="index">
-          <router-link :to="{name: 'patientDetail',params:{patientId:items.id}}">
-            <a-badge :status="items.state"
-                     :text="items.text" />
-          </router-link>
-        </li>
-      </ul>
-      <template slot="monthCellRender"
-                slot-scope="value">
-        <div v-for="(items,index) in getMonthData(value)"
-             :key="index"
-             class="notes-month">
-          <router-link :to="{name: 'patientDetail',params:{patientId:items.id}}">
-            <a-badge :status="items.state"
-                     :text="items.text" />
-          </router-link>
-        </div>
-      </template>
-    </a-calendar>
-  </a-locale-provider>
+  <div class="content">
+    <div class="hint">
+
+      <a-badge class="left"
+               status="success"
+               text="已经随访完成" />
+
+      <a-badge class="left"
+               status="error"
+               text="未随访" />
+
+      <a-badge class="left"
+               status="warning"
+               text="即将开始随访" />
+    </div>
+    <a-locale-provider :locale="local">
+      <a-calendar @panelChange="panelChange"
+                  local="local"
+                  ref='calendar'>
+        <ul class="events"
+            slot="dateCellRender"
+            slot-scope="value">
+          <li v-for="(items,index) in getListData(value)"
+              :key="index">
+            <router-link :to="{name: 'patientDetail',params:{patientId:items.id}}">
+              <a-badge :status="items.state"
+                       :text="items.text" />
+            </router-link>
+          </li>
+        </ul>
+        <template slot="monthCellRender"
+                  slot-scope="value">
+          <div v-for="(items,index) in getMonthData(value)"
+               :key="index"
+               class="notes-month">
+            <router-link :to="{name: 'patientDetail',params:{patientId:items.id}}">
+              <a-badge :status="items.state"
+                       :text="items.text" />
+            </router-link>
+          </div>
+        </template>
+      </a-calendar>
+    </a-locale-provider>
+  </div>
 </template>
 <script>
 import { getCalendar } from '@/api/CalendarService'
@@ -50,7 +66,6 @@ export default {
     this.getData()
   },
   methods: {
-
     /**
      * 计算构建 表格开始日期和结束日期
      * @params currentMon 当前的月份
@@ -156,6 +171,16 @@ export default {
 }
 </script>
 <style scoped>
+.content {
+  position: relative;
+}
+.hint {
+  position: absolute;
+  top: 17px;
+}
+.left {
+  margin-left: 5px;
+}
 .events {
   list-style: none;
   margin: 0;
