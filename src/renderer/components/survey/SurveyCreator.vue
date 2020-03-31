@@ -105,6 +105,7 @@ export default {
           action: tool.action
         })
       })
+      this.surveyCreator.surveyLiveTester.simulatorEnabled = false
     },
     saveMySurvey() {
       const text = this.surveyCreator.text
