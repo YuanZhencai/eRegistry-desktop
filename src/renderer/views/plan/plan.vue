@@ -201,7 +201,6 @@ export default {
       })
     },
     async headerCreatePlan(formName) {
-      this.$refs[formName].resetFields()
       this.isButtonDisabled = false
       this.dialogStatus = 'create'
       this.dialogFormData = {}
@@ -209,6 +208,9 @@ export default {
       await getCrfList().then((res) => {
         this.crflistData = res.data
         this.editCreateDialog = true
+      })
+      this.$nextTick(() => {
+        this.$refs[formName].clearValidate()
       })
     },
     async createPlan() {
