@@ -47,7 +47,7 @@
             <span>是否确认删除项目 '{{this.selectedProject.name}}'？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="deleteDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="confirmDelete">删 除</el-button>
+                <el-button type="primary" :disabled="isSaving" @click="confirmDelete">删 除</el-button>
             </span>
         </el-dialog>
         <project-dialog-component ref="project-dialog"></project-dialog-component>
@@ -63,6 +63,7 @@ export default {
     components: { ProjectDialogComponent },
     data() {
       return {
+        isSaving: false,
         loading: true,
         predicate: 'createdDate',
         order: 'desc',
@@ -136,10 +137,14 @@ export default {
         this.deleteDialogVisible = true
       },
       confirmDelete() {
+        this.isSaving = true
         deleteProject(this.selectedProject.id).then(res => {
+          this.isSaving = false
           this.deleteDialogVisible = false
           this.loading = true
           this.getProjects()
+        }, () => {
+          this.isSaving = false
         })
       },
       closeDialog() {
