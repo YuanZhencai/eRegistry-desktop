@@ -31,7 +31,7 @@
       return {
         rules: {
           opinion: [
-            { required: true, message: '请填写数据变更原因', trigger: 'blur' }
+            { required: true, message: '请填写数据变更原因', trigger: 'change' }
           ]
         },
         isSaving: false

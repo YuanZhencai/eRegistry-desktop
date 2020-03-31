@@ -144,7 +144,7 @@ export default {
         size: 10
       },
       rules: {
-        name: [{ required: true, message: '本字段不能为空', trigger: 'blur' }],
+        name: [{ required: true, message: '本字段不能为空', trigger: 'change' }],
         condition: [{ required: true, message: '本字段不能为空', trigger: 'change' }],
         remindingInterval: [{ required: false, trigger: 'change', validator: remindingInterval }]
       },
@@ -200,7 +200,7 @@ export default {
         this.total = Number(res.headers['x-total-count'])
       })
     },
-    async headerCreatePlan(formName) {
+    async headerCreatePlan() {
       this.isButtonDisabled = false
       this.dialogStatus = 'create'
       this.dialogFormData = {}
@@ -208,9 +208,6 @@ export default {
       await getCrfList().then((res) => {
         this.crflistData = res.data
         this.editCreateDialog = true
-      })
-      this.$nextTick(() => {
-        this.$refs[formName].clearValidate()
       })
     },
     async createPlan() {
@@ -244,9 +241,6 @@ export default {
           this.crfValue = this.crflistData[i].id
         }
       }
-      this.$nextTick(() => {
-        this.$refs[formName].clearValidate()
-      })
     },
     updatePlan(formName) {
       this.isButtonDisabled = true

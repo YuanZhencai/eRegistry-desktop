@@ -55,7 +55,7 @@
                 </el-col>
               </el-row>
               <el-form-item label="电子邮件"
-                            prop="mail">
+                            prop="email">
                 <el-input size="small"
                           style="width:90%"
                           v-model="settingsAccount.email"></el-input>
@@ -132,14 +132,14 @@ export default {
       settingsAccount: {},
       rules: {
         firstName: [
-          { required: true, message: '请填写名字', trigger: 'blur' }
+          { required: true, message: '请填写名字', trigger: 'change' }
         ],
         lastName: [
-          { required: true, message: '请填写姓氏', trigger: 'blur' }
+          { required: true, message: '请填写姓氏', trigger: 'change' }
         ],
-        mail: [
+        email: [
           { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['change', 'blur'] }
         ]
       },
       rulePassForm: {
@@ -148,10 +148,10 @@ export default {
       },
       rulesPassword: {
         pass: [
-          { validator: validatePass, trigger: 'blur' }
+          { validator: validatePass, trigger: 'change' }
         ],
         checkPass: [
-          { validator: validateNewPass, trigger: 'blur' }
+          { validator: validateNewPass, trigger: 'change' }
         ]
       }
     }
@@ -208,27 +208,31 @@ export default {
       }
       await upload(data).then((res) => { })
     },
-    async save(settingsAccount) {
-      const data = {
-        activated: this.settingsAccount.activated,
-        email: this.settingsAccount.email,
-        firstName: this.settingsAccount.firstName,
-        langKey: this.settingsAccount.langKey,
-        lastName: this.settingsAccount.lastName,
-        login: this.settingsAccount.login,
-        imageUrl: ''
-      }
-      await createSettings(data).then((res) => {
-        this.$nextTick(() => {
-          this.$notify({
-            title: '成功',
-            message: '编辑成功',
-            type: 'success',
-            duration: 2000
+    async save(formName) {
+      this.$refs[formName].validate(async(valid) => {
+        if (valid) {
+          const data = {
+            activated: this.settingsAccount.activated,
+            email: this.settingsAccount.email,
+            firstName: this.settingsAccount.firstName,
+            langKey: this.settingsAccount.langKey,
+            lastName: this.settingsAccount.lastName,
+            login: this.settingsAccount.login,
+            imageUrl: ''
+          }
+          await createSettings(data).then((res) => {
+            this.$nextTick(() => {
+              this.$notify({
+                title: '成功',
+                message: '编辑成功',
+                type: 'success',
+                duration: 2000
+              })
+            })
           })
-        })
+          this.OnInit()
+        }
       })
-      this.OnInit()
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {

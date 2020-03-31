@@ -45,17 +45,17 @@
         center: {},
         rules: {
           name: [
-            { required: true, message: '名称不能为空', trigger: 'blur' }
+            { required: true, message: '名称不能为空', trigger: 'change' }
           ],
           telephone: [
-            { required: true, message: '电话不能为空', trigger: 'blur' },
-            { pattern: /^(1(3|4|5|6|7|8|9)\d{9})$/, message: '手机号码有误，请重填', trigger: 'blur' }
+            { required: true, message: '电话不能为空', trigger: 'change' },
+            { pattern: /^(1(3|4|5|6|7|8|9)\d{9})$/, message: '手机号码有误，请重填', trigger: 'change' }
           ],
           no: [
-            { required: true, message: '编号不能为空', trigger: 'blur' }
+            { required: true, message: '编号不能为空', trigger: 'change' }
           ],
           chargedBy: [
-            { required: true, message: '负责人不能为空', trigger: 'blur' }
+            { required: true, message: '负责人不能为空', trigger: 'change' }
           ]
         },
         isSaving: false

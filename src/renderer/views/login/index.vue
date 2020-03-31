@@ -77,7 +77,7 @@ export default {
   name: 'login',
   data() {
     const validatePass = (rule, value, callback) => {
-      if (value.length < 3) {
+      if (value.length < 5) {
         callback(new Error('密码不能小于5位'))
       } else {
         callback()
@@ -89,8 +89,8 @@ export default {
         password: ''
       },
       loginRules: {
-        username: [{ required: true, message: '请填写用户名', trigger: 'blur' }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }]
+        username: [{ required: true, message: '请填写用户名', trigger: 'change' }],
+        password: [{ required: true, trigger: 'change', validator: validatePass }]
       },
       loading: false,
       errorTitle: false,
