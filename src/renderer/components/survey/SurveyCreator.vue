@@ -8,8 +8,6 @@ import * as SurveyKo from 'survey-knockout'
 import * as SurveyCreator from 'survey-creator'
 import * as widgets from './widgets'
 import { SurveyZhCnModel } from './survey-zh-cn.model'
-import 'survey-knockout/survey.css'
-import 'survey-creator/survey-creator.css'
 
 widgets.init(SurveyKo)
 const _local = new SurveyZhCnModel().zhcnStrings
@@ -124,4 +122,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    @import '~survey-knockout/survey.css';
+    @import '~survey-creator/survey-creator.css';
 </style>

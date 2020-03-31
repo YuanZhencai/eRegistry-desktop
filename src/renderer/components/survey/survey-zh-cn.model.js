@@ -437,7 +437,8 @@ export class SurveyZhCnModel {
       ts: {
         selectPage: '选择测试页面:',
         showInvisibleElements: '显示隐藏元件',
-        simulator: '选择测试设备'
+        simulator: '选择测试设备',
+        emptySurvey: '还没开始创建问题'
       },
       validators: {
         answercountvalidator: '数量检查',
@@ -538,8 +539,8 @@ export class SurveyZhCnModel {
         allowMultiple: '允许多选',
         labelTrue: 'true值标签',
         labelFalse: 'false值标签',
-        maximunFractionDigits: '最大分位数',
-        minimunFractionDigits: '最小分位数',
+        maximumFractionDigits: '最大分位数',
+        minimumFractionDigits: '最小分位数',
         allowImagesPreview: '允许预览图片',
         acceptedTypes: '可用类型',
         waitForUpload: '等待上传',

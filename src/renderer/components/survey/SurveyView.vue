@@ -7,8 +7,6 @@
 <script>
   import * as SurveyVue from 'survey-vue'
   import * as widgets from './widgets'
-  import 'survey-vue/survey.css'
-  import 'survey-vue/modern.css'
 
   const Survey = SurveyVue.Survey
   SurveyVue.StylesManager.applyTheme('winterstone')
@@ -107,4 +105,6 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  @import '~survey-vue/survey.css';
+  @import '~survey-vue/modern.css';
 </style>
