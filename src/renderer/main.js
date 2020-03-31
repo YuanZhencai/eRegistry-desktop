@@ -35,7 +35,12 @@ config.initVueApp(Vue)
 
 const i18n = config.initI18N(Vue)
 
-setupAxiosInterceptors(i18n)
+setupAxiosInterceptors(i18n, () => {
+  router.push({
+    path: `/401`
+  })
+  store.dispatch('GetInfo')
+})
 
 new Vue({
   components: { App },

@@ -18,7 +18,7 @@ const onRequestSuccess = config => {
   config.url = `${SERVER_API_URL}${config.url}`
   return config
 }
-const setupAxiosInterceptors = (i18n) => {
+const setupAxiosInterceptors = (i18n, onUnauthenticated) => {
   const messageService = new MessageService(i18n)
 
   const onResponseSuccess = res => {
@@ -28,6 +28,9 @@ const setupAxiosInterceptors = (i18n) => {
 
   const onResponseError = err => {
     if (err.response) {
+      if (err.response.status === 403) {
+        onUnauthenticated()
+      }
       messageService.error(err)
     } else {
       messageService.error({
