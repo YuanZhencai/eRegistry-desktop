@@ -67,11 +67,11 @@ export default {
         reports: [],
         rules: {
           name: [
-            { required: true, message: '请输入项目名称', trigger: 'blur' },
-            { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
+            { required: true, message: '请输入项目名称', trigger: 'change' },
+            { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'change' }
           ],
           beginDate: [
-            { required: true, message: '选择开始时间', trigger: 'blur' }
+            { required: true, message: '选择开始时间', trigger: 'change' }
           ]
         },
         beginDateOptions: {

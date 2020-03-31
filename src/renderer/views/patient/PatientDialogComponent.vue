@@ -52,10 +52,10 @@
         reject: null,
         rules: {
           name: [
-            { required: true, message: '请输入患者姓名', trigger: 'blur' }
+            { required: true, message: '请输入患者姓名', trigger: 'change' }
           ],
           telephone: [
-            { pattern: /^(1(3|4|5|6|7|8|9)\d{9})$/, message: '手机号码有误，请重填', trigger: 'blur' }
+            { pattern: /^(1(3|4|5|6|7|8|9)\d{9})$/, message: '手机号码有误，请重填', trigger: 'change' }
           ]
         },
         patient: { name: '' },

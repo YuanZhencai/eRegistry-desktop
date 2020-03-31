@@ -49,10 +49,10 @@
         },
         rules: {
           state: [
-            { required: true, message: '请先审核', trigger: 'blur' }
+            { required: true, message: '请先审核', trigger: 'change' }
           ],
           opinion: [
-            { required: true, message: '请填写拒绝原因', trigger: 'blur' }
+            { required: true, message: '请填写拒绝原因', trigger: 'change' }
           ]
         },
         isSaving: false

@@ -19,7 +19,7 @@
           <el-select v-model="userSelection.username"
                      :clearable="this.isAdmin"
                      placeholder="请选择用户名"
-                     @change="loadAll()">
+                     @change="reset()">
             <el-option v-for="item in members"
                        :key="item.username"
                        :label="item.username"
@@ -31,7 +31,7 @@
           <el-select v-model="form.region"
                      clearable
                      placeholder="请选择过滤事件"
-                     @change="loadAll()">
+                     @change="reset()">
             <el-option label="患者"
                        value="patient"></el-option>
             <el-option label="病例"
@@ -57,7 +57,8 @@
                        width="180">
       </el-table-column>
       <el-table-column prop="action"
-                       label="行动">
+                       label="行动"
+                       width="180">
       </el-table-column>
       <el-table-column prop="values"
                        label="导出的数据更改或字段列表">
@@ -126,6 +127,10 @@ export default {
         this.tableData = res.data
         this.total = Number(res.headers['x-total-count'])
       })
+    },
+    reset() {
+      this.listQuery.page = 0
+      this.loadAll()
     },
     // 获取用户名筛选并渲染
     async findMembers(id) {

@@ -90,7 +90,7 @@
         },
         rules: {
           email: [
-            { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
+            { type: 'email', message: '请输入正确的邮箱地址', trigger: 'change' }
           ]
         },
         projects: [],
