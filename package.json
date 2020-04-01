@@ -1,8 +1,8 @@
 {
-  "name": "electron-vue-admin",
-  "version": "3.0.0",
-  "author": "Pan <panfree23@gmail.com>",
-  "description": "An electron-vue project",
+  "name": "eregistry-desktop",
+  "version": "1.0.0",
+  "author": "Yuan <zhencai.yuan@datarx.cn>",
+  "description": "e registry desktop",
   "license": "MIT",
   "main": "./dist/electron/main.js",
   "scripts": {
@@ -20,7 +20,7 @@
   },
   "build": {
     "productName": "eregistry-desktop",
-    "appId": "org.simulatedgreg.electron-vue",
+    "appId": "cn.datarx.eregistry-desktop",
     "directories": {
       "output": "build"
     },
