@@ -83,7 +83,7 @@
           </div>
           <div class="card-body">
             <el-row :gutter="10">
-              <el-col :span="8" v-for="(member, index) in members" :key="member.id" v-if="index < 6">
+              <el-col :span="8" v-for="member in showMembers" :key="member.id">
                 <user-avatar :username="member.username" :size="30"></user-avatar>
                 <span>
                   {{member.username}}
@@ -105,7 +105,8 @@
             <span>动态</span>
           </div>
           <div class="card-body">
-            <div v-for="(change, index) in changes" :key="index" v-if="index < 5">
+            <div class="text-center" v-if="changes.length === 0">暂无数据</div>
+            <div v-for="(change, index) in showChanges" :key="index">
               <div class="row-flex">
                 <user-avatar :username="change.author" :size="30"></user-avatar>
                 <div style="margin-left: 10px;">
@@ -150,7 +151,13 @@
         'name',
         'roles',
         'avatar'
-      ])
+      ]),
+      showMembers: function() {
+        return this.members.slice(0, 6)
+      },
+      showChanges: function() {
+        return this.changes.slice(0, 5)
+      }
     },
     data() {
       const projectId = this.$route.params.projectId

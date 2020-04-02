@@ -98,6 +98,8 @@ export default {
   height: 50px;
   line-height: 50px;
   border-radius: 0px !important;
+  border-top: none;
+  border-left: none;
   .hamburger-container {
     line-height: 58px;
     height: 50px;
@@ -118,7 +120,7 @@ export default {
   .right-menu {
     float: right;
     height: 100%;
-    line-height: 50px;
+    line-height: 49px;
 
     &:focus {
       outline: none;
