@@ -1,5 +1,5 @@
 <template>
-  <el-menu class="navbar"
+  <el-menu class="navbar fixed-header"
            mode="horizontal">
     <breadcrumb></breadcrumb>
     <div class="right-menu">
@@ -94,6 +94,12 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  .fixed-header{
+    position: fixed;
+    top: 0;
+    z-index: 9;
+    width: 100%;
+  }
 .navbar {
   height: 50px;
   line-height: 50px;

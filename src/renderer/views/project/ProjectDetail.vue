@@ -1,69 +1,57 @@
 <template>
-  <div style="padding-top: 20px;">
+  <div class="project-detail">
     <el-container style="height: 100%">
-      <el-aside width="115px">
+      <el-aside class="sidebar" :class="{ 'aside-collapse': isCollapse }">
+        <div class="sidebar-fold" @click="isCollapse = !isCollapse">
+          <i class="fa fa-navicon" :class="{ 'icon-fold': !isCollapse }"></i>
+        </div>
         <el-menu :default-active="currentActive"
-                 :active="currentActive">
+                 :active="currentActive"
+                 :collapse="isCollapse"
+                 :collapse-transition="false">
           <el-menu-item index="home"
                         @click="selectMenu('home')">
-            <template slot="title">
-              <span class="fa fa-home"></span>
-              <span class="d-none d-md-inline">项目概览</span>
-            </template>
+            <i class="fa fa-home"></i>
+            <span slot="title" class="d-none d-md-inline">项目概览</span>
           </el-menu-item>
           <el-menu-item index="patient"
                         @click="selectMenu('patient')">
-            <template slot="title">
-              <span class="fa fa-address-book-o"></span>
-              <span class="d-none d-md-inline">患者病例</span>
-            </template>
+            <i class="fa fa-address-book-o"></i>
+            <span slot="title" class="d-none d-md-inline">患者病例</span>
           </el-menu-item>
           <el-menu-item index="questionnaire"
                         @click="selectMenu('questionnaire')">
-            <template slot="title">
-              <span class="fa fa-pencil-square-o"></span>
-              <span class="d-none d-md-inline">患者调查</span>
-            </template>
+            <i class="fa fa-pencil-square-o"></i>
+            <span slot="title" class="d-none d-md-inline">患者调查</span>
           </el-menu-item>
           <el-menu-item index="member"
                         @click="selectMenu('member')">
-            <template slot="title">
-              <span class="fa fa-users"></span>
-              <span class="d-none d-md-inline">项目成员</span>
-            </template>
+            <i class="fa fa-users"></i>
+            <span slot="title" class="d-none d-md-inline">项目成员</span>
           </el-menu-item>
           <el-menu-item index="center"
                         @click="selectMenu('center')">
-            <template slot="title">
-              <span class="fa fa-hospital-o"></span>
-              <span class="d-none d-md-inline">项目中心</span>
-            </template>
+            <i class="fa fa-hospital-o"></i>
+            <span slot="title" class="d-none d-md-inline">项目中心</span>
           </el-menu-item>
           <el-menu-item index="plan"
                         @click="selectMenu('plan')">
-            <template slot="title">
-              <span class="fa fa-medkit"></span>
-              <span class="d-none d-md-inline">随访计划</span>
-            </template>
+            <i class="fa fa-medkit"></i>
+            <span slot="title" class="d-none d-md-inline">随访计划</span>
           </el-menu-item>
           <el-menu-item index="calendar"
                         @click="selectMenu('calendar')">
-            <template slot="title">
-              <span class="fa fa-calendar"></span>
-              <span class="d-none d-md-inline">随访日历</span>
-            </template>
+            <i class="fa fa-calendar"></i>
+            <span slot="title" class="d-none d-md-inline">随访日历</span>
           </el-menu-item>
           <el-menu-item index="log"
                         @click="selectMenu('log')">
-            <template slot="title">
-              <span class="fa fa-file-text"></span>
-              <span class="d-none d-md-inline">日志记录</span>
-            </template>
+            <i class="fa fa-file-text"></i>
+            <span slot="title" class="d-none d-md-inline">日志记录</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
-
-      <el-main style="padding-top: 0;">
+      <el-main class="main-wrapper">
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -78,7 +66,7 @@ export default {
     const routerName = this.$route.path.split('/').reverse()[0]
     return {
       projectId: projectId,
-      isCollapse: true,
+      isCollapse: false,
       currentActive: routerName
     }
   },
@@ -102,5 +90,36 @@ export default {
 }
 .el-menu-item.is-active {
   background-color: #ecf5ff;
+}
+.project-detail{
+  height: 100%;
+}
+.sidebar {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  width: 115px !important;
+  z-index: 9;
+  background-color: white;
+}
+.sidebar.aside-collapse {
+  width: 64px !important;
+}
+.sidebar-fold {
+  border-right: 1px solid #e6e6e6;
+  text-align: center;
+  padding: 5px 0;
+  background-color: #ecf5ff;
+  cursor: pointer;
+}
+.sidebar-fold .icon-fold {
+  transform: rotate(90deg);
+}
+.main-wrapper {
+  width: 100%;
+  margin-left: 115px;
+}
+.aside-collapse + .main-wrapper {
+  margin-left: 64px;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-row>
+  <div class="col-flex h100">
+    <el-row class="no-flex">
       <div class="float-left row-flex">
         <div class="avatar" style="margin-right: 15px;">
           <el-avatar :size="50" :src="avatar"></el-avatar>
@@ -27,104 +27,112 @@
         </div>
       </div>
     </el-row>
-    <el-divider class="no-margin-top"></el-divider>
-    <el-row>
-      <el-col :span="15">
-        <el-row :gutter="8">
-          <el-card shadow="hover">
-            <div slot="header" class="clearfix">
-              <span>登记数据</span>
-              <el-select v-model="centerId" size="mini" style="float: right; padding: 3px 0" @change="patient">
-                <el-option :label="'全部'" :value="0"></el-option>
-                <el-option v-for="center in centers" :key="center.id"
-                           :label="center.name" :value="center.id">
-                </el-option>
-              </el-select>
-            </div>
-            <div class="card-body">
-              <el-radio-group class="float-right" v-model="range" size="mini" @change="patient">
-                <el-radio-button label="week">周</el-radio-button>
-                <el-radio-button label="month">月</el-radio-button>
-                <el-radio-button label="year">年</el-radio-button>
-              </el-radio-group>
-              <div class="clearfix"></div>
-              <div class="chart-container" v-if="patientOption">
-                <v-chart :options="patientOption" autoresize style="width: 100%; height: 200px"></v-chart>
+    <el-divider class="no-flex no-margin-top"></el-divider>
+    <div class="flex-grow" style="position: relative;">
+      <div class="position-ab">
+        <el-row class="h100">
+          <el-col :span="15" class="h100">
+            <el-row :gutter="8" class="h100">
+              <el-card shadow="hover" class="h50"
+                       :style="{'min-height': '278px'}"
+                       :body-style="{ height: 'calc(100% - 45px)' }">
+                <div slot="header" class="clearfix">
+                  <span>登记数据</span>
+                  <el-select v-model="centerId" size="mini" style="float: right; padding: 3px 0" @change="patient">
+                    <el-option :label="'全部'" :value="0"></el-option>
+                    <el-option v-for="center in centers" :key="center.id"
+                               :label="center.name" :value="center.id">
+                    </el-option>
+                  </el-select>
+                </div>
+                <div class="card-body h100">
+                  <el-radio-group class="float-right" v-model="range" size="mini" @change="patient">
+                    <el-radio-button label="week">周</el-radio-button>
+                    <el-radio-button label="month">月</el-radio-button>
+                    <el-radio-button label="year">年</el-radio-button>
+                  </el-radio-group>
+                  <div class="clearfix"></div>
+                  <div class="chart-container" :style="{height: 'calc(100% - 33px)' }" v-if="patientOption">
+                    <v-chart :options="patientOption" autoresize style="width: 100%; height: 100%;"></v-chart>
+                  </div>
+                </div>
+              </el-card>
+              <el-card shadow="hover" class="h50"
+                       :style="{'min-height': '250px'}"
+                       :body-style="{ height: 'calc(100% - 28px)' }">
+                <div slot="header" class="clearfix">
+                  <span>随访数据</span>
+                </div>
+                <div class="chart-container h100" v-if="planOption">
+                  <v-chart :options="planOption" autoresize style="width: 100%; height: 100%;"></v-chart>
+                </div>
+              </el-card>
+            </el-row>
+          </el-col>
+          <el-col :span="8" :offset="1">
+            <el-card shadow="hover" class="panel-group">
+              <div slot="header" class="clearfix">
+                <span>快速开始 / 便捷导航</span>
               </div>
-            </div>
-          </el-card>
-          <el-card shadow="hover">
-            <div slot="header" class="clearfix">
-              <span>随访数据</span>
-            </div>
-            <div class="chart-container" v-if="planOption">
-              <v-chart :options="planOption" autoresize style="width: 100%; height: 200px;"></v-chart>
-            </div>
-          </el-card>
-        </el-row>
-      </el-col>
-      <el-col :span="8" :offset="1">
-        <el-card shadow="hover" class="panel-group">
-          <div slot="header" class="clearfix">
-            <span>快速开始 / 便捷导航</span>
-          </div>
-          <div class="card-body">
-            <el-button type="text" @click="setProject"
-                       v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">项目设置</el-button>
-            <el-button type="text"
-                       v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
-              <router-link :to="{ path: `/project/${projectId}/report`, params: {projectId} }">CRF</router-link>
-            </el-button>
-          </div>
-        </el-card>
-        <el-card shadow="hover" class="panel-group">
-          <div slot="header" class="clearfix">
-            <span>项目成员</span>
-          </div>
-          <div class="card-body">
-            <el-row :gutter="10">
-              <el-col :span="8" v-for="member in showMembers" :key="member.id">
-                <user-avatar :username="member.username" :size="30"></user-avatar>
-                <span>
+              <div class="card-body">
+                <el-button type="text" @click="setProject"
+                           v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">项目设置</el-button>
+                <el-button type="text"
+                           v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
+                  <router-link :to="{ path: `/project/${projectId}/report`, params: {projectId} }">CRF</router-link>
+                </el-button>
+              </div>
+            </el-card>
+            <el-card shadow="hover" class="panel-group">
+              <div slot="header" class="clearfix">
+                <span>项目成员</span>
+              </div>
+              <div class="card-body">
+                <el-row :gutter="10">
+                  <el-col :span="8" v-for="member in showMembers" :key="member.id">
+                    <user-avatar :username="member.username" :size="30"></user-avatar>
+                    <span>
                   {{member.username}}
                   <template v-if="member.task">
                     (<span>{{TaskType[member.task]}}</span>)
                   </template>
                 </span>
-              </el-col>
-            </el-row>
-            <div class="text-right" v-if="members.length > 6">
-              <el-button type="text" size="mini">
-                <router-link :to="{ path: `/project/${projectId}/member`, params: {projectId}}">更多...</router-link>
-              </el-button>
-            </div>
-          </div>
-        </el-card>
-        <el-card shadow="hover" :body-style="{ padding: '10px' }">
-          <div slot="header" class="clearfix">
-            <span>动态</span>
-          </div>
-          <div class="card-body">
-            <div class="text-center" v-if="changes.length === 0">暂无数据</div>
-            <div v-for="(change, index) in showChanges" :key="index">
-              <div class="row-flex">
-                <user-avatar :username="change.author" :size="30"></user-avatar>
-                <div style="margin-left: 10px;">
-                  <p class="no-margin-bottom">{{change.author}} {{change.action}}</p>
-                  <p class="no-margin-bottom">{{change.commitDate | formatDate('YYYY-MM-DD hh:mm:ss')}}</p>
+                  </el-col>
+                </el-row>
+                <div class="text-right" v-if="members.length > 6">
+                  <el-button type="text" size="mini">
+                    <router-link :to="{ path: `/project/${projectId}/member`, params: {projectId}}">更多...</router-link>
+                  </el-button>
                 </div>
               </div>
-              <el-divider class="divider-margin"></el-divider>
-            </div>
-            <div class="text-right" v-if="changes.length > 5">
-              <el-button type="text" size="mini">
-                <router-link :to="{ path: `/project/${projectId}/log`, params: {projectId} }">更多...</router-link>
-              </el-button>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+            </el-card>
+            <el-card shadow="hover" :body-style="{ padding: '10px' }">
+              <div slot="header" class="clearfix">
+                <span>动态</span>
+              </div>
+              <div class="card-body">
+                <div class="text-center" v-if="changes.length === 0">暂无数据</div>
+                <div v-for="(change, index) in showChanges" :key="index">
+                  <div class="row-flex">
+                    <user-avatar :username="change.author" :size="30"></user-avatar>
+                    <div style="margin-left: 10px;">
+                      <p class="no-margin-bottom">{{change.author}} {{change.action}}</p>
+                      <p class="no-margin-bottom">{{change.commitDate | formatDate('YYYY-MM-DD hh:mm:ss')}}</p>
+                    </div>
+                  </div>
+                  <el-divider class="divider-margin"></el-divider>
+                </div>
+                <div class="text-right" v-if="changes.length > 5">
+                  <el-button type="text" size="mini">
+                    <router-link :to="{ path: `/project/${projectId}/log`, params: {projectId} }">更多...</router-link>
+                  </el-button>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </div>
+    </div>
     <project-dialog-component ref="project-dialog"></project-dialog-component>
   </div>
 </template>
@@ -249,5 +257,11 @@
   }
   .card-body{
     font-size: 12px;
+  }
+  .position-ab {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
   }
 </style>
