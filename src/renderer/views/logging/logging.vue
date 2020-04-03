@@ -61,11 +61,9 @@
       </el-table-column>
       <el-table-column prop="values"
                        label="导出的数据更改或字段列表">
-          <template slot-scope="scope">
-              <div class="textOVerFlow" @click="show(scope.$index)":class="{ active: isActive, 'text-danger': hasError }">
-                  {{ scope.row.values }}
-              </div>
-          </template>
+        <template slot-scope="scope">
+          <show-and-more :text='scope.row.values'></show-and-more>
+        </template>
       </el-table-column>
     </el-table>
     <el-pagination @size-change="sizeChange"
@@ -81,8 +79,12 @@
 </template>
 <script>
 import { userFilter, changes } from '@/api/logService'
-import { getProject } from '../../api/ProjectService'
+import { getProject } from '@/api/ProjectService'
+import ShowAndMore from '@/components/showMore/showAndMore'
 export default {
+  components: {
+    ShowAndMore
+  },
   data() {
     const projectId = this.$route.params.projectId
     return {
@@ -101,8 +103,6 @@ export default {
       tableData: [],
       projectId,
       isAdmin: false,
-      isActive: false,
-      hasError: true,
       project: null
     }
   },
@@ -153,9 +153,6 @@ export default {
       getProject(this.projectId).then((res) => {
         this.project = res.data
       })
-    },
-    show(index) {
-      this.isActive = !this.isActive
     }
   }
 }
@@ -163,14 +160,5 @@ export default {
 <style scoped>
 .box-card {
   overflow: hidden;
-}
-.textOVerFlow {
-    width: 450px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis
-}
-.active {
-    color: red !important;
 }
 </style>
