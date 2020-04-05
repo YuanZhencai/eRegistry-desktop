@@ -19,6 +19,12 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "/download"
+      }
+    ],
     "productName": "eregistry-desktop",
     "appId": "cn.datarx.eregistry-desktop",
     "directories": {
@@ -43,7 +49,8 @@
       ]
     },
     "mac": {
-      "icon": "build/icons/icon.icns"
+      "icon": "build/icons/icon.icns",
+      "target": "zip"
     },
     "win": {
       "icon": "build/icons/icon.ico"
