@@ -8,8 +8,6 @@ const latest = {
   'linux': 'latest-linux.json'
 }
 const release = `${process.env.BASE_API}/download/${latest[require('os').platform()]}`
-console.info('version', version)
-console.info('release', release)
 const checkVersion = async() => {
   // 自动更新的弹窗如果用户没有设置不再提醒，就可以去查询是否需要更新
   const res = await axios.get(release)
