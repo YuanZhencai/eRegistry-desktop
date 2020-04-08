@@ -124,9 +124,6 @@ let rendererConfig = {
       $: 'jquery'
     }),
     new ExtractTextPlugin('styles.css'),
-    new webpack.DefinePlugin({
-      'process.env': process.env.NODE_ENV === 'production' ? config.build.env : config.dev.env
-    }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: path.resolve(__dirname, '../src/index.ejs'),
@@ -165,7 +162,8 @@ let rendererConfig = {
 if (process.env.NODE_ENV !== 'production') {
   rendererConfig.plugins.push(
       new webpack.DefinePlugin({
-        '__static': `"${path.join(__dirname, '../static').replace(/\\/g, '\\\\')}"`
+        '__static': `"${path.join(__dirname, '../static').replace(/\\/g, '\\\\')}"`,
+        'process.env': require('../config/dev.env')
       })
   )
 }
@@ -186,7 +184,7 @@ if (process.env.NODE_ENV === 'production') {
         }
       ]),
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': '"production"'
+        'process.env': require('../config/prod.env')
       }),
       new webpack.LoaderOptionsPlugin({
         minimize: true

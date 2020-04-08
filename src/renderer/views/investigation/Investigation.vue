@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div>
     <el-form :inline="true" class="demo-form-inline" size="mini">
       <el-form-item>
         <el-input v-model="content" placeholder="搜索内容" suffix-icon="el-icon-search" @change="transition"></el-input>

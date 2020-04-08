@@ -8,7 +8,13 @@
         <el-row>
             <el-table v-loading="loading" stripe :data='projects' @sort-change="changeOrder"
                       style='width: 100%'>
-                <el-table-column prop='name' label='项目名称' sortable="custom"></el-table-column>
+                <el-table-column prop='name' label='项目名称' sortable="custom">
+                    <template slot-scope="scope">
+                        <router-link :to="{path: `/project/${scope.row.id}/home`}" class="linka">
+                            {{scope.row.name}}
+                        </router-link>
+                    </template>
+                </el-table-column>
                 <el-table-column prop='beginDate' label='开始时间' sortable="custom">
                     <template slot-scope="scope">
                         {{scope.row.beginDate | formatDate('YYYY-MM-DD')}}

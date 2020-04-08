@@ -1,6 +1,6 @@
 {
   "name": "eregistry-desktop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Yuan <zhencai.yuan@datarx.cn>",
   "description": "e registry desktop",
   "license": "MIT",
@@ -19,7 +19,14 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "eregistry-desktop",
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "/download"
+      }
+    ],
+    "productName": "患者登记云随访系统",
+    "artifactName": "eregistry-desktop-${version}.${ext}",
     "appId": "cn.datarx.eregistry-desktop",
     "directories": {
       "output": "build"
@@ -43,7 +50,8 @@
       ]
     },
     "mac": {
-      "icon": "build/icons/icon.icns"
+      "icon": "build/icons/icon.icns",
+      "target": "dmg"
     },
     "win": {
       "icon": "build/icons/icon.ico"
@@ -53,17 +61,18 @@
     }
   },
   "dependencies": {
-    "distpicker": "2.0.2",
     "ace-builds": "^1.4.8",
     "ant-design-vue": "^1.4.12",
     "axios": "^0.17.1",
     "bootstrap": "^3.4.1",
+    "distpicker": "2.0.2",
     "echarts": "^4.6.0",
     "electron-dl": "1.12.0",
     "element-ui": "^2.13.0",
     "jquery": "^3.4.1",
     "js-base64": "^2.5.2",
     "js-cookie": "^2.2.0",
+    "js-yaml": "^3.13.1",
     "moment": "^2.24.0",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",

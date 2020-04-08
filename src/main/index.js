@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain, session } from 'electron'
 import { download } from 'electron-dl'
+import checkVersion from './updater'
 const path = require('path')
 const unusedFilename = require('unused-filename')
 
@@ -87,10 +88,15 @@ function onLogin() {
   })
 }
 
+function onUpdater() {
+  checkVersion(mainWindow)
+}
+
 function onReady() {
   createWindow()
   onDownload()
   onLogin()
+  onUpdater()
 }
 
 app.on('ready', onReady)

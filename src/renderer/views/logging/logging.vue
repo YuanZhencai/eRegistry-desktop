@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div>
     <el-card>
       <div v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId, 'PROJECT_VIEW_' + projectId])">
         <el-button type="primary"
@@ -57,11 +57,13 @@
                        width="180">
       </el-table-column>
       <el-table-column prop="action"
-                       label="行动"
-                       width="180">
+                       label="行动">
       </el-table-column>
       <el-table-column prop="values"
                        label="导出的数据更改或字段列表">
+        <template slot-scope="scope">
+          <show-and-more :numberLength="numberLength" :text="scope.row.values"></show-and-more>
+        </template>
       </el-table-column>
     </el-table>
     <el-pagination @size-change="sizeChange"
@@ -77,8 +79,12 @@
 </template>
 <script>
 import { userFilter, changes } from '@/api/logService'
-import { getProject } from '../../api/ProjectService'
+import { getProject } from '@/api/ProjectService'
+import ShowAndMore from '@/components/showMore/showAndMore'
 export default {
+  components: {
+    ShowAndMore
+  },
   data() {
     const projectId = this.$route.params.projectId
     return {
@@ -97,7 +103,8 @@ export default {
       tableData: [],
       projectId,
       isAdmin: false,
-      project: null
+      project: null,
+      numberLength: 120
     }
   },
   mounted() {
