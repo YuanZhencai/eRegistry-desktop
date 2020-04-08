@@ -1,30 +1,23 @@
 <template>
   <div>
-    <el-tooltip popper-class="item" effect="dark" :content="text" placement="top">
-      <div class="textOverFlow">{{text}}</div>
-    </el-tooltip>
-
-
-<!--    <div v-if="text.length<numberLength">-->
-<!--      {{text}}-->
-<!--    </div>-->
-<!--    <div v-else-->
-<!--         style="overflow:hidden;">-->
-<!--      <div :class="isShowMore? 'textOverFlow':''">-->
-<!--        {{text}}-->
-<!--      </div>-->
-<!--      <span @mouseover="showMoreToggle"-->
-<!--            class="unfold"-->
-<!--            v-if="isShowMore">展示更多</span>-->
-<!--      <span @mouseout="showMoreToggle"-->
-<!--            class="unfold"-->
-<!--            v-else>收起</span>-->
-<!--    </div>-->
+    <div v-if="text.length<numberLength">
+      {{text}}
+    </div>
+    <el-popover v-else
+            placement="top"
+            width="400"
+            trigger="hover"
+            :content="text">
+      <div slot="reference" class="textOverFlow">{{text}}</div>
+    </el-popover>
   </div>
 </template>
 <script>
 export default {
   props: {
+    numberLength: {
+      type: Number
+    },
     text: {
       type: String,
       defalut: ''
@@ -33,38 +26,15 @@ export default {
   name: 'showAndMore',
   data() {
     return {
-      isShowMore: true,
-      numberLength: 120
-    }
-  },
-  methods: {
-    showMoreToggle() {
-      this.isShowMore = !this.isShowMore
     }
   }
-
 }
 </script>
 
-<style>
-.unfold {
-  float: right;
-  color: #409eff;
-  cursor: pointer;
-}
-
+<style scoped>
 .textOverFlow {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-}
-.item{
-  width: 400px;
-}
-.active {
-  width: auto;
-  overflow: auto;
-  white-space: normal;
-  text-overflow: clip;
 }
 </style>
