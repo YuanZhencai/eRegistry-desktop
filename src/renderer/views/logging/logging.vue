@@ -62,7 +62,7 @@
       <el-table-column prop="values"
                        label="导出的数据更改或字段列表">
         <template slot-scope="scope">
-          <show-and-more :text='scope.row.values'></show-and-more>
+          <show-and-more :text="scope.row.values"></show-and-more>
         </template>
       </el-table-column>
     </el-table>
