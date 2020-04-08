@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div>
     <el-card>
       <div v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId, 'PROJECT_VIEW_' + projectId])">
         <el-button type="primary"

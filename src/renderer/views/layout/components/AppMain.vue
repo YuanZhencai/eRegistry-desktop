@@ -1,8 +1,6 @@
 <template>
   <section class="app-main">
-    <transition name="fade" mode="out-in">
-      <router-view></router-view>
-    </transition>
+    <router-view></router-view>
   </section>
 </template>
 
@@ -11,3 +9,11 @@ export default {
   name: 'AppMain'
 }
 </script>
+<style rel="stylesheet/scss" lang="scss" scoped>
+.app-main {
+  position: relative;
+  height: 100vh;
+  padding-top: 50px;
+  overflow: auto
+}
+</style>
