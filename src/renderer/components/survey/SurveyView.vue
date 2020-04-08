@@ -1,8 +1,8 @@
 <template>
   <div class="content">
-    <i class="fa fa-arrows-alt fa-2x full"
+    <i class="el-icon-full-screen full"
        aria-hidden="true"
-       @click="screen">+++dasdas</i>
+       @click="screen"></i>
     <survey id='con_lf_top_div'
             :key="key"
             v-if="survey"
@@ -133,7 +133,6 @@ export default {
       }
       this.fullscreen = !this.fullscreen
     }
-
   }
 }
 </script>
@@ -146,12 +145,13 @@ export default {
   position: relative;
 }
 .full {
+  font-size: 30px;
   position: absolute;
   right: 35px;
   top: 20px;
-  z-index: 10;
 }
 #con_lf_top_div {
   overflow: auto;
+  height: 100%;
 }
 </style>
