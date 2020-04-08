@@ -8,7 +8,7 @@ const latest = {
   'linux': 'latest-linux.json'
 }
 const release = `${process.env.BASE_API}/download/${latest[require('os').platform()]}`
-const checkVersion = async() => {
+const checkVersion = async(win) => {
   // 自动更新的弹窗如果用户没有设置不再提醒，就可以去查询是否需要更新
   const res = await axios.get(release)
   if (res.status === 200) {
@@ -16,7 +16,7 @@ const checkVersion = async() => {
     const downloadUrl = `${process.env.BASE_API}${res.data.url}`
     const result = compareVersion2Update(version, latest) // 比对版本号，如果本地版本低于远端则更新
     if (result) {
-      dialog.showMessageBox({
+      dialog.showMessageBox(win, {
         type: 'info',
         title: '发现新版本',
         buttons: ['是', '否'],
