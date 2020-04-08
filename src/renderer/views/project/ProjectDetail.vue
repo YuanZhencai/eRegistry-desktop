@@ -1,9 +1,12 @@
 <template>
   <div class="project-detail">
     <el-container style="height: 100%">
-      <el-aside class="sidebar" :class="{ 'aside-collapse': isCollapse }">
-        <div class="sidebar-fold" @click="isCollapse = !isCollapse">
-          <i class="fa fa-navicon" :class="{ 'icon-fold': !isCollapse }"></i>
+      <el-aside class="sidebar" :class="{ 'aside-collapse': isCollapse }" >
+        <div v-if="isCollapse" class="sidebar-fold" @click="isCollapse = !isCollapse" style="padding-left: 20px">
+          <i class="fa fa-navicon"></i>
+        </div>
+        <div v-if="!isCollapse" class="sidebar-fold" @click="isCollapse = !isCollapse" style="text-align: center">
+          <i class="fa fa-navicon icon-fold"></i>
         </div>
         <el-menu :default-active="currentActive"
                  :active="currentActive"
@@ -107,9 +110,7 @@ export default {
 }
 .sidebar-fold {
   border-right: 1px solid #e6e6e6;
-  text-align: center;
   padding: 5px 0;
-  background-color: #ecf5ff;
   cursor: pointer;
 }
 .sidebar-fold .icon-fold {
