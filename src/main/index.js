@@ -89,7 +89,7 @@ function onLogin() {
 }
 
 function onUpdater() {
-  checkVersion()
+  checkVersion(mainWindow)
 }
 
 function onReady() {
