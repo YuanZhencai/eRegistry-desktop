@@ -1,13 +1,11 @@
 <template>
-  <div class="content">
-    <i class="el-icon-full-screen full"
-       aria-hidden="true"
-       @click="screen"></i>
-    <survey id='con_lf_top_div'
-            :key="key"
-            v-if="survey"
-            :survey="survey"></survey>
-  </div>
+    <div id="form_crf">
+      <a-icon v-if="isSpreadShrink" class="full" @click="screen" type="fullscreen"  />
+      <a-icon v-else class="full" @click="screen" type="fullscreen-exit" />
+      <survey :key="key"
+              v-if="survey"
+              :survey="survey"></survey>
+    </div>
 </template>
 
 <script>
@@ -43,7 +41,8 @@ export default {
     return {
       survey: null,
       key: null,
-      fullscreen: false
+      fullscreen: false,
+      isSpreadShrink: true
     }
   },
   created() {
@@ -107,8 +106,8 @@ export default {
       this.$emit('valueChange', survey.data)
     },
     screen() {
-      // const element = document.documentElement// 设置后就是我们平时的整个页面全屏效果
-      const element = document.getElementById('con_lf_top_div')// 设置后就是   id==con_lf_top_div 的容器全屏
+      this.isSpreadShrink = !this.isSpreadShrink
+      const element = document.getElementById('form_crf')// 设置后就是容器全屏
       if (this.fullscreen) {
         if (document.exitFullscreen) {
           document.exitFullscreen()
@@ -127,7 +126,6 @@ export default {
         } else if (element.mozRequestFullScreen) {
           element.mozRequestFullScreen()
         } else if (element.msRequestFullscreen) {
-          // IE11
           element.msRequestFullscreen()
         }
       }
@@ -141,17 +139,17 @@ export default {
 <style scoped>
 @import "~survey-vue/survey.css";
 @import "~survey-vue/modern.css";
-.content {
+#form_crf {
   position: relative;
-}
-.full {
-  font-size: 30px;
-  position: absolute;
-  right: 35px;
-  top: 20px;
-}
-#con_lf_top_div {
   overflow: auto;
   height: 100%;
+  width: 100%;
+}
+.full {
+  font-size: 24px;
+  position: absolute;
+  right: 15px;
+  top: 22px;
+  z-index: 9;
 }
 </style>
