@@ -2,7 +2,7 @@
   <div class="content">
     <i class="fa fa-arrows-alt fa-2x full"
        aria-hidden="true"
-       @click="screen"></i>
+       @click="screen">+++dasdas</i>
     <survey id='con_lf_top_div'
             :key="key"
             v-if="survey"
@@ -27,7 +27,7 @@ export default {
   props: {
     info: {
       type: Object,
-      default: function () {
+      default: function() {
         return {
           survey: {
             locale: 'zh-cn',
@@ -107,7 +107,7 @@ export default {
       this.$emit('valueChange', survey.data)
     },
     screen() {
-      // let element = document.documentElement;//设置后就是我们平时的整个页面全屏效果
+      // const element = document.documentElement// 设置后就是我们平时的整个页面全屏效果
       const element = document.getElementById('con_lf_top_div')// 设置后就是   id==con_lf_top_div 的容器全屏
       if (this.fullscreen) {
         if (document.exitFullscreen) {
@@ -153,28 +153,5 @@ export default {
 }
 #con_lf_top_div {
   overflow: auto;
-}
-/* 全屏属性 */
-.full:-webkit-full-screen {
-  position: absolute;
-  right: 35px;
-  top: 20px;
-  z-index: 10;
-}
-.full:-moz-full-screen {
-  position: absolute;
-  right: 35px;
-  top: 20px;
-  z-index: 10;
-}
-.full:-ms-fullscreen {
-  position: absolute;
-  right: 35px;
-  top: 20px;
-  z-index: 10;
-}
-/* 全屏伪类 当前chrome:70 不支持 */
-:fullscreen {
-  /* IE11支持 */
 }
 </style>
