@@ -19,6 +19,12 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "/download"
+      }
+    ],
     "productName": "eregistry-desktop",
     "appId": "cn.datarx.eregistry-desktop",
     "directories": {
