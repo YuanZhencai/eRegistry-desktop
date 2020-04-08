@@ -1,12 +1,10 @@
 <template>
   <div>
-    <div class="textOverFlow">
-      {{text}}
-      <div class="show">{{text}}</div>
-      <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start">
-        <el-button>上左</el-button>
-      </el-tooltip>
-    </div>
+    <el-tooltip popper-class="item" effect="dark" :content="text" placement="top">
+      <div class="textOverFlow">{{text}}</div>
+    </el-tooltip>
+
+
 <!--    <div v-if="text.length<numberLength">-->
 <!--      {{text}}-->
 <!--    </div>-->
@@ -48,7 +46,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .unfold {
   float: right;
   color: #409eff;
@@ -60,9 +58,8 @@ export default {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.show{
-  border: 1px solid red;
-  display: none;
+.item{
+  width: 400px;
 }
 .active {
   width: auto;
