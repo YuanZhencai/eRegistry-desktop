@@ -48,6 +48,15 @@ export default {
   created() {
   },
   mounted() {
+    // 监听键盘按键事件 定义let self = this；否则直接调用methods的方法会报方法undifined的错误；
+    const self = this
+    this.$nextTick(function() {
+      document.addEventListener('keyup', function(e) {
+        if (e.keyCode === 27) {
+          self.closeScreenFull()
+        }
+      })
+    })
   },
   watch: {
     info: {
@@ -105,29 +114,32 @@ export default {
     onValueChanged(survey, options) {
       this.$emit('valueChange', survey.data)
     },
+    // 按ESC退出全屏操作
+    closeScreenFull() {
+      if (!this.isSpreadShrink) {
+        this.isSpreadShrink = true
+      }
+    },
     screen() {
       this.isSpreadShrink = !this.isSpreadShrink
       const element = document.getElementById('form_crf')// 设置后就是容器全屏
-      if (this.fullscreen) {
-        if (document.exitFullscreen) {
-          document.exitFullscreen()
-        } else if (document.webkitCancelFullScreen) {
-          document.webkitCancelFullScreen()
-        } else if (document.mozCancelFullScreen) {
-          document.mozCancelFullScreen()
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen()
-        }
-      } else {
-        if (element.requestFullscreen) {
-          element.requestFullscreen()
-        } else if (element.webkitRequestFullScreen) {
-          element.webkitRequestFullScreen()
-        } else if (element.mozRequestFullScreen) {
-          element.mozRequestFullScreen()
-        } else if (element.msRequestFullscreen) {
-          element.msRequestFullscreen()
-        }
+      if (element.requestFullscreen) {
+        element.requestFullscreen()
+      } else if (element.webkitRequestFullScreen) {
+        element.webkitRequestFullScreen()
+      } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen()
+      } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen()
+      }
+      if (document.exitFullscreen) {
+        document.exitFullscreen()
+      } else if (document.webkitCancelFullScreen) {
+        document.webkitCancelFullScreen()
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen()
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen()
       }
       this.fullscreen = !this.fullscreen
     }
