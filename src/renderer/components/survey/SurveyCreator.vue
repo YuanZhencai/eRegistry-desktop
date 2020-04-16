@@ -7,6 +7,7 @@ import uuidv1 from 'uuid/v1'
 import * as SurveyKo from 'survey-knockout'
 import * as SurveyCreator from 'survey-creator'
 import * as widgets from './widgets'
+import * as screen from '../screen/screen'
 import { SurveyZhCnModel } from './survey-zh-cn.model'
 
 widgets.init(SurveyKo)
@@ -69,6 +70,7 @@ export default {
   },
   data() {
     return {
+      isSpreadShrink: false
     }
   },
   mounted() {
@@ -95,6 +97,12 @@ export default {
       this.surveyCreator.haveCommercialLicense = true
       this.surveyCreator.text = this.survey
       this.surveyCreator.saveSurveyFunc = this.saveMySurvey
+      this.surveyCreator.toolbarItems.push({
+        id: uuidv1(),
+        visible: true,
+        title: '全屏显示/退出全屏',
+        action: () => this.screen()
+      })
       this.tools.forEach(tool => {
         this.surveyCreator.toolbarItems.push({
           id: uuidv1(),
@@ -128,6 +136,11 @@ export default {
         }
       }
       return title || '未命名表单'
+    },
+    screen() {
+      const element = document.getElementById('surveyCreatorContainer')// 设置后就是容器全屏
+      this.isSpreadShrink = !this.isSpreadShrink
+      screen.screen(element)
     }
   }
 }
@@ -135,6 +148,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    @import '~survey-knockout/survey.css';
-    @import '~survey-creator/survey-creator.css';
+@import "~survey-knockout/survey.css";
+@import "~survey-creator/survey-creator.css";
+    #surveyCreatorContainer{
+        width: 100%;
+        height: 100%;
+    }
 </style>

@@ -1,22 +1,28 @@
 <template>
-    <div id="form_crf">
-      <a-icon v-if="isSpreadShrink" class="full" @click="screen" type="fullscreen"  />
-      <a-icon v-else class="full" @click="screen" type="fullscreen-exit" />
-      <survey :key="key"
-              v-if="survey"
-              :survey="survey"></survey>
-    </div>
+  <div id="form_crf">
+    <a-icon v-if="isSpreadShrink"
+            class="full"
+            @click="screen"
+            type="fullscreen" />
+    <a-icon v-else
+            class="full"
+            @click="screen"
+            type="fullscreen-exit" />
+    <survey :key="key"
+            v-if="survey"
+            :survey="survey"></survey>
+  </div>
 </template>
 
 <script>
 import * as SurveyVue from 'survey-vue'
 import * as widgets from './widgets'
+import * as screen from '../screen/screen'
 
 const Survey = SurveyVue.Survey
 SurveyVue.StylesManager.applyTheme('winterstone')
 
 widgets.init(SurveyVue)
-
 export default {
   name: 'survey-view',
   components: {
@@ -123,25 +129,7 @@ export default {
     screen() {
       this.isSpreadShrink = !this.isSpreadShrink
       const element = document.getElementById('form_crf')// 设置后就是容器全屏
-      if (element.requestFullscreen) {
-        element.requestFullscreen()
-      } else if (element.webkitRequestFullScreen) {
-        element.webkitRequestFullScreen()
-      } else if (element.mozRequestFullScreen) {
-        element.mozRequestFullScreen()
-      } else if (element.msRequestFullscreen) {
-        element.msRequestFullscreen()
-      }
-      if (document.exitFullscreen) {
-        document.exitFullscreen()
-      } else if (document.webkitCancelFullScreen) {
-        document.webkitCancelFullScreen()
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen()
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen()
-      }
-      this.fullscreen = !this.fullscreen
+      screen.screen(element)
     }
   }
 }
