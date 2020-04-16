@@ -101,7 +101,7 @@ export default {
         id: uuidv1(),
         visible: true,
         title: '全屏显示/退出全屏',
-        action: () => this.screen()
+        action: () => this.screen(!this.isSpreadShrink)
       })
       this.tools.forEach(tool => {
         this.surveyCreator.toolbarItems.push({
@@ -137,10 +137,10 @@ export default {
       }
       return title || '未命名表单'
     },
-    screen() {
+    screen(type) {
       const element = document.getElementById('surveyCreatorContainer')// 设置后就是容器全屏
       this.isSpreadShrink = !this.isSpreadShrink
-      screen.screen(element)
+      screen.screen(element, type)
     }
   }
 }
