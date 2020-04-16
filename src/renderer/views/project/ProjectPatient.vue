@@ -156,6 +156,13 @@ export default {
       this.getPatients()
       this.findCurrentMemberTask()
     },
+    mounted() {
+      this.$on('patientCaseListModification', function() {
+        this.currentPage = 1
+        this.patients = []
+        this.getPatients()
+      })
+    },
     methods: {
       sort() {
         return (this.predicate && this.order) ? this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null

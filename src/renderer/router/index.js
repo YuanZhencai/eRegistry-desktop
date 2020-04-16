@@ -47,6 +47,11 @@ export const constantRouterMap = [
     }]
   },
   {
+    path: '/patient-task/:taskId',
+    name: 'patientTask',
+    component: () => import('@/views/patient/PatientTaskComponent')
+  },
+  {
     path: '/report',
     component: Layout,
     name: 'Report',
