@@ -9,7 +9,7 @@
         </el-tooltip>
       </div>
       <remind-component class="right-menu-item"></remind-component>
-      <div class="right-menu-item">
+      <div class="right-menu-item" v-if="!isWeb">
         <export-history></export-history>
       </div>
       <el-dropdown class="right-menu-item avatar-container"
@@ -76,6 +76,11 @@ export default {
       'avatar',
       'name'
     ])
+  },
+  data() {
+    return {
+      isWeb: process.env.BUILD_TARGET === 'web'
+    }
   },
   methods: {
     toggleSideBar() {
