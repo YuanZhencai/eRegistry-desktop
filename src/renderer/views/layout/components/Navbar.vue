@@ -57,12 +57,15 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { shell } from 'electron'
+import { SERVER_API_URL } from '@/constants'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import ExportHistory from '../../export/ExportHistory'
 import RemindComponent from '@/components/remind/RemindComponent'
-
+var electron
+if (!process.env.IS_WEB) {
+  electron = require('electron')
+}
 export default {
   components: {
     RemindComponent,
@@ -79,7 +82,7 @@ export default {
   },
   data() {
     return {
-      isWeb: process.env.BUILD_TARGET === 'web'
+      isWeb: process.env.IS_WEB === true
     }
   },
   methods: {
@@ -92,7 +95,11 @@ export default {
       })
     },
     openHelpPage() {
-      shell.openExternal(`${process.env.BASE_API}/help/index.html`)
+      if (!process.env.IS_WEB) {
+        electron.shell.openExternal(`${process.env.BASE_API}/help/index.html`)
+      } else {
+        window.open(`${SERVER_API_URL}/help/index.html`, '_blank')
+      }
     }
   }
 }

@@ -1,7 +1,10 @@
-import { ipcRenderer } from 'electron'
 import { login, logout, getInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { SERVER_API_URL } from '@/constants'
+var electron
+if (!process.env.IS_WEB) {
+  electron = require('electron')
+}
 
 const user = {
   state: {
@@ -35,10 +38,12 @@ const user = {
           const data = response.data
           setToken(data.token)
           commit('SET_TOKEN', data.token)
-          ipcRenderer.send('login', {
-            token: data.token,
-            baseApi: SERVER_API_URL
-          })
+          if (!process.env.IS_WEB) {
+            electron.ipcRenderer.send('login', {
+              token: data.token,
+              baseApi: SERVER_API_URL
+            })
+          }
           resolve()
         }).catch(error => {
           reject(error)
