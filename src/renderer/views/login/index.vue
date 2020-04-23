@@ -70,7 +70,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" style="width:100%;">
-                <router-link :to="{path: '/registry'}">注册一个新账号</router-link>
+                <router-link :to="{path: '/register'}">注册一个新账号</router-link>
               </el-button>
             </el-form-item>
           </el-form>
@@ -152,6 +152,5 @@ export default {
   justify-content: center;
   align-items: center;
 }
-
 
 </style>

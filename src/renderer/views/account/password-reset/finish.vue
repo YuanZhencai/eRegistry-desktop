@@ -17,8 +17,8 @@
             <router-link :to="{ path: '/login' }" class="alert-link">登录</router-link>
         </p>
         <el-card class="box-card mt-100">
-            <div slot="header" class="text-center">
-                <img src="../../../assets/logo-pdas.png">忘记密码
+            <div slot="header" class="row-flex justify-center">
+                <img src="../../../assets/logo-pdas.png"><h5>忘记密码</h5>
             </div>
             <div class="item">
                 <el-form autoComplete="on"

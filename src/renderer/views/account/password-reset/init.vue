@@ -7,8 +7,8 @@
             <p>已将重置密码的操作说明发送到您的邮箱，请检查邮件.</p>
         </div>
         <el-card class="box-card mt-100">
-            <div slot="header" class="text-center">
-                <img src="../../../assets/logo-pdas.png">忘记密码
+            <div slot="header" class="row-flex justify-center">
+                <img src="../../../assets/logo-pdas.png"><h5>忘记密码</h5>
             </div>
             <div class="item">
                 <el-form autoComplete="on"
@@ -44,6 +44,8 @@
                     </el-form-item>
                     <el-form-item>
                         <router-link :to="{path: '/reset/finish'}">finish</router-link>
+                        <router-link :to="{path: '/activate'}">activate</router-link>
+                        <router-link :to="{path: '/invitation'}">invitation</router-link>
                     </el-form-item>
                 </el-form>
             </div>

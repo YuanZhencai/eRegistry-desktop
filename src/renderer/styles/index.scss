@@ -1,3 +1,5 @@
+/*styles/index.scss*/
+
 @import './variables.scss';
 @import './mixin.scss';
 @import './transition.scss';
@@ -173,7 +175,7 @@ h1, h2, h3, h4, h5, h6 {
   position: fixed;
   height: 100%;
   width: 100%;
-  //background: url(../assets/bg1.jpg) 50% no-repeat;
+  background: url("../assets/bg1.jpg") 50% no-repeat;
   .login-form {
     position: absolute;
     left: 0;
@@ -246,6 +248,10 @@ h1, h2, h3, h4, h5, h6 {
   .box-card {
     width: 320px;
     margin: 0 auto;
+    img {
+      height: 20px;
+      margin-top: 7px;
+    }
     .item {
       margin-bottom: 18px;
       .errorTitle {
