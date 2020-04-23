@@ -42,11 +42,6 @@
                             </el-col>
                         </el-row>
                     </el-form-item>
-                    <el-form-item>
-                        <router-link :to="{path: '/reset/finish'}">finish</router-link>
-                        <router-link :to="{path: '/activate'}">activate</router-link>
-                        <router-link :to="{path: '/invitation'}">invitation</router-link>
-                    </el-form-item>
                 </el-form>
             </div>
         </el-card>

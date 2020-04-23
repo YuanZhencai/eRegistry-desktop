@@ -93,7 +93,7 @@
           callback()
         }
       }
-      const key = this.$route.params.key || '12844791923021679613'
+      const key = this.$route.params.key
       return {
         bg_img,
         key: key,
