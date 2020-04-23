@@ -73,7 +73,9 @@
         this.$refs.resetForm.validate(valid => {
           if (valid) {
             this.isSaving = true
-            requestPasswordReset(this.resetForm.email).then(() => {
+            requestPasswordReset({
+              mail: this.resetForm.email
+            }).then(() => {
               this.isSaving = false
               this.success = 'OK'
             }, (err) => {
