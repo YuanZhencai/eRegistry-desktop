@@ -1,5 +1,5 @@
 <template>
-    <div class="login-container">
+    <div class="login-container" :style="{background: 'url(' + bg_img + ') 50% no-repeat'}">
         <el-card class="box-card mt-100">
             <div slot="header" class="row-flex justify-center">
                 <img src="../../assets/logo-pdas.png"><h5>激活</h5>
@@ -65,22 +65,11 @@
 
 <script>
   import { activeInvitation, getInvitation } from '@/api/InvitationService'
+  import bg_img from '@/assets/bg1.jpg'
+  import { checkEmail } from '../../utils/validate'
   export default {
     name: 'invitation',
     data() {
-      const checkEmail = (rule, value, callback) => {
-        const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
-        if (value === '') {
-          return callback(new Error('邮箱不能为空'))
-        }
-        setTimeout(() => {
-          if (mailReg.test(value)) {
-            callback()
-          } else {
-            callback(new Error('请输入正确的邮箱格式'))
-          }
-        }, 100)
-      }
       const validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'))
@@ -106,6 +95,7 @@
       }
       const key = this.$route.params.key || '12844791923021679613'
       return {
+        bg_img,
         key: key,
         invitation: {},
         activeForm: {

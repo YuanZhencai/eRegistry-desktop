@@ -1,5 +1,5 @@
 <template>
-<div class="login-container">
+<div class="login-container" :style="{background: 'url(' + bg_img + ') 50% no-repeat'}">
     <el-card class="box-card mt-100">
         <div slot="header" class="text-center">
             <img src="../../assets/logo-pdas.png">
@@ -64,24 +64,13 @@
 </template>
 
 <script>
-  // import bg_image from '@/assets/bg1.jpg'
+  import bg_img from '@/assets/bg1.jpg'
   import { registerAccount } from '@/api/AccountService'
+  import { checkEmail } from '../../utils/validate'
+
   export default {
     name: 'Register',
     data() {
-      const checkEmail = (rule, value, callback) => {
-        const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
-        if (value === '') {
-          return callback(new Error('邮箱不能为空'))
-        }
-        setTimeout(() => {
-          if (mailReg.test(value)) {
-            callback()
-          } else {
-            callback(new Error('请输入正确的邮箱格式'))
-          }
-        }, 100)
-      }
       const validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'))
@@ -106,6 +95,7 @@
         }
       }
       return {
+        bg_img,
         registerForm: {
           username: '',
           password: '',

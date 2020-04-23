@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container Grid">
+  <div class="login-container Grid" :style="{background: 'url(' + bg_img + ') 50% no-repeat'}">
     <div class="Grid-cell flex-right">
       <div>
         <div class="text-box">
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-
+import bg_img from '@/assets/bg1.jpg'
 export default {
   name: 'login',
   data() {
@@ -93,6 +93,7 @@ export default {
       }
     }
     return {
+      bg_img,
       loginForm: {
         username: '',
         password: ''

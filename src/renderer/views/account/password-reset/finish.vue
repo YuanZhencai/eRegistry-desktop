@@ -1,5 +1,5 @@
 <template>
-    <div class="login-container">
+    <div class="login-container" :style="{background: 'url(' + bg_img + ') 50% no-repeat'}">
         <div class="alert alert-danger" v-if="keyMissing">
             <strong>无效的重置密码请求.</strong>
         </div>
@@ -70,6 +70,7 @@
 
 <script>
   import { finishPasswordReset } from '@/api/AccountService'
+  import bg_img from '@/assets/bg1.jpg'
   export default {
     name: 'resetFinish',
     data() {
@@ -98,6 +99,7 @@
         }
       }
       return {
+        bg_img,
         pwdType: 'password',
         isSaving: false,
         key,

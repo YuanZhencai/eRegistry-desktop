@@ -1,5 +1,5 @@
 <template>
-    <div class="login-container">
+    <div class="login-container" :style="{background: 'url(' + bg_img + ') 50% no-repeat'}">
         <el-row>
             <el-col :span="16" :offset="4" class="text-center">
                 <h1 jhiTranslate="activate.title">启用</h1>
@@ -19,11 +19,13 @@
 
 <script>
   import { activateAccount } from '@/api/AccountService'
+  import bg_img from '@/assets/bg1.jpg'
   export default {
     name: 'activate',
     data() {
       const key = this.$route.params.key
       return {
+        bg_img,
         success: null,
         error: null,
         key

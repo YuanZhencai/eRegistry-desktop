@@ -1,5 +1,5 @@
 <template>
-    <div class="login-container">
+    <div class="login-container" :style="{background: 'url(' + bg_img + ') 50% no-repeat'}">
         <div class="alert alert-danger" v-if="errorEmailNotExists">
             <p>没有与该邮件地址关联的账号. 请使用其他邮件地址</p>
         </div>
@@ -55,23 +55,13 @@
 
 <script>
   import { requestPasswordReset } from '@/api/AccountService'
+  import bg_img from '@/assets/bg1.jpg'
+  import { checkEmail } from '../../../utils/validate'
   export default {
     name: 'resetInit',
     data() {
-      const checkEmail = (rule, value, callback) => {
-        const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
-        if (value === '') {
-          return callback(new Error('邮箱不能为空'))
-        }
-        setTimeout(() => {
-          if (mailReg.test(value)) {
-            callback()
-          } else {
-            callback(new Error('请输入正确的邮箱格式'))
-          }
-        }, 100)
-      }
       return {
+        bg_img,
         isSaving: false,
         resetForm: {
           email: ''
