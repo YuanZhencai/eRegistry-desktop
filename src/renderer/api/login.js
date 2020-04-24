@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export function login(username, password) {
   return axios({
-    url: '/api/authenticate',
+    url: 'api/authenticate',
     method: 'post',
     data: {
       username,
@@ -23,7 +23,7 @@ export function login(username, password) {
 
 export function getInfo(token) {
   return axios({
-    url: '/api/account',
+    url: 'api/account',
     method: 'get',
     params: { token },
     transformResponse: [function(data) {

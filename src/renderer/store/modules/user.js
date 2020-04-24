@@ -61,7 +61,7 @@ const user = {
           } else {
             reject('getInfo: roles must be a non-null array !')
           }
-          const avatar = `${process.env.BASE_API}/api/image/avatar/${data.name}.png`
+          const avatar = `${process.env.BASE_API}api/image/avatar/${data.name}.png`
           commit('SET_NAME', data.name)
           commit('SET_AVATAR', avatar)
           resolve(response)

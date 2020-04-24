@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export function getProjectCenters(projectId, params) {
   return axios({
-    url: `/api/projects/${projectId}/centers`,
+    url: `api/projects/${projectId}/centers`,
     method: 'get',
     params: params
   })
@@ -10,21 +10,21 @@ export function getProjectCenters(projectId, params) {
 
 export function getCenter(id) {
   return axios({
-    url: `/api/centers/${id}`,
+    url: `api/centers/${id}`,
     method: 'get'
   })
 }
 
 export function deleteCenter(id) {
   return axios({
-    url: `/api/centers/${id}`,
+    url: `api/centers/${id}`,
     method: 'delete'
   })
 }
 
 export function updateCenter(center) {
   return axios({
-    url: `/api/centers`,
+    url: `api/centers`,
     method: 'put',
     data: center
   })
@@ -32,7 +32,7 @@ export function updateCenter(center) {
 
 export function createCenter(center) {
   return axios({
-    url: `/api/centers`,
+    url: `api/centers`,
     method: 'post',
     data: center
   })
@@ -40,7 +40,7 @@ export function createCenter(center) {
 
 export function getAllCenters(params) {
   return axios({
-    url: `/api/centers`,
+    url: `api/centers`,
     method: 'get',
     params: params
   })

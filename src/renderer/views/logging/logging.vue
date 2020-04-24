@@ -5,7 +5,7 @@
         <el-button type="primary"
                    size="mini "
                    v-if="project && project.name"
-                   v-download="{name: `${project.name}.zip`, url: `/api/projects/${projectId}/changes/data`}"
+                   v-download="{name: `${project.name}.zip`, url: `api/projects/${projectId}/changes/data`}"
                    class="float-right">
           <span class="fa fa-download"></span>
           <span class="d-none d-md-inline">导出</span>
