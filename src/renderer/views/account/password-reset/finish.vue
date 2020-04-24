@@ -16,7 +16,7 @@
             <span><strong>您的密码已被重置.</strong> 请 </span>
             <router-link :to="{ path: '/login' }" class="alert-link">登录</router-link>
         </p>
-        <el-card class="box-card mt-100">
+        <el-card class="box-card mt-100" v-if="!keyMissing">
             <div slot="header" class="row-flex justify-center">
                 <img src="../../../assets/logo-pdas.png"><h5>忘记密码</h5>
             </div>
@@ -103,7 +103,7 @@
         pwdType: 'password',
         isSaving: false,
         key,
-        keyMissing: !this.key,
+        keyMissing: null,
         resetForm: {
           password: '',
           checkPass: ''
@@ -115,6 +115,9 @@
         success: null,
         error: null
       }
+    },
+    created() {
+      this.keyMissing = !this.key
     },
     methods: {
       showPwd() {
