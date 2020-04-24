@@ -74,7 +74,7 @@
   export default {
     name: 'resetFinish',
     data() {
-      const key = this.$route.params.key
+      const key = this.$route.query.key
       const validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'))
