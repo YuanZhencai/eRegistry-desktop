@@ -14,7 +14,7 @@
         <div class="text-box">
           <h3>让随访工作变得井井有条</h3>
         </div>
-        <div class="content mt-100" v-if="IS_WEB">
+        <div class="content mt-100" v-if="isWeb">
           <h5>立即下载</h5>
           <div class="list">
             <div class="item">
@@ -118,7 +118,6 @@ export default {
       }
     }
     return {
-      IS_WEB: process.env.IS_WEB,
       bg_img,
       loginForm: {
         username: '',
@@ -130,7 +129,8 @@ export default {
       },
       loading: false,
       errorTitle: false,
-      pwdType: 'password'
+      pwdType: 'password',
+      isWeb: process.env.IS_WEB
     }
   },
   methods: {
