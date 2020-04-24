@@ -139,8 +139,10 @@ export default {
     }
   },
   async created() {
-    this.macLatestPath = await this.getLatestPath('latest-mac.yml')
-    this.winLatestPath = await this.getLatestPath('latest.yml')
+    if (this.isWeb) {
+      this.macLatestPath = await this.getLatestPath('latest-mac.yml')
+      this.winLatestPath = await this.getLatestPath('latest.yml')
+    }
   },
   methods: {
     showPwd() {
