@@ -23,7 +23,7 @@
   export default {
     name: 'activate',
     data() {
-      const key = this.$route.params.key
+      const key = this.$route.query.key
       return {
         bg_img,
         success: null,

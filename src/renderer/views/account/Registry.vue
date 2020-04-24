@@ -135,6 +135,8 @@
                 message: '注册成功，稍后会发送激活邮件到您的注册邮箱，请前往去激活账号.',
                 type: 'success'
               })
+            }, () => {
+              this.isSaving = false
             })
           } else {
             this.isSaving = false

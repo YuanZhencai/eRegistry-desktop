@@ -93,7 +93,7 @@
           callback()
         }
       }
-      const key = this.$route.params.key
+      const key = this.$route.query.key
       return {
         bg_img,
         key: key,
