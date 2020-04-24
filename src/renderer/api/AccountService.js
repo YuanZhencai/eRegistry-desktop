@@ -40,11 +40,12 @@ export function changePassword(data) {
     data: data
   })
 }
-export function requestPasswordReset(data) {
+export function requestPasswordReset(mail) {
   return axios({
+    headers: { 'Content-Type': 'text/plain' },
     url: `api/account/reset-password/init`,
     method: 'post',
-    data: data
+    data: mail
   })
 }
 export function finishPasswordReset(data) {
