@@ -14,6 +14,31 @@
         <div class="text-box">
           <h3>让随访工作变得井井有条</h3>
         </div>
+        <div class="content mt-100" v-if="process.env.IS_WEB">
+          <h5>立即下载</h5>
+          <div class="list">
+            <div class="item">
+              <div class="Mac-Win macColor">
+                <i class="fa fa-apple fa-4x" aria-hidden="true"></i>
+                <p style="margin: 0px;" class="titColor">Mac</p>
+              </div>
+              <a href="download/eregistry-desktop.dmg" target="_blank" class="winColor modal">
+                <i class="fa fa-download fa-4x" aria-hidden="true"></i>
+                <p class="titColor">下载Mac客户端</p>
+              </a>
+            </div>
+            <div class="item">
+              <div class="Mac-Win winColor">
+                <i class="fa fa-windows fa-4x" aria-hidden="true"></i>
+                <p style="margin: 4px;" class="titColor">Windows</p>
+              </div>
+              <a href="download/eregistry-desktop.exe" target="_blank" class="winColor modal">
+                <i class="fa fa-download fa-4x" aria-hidden="true"></i>
+                <p class="titColor">下载Windows客户端</p>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="Grid-cell flex">
@@ -153,5 +178,52 @@ export default {
   justify-content: center;
   align-items: center;
 }
-
+.content {
+  .item {
+    float: left;
+    width: 139px;
+    height: 132px;
+    border: 1px solid #000;
+    text-align: center;
+    padding-top: 25px;
+    position: relative;
+    cursor: pointer;
+    color: #000;
+  }
+  .item{
+    display: block;
+    .titColor{
+      font-size: 12px;
+      color: #0a0a0a;
+      font-weight: 500;
+    }
+    .modal{
+      width: 137px;
+      height: 130px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      padding-top: 25px;
+      color: #000;
+      display: none;
+    }
+  }
+  .item + .item {
+    margin-left: 10px;
+  }
+  .macColor{
+    color: #fff !important;
+  }
+  .winColor{
+    color: #01adff !important;
+  }
+  .item:hover {
+    .Mac-Win {
+      display: none;
+    }
+    .modal{
+      display: block;
+    }
+  }
+}
 </style>
