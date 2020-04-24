@@ -2,14 +2,14 @@ import axios from 'axios'
 
 export function getProject(id) {
   return axios({
-    url: `/api/projects/${id}`,
+    url: `api/projects/${id}`,
     method: 'get'
   })
 }
 
 export function getMineProjects(req) {
   return axios({
-    url: `/api/projects/mine`,
+    url: `api/projects/mine`,
     method: 'get',
     params: req
   })
@@ -17,21 +17,21 @@ export function getMineProjects(req) {
 
 export function getProjectUsers(id) {
   return axios({
-    url: `/api/projects/${id}/users`,
+    url: `api/projects/${id}/users`,
     method: 'get'
   })
 }
 
 export function deleteProject(id) {
   return axios({
-    url: `/api/projects/${id}`,
+    url: `api/projects/${id}`,
     method: 'delete'
   })
 }
 
 export function createProject(project) {
   return axios({
-    url: `/api/projects`,
+    url: `api/projects`,
     method: 'post',
     data: project
   })
@@ -39,7 +39,7 @@ export function createProject(project) {
 
 export function updateProject(project) {
   return axios({
-    url: `/api/projects`,
+    url: `api/projects`,
     method: 'put',
     data: project
   })
@@ -47,13 +47,13 @@ export function updateProject(project) {
 
 export function findReport(id) {
   return axios({
-    url: `/api/projects/${id}/report`,
+    url: `api/projects/${id}/report`,
     method: 'get'
   })
 }
 export function saveReport(id, report) {
   return axios({
-    url: `/api/projects/${id}/report`,
+    url: `api/projects/${id}/report`,
     method: 'put',
     data: report
   })
@@ -61,7 +61,7 @@ export function saveReport(id, report) {
 
 export function getChanges(id, params) {
   return axios({
-    url: `/api/projects/${id}/changes`,
+    url: `api/projects/${id}/changes`,
     method: 'get',
     params
   })
@@ -69,7 +69,7 @@ export function getChanges(id, params) {
 
 export function exportChangesData(id, params) {
   return axios({
-    url: `/api/projects/${id}/changes/data`,
+    url: `api/projects/${id}/changes/data`,
     method: 'get',
     params
   })

@@ -13,7 +13,7 @@ export function initFilters() {
   })
 
   Vue.filter('qrcode', function(url) {
-    return `${SERVER_API_URL}/api/qrcode?uri=${encodeURIComponent(url)}`
+    return `${SERVER_API_URL}api/qrcode?uri=${encodeURIComponent(url)}`
   })
 
   Vue.filter('extension', function(path) {
