@@ -14,7 +14,7 @@
         <div class="text-box">
           <h3>让随访工作变得井井有条</h3>
         </div>
-        <div class="content mt-100" v-if="isWeb">
+        <div class="content mt-100" v-if="isWeb && macLatestPath && winLatestPath">
           <h5>立即下载</h5>
           <div class="list">
             <div class="item">
@@ -22,7 +22,7 @@
                 <i class="fa fa-apple fa-4x" aria-hidden="true"></i>
                 <p style="margin: 0px;" class="titColor">Mac</p>
               </div>
-              <a href="download/eregistry-desktop.dmg" target="_blank" class="winColor modal">
+              <a :herf="macLatestPath" target="_blank" class="winColor modal">
                 <i class="fa fa-download fa-4x" aria-hidden="true"></i>
                 <p class="titColor">下载Mac客户端</p>
               </a>
@@ -32,7 +32,7 @@
                 <i class="fa fa-windows fa-4x" aria-hidden="true"></i>
                 <p style="margin: 4px;" class="titColor">Windows</p>
               </div>
-              <a href="download/eregistry-desktop.exe" target="_blank" class="winColor modal">
+              <a :herf="winLatestPath" target="_blank" class="winColor modal">
                 <i class="fa fa-download fa-4x" aria-hidden="true"></i>
                 <p class="titColor">下载Windows客户端</p>
               </a>
@@ -107,6 +107,9 @@
 
 <script>
 import bg_img from '@/assets/bg1.jpg'
+import axios from 'axios'
+const yaml = require('js-yaml')
+
 export default {
   name: 'login',
   data() {
@@ -130,8 +133,14 @@ export default {
       loading: false,
       errorTitle: false,
       pwdType: 'password',
-      isWeb: process.env.IS_WEB
+      isWeb: process.env.IS_WEB,
+      macLatestPath: null,
+      winLatestPath: null
     }
+  },
+  async created() {
+    this.macLatestPath = await this.getLatestPath('latest-mac.yml')
+    this.winLatestPath = await this.getLatestPath('latest.yml')
   },
   methods: {
     showPwd() {
@@ -157,6 +166,18 @@ export default {
           return false
         }
       })
+    },
+    async getLatestPath(yml) {
+      try {
+        const release = `download/${yml}`
+        const res = await axios.get(release)
+        if (res.status === 200) {
+          const data = yaml.safeLoad(res.data, { json: true })
+          return `download/${data.path}`
+        }
+      } catch (e) {
+        // ignore
+      }
     }
   }
 }
