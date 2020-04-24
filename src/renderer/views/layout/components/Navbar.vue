@@ -96,9 +96,9 @@ export default {
     },
     openHelpPage() {
       if (!process.env.IS_WEB) {
-        electron.shell.openExternal(`${process.env.BASE_API}/help/index.html`)
+        electron.shell.openExternal(`${process.env.BASE_API}help/index.html`)
       } else {
-        window.open(`${SERVER_API_URL}/help/index.html`, '_blank')
+        window.open(`${SERVER_API_URL}help/index.html`, '_blank')
       }
     }
   }

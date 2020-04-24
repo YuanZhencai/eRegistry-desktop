@@ -127,7 +127,7 @@
       submit() {
         finishPasswordReset({
           key: this.key,
-          newPasswrod: this.resetForm.password
+          newPassword: this.resetForm.password
         }).then(() => {
           this.success = 'OK'
         }, () => {
