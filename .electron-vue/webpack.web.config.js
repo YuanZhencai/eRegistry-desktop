@@ -10,6 +10,10 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
+const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
+
+const smp = new SpeedMeasurePlugin();
+
 let webConfig = {
   devtool: '#cheap-module-eval-source-map',
   entry: {
@@ -162,4 +166,4 @@ if (process.env.NODE_ENV === 'production') {
   )
 }
 
-module.exports = webConfig
+module.exports = smp.wrap(webConfig)
