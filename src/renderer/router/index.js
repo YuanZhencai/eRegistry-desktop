@@ -58,7 +58,7 @@ export const constantRouterMap = [
   },
   {
     path: '/questionnaire/:questionnaireId/investigation-new',
-    component: () => import('@/views/investigation/InvestigationDetail')
+    component: () => import('@/views/investigation/SharedInvestigationDetail')
   },
   {
     path: '/report',
