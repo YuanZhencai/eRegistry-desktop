@@ -37,10 +37,9 @@
     },
     methods: {
       findTaskReport() {
-        const that = this
         getPatientTaskReport(this.taskId).then(res => {
-          that.report = res.data
-          that.survey = new PatientTaskSurvey(that.report, that.task, 'share')
+          this.report = res.data
+          this.survey = new PatientTaskSurvey(this.report, this.task, 'share')
         })
       },
       save() {
