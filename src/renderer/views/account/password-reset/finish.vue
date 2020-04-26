@@ -4,12 +4,12 @@
             <strong>无效的重置密码请求.</strong>
         </div>
 
-        <div class="alert alert-warning" v-if="!success && !keyMissing">
+        <div class="alert alert-warning" v-if="!success && !keyMissing && !error">
             <p>请设置新密码</p>
         </div>
 
         <div class="alert alert-danger" v-if="error">
-            <p>无法重置密码. 您必须在请求重置密码后24小时内完成重置.</p>
+            <p>无法重置密码. 请检查是否已重置过，或重新请求重置（您必须在请求重置密码后24小时内完成重置）.</p>
         </div>
 
         <p class="alert alert-success" v-if="success">
@@ -128,12 +128,16 @@
         }
       },
       submit() {
+        this.isSaving = true
         finishPasswordReset({
           key: this.key,
           newPassword: this.resetForm.password
         }).then(() => {
+          this.isSaving = false
           this.success = 'OK'
+          this.error = null
         }, () => {
+          this.isSaving = false
           this.success = null
           this.error = 'ERROR'
         })
