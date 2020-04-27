@@ -26,7 +26,10 @@ function createWindow() {
     width: 1440,
     height: 760,
     minWidth: 1000,
-    minHeight: 600
+    minHeight: 600,
+    webPreferences: {
+      webSecurity: false
+    }
   })
 
   // 装载应用的index.html页面

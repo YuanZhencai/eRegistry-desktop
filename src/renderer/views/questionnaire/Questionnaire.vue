@@ -127,7 +127,7 @@
       },
       newInvestigation(questionnaireId) {
         this.$router.push({
-          path: `/project/${this.projectId}/questionnaire/${questionnaireId}/investigation-new`
+          path: `/project/${this.projectId}/questionnaire/${questionnaireId}/investigation-input`
         })
       },
       investigation(questionnaireId) {

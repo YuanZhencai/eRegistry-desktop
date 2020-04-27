@@ -10,6 +10,10 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
+const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
+
+const smp = new SpeedMeasurePlugin();
+
 let webConfig = {
   devtool: '#cheap-module-eval-source-map',
   entry: {
@@ -46,6 +50,10 @@ let webConfig = {
         exclude: /node_modules/
       },
       {
+        test: /\.node$/,
+        use: 'node-loader'
+      },
+      {
         test: /\.vue$/,
         use: {
           loader: 'vue-loader',
@@ -59,6 +67,14 @@ let webConfig = {
         }
       },
       {
+        test: /\.svg$/,
+        loader: 'svg-sprite-loader',
+        include: [path.join(__dirname, '../src/renderer/icons')],
+        options: {
+          symbolId: 'icon-[name]'
+        }
+      },
+      {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         use: {
           loader: 'url-loader',
@@ -66,7 +82,8 @@ let webConfig = {
             limit: 10000,
             name: 'imgs/[name].[ext]'
           }
-        }
+        },
+        exclude: [path.join(__dirname, '../src/renderer/icons')]
       },
       {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
@@ -85,6 +102,18 @@ let webConfig = {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: path.resolve(__dirname, '../src/index.ejs'),
+      templateParameters(compilation, assets, options) {
+        return {
+          compilation: compilation,
+          webpack: compilation.getStats().toJson(),
+          webpackConfig: compilation.options,
+          htmlWebpackPlugin: {
+            files: assets,
+            options: options
+          },
+          process,
+        };
+      },
       minify: {
         collapseWhitespace: true,
         removeAttributeQuotes: true,
@@ -93,7 +122,8 @@ let webConfig = {
       nodeModules: false
     }),
     new webpack.DefinePlugin({
-      'process.env.IS_WEB': 'true'
+      'process.env.IS_WEB': 'true',
+      'process.env.BASE_API': JSON.stringify(process.env.BASE_API)
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()
@@ -136,4 +166,4 @@ if (process.env.NODE_ENV === 'production') {
   )
 }
 
-module.exports = webConfig
+module.exports = smp.wrap(webConfig)

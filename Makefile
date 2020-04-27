@@ -6,5 +6,7 @@ image:
 	cp build/*.yml dist/release
 	docker build . -t registry.cn-hangzhou.aliyuncs.com/palan/eregistry-desktop
 
+web:
+	docker build . -t registry.cn-hangzhou.aliyuncs.com/palan/eregistry:web -f Dockerfile.web
 push: image
 	docker push registry.cn-hangzhou.aliyuncs.com/palan/eregistry-desktop

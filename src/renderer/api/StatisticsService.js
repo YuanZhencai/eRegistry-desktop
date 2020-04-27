@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export function getDateChart(projectId, params) {
   return axios({
-    url: `/api/projects/${projectId}/chart/date`,
+    url: `api/projects/${projectId}/chart/date`,
     method: 'get',
     params
   })
@@ -10,14 +10,14 @@ export function getDateChart(projectId, params) {
 
 export function getPlanChart(projectId) {
   return axios({
-    url: `/api/projects/${projectId}/chart/plan`,
+    url: `api/projects/${projectId}/chart/plan`,
     method: 'get'
   })
 }
 
 export function getProjectStatistics(projectId) {
   return axios({
-    url: `/api/projects/${projectId}/statistics`,
+    url: `api/projects/${projectId}/statistics`,
     method: 'get'
   })
 }

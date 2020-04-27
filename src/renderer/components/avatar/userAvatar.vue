@@ -10,7 +10,7 @@
     props: ['username', 'size', 'shape'],
     data() {
       return {
-        imgUrl: process.env.BASE_API + '/api/image/avatar/' + this.username + '.png'
+        imgUrl: process.env.BASE_API + 'api/image/avatar/' + this.username + '.png'
       }
     }
   }

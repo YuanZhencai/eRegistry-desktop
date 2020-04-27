@@ -23,6 +23,11 @@ import Layout from '../views/layout/Layout'
 **/
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
+  { path: '/register', component: () => import('@/views/account/Registry'), hidden: true },
+  { path: '/reset/request', component: () => import('@/views/account/password-reset/init'), hidden: true },
+  { path: '/reset/finish', component: () => import('@/views/account/password-reset/finish'), hidden: true },
+  { path: '/activate', component: () => import('@/views/account/activate'), hidden: true },
+  { path: '/invitation', component: () => import('@/views/account/invitation'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
   { path: '/401', component: () => import('@/views/401'), hidden: true },
   {
@@ -45,6 +50,15 @@ export const constantRouterMap = [
       path: '/settings',
       component: () => import('@/views/settings/Settings')
     }]
+  },
+  {
+    path: '/patient-task/:taskId',
+    name: 'patientTask',
+    component: () => import('@/views/patient/PatientTaskComponent')
+  },
+  {
+    path: '/questionnaire/:questionnaireId/investigation-new',
+    component: () => import('@/views/investigation/SharedInvestigationDetail')
   },
   {
     path: '/report',
@@ -126,7 +140,7 @@ export const constantRouterMap = [
             component: () => import('@/views/investigation/Investigation')
           },
           {
-            path: 'questionnaire/:questionnaireId/investigation-new',
+            path: 'questionnaire/:questionnaireId/investigation-input',
             component: () => import('@/views/investigation/InvestigationDetail')
           },
           {

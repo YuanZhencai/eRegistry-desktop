@@ -13,9 +13,11 @@ export class InvestigationSurvey {
 
   complete(data, state) {
     if (this.investigation) {
-      this.investigation.content = JSON.stringify(data)
+      const copy = JSON.parse(JSON.stringify(this.investigation))
+      copy.content = JSON.stringify(data)
+      return copy
     }
-    return this.investigation
+    return {}
   }
 
   get survey() {
