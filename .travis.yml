@@ -33,7 +33,7 @@ script:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then yarn run build:web; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker build . -t registry.cn-hangzhou.aliyuncs.com/palan/eregistry:web -f Dockerfile.web; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker login --username=yuanzhencai@palan registry.cn-hangzhou.aliyuncs.com --password $ALI_REGISTRY_PASSWORD; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker push registry.cn-hangzhou.aliyuncs.com/palan/electron:web; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker push registry.cn-hangzhou.aliyuncs.com/palan/eregistry:web; fi
 branches:
   only:
     - master
