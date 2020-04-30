@@ -100,7 +100,7 @@ export default {
       this.surveyCreator.toolbarItems.push({
         id: uuidv1(),
         visible: true,
-        title: '全屏显示/退出全屏',
+        title: '全屏/恢复',
         action: () => this.screen(!this.isSpreadShrink)
       })
       this.tools.forEach(tool => {

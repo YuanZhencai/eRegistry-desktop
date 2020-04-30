@@ -1,6 +1,6 @@
 <template>
   <div id="form_crf">
-    <a-icon v-if="isSpreadShrink"
+    <a-icon v-if="!isSpreadShrink"
             class="full"
             @click="screen"
             type="fullscreen" />
@@ -47,8 +47,7 @@ export default {
     return {
       survey: null,
       key: null,
-      fullscreen: false,
-      isSpreadShrink: true
+      isSpreadShrink: false
     }
   },
   created() {
@@ -129,7 +128,7 @@ export default {
     screen() {
       this.isSpreadShrink = !this.isSpreadShrink
       const element = document.getElementById('form_crf')// 设置后就是容器全屏
-      screen.screen(element)
+      screen.screen(element, this.isSpreadShrink)
     }
   }
 }
