@@ -1,7 +1,7 @@
 version: "2"
 services:
-  eregistry-desktop:
+  eregistry:
     image: registry.cn-hangzhou.aliyuncs.com/palan/eregistry-desktop
     restart: always
     ports:
-      - 8080:80
+      - 7080:80

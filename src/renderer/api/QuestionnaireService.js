@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export function getProjectQuestionnaires(projectId, params) {
   return axios({
-    url: `/api/project/${projectId}/questionnaires`,
+    url: `api/project/${projectId}/questionnaires`,
     method: 'get',
     params: params
   })
@@ -10,21 +10,21 @@ export function getProjectQuestionnaires(projectId, params) {
 
 export function getQuestionnaireWithReport(id) {
   return axios({
-    url: `/api/questionnaires/report/${id}`,
+    url: `api/questionnaires/report/${id}`,
     method: 'get'
   })
 }
 
 export function getQuestionnaireReport(questionnaireId) {
   return axios({
-    url: `/api/questionnaire-investigations/${questionnaireId}/report`,
+    url: `api/questionnaire-investigations/${questionnaireId}/report`,
     method: 'get'
   })
 }
 
 export function saveWithReport(questionnaireDTO) {
   return axios({
-    url: `/api/questionnaires/report`,
+    url: `api/questionnaires/report`,
     method: 'put',
     data: questionnaireDTO
   })
@@ -32,7 +32,7 @@ export function saveWithReport(questionnaireDTO) {
 
 export function deleteQuestionnaire(id) {
   return axios({
-    url: `/api/questionnaires/${id}`,
+    url: `api/questionnaires/${id}`,
     method: 'delete'
   })
 }

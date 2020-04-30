@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container Grid">
+  <div class="login-container Grid" :style="{background: 'url(' + bg_img + ') 50% no-repeat'}">
     <div class="Grid-cell flex-right">
       <div>
         <div class="text-box">
@@ -13,6 +13,31 @@
         </div>
         <div class="text-box">
           <h3>让随访工作变得井井有条</h3>
+        </div>
+        <div class="content mt-100" v-if="isWeb">
+          <h5>立即下载</h5>
+          <div class="list">
+            <div class="item">
+              <div class="Mac-Win macColor">
+                <i class="fa fa-apple fa-4x" aria-hidden="true"></i>
+                <p style="margin: 0px;" class="titColor">Mac</p>
+              </div>
+              <a @click="getLatestPath('latest-mac.yml')" target="_blank" class="winColor modal">
+                <i class="fa fa-download fa-4x" aria-hidden="true"></i>
+                <p class="titColor">下载Mac客户端</p>
+              </a>
+            </div>
+            <div class="item">
+              <div class="Mac-Win winColor">
+                <i class="fa fa-windows fa-4x" aria-hidden="true"></i>
+                <p style="margin: 4px;" class="titColor">Windows</p>
+              </div>
+              <a @click="getLatestPath('latest.yml')" target="_blank" class="winColor modal">
+                <i class="fa fa-download fa-4x" aria-hidden="true"></i>
+                <p class="titColor">下载Windows客户端</p>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -56,12 +81,21 @@
                     @click="showPwd">
                 <svg-icon icon-class="eye" /></span>
             </el-form-item>
+            <el-form-item class="text-right">
+              <el-button type="text" style="color: #333;">
+                <router-link :to="{path: '/reset/request'}">忘记密码?</router-link></el-button>
+            </el-form-item>
             <el-form-item>
               <el-button type="primary"
                          style="width:100%;"
                          :loading="loading"
                          @click.native.prevent="handleLogin">
                 登录
+              </el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" style="width:100%;">
+                <router-link :to="{path: '/register'}">注册一个新账号</router-link>
               </el-button>
             </el-form-item>
           </el-form>
@@ -72,18 +106,22 @@
 </template>
 
 <script>
+import bg_img from '@/assets/bg1.jpg'
+import axios from 'axios'
+const yaml = require('js-yaml')
 
 export default {
   name: 'login',
   data() {
     const validatePass = (rule, value, callback) => {
-      if (value.length < 5) {
-        callback(new Error('密码不能小于5位'))
+      if (value.length < 4) {
+        callback(new Error('密码不能小于4位'))
       } else {
         callback()
       }
     }
     return {
+      bg_img,
       loginForm: {
         username: '',
         password: ''
@@ -94,7 +132,8 @@ export default {
       },
       loading: false,
       errorTitle: false,
-      pwdType: 'password'
+      pwdType: 'password',
+      isWeb: process.env.IS_WEB
     }
   },
   methods: {
@@ -121,49 +160,24 @@ export default {
           return false
         }
       })
+    },
+    async getLatestPath(yml) {
+      try {
+        const release = `download/${yml}`
+        const res = await axios.get(release)
+        if (res.status === 200) {
+          const data = yaml.safeLoad(res.data, { json: true })
+          window.open(`${process.env.BASE_API}download/${data.path}`, '_blank')
+        }
+      } catch (e) {
+        // ignore
+      }
     }
   }
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
-$bg: #2d3a4b;
-$light_gray: #606266;
-
-/* reset element-ui css */
-.login-container {
-  .el-input {
-    display: inline-block;
-    height: 47px;
-    width: 85%;
-    input {
-      background: transparent;
-      border: 0px;
-      -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
-      color: $light_gray;
-      height: 47px;
-      &:-webkit-autofill {
-        -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: #fff !important;
-      }
-    }
-  }
-  .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    color: #454545;
-  }
-}
-
-</style>
-
 <style rel="stylesheet/scss" lang="scss" scoped>
-$bg: #2d3a4b;
-$dark_gray: #889aa4;
-$light_gray: #eee;
 .Grid {
   display: flex;
   .flex-right {
@@ -180,78 +194,51 @@ $light_gray: #eee;
   justify-content: center;
   align-items: center;
 }
-
-.login-container {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  background: url(../../assets/bg1.jpg) 50% no-repeat;
-  .login-form {
-    position: absolute;
-    left: 0;
-    right: 0;
-    width: 520px;
-    padding: 35px 35px 15px 35px;
-    margin: 120px auto;
-  }
-  .tips {
-    font-size: 14px;
-    color: #fff;
-    margin-bottom: 10px;
-    span {
-      &:first-of-type {
-        margin-right: 16px;
-      }
-    }
-  }
-  .svg-container {
-    padding: 6px 5px 6px 15px;
-    color: $dark_gray;
-    vertical-align: middle;
-    width: 30px;
-    display: inline-block;
-    &_login {
-      font-size: 20px;
-    }
-  }
-  .title {
-    font-size: 26px;
-    font-weight: 400;
-    color: $light_gray;
-    margin: 0px auto 40px auto;
+.content {
+  .item {
+    float: left;
+    width: 139px;
+    height: 132px;
+    border: 1px solid #000;
     text-align: center;
-    font-weight: bold;
-  }
-  .show-pwd {
-    position: absolute;
-    right: 10px;
-    top: 7px;
-    font-size: 16px;
-    color: $dark_gray;
+    padding-top: 25px;
+    position: relative;
     cursor: pointer;
-    user-select: none;
+    color: #000;
   }
-  .text-box {
-    margin-bottom: 20px;
+  .item{
+    display: block;
+    .titColor{
+      font-size: 12px;
+      color: #0a0a0a;
+      font-weight: 500;
+    }
+    .modal{
+      width: 137px;
+      height: 130px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      padding-top: 25px;
+      color: #000;
+      display: none;
+    }
   }
-  .box-card {
-    width: 320px;
-    .item {
-      margin-bottom: 18px;
-      .errorTitle {
-        color: #721c24;
-        background-color: #f8d7da;
-        border-radius: 5px;
-        padding: 10px;
-        margin-bottom: 15px;
-        border-color: #f5c6cb;
-      }
-      .imputStyle {
-        background: #fff;
-        border: 1px solid #d9d9d9;
-        border-radius: 5px;
-        margin-bottom: 25px;
-      }
+  .item + .item {
+    margin-left: 10px;
+  }
+  .macColor{
+    color: #fff !important;
+  }
+  .winColor{
+    color: #01adff !important;
+  }
+  .item:hover {
+    .Mac-Win {
+      display: none;
+    }
+    .modal{
+      display: block;
     }
   }
 }

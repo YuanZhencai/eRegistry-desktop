@@ -7,11 +7,11 @@ import VueI18n from 'vue-i18n'
 import CustomFormatter from './formatter'
 
 export function initVueApp(vue) {
-  directives.initDirectives()
-  filters.initFilters()
   vue.use(VueAxios, axios)
   vue.prototype.$axios = axios
   vue.prototype.$hasAnyAuthority = hasAnyAuthority
+  directives.initDirectives()
+  filters.initFilters()
 }
 
 const dateTimeFormats = {

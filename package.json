@@ -1,6 +1,6 @@
 {
   "name": "eregistry-desktop",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Yuan <zhencai.yuan@datarx.cn>",
   "description": "e registry desktop",
   "license": "MIT",
@@ -9,20 +9,26 @@
     "build": "node .electron-vue/build.js && electron-builder",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
-    "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
+    "build:web": "cross-env BUILD_TARGET=web BASE_API='' node --max_old_space_size=4096 .electron-vue/build.js",
+    "release": "node .electron-vue/build.js && electron-builder --publish always",
     "dev": "node .electron-vue/dev-runner.js",
     "lint": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter src",
     "lint:fix": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix src",
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
-    "postinstall": "npm run lint:fix"
+    "postinstall": "npm run lint:fix",
+    "patch": "npm version patch && git push origin master && git push origin --tags",
+    "minor": "npm version minor && git push origin master && git push origin --tags",
+    "major": "npm version major && git push origin master && git push origin --tags"
   },
   "build": {
     "publish": [
       {
-        "provider": "generic",
-        "url": "/download"
+        "provider": "github",
+        "owner": "YuanZhencai",
+        "repo": "eRegistry-desktop",
+        "releaseType": "draft"
       }
     ],
     "productName": "患者登记云随访系统",
@@ -69,6 +75,7 @@
     "echarts": "^4.6.0",
     "electron-dl": "1.12.0",
     "element-ui": "^2.13.0",
+    "file-saver": "^2.0.2",
     "jquery": "^3.4.1",
     "js-base64": "^2.5.2",
     "js-cookie": "^2.2.0",
@@ -76,6 +83,7 @@
     "moment": "^2.24.0",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
+    "signature_pad": "^2.3.2",
     "sockjs-client": "^1.4.0",
     "stompjs": "^2.3.3",
     "survey-creator": "^1.0.79",
@@ -94,6 +102,7 @@
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
+    "babel-eslint": "^7.2.3",
     "babel-loader": "^7.1.1",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.0",
@@ -108,10 +117,9 @@
     "del": "^3.0.0",
     "devtron": "^1.4.0",
     "electron": "^1.7.5",
+    "electron-builder": "^19.19.1",
     "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.2.0",
-    "electron-builder": "^19.19.1",
-    "babel-eslint": "^7.2.3",
     "eslint": "^4.4.1",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-loader": "^1.9.0",
@@ -122,8 +130,9 @@
     "multispinner": "^0.2.1",
     "node-loader": "^0.6.0",
     "node-sass": "^4.7.2",
-    "style-loader": "^0.18.2",
     "sass-loader": "6.0.6",
+    "speed-measure-webpack-plugin": "^1.3.3",
+    "style-loader": "^0.18.2",
     "svg-sprite-loader": "3.5.2",
     "url-loader": "^0.5.9",
     "vue-html-loader": "^1.2.4",

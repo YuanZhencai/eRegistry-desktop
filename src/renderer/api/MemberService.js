@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export function getProjectMembers(projectId, params) {
   return axios({
-    url: `/api/projects/${projectId}/members`,
+    url: `api/projects/${projectId}/members`,
     method: 'get',
     params: params
   })
@@ -10,21 +10,21 @@ export function getProjectMembers(projectId, params) {
 
 export function getMember(id) {
   return axios({
-    url: `/api/members/${id}`,
+    url: `api/members/${id}`,
     method: 'get'
   })
 }
 
 export function deleteMember(id) {
   return axios({
-    url: `/api/members/${id}`,
+    url: `api/members/${id}`,
     method: 'delete'
   })
 }
 
 export function createBatchMember(batchMember) {
   return axios({
-    url: `/api/members/batch`,
+    url: `api/members/batch`,
     method: 'post',
     data: batchMember
   })
@@ -32,7 +32,7 @@ export function createBatchMember(batchMember) {
 
 export function createMember(member) {
   return axios({
-    url: `/api/members`,
+    url: `api/members`,
     method: 'post',
     data: member
   })
@@ -40,7 +40,7 @@ export function createMember(member) {
 
 export function updateMember(member) {
   return axios({
-    url: `/api/members`,
+    url: `api/members`,
     method: 'put',
     data: member
   })

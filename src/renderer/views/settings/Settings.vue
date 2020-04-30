@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container">
+  <div>
     <el-row :gutter="20">
       <el-col :span="12"
               :offset="6">
@@ -91,7 +91,7 @@
                           autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary"
+                <el-button type="primary" :disabled="isSubmitting"
                            @click="submitForm('ruleForm')">提交</el-button>
               </el-form-item>
             </el-form>
@@ -153,7 +153,8 @@ export default {
         checkPass: [
           { validator: validateNewPass, trigger: 'change' }
         ]
-      }
+      },
+      isSubmitting: false
     }
   },
   computed: {
@@ -237,18 +238,34 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          changePassword(this.rulePassForm.checkPass).then((res) => { })
-          this.$nextTick(() => {
+          this.isSubmitting = true
+          changePassword(this.rulePassForm.checkPass).then((res) => {
+            this.isSubmitting = false
             this.$notify({
               title: '成功',
-              message: '重置成功',
+              message: '密码重置成功,请重新登录',
               type: 'success',
+              duration: 1500
+            })
+            setTimeout(() => {
+              this.logout()
+            }, 1500)
+          }, () => {
+            this.isSubmitting = false
+            this.$notify({
+              title: '失败',
+              message: '密码重置失败，请重试',
+              type: 'error',
               duration: 2000
             })
           })
         }
       })
-      this.OnInit()
+    },
+    logout() {
+      this.$store.dispatch('LogOut').then(() => {
+        location.reload() // 为了重新实例化vue-router对象 避免bug
+      })
     }
   }
 }

@@ -1,4 +1,3 @@
-import {app} from "electron";
 <template>
   <el-popover @show="findExportFiles"
               placement="bottom"
@@ -49,10 +48,14 @@ import {app} from "electron";
 </template>
 
 <script>
-import { ipcRenderer, shell } from 'electron'
 import { addExportFile, clearExportFiles, findExportFiles, saveExportFiles } from '../../api/ExportService'
 import FileIcon from './file-icon'
-const fs = require('fs')
+var electron, fs
+if (!process.env.IS_WEB) {
+  electron = require('electron')
+  fs = require('fs')
+}
+
 export default {
   name: 'export-history',
   components: { FileIcon },
@@ -69,7 +72,7 @@ export default {
   },
   methods: {
     onDownloadFinish() {
-      ipcRenderer.on('download-finish', async(event, file) => {
+      electron.ipcRenderer.on('download-finish', async(event, file) => {
         let message
 
         if (file.state === 'success') {
@@ -107,7 +110,7 @@ export default {
       file.visible = false
       fs.exists(file.path, (exists) => {
         if (exists) {
-          shell.showItemInFolder(file.path)
+          electron.shell.showItemInFolder(file.path)
         } else {
           this.$message.error('文件已经删除，请重新导出')
         }

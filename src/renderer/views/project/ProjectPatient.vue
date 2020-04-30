@@ -94,13 +94,13 @@
                    :visible.sync="exportDialogVisible" :before-close="closeDialog">
             <div class="text-center" v-if="project">
                 <el-image v-if="project.name"
-                        v-download="{url: `/api/projects/${projectId}/patients/data?type=EXCEL`, name: `${project.name}.zip`}"
+                        v-download="{url: `api/projects/${projectId}/patients/data?type=EXCEL`, name: `${project.name}.zip`}"
                         style="width: 100px; height: 100px; margin-right: 50px;"
                         :src="img_excel" fit="fit">
 
                 </el-image>
                 <el-image v-if="project.name"
-                        v-download="{url: `/api/projects/${projectId}/patients/data?type=CSV`, name: `${project.name}.zip`}"
+                        v-download="{url: `api/projects/${projectId}/patients/data?type=CSV`, name: `${project.name}.zip`}"
                         style="width: 100px; height: 100px"
                         :src="img_csv" fit="fit">
 
@@ -155,6 +155,13 @@ export default {
       this.findProject()
       this.getPatients()
       this.findCurrentMemberTask()
+    },
+    mounted() {
+      this.$on('patientCaseListModification', function() {
+        this.currentPage = 1
+        this.patients = []
+        this.getPatients()
+      })
     },
     methods: {
       sort() {

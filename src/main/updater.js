@@ -8,7 +8,7 @@ const latest = {
   'win32': 'latest.yml',
   'linux': 'latest-linux.yml'
 }
-const release = `${process.env.BASE_API}/download/${latest[require('os').platform()]}`
+const release = `${process.env.BASE_API}download/${latest[require('os').platform()]}`
 console.info(version, release)
 const checkVersion = async(win) => {
   // 自动更新的弹窗如果用户没有设置不再提醒，就可以去查询是否需要更新
@@ -17,7 +17,7 @@ const checkVersion = async(win) => {
     const data = yaml.safeLoad(res.data, { json: true })
     console.info('data', data)
     const latest = data.version // 获取版本号
-    const downloadUrl = `${process.env.BASE_API}/download/${data.path}`
+    const downloadUrl = `${process.env.BASE_API}download/${data.path}`
     const result = compareVersion2Update(version, latest) // 比对版本号，如果本地版本低于远端则更新
     if (result) {
       dialog.showMessageBox(win, {
