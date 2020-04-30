@@ -935,5 +935,8 @@
     "zipCode": "邮编",
     "address": "地址",
     "projectId": "项目"
+  },
+  "avatar": {
+    "updated": "头像上传成功"
   }
 }

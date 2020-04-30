@@ -3,7 +3,7 @@
     <el-row class="no-flex">
       <div class="float-left row-flex">
         <div class="avatar" style="margin-right: 15px;">
-          <el-avatar :size="50" :src="avatar"></el-avatar>
+          <user-avatar :size="50" :username="name"></user-avatar>
         </div>
         <div class="desc">
           <p><small>当前登录用户</small></p>

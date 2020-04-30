@@ -102,12 +102,24 @@
   </div>
 </template>
 <script>
-import { getsettings, createSettings, upload, changePassword } from '@/api/SettingsService'
-import { Base64 } from 'js-base64'
+import { saveAvatar, changePassword } from '@/api/SettingsService'
 import { mapGetters } from 'vuex'
+import UserAvatar from '../../components/avatar/userAvatar'
+import { getAccount, saveAccount } from '../../api/AccountService'
+
 export default {
+  name: 'Setting',
+  components: {
+    UserAvatar
+  },
+  computed: {
+    ...mapGetters([
+      'avatar',
+      'name'
+    ])
+  },
   data() {
-    var validatePass = (rule, value, callback) => {
+    const validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'))
       } else {
@@ -117,7 +129,7 @@ export default {
         callback()
       }
     }
-    var validateNewPass = (rule, value, callback) => {
+    const validateNewPass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
       } else if (value !== this.rulePassForm.pass) {
@@ -157,9 +169,6 @@ export default {
       isSubmitting: false
     }
   },
-  computed: {
-    ...mapGetters(['avatar'])
-  },
   mounted() {
     this.OnInit()
   },
@@ -167,7 +176,7 @@ export default {
     async OnInit() {
       this.fileReader = new FileReader()
       this.imageUrl = this.avatar
-      await getsettings().then((res) => {
+      await getAccount().then((res) => {
         this.settingsAccount = res.data
       })
     },
@@ -179,10 +188,12 @@ export default {
       this.fileReader.onload = () => {
         const base64Str = this.fileReader.result
         const data = {
-          blob: base64Str.split(',')[1],
-          type: 'avatar'
+          image: base64Str.split(',')[1],
+          imageContentType: file.type,
+          url: file.name,
+          username: this.name
         }
-        upload(data).then((res) => {
+        saveAvatar(data).then((res) => {
           this.imageUrl = base64Str
         })
       }
@@ -192,22 +203,14 @@ export default {
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 20
+      const isLt2M = file.size / 1024 < 500
       if (!isJPG) {
         this.$message.error('上传头像图片只能是 JPG 格式!')
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 20MB!')
+        this.$message.error('上传头像图片大小不能超过 500K!')
       }
       return isJPG && isLt2M
-    },
-    async progress(event, file, fileList) {
-      this.BaseUrl = Base64.encode(file.raw)
-      const data = {
-        blob: this.BaseUrl,
-        type: 'avatar'
-      }
-      await upload(data).then((res) => { })
     },
     async save(formName) {
       this.$refs[formName].validate(async(valid) => {
@@ -221,7 +224,7 @@ export default {
             login: this.settingsAccount.login,
             imageUrl: ''
           }
-          await createSettings(data).then((res) => {
+          await saveAccount(data).then((res) => {
             this.$nextTick(() => {
               this.$notify({
                 title: '成功',
