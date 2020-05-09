@@ -37,6 +37,12 @@
                             </el-popover>
                         </template>
                     </el-button>
+                    <el-button type="primary" size="mini" icon="el-icon-plus"
+                               v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
+                        入组患者
+                        <incorporation :project-id="projectId"></incorporation>
+                    </el-button>
+
                 </el-form-item>
             </el-form>
         </el-row>
@@ -75,6 +81,10 @@
                     <template slot-scope="scope"
                               v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
                         <el-button type="text" @click="edit(scope.row)">编辑</el-button>
+                        <el-divider direction="vertical"></el-divider>
+                        <el-button type="text">
+                            <incorporation :patient-id="scope.row.id"></incorporation>
+                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -121,9 +131,10 @@
   import img_csv from '@/assets/csv.png'
   import { getCurrentProjectMemberTask } from '@/api/TaskService'
   import { getProject } from '../../api/ProjectService'
+  import Incorporation from '../../components/qrcode/Incorporation'
 export default {
     name: 'ProjectPatient',
-    components: { PatientDialogComponent },
+    components: { Incorporation, PatientDialogComponent },
     data() {
       const projectId = this.$route.params.projectId
       return {
