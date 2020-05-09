@@ -68,6 +68,16 @@
                         申请数据变更
                     </el-button>
                 </template>
+                <template v-if="timeline && timeline.patient && name === timeline.patient.username && 'development' === env">
+                    <el-button type="primary" v-if="report">
+                        <router-link :to="{ name:'fill-case',query:{
+                          patientId: timeline.patient.id,
+                          projectId: projectId,
+                          reportId: report.id,
+                          caseId: patientCase.id,
+                        } }">填写病例</router-link>
+                    </el-button>
+                </template>
             </div>
         </el-row>
         <el-row :gutter="15">
@@ -103,6 +113,7 @@
   import WithdrawalAuditDialog from './WithdrawalAuditDialog'
   import ApplyDataChangeDialog from './ApplyDataChangeDialog'
   import AuditChangeDialog from './AuditChangeDialog'
+  import { mapGetters } from 'vuex'
 export default {
     name: 'PatientDetail',
     components: { AuditChangeDialog, ApplyDataChangeDialog, WithdrawalAuditDialog, RecordAuditDialog, AuditComponent, Timeline, SurveyView, PatientInfo },
@@ -118,14 +129,22 @@ export default {
         audits: [],
         latestAudit: {},
         follow: null, // 随访
-        patientCase: null, // 病例
+        patientCase: {
+          id: null
+        }, // 病例
         survey: {},
         audit: {},
         changeDataDialogVisible: false, // 数据变更
         withdrawalAuditDialogVisible: false, // 撤回审核
         recordAuditDialogVisible: false, // 审核病例/随访
-        auditChangeDialogVisible: false
+        auditChangeDialogVisible: false,
+        env: process.env.NODE_ENV
       }
+    },
+    computed: {
+      ...mapGetters([
+        'name'
+      ])
     },
     created() {
       this.isRegister = this.$hasAnyAuthority([

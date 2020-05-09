@@ -16,10 +16,12 @@ export class PatientSurvey {
       state = 'SAVED'
     }
     if (this.patient) {
-      this.patient.state = state
-      this.patient.content = JSON.stringify(data)
+      const copy = JSON.parse(JSON.stringify(this.patient))
+      copy.state = state
+      copy.content = JSON.stringify(data)
+      return copy
     }
-    return this.patient
+    return {}
   }
 
   get survey() {

@@ -175,7 +175,12 @@ export const constantRouterMap = [
       }
     ]
   },
-  { path: '*', redirect: '/404', hidden: true }
+  { path: '*', redirect: '/404', hidden: true },
+  {
+    name: 'fill-case',
+    path: '/mobile/fill-case',
+    component: () => import('@/views/mobile/fill-case')
+  }
 ]
 
 export default new Router({
