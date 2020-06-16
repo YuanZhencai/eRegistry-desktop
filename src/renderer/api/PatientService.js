@@ -44,3 +44,19 @@ export function getTimeline(id) {
     method: 'get'
   })
 }
+
+export function fillCase(patientCase) {
+  return axios({
+    url: `api/patient/case`,
+    method: 'post',
+    data: patientCase
+  })
+}
+
+export function fillFollow(follow) {
+  return axios({
+    url: `api/patient/follow`,
+    method: 'post',
+    data: follow
+  })
+}

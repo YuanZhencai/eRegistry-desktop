@@ -5,12 +5,13 @@
 </template>
 
 <script>
-  import { getPatientCase, updatePatientCase } from '../../api/PatientCaseService'
+  import { getPatientCase } from '../../api/PatientCaseService'
   import { getReport } from '../../api/ReportService'
   import { PatientSurvey } from '../patient/patient-survey'
   import SurveyView from '../../components/survey/SurveyView'
+  import { fillCase } from '../../api/PatientService'
 
-  export default {
+export default {
     name: 'FillCase',
     components: { SurveyView },
     data() {
@@ -56,6 +57,7 @@
             resolve({
               data: {
                 projectId: this.projectId,
+                patientId: this.patientId,
                 state: 'SAVED'
               }
             })
@@ -64,7 +66,7 @@
       },
       save(data, state) {
         const complete = this.survey.complete(data, state)
-        updatePatientCase(complete).then((res) => {
+        fillCase(complete).then((res) => {
           this.caseId = res.data.id
           this.findPatientCaseSurvey()
         })
