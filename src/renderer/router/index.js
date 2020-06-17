@@ -178,8 +178,13 @@ export const constantRouterMap = [
   { path: '*', redirect: '/404', hidden: true },
   {
     name: 'fill-case',
-    path: '/mobile/fill-case',
-    component: () => import('@/views/mobile/fill-case')
+    path: '/h5/case',
+    component: () => import('@/views/h5/case')
+  },
+  {
+    name: 'fill-follow',
+    path: '/h5/follow',
+    component: () => import('@/views/h5/follow')
   }
 ]
 

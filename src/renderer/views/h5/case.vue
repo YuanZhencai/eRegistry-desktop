@@ -12,7 +12,7 @@
   import { fillCase } from '../../api/PatientService'
 
 export default {
-    name: 'FillCase',
+    name: 'Case',
     components: { SurveyView },
     data() {
       return {

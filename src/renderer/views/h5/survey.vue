@@ -1,11 +1,10 @@
 <template>
-
     <div>填写表单</div>
 </template>
 
 <script>
   export default {
-    name: 'FillSurvey',
+    name: 'Survey',
     data() {
       return {
         projectId: this.$route.query.projectId,

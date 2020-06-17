@@ -18,6 +18,12 @@ function isWhiteList(path) {
 }
 
 router.beforeEach((to, from, next) => {
+  if (to.query.access_token) {
+    const accessToken = to.query.access_token
+    store.dispatch('TokenLogin', accessToken).then(() => { // 拉取用户信息
+      next()
+    })
+  }
   NProgress.start()
   if (store.getters.token) {
     if (to.path === '/login') {

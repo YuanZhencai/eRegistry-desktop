@@ -92,6 +92,14 @@ const user = {
         commit('SET_TOKEN', '')
         resolve()
       })
+    },
+    // 登录
+    TokenLogin({ commit }, accessToken) {
+      return new Promise((resolve, reject) => {
+        setToken(accessToken)
+        commit('SET_TOKEN', accessToken)
+        resolve()
+      })
     }
   }
 }
