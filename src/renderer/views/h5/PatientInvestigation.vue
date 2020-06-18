@@ -5,11 +5,11 @@
 </template>
 
 <script>
-  import { InvestigationSurvey } from './investigation-survey'
   import { getInvestigation, saveInvestigation } from '../../api/InvestigationService'
   import SurveyView from '@/components/survey/SurveyView'
   import { getQuestionnaireReport } from '../../api/QuestionnaireService'
-  export default {
+  import { InvestigationSurvey } from '../investigation/investigation-survey'
+export default {
     name: 'PatientInvestigation',
     components: {
       SurveyView

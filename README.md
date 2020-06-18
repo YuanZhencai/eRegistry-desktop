@@ -28,7 +28,5 @@ npm run pack
 ## 移动端页面
 
 ```
-http://192.168.3.2:7080/#/h5/case?projectId=1&reportId=1&patientId=1&access_token=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTU5MjUzOTE3OX0.6Ku5jT4T-L5qaZSWgfjP6kAgPIJ7jLAhs8I01v7RsTgSHeR04RpUqHvJRwirekD_9bLf9d2BP_l2_40zVVsd_w
-http://localhost:63342/electron-vue-admin/dist/web/index.html#/h5/follow?projectId=1&reportId=2&patientId=1&planId=1&access_token=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTU5MjQ0NjU2Mn0.xg83PoSst-dsgnQSBadHomEEj124f8-BLbf_IlIbRBs5uhTK4YX7S1CbEQxRtXKZ_rTQ1t5C5jPrTW17cd1a-w
-http://localhost:63342/electron-vue-admin/dist/web/index.html#/h5/case?access_token=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTU5MjQ0Njc5MH0.xPVz8IhLWETEh1GGIuS6KMQRVKhAIJK7Kr-IlIjBIZr7UXLrNigq9g4q9sC-IBeFvNmeXSI3lLXiRGpz8VkwQA
+http://192.168.3.2:7080/#/patient/case?projectId=1&reportId=1&patientId=1&access_token=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTU5MjUzOTE3OX0.6Ku5jT4T-L5qaZSWgfjP6kAgPIJ7jLAhs8I01v7RsTgSHeR04RpUqHvJRwirekD_9bLf9d2BP_l2_40zVVsd_w
 ```
