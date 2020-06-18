@@ -177,14 +177,19 @@ export const constantRouterMap = [
   },
   { path: '*', redirect: '/404', hidden: true },
   {
-    name: 'fill-case',
-    path: '/h5/case',
-    component: () => import('@/views/h5/case')
+    name: 'patient-case',
+    path: '/patient/case',
+    component: () => import('@/views/h5/PatientCase')
   },
   {
-    name: 'fill-follow',
-    path: '/h5/follow',
-    component: () => import('@/views/h5/follow')
+    name: 'patient-follow',
+    path: '/patient/follow',
+    component: () => import('@/views/h5/PatientFollow')
+  },
+  {
+    name: 'patient-investigation',
+    path: '/patient/investigation',
+    component: () => import('@/views/h5/PatientInvestigation')
   }
 ]
 

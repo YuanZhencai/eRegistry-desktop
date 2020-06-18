@@ -3,5 +3,7 @@ services:
   eregistry:
     image: registry.cn-hangzhou.aliyuncs.com/palan/eregistry-desktop
     restart: always
+    volumes:
+      - ./dist/web:/usr/share/nginx/html
     ports:
       - 7080:80

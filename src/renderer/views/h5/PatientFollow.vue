@@ -11,7 +11,7 @@
   import { FollowSurvey } from '../patient/follow-survey'
 
 export default {
-    name: 'Follow',
+    name: 'PatientFollow',
     data() {
       return {
         projectId: this.$route.query.projectId,
