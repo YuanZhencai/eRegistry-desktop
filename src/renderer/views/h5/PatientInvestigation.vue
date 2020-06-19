@@ -7,8 +7,8 @@
 <script>
   import { getInvestigation, saveInvestigation } from '../../api/InvestigationService'
   import SurveyView from '@/components/survey/SurveyView'
-  import { getQuestionnaireReport } from '../../api/QuestionnaireService'
   import { InvestigationSurvey } from '../investigation/investigation-survey'
+  import { getReport } from '../../api/ReportService'
 export default {
     name: 'PatientInvestigation',
     components: {
@@ -29,8 +29,16 @@ export default {
       this.findInvestigationSurvey()
     },
     methods: {
-      findQuestionnaireReport() {
-        return getQuestionnaireReport(this.questionnaireId)
+      findReport() {
+        if (this.reportId) {
+          return getReport(this.reportId)
+        } else {
+          return new Promise((resolve, reject) => {
+            resolve({
+              data: {}
+            })
+          })
+        }
       },
       findInvestigation() {
         if (this.investigationId) {
@@ -48,7 +56,7 @@ export default {
       },
       findInvestigationSurvey() {
         const vm = this
-        vm.$axios.all([vm.findQuestionnaireReport(), vm.findInvestigation()])
+        vm.$axios.all([vm.findReport(), vm.findInvestigation()])
           .then(vm.$axios.spread(function(report, investigation) {
             vm.report = report.data
             vm.investigation = investigation.data
