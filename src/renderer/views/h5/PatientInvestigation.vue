@@ -16,6 +16,7 @@ export default {
     },
     data() {
       return {
+        reportId: this.$route.query.reportId,
         projectId: this.$route.query.projectId,
         questionnaireId: this.$route.query.questionnaireId,
         investigationId: this.$route.query.investigationId,
