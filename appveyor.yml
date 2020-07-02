@@ -21,10 +21,10 @@ init:
 install:
   - ps: Install-Product node 10 x64
   - git reset --hard HEAD
-  - yarn
   - node --version
+  - npm install
 
 build_script:
-  - yarn release
+  - npm run release
 
 test: off
