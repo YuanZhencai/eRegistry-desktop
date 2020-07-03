@@ -9,9 +9,11 @@
   import { getFollow } from '../../api/FollowService'
   import { fillFollow } from '../../api/PatientService'
   import { FollowSurvey } from '../patient/follow-survey'
+  import SurveyView from '@/components/survey/SurveyView'
 
 export default {
     name: 'PatientFollow',
+    components: { SurveyView },
     data() {
       return {
         projectId: this.$route.query.projectId,
