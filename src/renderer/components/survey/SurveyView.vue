@@ -1,13 +1,5 @@
 <template>
   <div id="form_crf">
-    <a-icon v-if="!isSpreadShrink"
-            class="full"
-            @click="screen"
-            type="fullscreen" />
-    <a-icon v-else
-            class="full"
-            @click="screen"
-            type="fullscreen-exit" />
     <survey :key="key"
             v-if="survey"
             :survey="survey"></survey>
@@ -41,6 +33,10 @@ export default {
           mode: 'edit'
         }
       }
+    },
+    fullScreenSetting: {
+      type: Boolean,
+      default: true
     }
   },
   data() {

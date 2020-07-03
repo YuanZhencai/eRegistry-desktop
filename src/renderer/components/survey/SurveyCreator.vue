@@ -97,12 +97,6 @@ export default {
       this.surveyCreator.haveCommercialLicense = true
       this.surveyCreator.text = this.survey
       this.surveyCreator.saveSurveyFunc = this.saveMySurvey
-      this.surveyCreator.toolbarItems.push({
-        id: uuidv1(),
-        visible: true,
-        title: '全屏/恢复',
-        action: () => this.screen(!this.isSpreadShrink)
-      })
       this.tools.forEach(tool => {
         this.surveyCreator.toolbarItems.push({
           id: uuidv1(),
