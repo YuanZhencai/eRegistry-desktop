@@ -52,6 +52,16 @@ export const constantRouterMap = [
     }]
   },
   {
+    path: 'management',
+    component: Layout,
+    name: 'management',
+    hidden: true,
+    children: [{
+      path: '/management',
+      component: () => import('@/views/management/management')
+    }]
+  },
+  {
     path: '/patient-task/:taskId',
     name: 'patientTask',
     component: () => import('@/views/patient/PatientTaskComponent')

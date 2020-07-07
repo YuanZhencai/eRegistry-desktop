@@ -45,6 +45,13 @@
               <span>个人设置</span>
             </el-dropdown-item>
           </router-link>
+          <router-link class="inlineBlock"
+                       to="/management">
+            <el-dropdown-item>
+              <i class="fa fa-users" aria-hidden="true"></i>
+              <span>用户管理</span>
+            </el-dropdown-item>
+          </router-link>
           <el-dropdown-item divided>
             <i class="fa fa-fw fa-sign-out" aria-hidden="true"></i>
             <span @click="logout">退出</span>
