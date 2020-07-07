@@ -1,13 +1,13 @@
 import axios from 'axios'
 
-export function getInit(data) {
+export function findUsers(req) {
   return axios({
     method: 'get',
     url: `api/users`,
-    data
+    params: req
   })
 }
-export function create(user) {
+export function createUser(user) {
   return axios({
     method: 'post',
     url: `api/users`,
@@ -20,7 +20,7 @@ export function search(login) {
     url: `api/users/${login}`
   })
 }
-export function update(user) {
+export function updateUser(user) {
   return axios({
     method: 'put',
     url: `api/users`,
@@ -33,11 +33,11 @@ export function remove(userId) {
     url: `api/users/${userId}`
   })
 }
-export function modify(password) {
+export function modify(user) {
   return axios({
     method: 'post',
     url: `api/users/change-password`,
-    data: password
+    data: user
   })
 }
 export function retrieveAuthorities() {
