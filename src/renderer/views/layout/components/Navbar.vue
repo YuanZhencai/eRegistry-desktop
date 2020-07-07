@@ -45,7 +45,7 @@
               <span>个人设置</span>
             </el-dropdown-item>
           </router-link>
-          <router-link class="inlineBlock"
+          <router-link class="inlineBlock" v-if="$hasAnyAuthority(['ROLE_ADMIN'])"
                        to="/management">
             <el-dropdown-item>
               <i class="fa fa-users" aria-hidden="true"></i>

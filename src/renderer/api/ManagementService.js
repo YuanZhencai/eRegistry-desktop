@@ -33,7 +33,7 @@ export function remove(userId) {
     url: `api/users/${userId}`
   })
 }
-export function modify(user) {
+export function changePassword(user) {
   return axios({
     method: 'post',
     url: `api/users/change-password`,

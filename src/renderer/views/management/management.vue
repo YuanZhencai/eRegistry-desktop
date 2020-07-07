@@ -127,65 +127,20 @@
 				layout="total, prev, pager, next, jumper"
 				:total="totalItems" class="pagination">
 		</el-pagination>
-		<el-dialog
-				title="修改密码"
-				:visible.sync="dialogChangePassword">
-			<el-form
-					ref="user"
-					:model="user"
-					:rules="loginRules"
-					autocomplete="on">
-				<el-form-item
-						label="用户名"
-						prop="login">
-					<el-input
-							v-model="user.login"
-							:disabled="true"/>
-				</el-form-item>
-				<el-form-item
-						label="邮箱"
-						prop="email">
-					<el-input
-							v-model="user.email"
-							:disabled="true"/>
-				</el-form-item>
-				<el-form-item
-						prop="password"
-						label="密码">
-					<el-input
-							:key="passwordType"
-							ref="password"
-							v-model="user.password"
-							:type="passwordType"
-							name="password"
-							autocomplete="on"
-							@keyup.enter.native="newPasswordData"/>
-				</el-form-item>
-			</el-form>
-			<div
-					slot="footer"
-					class="dialog-footer">
-				<el-button @click="dialogChangePassword = false">
-					取 消
-				</el-button>
-				<el-button
-						type="primary"
-						@click="newPasswordData('newPassWord')">
-					确 定
-				</el-button>
-			</div>
-		</el-dialog>
 		<user-detail-dialog ref="user-dialog"></user-detail-dialog>
+		<change-password-dialog ref="password-dialog"></change-password-dialog>
 	</div>
 </template>
 
 <script>
 	import { findUsers, updateUser } from '../../api/ManagementService'
 	import UserDetailDialog from './user-detail-dialog'
+	import ChangePasswordDialog from './change-password-dialog'
 
 	export default {
 	  name: 'management',
 	  components: {
+	    ChangePasswordDialog,
 	    UserDetailDialog
 	  },
 	  data() {
@@ -281,8 +236,8 @@
 	    },
 	    editUser(user) {
 	      this.$refs['user-dialog'].show(user).then(() => {
-	      }, () => {
 	        this.loadAll()
+	      }, () => {
 	      })
 	    },
 	    // 修改状态
@@ -296,19 +251,10 @@
 	          this.loadAll()
 	        })
 	    },
-	    changePassword(row) {
-	      this.dialogChangePassword = true
-	      this.user = Object.assign({}, row)
-	    },
-	    newPasswordData(user) {
-	      this.$refs[user].validate((valid) => {
-	        if (valid) {
-	          const copy = JSON.parse(JSON.stringify(user))
-	          updateUser(copy)
-	            .then(res => {
-	              this.dialogChangePassword = false
-	            })
-	        }
+	    changePassword(user) {
+	      this.$refs['password-dialog'].show(user).then(() => {
+	      }, () => {
+	        this.loadAll()
 	      })
 	    }
 	  }
