@@ -38,17 +38,24 @@ const checkVersion = async(win) => {
 
 // if true -> update else return false
 const compareVersion2Update = (current, latest) => {
-  const currentVersion = current.split('.').map(item => parseInt(item))
-  const latestVersion = latest.split('.').map(item => parseInt(item))
   let flag = false
 
-  for (let i = 0; i < 3; i++) {
-    if (currentVersion[i] < latestVersion[i]) {
-      flag = true
-    }
+  try {
+    const currentVersion = getVersionValue(current)
+    const latestVersion = getVersionValue(latest)
+    flag = currentVersion < latestVersion
+  } catch (e) {
+    console.info('版本比较失败')
   }
 
   return flag
+}
+
+const getVersionValue = (version) => {
+  const numbers = version.split('.').map(item => parseInt(item))
+  const value = numbers[0] * 100 + numbers[1] * 10 + numbers[2]
+  console.info('getVersionValue', value)
+  return value
 }
 
 export default checkVersion
