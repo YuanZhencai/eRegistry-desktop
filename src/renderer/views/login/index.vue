@@ -37,6 +37,18 @@
                 <p class="titColor">下载Windows客户端</p>
               </a>
             </div>
+            <div class="item">
+              <div class="Mac-Win winColor">
+                <i class="fa fa-android fa-4x" aria-hidden="true"></i>
+                <p style="margin: 4px;" class="titColor">Android</p>
+              </div>
+              <div class="winColor modal" style="padding-top: 0px;">
+                <div class="qr_code">
+                  <img style="width: 100%;height: 100%;" src="../../assets/QRCode.png" alt="">
+                </div>
+                <p class="titColor">扫描二维码<br/>下载Android正式版</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -240,6 +252,11 @@ export default {
     .modal{
       display: block;
     }
+  }
+  .qr_code{
+    width: 80px;
+    height: 80px;
+    margin: 13px auto 0;
   }
 }
 </style>
