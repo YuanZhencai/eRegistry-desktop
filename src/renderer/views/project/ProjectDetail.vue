@@ -52,6 +52,11 @@
             <i class="fa fa-file-text"></i>
             <span slot="title" class="d-none d-md-inline">日志记录</span>
           </el-menu-item>
+          <el-menu-item index="video"
+                        @click="selectMenu('video')">
+            <i class="fa fa-video-camera"></i>
+            <span slot="title" class="d-none d-md-inline">视频会议</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
       <el-main class="main-wrapper">
