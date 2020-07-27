@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: 'beginMeeting.vue'
+    name: 'beginMeetingDialog'
   }
 </script>
 

@@ -10,8 +10,8 @@
 <!--    </el-card>-->
     <el-card>
       <div class="header-panel justify-content">
-        <el-button class="meeting" type="primary" @click="rightOff">马上开会</el-button>
-        <el-button class="meeting order" @click="Invitation">预约开会</el-button>
+        <el-button class="meeting" type="primary" @click="Invitation">开始随访</el-button>
+        <el-button class="meeting order" @click="rightOff">预约开会</el-button>
       </div>
     </el-card>
     <div class="center-panel justify-content">
@@ -39,7 +39,7 @@
       rightOff() {
         const modalPath = process.env.NODE_ENV === 'development'
           ? `http://192.168.3.247:20002/reg/#/project/${this.projectId}/log`
-          : `file://${__dirname}/index.html#beginMeeting`
+          : `file://${__dirname}/index.html#beginMeetingDialog`
         console.log(modalPath, '1111111')
         let win = new BrowserWindow({
           // frame: false,

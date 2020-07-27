@@ -4,31 +4,19 @@
       <el-col :span="12">
         <div class="grid-content bg-purple">
           <div class="personnel">
-            <span class="user">username</span>
+            <span class="user">{{ name }}</span>
             <el-tag
+              v-show="checkAll"
               class="tag"
               closable
+              @close="remove(patientName)"
               size="medium"
               type="info">
-              会议邀请
-            </el-tag>
-            <el-tag
-              class="tag"
-              closable
-              size="medium"
-              type="info">
-              会议邀请
-            </el-tag>
-            <el-tag
-              class="tag"
-              closable
-              size="medium"
-              type="info">
-              会议邀请
+              {{ patientName }}
             </el-tag>
             <el-autocomplete style="margin-top: 3px;"
               class="inline-input"
-              v-model="state2"
+              v-model="queryName"
               :fetch-suggestions="querySearch"
               placeholder="搜索"
               :trigger-on-focus="false"
@@ -36,7 +24,7 @@
             ></el-autocomplete>
           </div>
           <el-row class="btn_foot">
-            <el-button type="primary" class="confirm" disabled>确定(0/1)</el-button>
+            <el-button type="primary" class="confirm" :disabled="Ninja">确定</el-button>
             <el-button type="info" plain class="cancel">取 消</el-button>
           </el-row>
         </div>
@@ -54,22 +42,14 @@
               <i class="el-icon-arrow-left"></i>
               我的患者
             </div>
-            <div style="margin: 5px 15px;">
-              <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-                <div v-for="item in cities" >
-                  <el-checkbox :label="item" :key="item">{{ item.PatientName }}</el-checkbox>
+            <div style="margin: 5px 15px;overflow: auto;height: 310px;">
+              <el-radio-group v-model="checkedCities" v-infinite-scroll="load" @change="patient">
+                <div v-for="(item,index) in patients" :key="index" style="margin: 10px 5px;">
+                  <el-radio :label="item">{{ item.name }}</el-radio>
                 </div>
-              </el-checkbox-group>
+              </el-radio-group>
             </div>
           </div>
-          <el-pagination background
-                         :current-page="currentPage"
-                         :page-size="pageSize"
-                         layout="total, prev, pager, next, jumper"
-                         :total="total"
-                         @current-change="currentChange"
-                         class="pagination">
-          </el-pagination>
         </div>
       </el-col>
     </el-row>
@@ -77,6 +57,7 @@
 </template>
 <script>
   import { getProjectPatients } from '@/api/PatientService'
+  import { mapGetters } from 'vuex'
   const cityOptions = []
   export default {
     name: 'MeetingInvitationDialog',
@@ -84,49 +65,98 @@
       const projectId = this.$route.params.projectId
       return {
         projectId,
-        display: false,
         total: 0,
         pageSize: 10, // 单页数据量
         currentPage: 1, // 默认开始页面
+        display: false,
         Ninja: true,
         patientList: true,
         checkAll: false,
-        checkedCities: [],
+        checkedCities: '',
         patients: [],
-        cities: cityOptions
-        // isIndeterminate: true
+        cities: cityOptions,
+        arr: [],
+        array: [],
+        queryName: null,
+        patientName: null
+      }
+    },
+    computed: {
+      ...mapGetters([
+        'name'
+      ]),
+      noMore() {
+        return !(this.patients.length < this.total)
       }
     },
     methods: {
       show() {
         this.display = true
+        this.remove()
       },
-      handleCheckedCitiesChange(value) {
-        const checkedCount = value.length
-        this.checkAll = checkedCount === this.cities.length
-        // this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length
+      load() {
+        if (!this.noMore) {
+          this.currentPage = this.currentPage + 1
+          this.queryPatient()
+        }
       },
       patientShow() {
         this.patientList = !this.patientList
+        this.patients = []
+        this.currentPage = 1
         this.queryPatient()
       },
-      async queryPatient() {
-        await getProjectPatients(this.projectId, {
+      queryPatient() {
+        getProjectPatients(this.projectId, {
           page: this.currentPage - 1,
-          size: this.pageSize
+          size: this.pageSize,
+          'EQ_patient.name': this.queryName
         }).then((res) => {
-          this.patients = res.data
-          this.patients.forEach(function(item) {
-            cityOptions.push({ PatientName: item.name })
-          })
+          this.patients = this.patients.concat(res.data)
           this.total = Number(res.headers['x-total-count'])
         })
       },
-      currentChange: function(currentPage) {
-        this.currentPage = currentPage
+
+      querySearch(queryString, cb) {
         this.queryPatient()
+        console.log(this.arr, 'b')
+        const cities = this.arr
+        const results = queryString ? cities.filter(this.createFilter(queryString)) : cities
+        // 调用 callback 返回建议列表的数据
+        cb(results)
+      },
+      createFilter(queryString) {
+        console.log('c')
+        return (restaurant) => {
+          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+        }
+      },
+      handleSelect() {
+        console.log('a')
+        if (this.queryName === '') {
+          this.queryName = null
+        }
+        this.queryPatient()
+      },
+      // loadAll() {
+      //   console.log('d')
+      // },
+      patient() {
+        this.checkAll = true
+        this.patientName = this.checkedCities.name
+        this.Ninja = false
+      },
+      remove() {
+        this.checkAll = false
+        this.patientName = null
+        this.checkedCities = null
+        this.Ninja = true
       }
     }
+    // mounted() {
+    //   console.log('e')
+    //   this.arr = this.loadAll()
+    // }
   }
 </script>
 
