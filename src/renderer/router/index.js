@@ -30,6 +30,7 @@ export const constantRouterMap = [
   { path: '/invitation', component: () => import('@/views/account/invitation'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
   { path: '/401', component: () => import('@/views/401'), hidden: true },
+  { path: '/meeting', component: () => import('@/views/video-meeting/beginMeeting') },
   {
     path: '/',
     component: Layout,

@@ -74,13 +74,15 @@
                 <el-table-column prop="createdBy" label="录入人" sortable="custom"></el-table-column>
                 <el-table-column prop="caseCount" label="病例数"></el-table-column>
                 <el-table-column prop="followCount" label="随访数"></el-table-column>
-                <el-table-column align="center">
+                <el-table-column align="center" style="width: 100px;">
                     <template slot="header" slot-scope="scope">
                         <span>操作</span>
                     </template>
                     <template slot-scope="scope"
                               v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
                         <el-button type="text" @click="edit(scope.row)">编辑</el-button>
+                        <el-divider direction="vertical"></el-divider>
+                        <el-button type="text" @click="edit(scope.row)">视频随访</el-button>
                         <el-divider direction="vertical"></el-divider>
                         <el-button type="text">
                             <incorporation :patient-id="scope.row.id"></incorporation>

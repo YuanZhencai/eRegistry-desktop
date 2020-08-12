@@ -68,6 +68,7 @@
   },
   "dependencies": {
     "ace-builds": "^1.4.8",
+    "agora-electron-sdk": "^3.0.0-build.661",
     "ant-design-vue": "^1.4.12",
     "axios": "^0.17.1",
     "bootstrap": "^3.4.1",
@@ -117,10 +118,11 @@
     "css-loader": "^0.28.4",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
-    "electron": "^1.7.5",
+    "electron": "^5.0.13",
     "electron-builder": "^19.19.1",
     "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.2.0",
+    "electron-rebuild": "^1.11.0",
     "eslint": "^4.4.1",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-loader": "^1.9.0",
@@ -143,5 +145,9 @@
     "webpack": "^3.5.2",
     "webpack-dev-server": "^2.7.1",
     "webpack-hot-middleware": "^2.18.2"
+  },
+  "agora_electron": {
+    "electron_version": "5.0.8",
+    "prebuilt": true
   }
 }

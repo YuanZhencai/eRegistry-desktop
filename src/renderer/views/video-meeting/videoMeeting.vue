@@ -1,17 +1,9 @@
 <template>
   <div>
-<!--    <el-card style="overflow: hidden">-->
-<!--      <span style="font-size: 15px;">-->
-<!--        视频会议-->
-<!--      </span>-->
-<!--      <span style="font-size: 20px;color: #1890ff;float: right;">-->
-<!--        <i class="el-icon-plus"></i>-->
-<!--      </span>-->
-<!--    </el-card>-->
     <el-card>
       <div class="header-panel justify-content">
         <el-button class="meeting" type="primary" @click="Invitation">开始随访</el-button>
-        <el-button class="meeting order" @click="rightOff">预约开会</el-button>
+        <el-button class="meeting order" @click="rightOff">邀请随访人</el-button>
       </div>
     </el-card>
     <div class="center-panel justify-content">
@@ -37,26 +29,23 @@
     },
     methods: {
       rightOff() {
+        this.$refs['invitation-dialog'].show(this.projectId)
+      },
+      Invitation() {
         const modalPath = process.env.NODE_ENV === 'development'
-          ? `http://192.168.3.247:20002/reg/#/project/${this.projectId}/log`
-          : `file://${__dirname}/index.html#beginMeetingDialog`
-        console.log(modalPath, '1111111')
+          ? `http://localhost:9080/#/meeting`
+          : `file://${__dirname}/index.html#beginMeeting`
         let win = new BrowserWindow({
           // frame: false,
-          width: 800,
-          height: 600,
+          width: 1200,
+          height: 900,
           webPreferences: {
+            nodeIntegration: true,
             webSecurity: false
           },
           parent: win
         })
         win.loadURL(modalPath)
-        win.on('closed', () => {
-          win = null
-        })
-      },
-      Invitation() {
-        this.$refs['invitation-dialog'].show(this.projectId)
       }
     }
   }
