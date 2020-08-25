@@ -1,10 +1,10 @@
 <template>
   <div style="background: #5a5e66;">
     <div class="hello" style="background: #5a5e66;">
-      <div class="video" id="local"></div>
+<!--      <div class="video" id="local"></div>-->
       <div class="video" style="border: 1px solid red;" id="remote"></div>
     </div>
-    <el-card class="justify-content" style="align:center;">
+    <div class="justify-content" style="align:center;">
       <el-button class="meeting" type="danger" round @click="endFollowUp">结束随访</el-button>
       <el-button class="meeting" type="info" round @click="endAudio" v-show="showHide">
         关闭话筒
@@ -14,7 +14,7 @@
         开启话筒
         <i class="fa fa-microphone" aria-hidden="true"></i>
       </el-button>
-    </el-card>
+    </div>
     <div>{{ consoleContainer }}</div>
   </div>
 </template>
@@ -56,12 +56,12 @@
           }
           rtcEngine.initialize(AgoraID)
           // listen to events
-          rtcEngine.on('joinedChannel', (channel, uid, elapsed) => {
-            this.consoleContainer = `join channel success ${channel} ${uid} ${elapsed}`
-            let localVideoContainer = document.querySelector('#local')
-            // setup render area for local user
-            rtcEngine.setupLocalVideo(localVideoContainer)
-          })
+          // rtcEngine.on('joinedChannel', (channel, uid, elapsed) => {
+          //   this.consoleContainer = `join channel success ${channel} ${uid} ${elapsed}`
+          //   let localVideoContainer = document.querySelector('#local')
+          //   // setup render area for local user
+          //   rtcEngine.setupLocalVideo(localVideoContainer)
+          // })
           rtcEngine.on('error', (err, msg) => {
             this.consoleContainer = `error: code ${err} - ${msg}`
           })
@@ -81,7 +81,7 @@
           // set where log file should be put for problem diagnostic
           rtcEngine.setLogFile(logpath)
           // join channel to rock!
-          rtcEngine.joinChannel(null, 'demoChannel', null, Math.floor(new Date().getTime() / 1000))
+          rtcEngine.joinChannel(null, '111111', null, Math.floor(new Date().getTime() / 1000))
           global.rtcEngine = rtcEngine
         })
       },
@@ -108,7 +108,7 @@
     align-items: center;
   }
   .video {
-    width: 750px;
+    width: 1200px;
     height: 400px;
     overflow: hidden;
     margin: 10px;

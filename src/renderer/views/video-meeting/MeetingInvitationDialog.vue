@@ -14,7 +14,7 @@
               type="info">
               {{ patientName }}
             </el-tag>
-            <el-input v-model="queryName" placeholder="搜索患者" size="mini" suffix-icon="el-icon-search" style="width: 100px;border: none;"
+            <el-input v-model="queryName" placeholder="搜索患者" size="mini" suffix-icon="el-icon-search" style="width: 100px;"
                       @change="searchPatient"></el-input>
           </div>
           <el-row class="btn_foot">
