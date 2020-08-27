@@ -2,9 +2,8 @@
   <div>
     <el-card>
       <div class="header-panel justify-content">
-        <el-button class="meeting" type="primary" @click="openVideoWindow">开始随访</el-button>
-        <el-button class="meeting order" @click="rightOff">邀请随访人</el-button>
-·        <el-button class="meeting order" @click="videoList">会议记录列表</el-button>
+        <el-button class="meeting" type="primary" @click="createMeeting">开始随访</el-button>
+·       <el-button class="meeting order" @click="videoList">会议记录列表</el-button>
       </div>
     </el-card>
     <div class="center-panel justify-content" v-show="showHide">
@@ -12,24 +11,31 @@
     </div>
     <div v-show="!showHide">
       <el-table
-        :data="videoListData"
+        :data="meetings"
         style="width: 100%">
         <el-table-column
           width="80">
           <template slot-scope="scope">
-<!--            <user-avatar :username="videoListData.url" :size="35"></user-avatar>-->
+              <div v-for="participant in scope.row.participants" :key="participant">
+                  <user-avatar :username="participant" :size="35"></user-avatar>
+              </div>
           </template>
         </el-table-column>
         <el-table-column
           width="320">
           <template slot-scope="scope">
-            <p>{11{videoListData}111}</p>
-            <p>{22{scope}33}</p>
+            <p>{{scope.row.title}}</p>
+            <p>{{scope.row.beginDate | formatDate('YYYY-MM-DD HH:mm')}}</p>
           </template>
         </el-table-column>
         <el-table-column>
           <template slot-scope="scope">
-            <el-button icon="el-icon-video-camera" circle></el-button>
+            <el-button
+                    @click="enterMeeting(scope.row)"
+                    v-if="scope.row.state === 'START'"
+                    icon="el-icon-video-camera"
+                    circle>
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -41,8 +47,9 @@
 <script>
 import MeetingInvitationDialog from './MeetingInvitationDialog'
 import UserAvatar from '@/components/avatar/userAvatar'
+import { getProjectMeetings } from '../../api/MeetingService'
 export default {
-  name: 'videoMeeting',
+  name: 'Meeting',
   components: {
     MeetingInvitationDialog,
     UserAvatar
@@ -51,42 +58,43 @@ export default {
     const projectId = this.$route.params.projectId
     return {
       projectId,
-      showHide: true,
-      videoListData: [
-        {
-          url: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-          date: '2016-05-02',
-          name: '王小虎发起的视频会议'
-        }, {
-          url: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-          date: '2016-05-04',
-          name: '王小发起的视频会议'
-        }, {
-          url: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-          date: '2016-05-01',
-          name: '小虎发起的视频会议'
-        }, {
-          url: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-          date: '2016-05-03',
-          name: '王虎发起的视频会议'
-        }
-      ]
+      meeting: null,
+      meetings: [],
+      showHide: true
     }
   },
   methods: {
-    rightOff() {
-      this.$refs['invitation-dialog'].show(this.projectId)
-    },
     videoList() {
       this.showHide = !this.showHide
+      if (!this.showHide) {
+        this.findMeetings()
+      }
     },
-    openVideoWindow() {
+    openVideoWindow(meeting) {
       if (!process.env.IS_WEB) {
-      	const electron = require('electron')
+        const electron = require('electron')
         electron.ipcRenderer.send('open-video', {
-          path: '/#/meeting'
+          path: `/#/video?roomId=${meeting.roomId}`
         })
       }
+    },
+    createMeeting() {
+      if (this.meeting) {
+        this.openVideoWindow(this.meeting)
+      } else {
+        this.$refs['invitation-dialog'].show().then((meeting) => {
+          this.meeting = meeting
+          this.openVideoWindow(this.meeting)
+        }, () => {})
+      }
+    },
+    findMeetings() {
+      getProjectMeetings({ projectId: this.projectId }).then((response) => {
+        this.meetings = response.data
+      })
+    },
+    enterMeeting(meeting) {
+      this.openVideoWindow(meeting)
     }
   }
 }

@@ -99,35 +99,36 @@ function onUpdater() {
 function onOpenVideoWindow() {
   ipcMain.on('open-video', async(event, { path }) => {
     if (meetingWindow) {
-	  meetingWindow.show()
-	  meetingWindow.focus()
-	  return meetingWindow
+      meetingWindow.show()
+      meetingWindow.focus()
+      return meetingWindow
     }
     meetingWindow = new BrowserWindow({
-	  title: '视频随访',
-	  width: 980,
-	  height: 640,
-	  minWidth: 720,
-	  minHeight: 450,
-	  useContentSize: true,
-	  resizable: true,
-	  menu: false,
-	  parent: mainWindow,
-	  modal: process.platform !== 'darwin',
-	  show: false,
-	  webPreferences: {
-        nodeIntegration: true
-	  }
+      title: '视频随访',
+      width: 980,
+      height: 640,
+      minWidth: 720,
+      minHeight: 450,
+      useContentSize: true,
+      resizable: true,
+      menu: false,
+      parent: mainWindow,
+      modal: process.platform !== 'darwin',
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        webSecurity: false
+      }
     })
 
     meetingWindow.on('ready-to-show', () => {
-	  meetingWindow.show()
-	  meetingWindow.focus()
+      meetingWindow.show()
+      meetingWindow.focus()
     })
 
     // 窗口关闭后手动让$window为null
     meetingWindow.on('closed', () => {
-	  meetingWindow = null
+      meetingWindow = null
     })
 
     await meetingWindow.loadURL(path ? winURL + path : winURL)

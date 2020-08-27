@@ -1,25 +1,25 @@
 <template>
-  <el-dialog title="会议邀请" :visible.sync="display">
+  <el-dialog title="会议邀请" :visible.sync="display" @close="close">
     <el-row>
       <el-col :span="12">
         <div class="grid-content bg-purple">
           <div class="personnel">
             <span class="user">{{ name }}</span>
             <el-tag
-              v-show="checkOnly"
+              v-if="checkedPatient"
               class="tag"
               closable
-              @close="remove(patientName)"
+              @close="remove"
               size="medium"
               type="info">
-              {{ patientName }}
+              {{ checkedPatient.name }}
             </el-tag>
             <el-input v-model="queryName" placeholder="搜索患者" size="mini" suffix-icon="el-icon-search" style="width: 100px;"
                       @change="searchPatient"></el-input>
           </div>
           <el-row class="btn_foot">
-            <el-button type="primary" class="confirm" :disabled="confirm">确定</el-button>
-            <el-button type="info" plain class="cancel">取 消</el-button>
+            <el-button type="primary" class="confirm" :disabled="!checkedPatient" @click="save">确定</el-button>
+            <el-button type="info" plain class="cancel" @click="cancel">取 消</el-button>
           </el-row>
         </div>
       </el-col>
@@ -37,8 +37,8 @@
               我的患者
             </div>
             <div style="margin: 5px 15px;overflow: auto;height: 310px;">
-              <el-radio-group v-model="checkedName" v-infinite-scroll="load" @change="patient">
-                <div v-for="(item,index) in patients" :key="index" style="margin: 10px 5px;">
+              <el-radio-group v-model="checkedPatient" v-infinite-scroll="load">
+                <div v-for="(item, index) in patients" :key="index" style="margin: 10px 5px;">
                   <el-radio :label="item">{{ item.name }}</el-radio>
                 </div>
               </el-radio-group>
@@ -52,8 +52,9 @@
 <script>
   import { getProjectPatients } from '@/api/PatientService'
   import { mapGetters } from 'vuex'
-  const patientOptions = []
-  export default {
+  import { createMeeting } from '../../api/MeetingService'
+  import { Message } from 'element-ui'
+export default {
     name: 'MeetingInvitationDialog',
     data() {
       const projectId = this.$route.params.projectId
@@ -63,14 +64,13 @@
         pageSize: 10, // 单页数据量
         currentPage: 1, // 默认开始页面
         display: false,
+        resolve: null,
+        reject: null,
+        isSaving: false,
         confirm: true,
         showHide: true,
-        checkOnly: false,
-        checkedName: '',
+        checkedPatient: null,
         patients: [],
-        cities: patientOptions,
-        arr: [],
-        array: [],
         queryName: null,
         patientName: null
       }
@@ -86,7 +86,38 @@
     methods: {
       show() {
         this.display = true
-        this.remove()
+        return new Promise((resolve, reject) => {
+          this.resolve = resolve
+          this.reject = reject
+        })
+      },
+      close() {
+        this.display = false
+        this.reject('close')
+      },
+      cancel() {
+        this.display = false
+        this.reject('cancel')
+      },
+      save() {
+        if (!this.checkedPatient.username) {
+          Message.error('该患者还没有认入组，请把入组二维码发送给患者进行确认入组')
+          return
+        }
+        this.isSaving = true
+        createMeeting({
+          projectId: this.projectId,
+          title: `${this.name}发起的视频随访`,
+          participants: [
+            this.checkedPatient.username
+          ]
+        }).then(res => {
+          this.isSaving = false
+          this.display = false
+          this.resolve(res.data)
+        }, () => {
+          this.isSaving = false
+        })
       },
       load() {
         if (!this.noMore) {
@@ -104,7 +135,7 @@
         getProjectPatients(this.projectId, {
           page: this.currentPage - 1,
           size: this.pageSize,
-          'EQ_patient.name': this.queryName
+          'LIKE_patient.name': (this.queryName ? `%${this.queryName}%` : null)
         }).then((res) => {
           this.patients = this.patients.concat(res.data)
           this.total = Number(res.headers['x-total-count'])
@@ -112,22 +143,13 @@
       },
       searchPatient() {
         this.showHide = false
-        console.log(this.queryName)
         if (this.queryName === '') {
           this.queryName = null
         }
         this.queryPatient()
       },
-      patient() {
-        this.checkOnly = true
-        this.patientName = this.checkedName.name
-        this.confirm = false
-      },
       remove() {
-        this.checkOnly = false
-        this.patientName = null
-        this.checkedName = null
-        this.confirm = true
+        this.checkedPatient = null
       }
     }
   }
