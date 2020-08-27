@@ -2,7 +2,7 @@
   <div style="background: #5a5e66;">
     <div class="hello" style="background: #5a5e66;">
 <!--      <div class="video" id="local"></div>-->
-      <div class="video" style="border: 1px solid red;" id="remote"></div>
+      <div class="video" id="remote"></div>
     </div>
     <div class="justify-content" style="align:center;">
       <el-button class="meeting" type="danger" round @click="endFollowUp">结束随访</el-button>

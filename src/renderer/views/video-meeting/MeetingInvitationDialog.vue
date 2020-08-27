@@ -14,8 +14,14 @@
               type="info">
               {{ patientName }}
             </el-tag>
-            <el-input v-model="queryName" placeholder="搜索患者" size="mini" suffix-icon="el-icon-search" style="width: 100px;"
-                      @change="searchPatient"></el-input>
+            <el-autocomplete
+              class="inline-input"
+              v-model="state2"
+              :fetch-suggestions="querySearch"
+              placeholder="搜索患者"
+              :trigger-on-focus="false"
+              @select="handleSelect"
+            ></el-autocomplete>
           </div>
           <el-row class="btn_foot">
             <el-button type="primary" class="confirm" :disabled="confirm">确定</el-button>
@@ -72,6 +78,8 @@
         arr: [],
         array: [],
         queryName: null,
+        restaurants: [],
+        state2: '',
         patientName: null
       }
     },
@@ -87,6 +95,19 @@
       show() {
         this.display = true
         this.remove()
+      },
+      querySearch(queryString, cb) {
+        var restaurants = this.restaurants
+        console.log(restaurants, '1')
+        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
+        // 调用 callback 返回建议列表的数据
+        cb(results)
+      },
+      createFilter(queryString) {
+        return (restaurant) => {
+          console.log(restaurant, '2')
+          return (restaurant.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+        }
       },
       load() {
         if (!this.noMore) {
@@ -104,11 +125,16 @@
         getProjectPatients(this.projectId, {
           page: this.currentPage - 1,
           size: this.pageSize,
-          'EQ_patient.name': this.queryName
+          'LIKE_patient.name': (this.state2 ? `%${this.state2}%` : null)
         }).then((res) => {
-          this.patients = this.patients.concat(res.data)
           this.total = Number(res.headers['x-total-count'])
+          this.patients = this.patients.concat(res.data)
+          // this.patients = res.data
+          this.restaurants = res.data
         })
+      },
+      handleSelect(item) {
+        console.log(item)
       },
       searchPatient() {
         this.showHide = false
@@ -129,6 +155,9 @@
         this.checkedName = null
         this.confirm = true
       }
+    },
+    mounted() {
+      this.queryPatient()
     }
   }
 </script>

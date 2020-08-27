@@ -81,7 +81,7 @@
       Invitation() {
         const modalPath = process.env.NODE_ENV === 'development'
           ? `http://localhost:9080/#/meeting`
-          : `file://${__dirname}/index.html#beginMeeting`
+          : `file://${__dirname}/index.html#meeting`
         let win = new BrowserWindow({
           // frame: false,
           width: 1200,
@@ -89,8 +89,7 @@
           webPreferences: {
             nodeIntegration: true,
             webSecurity: false
-          },
-          parent: win
+          }
         })
         win.loadURL(modalPath)
       },
