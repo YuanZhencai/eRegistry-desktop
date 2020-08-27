@@ -37,15 +37,15 @@
           </div>
         </div>
         <div v-show="!showHide">
-          <div class="personnel">
+          <div class="personnel" >
             <div style="color: #000;font-size: 15px;margin: 10px 15px;cursor: pointer;" @click="showHide=!showHide">
               <i class="el-icon-arrow-left"></i>
               我的患者
             </div>
             <div style="margin: 5px 15px;overflow: auto;height: 310px;">
-              <el-radio-group v-model="checkedPatient" v-infinite-scroll="load">
+              <el-radio-group v-model="checkedPatient" v-infinite-scroll="load" @change="changeRadio">
                 <div v-for="(item, index) in patients" :key="index" style="margin: 10px 5px;">
-                  <el-radio :label="item">{{ item.name }}</el-radio>
+                  <el-radio :label="item" >{{ item.name }}</el-radio>
                 </div>
               </el-radio-group>
             </div>
@@ -128,7 +128,6 @@ export default {
       },
       querySearch(queryString, cb) {
         var patients = this.patients
-        console.log(patients, '1')
         var results = queryString ? patients.filter(this.createFilter(queryString)) : patients
         // 调用 callback 返回建议列表的数据
         cb(results)
@@ -138,6 +137,9 @@ export default {
           return (restaurant.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
         }
       },
+      changeRadio(item) {
+        this.searchPatients = item.name
+      },
       load() {
         if (!this.noMore) {
           this.currentPage = this.currentPage + 1
@@ -146,9 +148,6 @@ export default {
       },
       patientShow() {
         this.showHide = !this.showHide
-        this.patients = []
-        this.currentPage = 1
-        this.queryPatient()
       },
       queryPatient() {
         getProjectPatients(this.projectId, {
@@ -156,12 +155,12 @@ export default {
           size: this.pageSize,
           'LIKE_patient.name': (this.queryName ? `%${this.queryName}%` : null)
         }).then((res) => {
-          this.patients = this.patients.concat(res.data)
+          this.patients = [...this.patients, ...res.data].map((i) => { return { ...i, value: i.name } })
           this.total = Number(res.headers['x-total-count'])
         })
       },
       handleSelect(item) {
-        console.log(item, '12312')
+        this.checkedPatient = item
       },
       searchPatient() {
         this.showHide = false
@@ -171,6 +170,7 @@ export default {
         this.queryPatient()
       },
       remove() {
+        this.searchPatients = ''
         this.checkedPatient = null
       }
     },
