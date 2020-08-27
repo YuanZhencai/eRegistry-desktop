@@ -16,7 +16,7 @@
             </el-tag>
             <el-autocomplete
               class="inline-input"
-              v-model="state2"
+              v-model="searchPatients"
               :fetch-suggestions="querySearch"
               placeholder="搜索患者"
               :trigger-on-focus="false"
@@ -78,8 +78,7 @@ export default {
         checkedPatient: null,
         patients: [],
         queryName: null,
-        restaurants: [],
-        state2: '',
+        searchPatients: '',
         patientName: null
       }
     },
@@ -128,15 +127,14 @@ export default {
         })
       },
       querySearch(queryString, cb) {
-        var restaurants = this.restaurants
-        console.log(restaurants, '1')
-        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
+        var patients = this.patients
+        console.log(patients, '1')
+        var results = queryString ? patients.filter(this.createFilter(queryString)) : patients
         // 调用 callback 返回建议列表的数据
         cb(results)
       },
       createFilter(queryString) {
         return (restaurant) => {
-          console.log(restaurant, '2')
           return (restaurant.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
         }
       },
@@ -160,13 +158,10 @@ export default {
         }).then((res) => {
           this.patients = this.patients.concat(res.data)
           this.total = Number(res.headers['x-total-count'])
-          this.patients = this.patients.concat(res.data)
-          // this.patients = res.data
-          this.restaurants = res.data
         })
       },
       handleSelect(item) {
-        console.log(item)
+        console.log(item, '12312')
       },
       searchPatient() {
         this.showHide = false
