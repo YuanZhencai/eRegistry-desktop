@@ -12,9 +12,9 @@ if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
-let mainWindow
+let mainWindow, meetingWindow
 const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080`
+  ? 'http://localhost:9080'
   : `file://${__dirname}/index.html`
 
 function createWindow() {
@@ -82,10 +82,10 @@ function onLogin() {
 
     session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
       if (token) {
-        details.requestHeaders['Authorization'] = `Bearer ${token}`
+        details.requestHeaders.Authorization = `Bearer ${token}`
       }
       if (referrer) {
-        details.requestHeaders['Referer'] = referrer
+        details.requestHeaders.Referer = referrer
       }
       callback({ requestHeaders: details.requestHeaders })
     })
@@ -96,11 +96,51 @@ function onUpdater() {
   checkVersion(mainWindow)
 }
 
+function onOpenVideoWindow() {
+  ipcMain.on('open-video', async(event, { path }) => {
+    if (meetingWindow) {
+	  meetingWindow.show()
+	  meetingWindow.focus()
+	  return meetingWindow
+    }
+    meetingWindow = new BrowserWindow({
+	  title: '视频随访',
+	  width: 980,
+	  height: 640,
+	  minWidth: 720,
+	  minHeight: 450,
+	  useContentSize: true,
+	  resizable: true,
+	  menu: false,
+	  parent: mainWindow,
+	  modal: process.platform !== 'darwin',
+	  show: false,
+	  webPreferences: {
+        nodeIntegration: true
+	  }
+    })
+
+    meetingWindow.on('ready-to-show', () => {
+	  meetingWindow.show()
+	  meetingWindow.focus()
+    })
+
+    // 窗口关闭后手动让$window为null
+    meetingWindow.on('closed', () => {
+	  meetingWindow = null
+    })
+
+    await meetingWindow.loadURL(path ? winURL + path : winURL)
+    return meetingWindow
+  })
+}
+
 function onReady() {
   createWindow()
   onDownload()
   onLogin()
   onUpdater()
+  onOpenVideoWindow()
 }
 
 app.on('ready', onReady)

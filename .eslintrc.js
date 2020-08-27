@@ -69,6 +69,7 @@ module.exports = {
       'newIsCap': true,
       'capIsNew': false
     }],
+	'no-mixed-spaces-and-tabs': 0,
     'new-parens': 2,
     'no-array-constructor': 2,
     'no-caller': 2,
@@ -104,7 +105,6 @@ module.exports = {
       'allowSwitch': false
     }],
     'no-lone-blocks': 2,
-    'no-mixed-spaces-and-tabs': 2,
     'no-multi-spaces': 2,
     'no-multi-str': 2,
     'no-multiple-empty-lines': [2, {
