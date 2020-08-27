@@ -195,7 +195,7 @@ export default {
           page: this.currentPage - 1,
           size: this.pageSize,
           sort: this.sort(),
-          'EQ_patient.name': this.form.queryString,
+          'LIKE_patient.name': (this.form.queryString ? `%${this.form.queryString}%` : null),
           'GT_patient.visitDate': this.form.startDate,
           'LT_patient.visitDate': this.form.endDate
         }).then((res) => {
