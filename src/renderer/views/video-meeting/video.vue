@@ -28,7 +28,6 @@
 	import { Message } from 'element-ui'
 	import { finishMeeting } from '../../api/MeetingService'
 	import { mapGetters } from 'vuex'
-
 	const AgoraID = 'd17d26b18b574c7c85611c912b5401ce' || ''
 	const rtcEngine = new AgoraRtcEngine()
 	export default {

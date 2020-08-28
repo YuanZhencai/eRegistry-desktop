@@ -63,6 +63,9 @@ export default {
       showHide: true
     }
   },
+  mounted() {
+    this.onVideoFinish()
+  },
   methods: {
     videoList() {
       this.showHide = !this.showHide
@@ -85,6 +88,7 @@ export default {
         this.$refs['invitation-dialog'].show().then((meeting) => {
           this.meeting = meeting
           this.openVideoWindow(this.meeting)
+          this.findMeetings()
         }, () => {})
       }
     },
@@ -95,6 +99,15 @@ export default {
     },
     enterMeeting(meeting) {
       this.openVideoWindow(meeting)
+    },
+    onVideoFinish() {
+      if (!process.env.IS_WEB) {
+        const electron = require('electron')
+        electron.ipcRenderer.on('finish-video', async(event) => {
+          this.meeting = null
+          this.findMeetings()
+        })
+      }
     }
   }
 }

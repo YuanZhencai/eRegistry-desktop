@@ -128,6 +128,7 @@ function onOpenVideoWindow() {
 
     // 窗口关闭后手动让$window为null
     meetingWindow.on('closed', () => {
+      event.sender.send('finish-video')
       meetingWindow = null
     })
 
