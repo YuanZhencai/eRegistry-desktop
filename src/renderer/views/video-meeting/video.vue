@@ -27,8 +27,8 @@
 	import { remote } from 'electron'
 	import { Message } from 'element-ui'
 	import { finishMeeting } from '../../api/MeetingService'
+	import { mapGetters } from 'vuex'
 
-const shell = require('electron').shell
 	const AgoraID = 'd17d26b18b574c7c85611c912b5401ce' || ''
 	const rtcEngine = new AgoraRtcEngine()
 	export default {
@@ -41,13 +41,15 @@ const shell = require('electron').shell
 	      consoleContainer: String
 	    }
 	  },
+	  computed: {
+	    ...mapGetters([
+	      'name'
+	    ])
+	  },
 	  mounted() {
 	    this.beginVideo()
 	  },
 	  methods: {
-	    link: (url) => {
-	      shell.openExternal(url)
-	    },
 	    beginVideo() {
 	      this.$nextTick(function() {
 	        if (!this.roomId) {
@@ -88,7 +90,8 @@ const shell = require('electron').shell
 	        // set where log file should be put for problem diagnostic
 	        rtcEngine.setLogFile(logpath)
 	        // join channel to rock!
-	        rtcEngine.joinChannel(null, this.roomId, null, Math.floor(new Date().getTime() / 1000))
+	        // rtcEngine.joinChannel(null, this.roomId, null, Math.floor(new Date().getTime() / 1000))
+	        rtcEngine.joinChannelWithUserAccount(null, this.roomId, this.name)
 	        global.rtcEngine = rtcEngine
 	      })
 	    },
