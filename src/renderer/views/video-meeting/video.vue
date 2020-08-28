@@ -1,21 +1,20 @@
 <template>
 	<div style="background: #5a5e66;">
 		<div class="hello" style="background: #5a5e66;">
-			<!--      <div class="video" id="local"></div>-->
-			<div class="video" style="border: 1px solid red;" id="remote"></div>
+			<div v-show="!userJoined" class="video" id="local"></div>
+			<div v-show="userJoined" class="video" style="border: 1px solid red;" id="remote"></div>
 		</div>
 		<div class="justify-content" style="align:center;">
 			<el-button class="meeting" type="danger" round @click="finish">结束随访</el-button>
-			<el-button class="meeting" type="info" round @click="endAudio" v-show="showHide">
+			<el-button class="meeting" type="info" round @click="disableAudio" v-show="audioEnabled">
 				关闭话筒
 				<i class="fa fa-microphone-slash" aria-hidden="true"></i>
 			</el-button>
-			<el-button class="meeting" type="info" round @click="beginAudio" v-show="!showHide">
+			<el-button class="meeting" type="info" round @click="enableAudio" v-show="!audioEnabled">
 				开启话筒
 				<i class="fa fa-microphone" aria-hidden="true"></i>
 			</el-button>
 		</div>
-		<div>{{ consoleContainer }}</div>
 	</div>
 </template>
 
@@ -35,7 +34,8 @@
 	    const roomId = this.$route.query.roomId
 	    return {
 	      roomId: roomId,
-	      showHide: true,
+	      userJoined: false,
+	      audioEnabled: false,
 	      consoleContainer: String
 	    }
 	  },
@@ -63,19 +63,19 @@
 	        }
 	        rtcEngine.initialize(AgoraID)
 	        // listen to events
-	        // rtcEngine.on('joinedChannel', (channel, uid, elapsed) => {
-	        //   this.consoleContainer = `join channel success ${channel} ${uid} ${elapsed}`
-	        //   let localVideoContainer = document.querySelector('#local')
-	        //   // setup render area for local user
-	        //   rtcEngine.setupLocalVideo(localVideoContainer)
-	        // })
+	        rtcEngine.on('joinedChannel', (channel, uid, elapsed) => {
+	          this.consoleContainer = `join channel success ${channel} ${uid} ${elapsed}`
+	          let localVideoContainer = document.querySelector('#local')
+	          // setup render area for local user
+	          rtcEngine.setupLocalVideo(localVideoContainer)
+	        })
 	        rtcEngine.on('error', (err, msg) => {
 	          this.consoleContainer = `error: code ${err} - ${msg}`
 	        })
 	        rtcEngine.on('userJoined', (uid) => {
 	          // setup render area for joined user
+	          this.userJoined = true
 	          let remoteVideoContainer = document.querySelector('#remote')
-
 	          rtcEngine.setupViewContentMode(uid, 1)
 	          rtcEngine.subscribe(uid, remoteVideoContainer)
 	        })
@@ -97,12 +97,12 @@
 	      rtcEngine.leaveChannel()
 	      remote.getCurrentWindow().close()
 	    },
-	    endAudio() {
-	      this.showHide = false
+	    disableAudio() {
+	      this.audioEnabled = false
 	      rtcEngine.disableAudio()
 	    },
-	    beginAudio() {
-	      this.showHide = true
+	    enableAudio() {
+	      this.audioEnabled = true
 	      rtcEngine.enableAudio()
 	    }
 	  }
