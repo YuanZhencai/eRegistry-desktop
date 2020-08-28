@@ -86,6 +86,8 @@ export default {
     methods: {
       show() {
         this.display = true
+        this.showHide = true
+        this.checkedPatient = null
         return new Promise((resolve, reject) => {
           this.resolve = resolve
           this.reject = reject

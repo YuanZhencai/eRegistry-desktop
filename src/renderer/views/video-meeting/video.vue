@@ -26,7 +26,6 @@
 
 	import { remote } from 'electron'
 	import { Message } from 'element-ui'
-	import { finishMeeting } from '../../api/MeetingService'
 	import { mapGetters } from 'vuex'
 	const AgoraID = 'd17d26b18b574c7c85611c912b5401ce' || ''
 	const rtcEngine = new AgoraRtcEngine()
@@ -95,10 +94,8 @@
 	      })
 	    },
 	    finish() {
-	      finishMeeting(this.roomId).then(res => {
-	        rtcEngine.leaveChannel()
-	        remote.getCurrentWindow().close()
-	      })
+	      rtcEngine.leaveChannel()
+	      remote.getCurrentWindow().close()
 	    },
 	    endAudio() {
 	      this.showHide = false

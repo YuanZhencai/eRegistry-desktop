@@ -47,7 +47,8 @@
 <script>
 import MeetingInvitationDialog from './MeetingInvitationDialog'
 import UserAvatar from '@/components/avatar/userAvatar'
-import { getProjectMeetings } from '../../api/MeetingService'
+import { finishMeeting, getProjectMeetings } from '../../api/MeetingService'
+
 export default {
   name: 'Meeting',
   components: {
@@ -60,11 +61,9 @@ export default {
       projectId,
       meeting: null,
       meetings: [],
-      showHide: true
+      showHide: true,
+      meetingWindow: null
     }
-  },
-  mounted() {
-    this.onVideoFinish()
   },
   methods: {
     videoList() {
@@ -73,12 +72,52 @@ export default {
         this.findMeetings()
       }
     },
-    openVideoWindow(meeting) {
+    async openVideoWindow(meeting) {
       if (!process.env.IS_WEB) {
-        const electron = require('electron')
-        electron.ipcRenderer.send('open-video', {
-          path: `/#/video?roomId=${meeting.roomId}`
+        const { BrowserWindow } = require('electron').remote
+        if (this.meetingWindow) {
+          this.meetingWindow.show()
+          this.meetingWindow.focus()
+          return this.meetingWindow
+        }
+        this.meetingWindow = new BrowserWindow({
+          title: '视频随访',
+          width: 980,
+          height: 640,
+          minWidth: 720,
+          minHeight: 450,
+          useContentSize: true,
+          resizable: true,
+          menu: false,
+          modal: process.platform !== 'darwin',
+          show: false,
+          webPreferences: {
+            nodeIntegration: true,
+            webSecurity: false
+          }
         })
+
+        this.meetingWindow.on('ready-to-show', () => {
+          this.meetingWindow.show()
+          this.meetingWindow.focus()
+        })
+
+        this.meetingWindow.on('close', async(e) => {
+          // todo 关闭确认
+          console.info('close', e)
+        })
+
+        // 窗口关闭后手动让$window为null
+        this.meetingWindow.on('closed', (e) => {
+          console.info('closed', e)
+          this.finishVideo()
+          this.meetingWindow = null
+        })
+        const winURL = process.env.NODE_ENV === 'development'
+          ? 'http://localhost:9080'
+          : `file://${__dirname}/index.html`
+        await this.meetingWindow.loadURL(`${winURL}/#/video?roomId=${meeting.roomId}`)
+        return this.meetingWindow
       }
     },
     createMeeting() {
@@ -98,16 +137,14 @@ export default {
       })
     },
     enterMeeting(meeting) {
+      this.meeting = meeting
       this.openVideoWindow(meeting)
     },
-    onVideoFinish() {
-      if (!process.env.IS_WEB) {
-        const electron = require('electron')
-        electron.ipcRenderer.on('finish-video', async(event) => {
-          this.meeting = null
-          this.findMeetings()
-        })
-      }
+    finishVideo() {
+      finishMeeting(this.meeting.roomId).then(res => {
+        this.meeting = null
+        this.findMeetings()
+      })
     }
   }
 }
