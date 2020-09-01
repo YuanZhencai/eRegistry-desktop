@@ -14,8 +14,14 @@
               type="info">
               {{ checkedPatient.name }}
             </el-tag>
-            <el-input v-model="queryName" placeholder="搜索患者" size="mini" suffix-icon="el-icon-search" style="width: 100px;"
-                      @change="searchPatient"></el-input>
+            <el-autocomplete
+              class="inline-input"
+              v-model="searchPatients"
+              :fetch-suggestions="querySearch"
+              placeholder="搜索患者"
+              :trigger-on-focus="false"
+              @select="handleSelect"
+            ></el-autocomplete>
           </div>
           <el-row class="btn_foot">
             <el-button type="primary" class="confirm" :disabled="!checkedPatient" @click="save">确定</el-button>
@@ -31,15 +37,15 @@
           </div>
         </div>
         <div v-show="!showHide">
-          <div class="personnel">
+          <div class="personnel" >
             <div style="color: #000;font-size: 15px;margin: 10px 15px;cursor: pointer;" @click="showHide=!showHide">
               <i class="el-icon-arrow-left"></i>
               我的患者
             </div>
             <div style="margin: 5px 15px;overflow: auto;height: 310px;">
-              <el-radio-group v-model="checkedPatient" v-infinite-scroll="load">
+              <el-radio-group v-model="checkedPatient" v-infinite-scroll="load" @change="changeRadio">
                 <div v-for="(item, index) in patients" :key="index" style="margin: 10px 5px;">
-                  <el-radio :label="item">{{ item.name }}</el-radio>
+                  <el-radio :label="item" >{{ item.name }}</el-radio>
                 </div>
               </el-radio-group>
             </div>
@@ -72,6 +78,7 @@ export default {
         checkedPatient: null,
         patients: [],
         queryName: null,
+        searchPatients: '',
         patientName: null
       }
     },
@@ -121,6 +128,20 @@ export default {
           this.isSaving = false
         })
       },
+      querySearch(queryString, cb) {
+        var patients = this.patients
+        var results = queryString ? patients.filter(this.createFilter(queryString)) : patients
+        // 调用 callback 返回建议列表的数据
+        cb(results)
+      },
+      createFilter(queryString) {
+        return (restaurant) => {
+          return (restaurant.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+        }
+      },
+      changeRadio(item) {
+        this.searchPatients = item.name
+      },
       load() {
         if (!this.noMore) {
           this.currentPage = this.currentPage + 1
@@ -129,9 +150,6 @@ export default {
       },
       patientShow() {
         this.showHide = !this.showHide
-        this.patients = []
-        this.currentPage = 1
-        this.queryPatient()
       },
       queryPatient() {
         getProjectPatients(this.projectId, {
@@ -139,9 +157,12 @@ export default {
           size: this.pageSize,
           'LIKE_patient.name': (this.queryName ? `%${this.queryName}%` : null)
         }).then((res) => {
-          this.patients = this.patients.concat(res.data)
+          this.patients = [...this.patients, ...res.data].map((i) => { return { ...i, value: i.name } })
           this.total = Number(res.headers['x-total-count'])
         })
+      },
+      handleSelect(item) {
+        this.checkedPatient = item
       },
       searchPatient() {
         this.showHide = false
@@ -151,8 +172,12 @@ export default {
         this.queryPatient()
       },
       remove() {
+        this.searchPatients = ''
         this.checkedPatient = null
       }
+    },
+    mounted() {
+      this.queryPatient()
     }
   }
 </script>
