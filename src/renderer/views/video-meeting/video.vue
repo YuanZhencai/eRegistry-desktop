@@ -1,8 +1,8 @@
 <template>
-	<div style="background: #5a5e66;">
-		<div class="hello" style="background: #5a5e66;">
+	<div class="content">
+		<div class="hello">
 			<div v-show="!userJoined" class="video" id="local"></div>
-			<div v-show="userJoined" class="video" style="border: 1px solid red;" id="remote"></div>
+			<div v-show="userJoined" class="video" id="remote"></div>
 		</div>
 		<div class="justify-content" style="align:center;">
 			<el-button class="meeting" type="danger" round @click="finish">结束随访</el-button>
@@ -110,18 +110,25 @@
 </script>
 
 <style scoped>
+  .content {
+    background: #5a5e66;
+    height: 100%;
+  }
 	.hello {
+    height: 650px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
+    background: #5a5e66;
+    padding: 30px 10px;
 	}
 	.video {
-		width: 1200px;
-		height: 400px;
+    width: 100%;
+    height: 100%;
 		overflow: hidden;
-		margin: 10px;
 	}
 	.justify-content{
+    background: #5a5e66;
 		display: flex;
 		justify-content: center;
 		align-items: center;

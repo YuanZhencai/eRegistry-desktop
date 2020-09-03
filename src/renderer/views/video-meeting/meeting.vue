@@ -3,7 +3,7 @@
     <el-card>
       <div class="header-panel justify-content">
         <el-button class="meeting" type="primary" @click="createMeeting">开始随访</el-button>
-·       <el-button class="meeting order" @click="videoList">会议记录列表</el-button>
+        <el-button class="meeting order" @click="videoList">会议记录列表</el-button>
       </div>
     </el-card>
     <div class="center-panel justify-content" v-show="showHide">
@@ -83,7 +83,7 @@ export default {
         this.meetingWindow = new BrowserWindow({
           title: '视频随访',
           width: 980,
-          height: 640,
+          height: 700,
           minWidth: 720,
           minHeight: 450,
           useContentSize: true,

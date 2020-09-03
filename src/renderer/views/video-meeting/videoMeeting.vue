@@ -85,7 +85,7 @@
         let win = new BrowserWindow({
           // frame: false,
           width: 1200,
-          height: 900,
+          height: 800,
           webPreferences: {
             nodeIntegration: true,
             webSecurity: false

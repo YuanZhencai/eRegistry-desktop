@@ -1,9 +1,6 @@
 <template>
   <div style="background: #5a5e66;">
-    <div class="hello" style="background: #5a5e66;">
-<!--      <div class="video" id="local"></div>-->
-      <div class="video" id="remote"></div>
-    </div>
+    <div class="video" id="remote"></div>
     <div class="justify-content" style="align:center;">
       <el-button class="meeting" type="danger" round @click="endFollowUp">结束随访</el-button>
       <el-button class="meeting" type="info" round @click="endAudio" v-show="showHide">
@@ -45,6 +42,7 @@
         shell.openExternal(url)
       },
       beginVideo() {
+        console.log('1')
         this.$nextTick(function() {
           if (global.rtcEngine) {
             global.rtcEngine.release()
@@ -55,20 +53,12 @@
             return
           }
           rtcEngine.initialize(AgoraID)
-          // listen to events
-          // rtcEngine.on('joinedChannel', (channel, uid, elapsed) => {
-          //   this.consoleContainer = `join channel success ${channel} ${uid} ${elapsed}`
-          //   let localVideoContainer = document.querySelector('#local')
-          //   // setup render area for local user
-          //   rtcEngine.setupLocalVideo(localVideoContainer)
-          // })
           rtcEngine.on('error', (err, msg) => {
             this.consoleContainer = `error: code ${err} - ${msg}`
           })
           rtcEngine.on('userJoined', (uid) => {
             // setup render area for joined user
             let remoteVideoContainer = document.querySelector('#remote')
-
             rtcEngine.setupViewContentMode(uid, 1)
             rtcEngine.subscribe(uid, remoteVideoContainer)
           })
