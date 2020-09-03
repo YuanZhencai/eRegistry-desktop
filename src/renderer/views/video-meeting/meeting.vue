@@ -2,7 +2,7 @@
   <div>
     <el-card>
       <div class="header-panel justify-content">
-        <el-button class="meeting" type="primary" @click="createMeeting">开始随访</el-button>
+        <el-button class="meeting" type="primary" @click="createMeeting">开始视频随访</el-button>
         <el-button class="meeting order" @click="videoList">会议记录列表</el-button>
       </div>
     </el-card>
@@ -48,6 +48,7 @@
 import MeetingInvitationDialog from './MeetingInvitationDialog'
 import UserAvatar from '@/components/avatar/userAvatar'
 import { finishMeeting, getProjectMeetings } from '../../api/MeetingService'
+import { Message } from 'element-ui'
 
 export default {
   name: 'Meeting',
@@ -121,6 +122,10 @@ export default {
       }
     },
     createMeeting() {
+      if (process.env.IS_WEB) {
+        Message.warning('视频随访目前只支持桌面版，请下载桌面客户端')
+        return
+      }
       if (this.meeting) {
         this.openVideoWindow(this.meeting)
       } else {
