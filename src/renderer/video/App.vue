@@ -1,11 +1,13 @@
 <template>
-	<router-view></router-view>
+	<p-video></p-video>
 </template>
 
 <script>
 
+import PVideo from './video'
 export default {
-  name: 'App'
+  name: 'App',
+  components: { PVideo }
 }
 </script>
 

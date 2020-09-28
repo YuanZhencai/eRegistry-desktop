@@ -49,12 +49,18 @@ import MeetingInvitationDialog from './MeetingInvitationDialog'
 import UserAvatar from '@/components/avatar/userAvatar'
 import { finishMeeting, getProjectMeetings } from '../../api/MeetingService'
 import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Meeting',
   components: {
     MeetingInvitationDialog,
     UserAvatar
+  },
+  computed: {
+    ...mapGetters([
+      'name'
+    ])
   },
   data() {
     const projectId = this.$route.params.projectId
@@ -117,7 +123,7 @@ export default {
         const winURL = process.env.NODE_ENV === 'development'
           ? 'http://localhost:9080/video.html'
           : `file://${__dirname}/video.html`
-        const videoURL = `${winURL}?roomId=${meeting.roomId}`
+        const videoURL = `${winURL}?roomId=${meeting.roomId}&user=${this.name}`
         console.info('videoURL', videoURL)
         await this.meetingWindow.loadURL(videoURL)
         return this.meetingWindow

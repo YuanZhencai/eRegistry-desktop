@@ -25,27 +25,31 @@
 
 	import { remote } from 'electron'
 	import { Message } from 'element-ui'
-	import { mapGetters } from 'vuex'
 	import { AGORA_ID } from '../constants'
 	const AgoraID = AGORA_ID || ''
 	const rtcEngine = new AgoraRtcEngine()
 	export default {
 	  name: 'PVideo',
 	  data() {
-	    console.info('query', this.$route.query)
-	    console.info('params', this.$route.params)
-	    const roomId = this.$route.query.roomId
+	    const href = window.location.href
+	    console.info('query', href)
+	    const params = {}
+	    if (href.indexOf('?') > 0) {
+	      const queries = href.split('?')[1].split('&')
+	      for (let i = 0; i < queries.length; i++) {
+	        const query = queries[i]
+	        const keyAndValue = query.split('=')
+	        params[keyAndValue[0]] = keyAndValue[1]
+	      }
+	    }
+	    console.info('params', params)
 	    return {
-	      roomId: roomId,
+	      roomId: params['roomId'],
+	      user: params['user'],
 	      userJoined: false,
 	      audioEnabled: false,
 	      consoleContainer: String
 	    }
-	  },
-	  computed: {
-	    ...mapGetters([
-	      'name'
-	    ])
 	  },
 	  mounted() {
 	    this.beginVideo()
@@ -93,7 +97,8 @@
 	        rtcEngine.setLogFile(logpath)
 	        // join channel to rock!
 	        // rtcEngine.joinChannel(null, this.roomId, null, Math.floor(new Date().getTime() / 1000))
-	        rtcEngine.joinChannelWithUserAccount(null, this.roomId, this.name)
+	        console.info('joinChannelWithUserAccount', this.user)
+	        rtcEngine.joinChannelWithUserAccount(null, this.roomId, this.user)
 	        global.rtcEngine = rtcEngine
 	      })
 	    },
