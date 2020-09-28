@@ -26,12 +26,14 @@
 	import { remote } from 'electron'
 	import { Message } from 'element-ui'
 	import { mapGetters } from 'vuex'
-	import { AGORA_ID } from '../../constants'
+	import { AGORA_ID } from '../constants'
 	const AgoraID = AGORA_ID || ''
 	const rtcEngine = new AgoraRtcEngine()
 	export default {
 	  name: 'PVideo',
 	  data() {
+	    console.info('query', this.$route.query)
+	    console.info('params', this.$route.params)
 	    const roomId = this.$route.query.roomId
 	    return {
 	      roomId: roomId,
@@ -50,6 +52,7 @@
 	  },
 	  methods: {
 	    beginVideo() {
+	      console.info('beginVideo', rtcEngine)
 	      this.$nextTick(function() {
 	        if (!this.roomId) {
 	          Message.error('会议号不能为空，或者会议已经结束')
@@ -71,7 +74,7 @@
 	          rtcEngine.setupLocalVideo(localVideoContainer)
 	        })
 	        rtcEngine.on('error', (err, msg) => {
-	          this.consoleContainer = `error: code ${err} - ${msg}`
+	          Message.error(`错误：${err} - ${msg}`)
 	        })
 	        rtcEngine.on('userJoined', (uid) => {
 	          // setup render area for joined user

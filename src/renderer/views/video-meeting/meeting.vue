@@ -115,9 +115,11 @@ export default {
           this.meetingWindow = null
         })
         const winURL = process.env.NODE_ENV === 'development'
-          ? 'http://localhost:9080'
-          : `file://${__dirname}/index.html`
-        await this.meetingWindow.loadURL(`${winURL}/#/video?roomId=${meeting.roomId}`)
+          ? 'http://localhost:9080/video.html'
+          : `file://${__dirname}/video.html`
+        const videoURL = `${winURL}?roomId=${meeting.roomId}`
+        console.info('videoURL', videoURL)
+        await this.meetingWindow.loadURL(videoURL)
         return this.meetingWindow
       }
     },
