@@ -79,6 +79,10 @@
 	          rtcEngine.setupViewContentMode(uid, 1)
 	          rtcEngine.subscribe(uid, remoteVideoContainer)
 	        })
+	        rtcEngine.on('removeStream', (uid) => {
+	          // setup render area for joined user
+	          this.userJoined = false
+	        })
 	        // set channel profile, 0: video call, 1: live broadcasting
 	        rtcEngine.setChannelProfile(1)
 	        rtcEngine.setClientRole(1)
