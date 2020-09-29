@@ -50,7 +50,10 @@ import UserAvatar from '@/components/avatar/userAvatar'
 import { finishMeeting, getProjectMeetings } from '../../api/MeetingService'
 import { Message } from 'element-ui'
 import { mapGetters } from 'vuex'
-
+let electron
+if (!process.env.IS_WEB) {
+  electron = require('electron')
+}
 export default {
   name: 'Meeting',
   components: {
@@ -81,7 +84,7 @@ export default {
     },
     async openVideoWindow(meeting) {
       if (!process.env.IS_WEB) {
-        const { BrowserWindow } = require('electron').remote
+        const { BrowserWindow } = electron.remote
         if (this.meetingWindow) {
           this.meetingWindow.show()
           this.meetingWindow.focus()
