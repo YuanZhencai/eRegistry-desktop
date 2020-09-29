@@ -180,6 +180,10 @@ export const constantRouterMap = [
           {
             path: 'log',
             component: () => import('@/views/logging/logging')
+          },
+          {
+            path: 'meeting',
+            component: () => import('@/views/video-meeting/meeting')
           }
         ]
       }

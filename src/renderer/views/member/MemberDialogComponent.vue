@@ -169,6 +169,7 @@
         }
       },
       remove(user) {
+        console.log(user)
         this.$set(user, 'selected', false)
       },
       cancel() {

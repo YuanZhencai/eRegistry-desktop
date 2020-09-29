@@ -1,12 +1,12 @@
 import { dialog, shell } from 'electron'
 import axios from 'axios'
-const yaml = require('js-yaml')
 import pkg from '../../package.json'
+const yaml = require('js-yaml')
 const version = pkg.version
 const latest = {
-  'darwin': 'latest-mac.yml',
-  'win32': 'latest.yml',
-  'linux': 'latest-linux.yml'
+  darwin: 'latest-mac.yml',
+  win32: 'latest.yml',
+  linux: 'latest-linux.yml'
 }
 const release = `${process.env.BASE_API}download/${latest[require('os').platform()]}`
 console.info(version, release)

@@ -74,7 +74,7 @@
                 <el-table-column prop="createdBy" label="录入人" sortable="custom"></el-table-column>
                 <el-table-column prop="caseCount" label="病例数"></el-table-column>
                 <el-table-column prop="followCount" label="随访数"></el-table-column>
-                <el-table-column align="center">
+                <el-table-column align="center" style="width: 100px;">
                     <template slot="header" slot-scope="scope">
                         <span>操作</span>
                     </template>
@@ -193,7 +193,7 @@ export default {
           page: this.currentPage - 1,
           size: this.pageSize,
           sort: this.sort(),
-          'EQ_patient.name': this.form.queryString,
+          'LIKE_patient.name': (this.form.queryString ? `%${this.form.queryString}%` : null),
           'GT_patient.visitDate': this.form.startDate,
           'LT_patient.visitDate': this.form.endDate
         }).then((res) => {

@@ -14,7 +14,7 @@ if (process.env.NODE_ENV !== 'development') {
 
 let mainWindow
 const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080`
+  ? 'http://localhost:9080'
   : `file://${__dirname}/index.html`
 
 function createWindow() {
@@ -28,6 +28,7 @@ function createWindow() {
     minWidth: 1000,
     minHeight: 600,
     webPreferences: {
+      nodeIntegration: true,
       webSecurity: false
     }
   })
@@ -81,10 +82,10 @@ function onLogin() {
 
     session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
       if (token) {
-        details.requestHeaders['Authorization'] = `Bearer ${token}`
+        details.requestHeaders.Authorization = `Bearer ${token}`
       }
       if (referrer) {
-        details.requestHeaders['Referer'] = referrer
+        details.requestHeaders.Referer = referrer
       }
       callback({ requestHeaders: details.requestHeaders })
     })
