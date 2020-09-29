@@ -3,12 +3,12 @@
 </template>
 
 <script>
+	import PVideo from './video'
 
-import PVideo from './video'
-export default {
-  name: 'App',
-  components: { PVideo }
-}
+	export default {
+	  name: 'App',
+	  components: { PVideo }
+	}
 </script>
 
 <style>

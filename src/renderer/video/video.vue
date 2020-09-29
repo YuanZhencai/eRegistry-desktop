@@ -31,21 +31,7 @@
 	export default {
 	  name: 'PVideo',
 	  data() {
-	    const href = window.location.href
-	    console.info('query', href)
-	    const params = {}
-	    if (href.indexOf('?') > 0) {
-	      const queries = href.split('?')[1].split('&')
-	      for (let i = 0; i < queries.length; i++) {
-	        const query = queries[i]
-	        const keyAndValue = query.split('=')
-	        params[keyAndValue[0]] = keyAndValue[1]
-	      }
-	    }
-	    console.info('params', params)
 	    return {
-	      roomId: params['roomId'],
-	      user: params['user'],
 	      userJoined: false,
 	      audioEnabled: false,
 	      consoleContainer: String
@@ -56,10 +42,16 @@
 	  },
 	  methods: {
 	    beginVideo() {
-	      console.info('beginVideo', rtcEngine)
+	      const params = this.getQueryParams()
+	      const roomId = params['roomId']
+	      const user = params['user']
+
 	      this.$nextTick(function() {
-	        if (!this.roomId) {
+	        if (!roomId) {
 	          Message.error('会议号不能为空，或者会议已经结束')
+	        }
+	        if (!user) {
+	          Message.error('用户名不能为空')
 	        }
 	        if (global.rtcEngine) {
 	          global.rtcEngine.release()
@@ -97,10 +89,24 @@
 	        rtcEngine.setLogFile(logpath)
 	        // join channel to rock!
 	        // rtcEngine.joinChannel(null, this.roomId, null, Math.floor(new Date().getTime() / 1000))
-	        console.info('joinChannelWithUserAccount', this.user)
-	        rtcEngine.joinChannelWithUserAccount(null, this.roomId, this.user)
+	        console.info('joinChannelWithUserAccount', user)
+	        rtcEngine.joinChannelWithUserAccount(null, roomId, user)
 	        global.rtcEngine = rtcEngine
 	      })
+	    },
+	    getQueryParams() {
+	      // const url = remote.getCurrentWindow().webContents.getURL()
+	      const url = global.location.search
+	      const params = {}
+	      if (url.indexOf('?') > -1) {
+	        const queries = url.split('?')[1].split('&')
+	        for (let i = 0; i < queries.length; i++) {
+	          const query = queries[i]
+	          const keyAndValue = query.split('=')
+	          params[keyAndValue[0]] = keyAndValue[1]
+	        }
+	      }
+	      return params
 	    },
 	    finish() {
 	      rtcEngine.leaveChannel()
