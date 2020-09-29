@@ -82,8 +82,6 @@
                               v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
                         <el-button type="text" @click="edit(scope.row)">编辑</el-button>
                         <el-divider direction="vertical"></el-divider>
-                        <el-button type="text" @click="edit(scope.row)">视频随访</el-button>
-                        <el-divider direction="vertical"></el-divider>
                         <el-button type="text">
                             <incorporation :patient-id="scope.row.id"></incorporation>
                         </el-button>
