@@ -24,13 +24,6 @@ npm run pack
 ```
 ---
 
-
-## 移动端页面
-
-```
-http://192.168.3.2:7080/#/patient/case?projectId=1&reportId=1&patientId=1&access_token=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTU5MjUzOTE3OX0.6Ku5jT4T-L5qaZSWgfjP6kAgPIJ7jLAhs8I01v7RsTgSHeR04RpUqHvJRwirekD_9bLf9d2BP_l2_40zVVsd_w
-```
-
 ## windows运行打包项目
 
 ```
@@ -42,3 +35,4 @@ npm run dev
 
 # build electron app for production
 npm run build
+```
