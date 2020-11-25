@@ -70,6 +70,10 @@
 	          rtcEngine.setupLocalVideo(localVideoContainer)
 	        })
 	        rtcEngine.on('error', (err, msg) => {
+	          if (err === 1003) {
+	            Message.error('启动摄像头失败,请检查摄像头是否被其他应用占用。')
+	            return
+	          }
 	          Message.error(`错误：${err} - ${msg}`)
 	        })
 	        rtcEngine.on('userJoined', (uid) => {
