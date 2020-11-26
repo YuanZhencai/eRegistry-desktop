@@ -61,10 +61,6 @@
       "hardenedRuntime": false,
       "target": "dmg"
     },
-    "electronDownload": {
-      "platform": "win32",
-      "arch": "ia32"
-    },
     "win": {
       "icon": "build/icons/icon.ico",
       "target": [
