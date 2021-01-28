@@ -48,3 +48,13 @@ export function logout() {
     resolve()
   })
 }
+
+export function oauth(source) {
+  return axios({
+    url: `oauth/login/${source}`,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    method: 'get'
+  })
+}
