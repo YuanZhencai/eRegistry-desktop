@@ -116,8 +116,8 @@
 							<span style="margin-right: 5px">
 								其他方式登录
 							</span>
-							<el-tooltip content="项目空间" placement="bottom">
-								<el-button type="plain" circle @click="oauth('palan')">
+							<el-tooltip content="认证中心" placement="bottom">
+								<el-button type="plain" circle @click="oauth('account')">
 									<div style="width: 20px; height: 20px">
 										<img src="../../assets/20x20.png">
 									</div>
@@ -169,6 +169,7 @@
 	    oauth(source) {
 	      const redirectUrl = encodeURIComponent(window.location.href)
 	      const oauthUrl = `${SERVER_API_URL}oauth/login/${source}?redirectUrl=${redirectUrl}`
+	      console.info('oauthUrl', oauthUrl)
 	      window.location.href = oauthUrl
 	    },
 	    showPwd() {
