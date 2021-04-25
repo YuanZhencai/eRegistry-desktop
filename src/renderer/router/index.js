@@ -191,6 +191,14 @@ export const constantRouterMap = [
   },
   { path: '*', redirect: '/404', hidden: true },
   {
+    name: 'patient-incorporation',
+    path: '/patient/incorporation',
+    component: () => import('@/views/h5/PatientIncorporation'),
+    meta: {
+      title: '入组确认'
+    }
+  },
+  {
     name: 'patient-case',
     path: '/patient/case',
     component: () => import('@/views/h5/PatientCase')

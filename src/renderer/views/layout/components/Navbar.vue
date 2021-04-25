@@ -13,6 +13,7 @@
         <export-history></export-history>
       </div>
       <el-dropdown class="right-menu-item avatar-container"
+				   @command="handleCommand"
                    trigger="click">
         <div class="row-flex"
              style="margin-top: 10px">
@@ -45,6 +46,10 @@
               <span>个人设置</span>
             </el-dropdown-item>
           </router-link>
+			<el-dropdown-item command="scan">
+				<i class="fa fa-fw fa-wrench" aria-hidden="true"></i>
+				<span>扫码入组</span>
+			</el-dropdown-item>
           <router-link class="inlineBlock" v-if="$hasAnyAuthority(['ROLE_ADMIN'])"
                        to="/management">
             <el-dropdown-item>
@@ -52,9 +57,9 @@
               <span>用户管理</span>
             </el-dropdown-item>
           </router-link>
-          <el-dropdown-item divided>
+          <el-dropdown-item command="logout" divided>
             <i class="fa fa-fw fa-sign-out" aria-hidden="true"></i>
-            <span @click="logout">退出</span>
+            <span>退出</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -93,6 +98,19 @@ export default {
     }
   },
   methods: {
+    handleCommand(command) {
+      if (command === 'logout') {
+        this.logout()
+      }
+      if (command === 'scan') {
+        this.$router.push({
+          path: `/patient/incorporation`,
+          query: {
+            projectId: 1
+          }
+        })
+      }
+    },
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
     },
