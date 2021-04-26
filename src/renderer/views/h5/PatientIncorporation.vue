@@ -53,6 +53,7 @@
 	  data() {
 	    return {
 	      projectId: this.$route.query.projectId,
+	      chargedBy: this.$route.query.chargedBy,
 	      patientId: null,
 	      rules: {
 	        name: [
@@ -69,7 +70,6 @@
 	    }
 	  },
 	  mounted() {
-	    console.info('params', this.projectId)
 	    this.options = JSON.parse(JSON.stringify(codes))
 	    this.getIncorporationPatient()
 	  },
@@ -93,6 +93,7 @@
 	    incorporationPatient(formName) {
 	      this.$refs[formName].validate((valid) => {
 	        if (valid) {
+	          this.patient.chargedBy = this.chargedBy
 	          incorporationPatient(this.patient).then(res => {
 	            this.isSaving = false
 	            this.getIncorporationPatient()
