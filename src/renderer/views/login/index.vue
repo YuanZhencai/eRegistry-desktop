@@ -112,12 +112,12 @@
 								<router-link :to="{path: '/register'}">注册一个新账号</router-link>
 							</el-button>
 						</el-form-item>
-						<el-row class="elRow">
+						<el-row class="elRow" v-if="providers && providers.length > 0">
 							<span style="margin-right: 5px">
 								其他方式登录
 							</span>
-							<el-tooltip content="认证中心" placement="bottom">
-								<el-button type="plain" circle @click="oauth('account')">
+							<el-tooltip content="认证中心" placement="bottom" v-for="(provider, index) in providers" :key="index">
+								<el-button type="plain" circle @click="oauth(provider)">
 									<div style="width: 20px; height: 20px">
 										<img src="../../assets/20x20.png">
 									</div>
@@ -138,6 +138,7 @@
 
 	const yaml = require('js-yaml')
 	import { SERVER_API_URL } from '../../constants'
+	import { getProviders } from '../../api/OauthService'
 
 	export default {
 	  name: 'login',
@@ -162,8 +163,12 @@
 	      loading: false,
 	      errorTitle: false,
 	      pwdType: 'password',
-	      isWeb: process.env.IS_WEB
+	      isWeb: process.env.IS_WEB,
+	      providers: []
 	    }
+	  },
+	  mounted() {
+	    this.getProviders()
 	  },
 	  methods: {
 	    oauth(source) {
@@ -171,6 +176,11 @@
 	      const oauthUrl = `${SERVER_API_URL}oauth/login/${source}?redirectUrl=${redirectUrl}`
 	      console.info('oauthUrl', oauthUrl)
 	      window.location.href = oauthUrl
+	    },
+	    getProviders() {
+	      getProviders().then(res => {
+	        this.providers = res.data
+	      })
 	    },
 	    showPwd() {
 	      if (this.pwdType === 'password') {
