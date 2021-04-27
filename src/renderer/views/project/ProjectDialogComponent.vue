@@ -2,7 +2,7 @@
     <el-dialog title="创建或编辑项目" width="500px"
                :visible.sync="display"
                :before-close="close">
-        <el-form label-width="80px" size="mini" ref="projectForm" :model="project" :rules="rules">
+        <el-form label-width="85px" size="mini" ref="projectForm" :model="project" :rules="rules">
             <el-form-item label="项目名称" prop="name">
                 <el-input v-model="project.name"></el-input>
             </el-form-item>
@@ -34,6 +34,9 @@
                     </el-form-item>
                 </el-col>
             </el-row>
+			<el-form-item label="知情同意书">
+				<el-input v-model="project.agreeUrl"  placeholder="知情同意书链接"></el-input>
+			</el-form-item>
 
             <el-form-item label="项目简介">
                 <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="project.introduction"></el-input>

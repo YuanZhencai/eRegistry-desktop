@@ -37,7 +37,13 @@
 				<el-input v-model="patient.address"></el-input>
 			</el-form-item>
 			<el-form-item>
-				<el-button type="primary" @click="incorporationPatient('patientForm')">确定</el-button>
+				<el-checkbox v-if="project && project.agreeUrl" v-model="checked">
+					<el-link type="primary" :href="project.agreeUrl">知情同意书</el-link>
+				</el-checkbox>
+			</el-form-item>
+			<el-form-item>
+				<el-button type="primary" v-if="!project.agreeUrl || '' === project.agreeUrl" @click="incorporationPatient('patientForm')">确定</el-button>
+				<el-button type="primary" v-if="project.agreeUrl && '' !== project.agreeUrl" :disabled="!checked" @click="incorporationPatient('patientForm')">确定</el-button>
 			</el-form-item>
 		</el-form>
 	</div>
@@ -45,6 +51,7 @@
 
 <script>
 	import { getIncorporationPatient, incorporationPatient } from '../../api/IncorporationService'
+	import { getProject } from '@/api/ProjectService'
 
 	const codes = require('../patient/pca-code.json')
 
@@ -60,20 +67,35 @@
 	          { required: true, message: '请输入患者姓名', trigger: 'change' }
 	        ],
 	        telephone: [
+	          { required: true, message: '请输入手机号', trigger: 'change' },
 	          { pattern: /^(1(3|4|5|6|7|8|9)\d{9})$/, message: '手机号码有误，请重填', trigger: 'change' }
 	        ]
 	      },
 	      patient: null,
 	      provinceCity: [],
 	      options: [],
-	      isSaving: false
+	      isSaving: false,
+	      project: {
+	        'agreeUrl': null
+	      },
+	      checked: false
 	    }
 	  },
 	  mounted() {
 	    this.options = JSON.parse(JSON.stringify(codes))
 	    this.getIncorporationPatient()
+	    this.getProject()
 	  },
 	  methods: {
+	    show() {
+
+	    },
+	    getProject() {
+	      getProject(this.projectId).then(res => {
+	        this.project = res.data
+	        this.endDate = this.project.endDate
+	      })
+	    },
 	    getIncorporationPatient() {
 	      getIncorporationPatient(this.projectId).then(res => {
 	        this.patient = res.data
