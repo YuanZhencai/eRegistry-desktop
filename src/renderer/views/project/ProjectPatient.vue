@@ -55,8 +55,7 @@
                 <el-table-column prop="lastModifiedDate" label="更新时间" sortable="custom">
                     <template slot-scope="scope">{{scope.row.lastModifiedDate | formatDate('YYYY-MM-DD')}}</template>
                 </el-table-column>
-                <el-table-column prop="createdBy" label="录入人" sortable="custom"></el-table-column>
-                <el-table-column prop="caseCount" label="病例数"></el-table-column>
+                <el-table-column prop="chargedBy" label="负责人" sortable="custom"></el-table-column>
                 <el-table-column prop="followCount" label="随访数"></el-table-column>
                 <el-table-column align="center" style="width: 100px;">
                     <template slot="header" slot-scope="scope">
