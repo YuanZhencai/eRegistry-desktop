@@ -39,14 +39,14 @@
 						</div>
 						<div class="item">
 							<div class="Mac-Win winColor">
-								<i class="fa fa-android fa-4x" aria-hidden="true"></i>
-								<p style="margin: 4px;" class="titColor">Android</p>
+								<i class="fa fa-wechat fa-4x" aria-hidden="true"></i>
+								<p style="margin: 4px;" class="titColor">微信小程序</p>
 							</div>
 							<div class="winColor modal" style="padding-top: 0px;">
 								<div class="qr_code">
-									<img style="width: 100%;height: 100%;" src="../../assets/QRCode.png" alt="">
+									<img style="width: 100%;height: 100%;" src="../../assets/wechat.jpg" alt="">
 								</div>
-								<p class="titColor">扫描二维码<br/>下载Android正式版</p>
+								<p class="titColor">扫描二维码<br/>微信小程序</p>
 							</div>
 						</div>
 					</div>

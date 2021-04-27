@@ -102,14 +102,6 @@ export default {
       if (command === 'logout') {
         this.logout()
       }
-      if (command === 'scan') {
-        this.$router.push({
-          path: `/patient/incorporation`,
-          query: {
-            projectId: 1
-          }
-        })
-      }
     },
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
