@@ -1,5 +1,5 @@
 <template>
-	<div class="app-container">
+	<div class="app-container" style="padding-top: 0px">
 		<div style="text-align: center">
 			<h2>入组确认</h2>
 		</div>

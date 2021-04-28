@@ -46,10 +46,6 @@
               <span>个人设置</span>
             </el-dropdown-item>
           </router-link>
-			<el-dropdown-item command="scan">
-				<i class="fa fa-fw fa-wrench" aria-hidden="true"></i>
-				<span>扫码入组</span>
-			</el-dropdown-item>
           <router-link class="inlineBlock" v-if="$hasAnyAuthority(['ROLE_ADMIN'])"
                        to="/management">
             <el-dropdown-item>
