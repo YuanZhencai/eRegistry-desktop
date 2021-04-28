@@ -25,24 +25,8 @@
                     <el-button type="primary" size="mini" icon="el-icon-plus"
                                v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])"
                                @click="newPatient">新建患者
-                        <template v-if="$hasAnyAuthority(['PROJECT_PATIENT_' + projectId])">
-                            <el-popover
-                                    placement="right-end"
-                                    title="添加患者二维码"
-                                    trigger="hover"
-                                    width="200"
-                                    v-if="task">
-                                <el-image :src="`/#/patient-task/${task.id}` | qrcode"></el-image>
-                                <i class="fa fa-qrcode" slot="reference"></i>
-                            </el-popover>
-                        </template>
+						<incorporation :project-id="projectId"></incorporation>
                     </el-button>
-                    <el-button type="primary" size="mini" icon="el-icon-plus"
-                               v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
-                        入组患者
-                        <incorporation :project-id="projectId"></incorporation>
-                    </el-button>
-
                 </el-form-item>
             </el-form>
         </el-row>
@@ -71,8 +55,7 @@
                 <el-table-column prop="lastModifiedDate" label="更新时间" sortable="custom">
                     <template slot-scope="scope">{{scope.row.lastModifiedDate | formatDate('YYYY-MM-DD')}}</template>
                 </el-table-column>
-                <el-table-column prop="createdBy" label="录入人" sortable="custom"></el-table-column>
-                <el-table-column prop="caseCount" label="病例数"></el-table-column>
+                <el-table-column prop="chargedBy" label="负责人" sortable="custom"></el-table-column>
                 <el-table-column prop="followCount" label="随访数"></el-table-column>
                 <el-table-column align="center" style="width: 100px;">
                     <template slot="header" slot-scope="scope">
@@ -81,10 +64,6 @@
                     <template slot-scope="scope"
                               v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
                         <el-button type="text" @click="edit(scope.row)">编辑</el-button>
-                        <el-divider direction="vertical"></el-divider>
-                        <el-button type="text">
-                            <incorporation :patient-id="scope.row.id"></incorporation>
-                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>

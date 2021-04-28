@@ -11,16 +11,18 @@
 
 <script>
   import { SERVER_API_URL } from '../../constants'
+  import store from '@/store'
 
   export default {
     name: 'Incorporation',
-    props: ['patientId', 'projectId'],
+    props: ['projectId'],
     computed: {
       url: function() {
+        const name = store.getters && store.getters.name
         const url = `${SERVER_API_URL}api/qrcode/incorporation`
         const queries = []
-        if (this.patientId) {
-          queries.push(`patientId=${this.patientId}`)
+        if (name) {
+          queries.push(`chargedBy=${name}`)
         }
         if (this.projectId) {
           queries.push(`projectId=${this.projectId}`)

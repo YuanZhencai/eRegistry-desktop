@@ -44,7 +44,16 @@ export function getInfo(token) {
 }
 
 export function logout() {
-  return new Promise((resolve, reject) => {
-    resolve()
+  const redirect_uri = window.location.origin
+  return axios.post(`api/logout`, redirect_uri)
+}
+
+export function oauth(source) {
+  return axios({
+    url: `oauth/login/${source}`,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    method: 'get'
   })
 }
