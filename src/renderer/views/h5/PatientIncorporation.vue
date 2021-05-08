@@ -4,6 +4,9 @@
 			<h2>入组确认</h2>
 		</div>
 		<el-form v-if="patient" label-width="75px" size="mini" :model="patient" :rules="rules" ref="patientForm">
+			<el-form-item label="项目名称">
+				<el-input v-model="project.name" :disabled="true"></el-input>
+			</el-form-item>
 			<el-form-item label="姓名" prop="name">
 				<el-input v-model="patient.name"></el-input>
 			</el-form-item>
@@ -52,7 +55,7 @@
 <script>
 	import { getIncorporationPatient, incorporationPatient } from '../../api/IncorporationService'
 	import { getProject } from '@/api/ProjectService'
-  import wx from 'weixin-js-sdk'
+	import wx from 'weixin-js-sdk'
 
 	const codes = require('../patient/pca-code.json')
 
@@ -120,7 +123,7 @@
 	          incorporationPatient(this.patient).then(res => {
 	            this.isSaving = false
 	            this.getIncorporationPatient()
-              this.ToHomePage()
+	            this.ToHomePage()
 	          }, () => {
 	            this.isSaving = false
 	          })
@@ -132,11 +135,11 @@
 	      this.patient.city = value[1]
 	      this.patient.area = value[2]
 	    },
-      ToHomePage() {
-        wx.switchTab({
-          url: '/pages/template/home/overview'
-        })
-      }
+	    ToHomePage() {
+	      wx.switchTab({
+	        url: '/pages/template/home/overview'
+	      })
+	    }
 	  }
 	}
 </script>
