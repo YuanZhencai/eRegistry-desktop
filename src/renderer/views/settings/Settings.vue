@@ -13,59 +13,97 @@
                class="clearfix">
             <span>个人信息</span>
           </div>
-          <template>
-            <el-form label-width="80px"
-                     label-position="top"
-                     :model="settingsAccount"
-                     :rules="rules"
-                     ref="ruleMessageForm">
-              <el-form-item label="用户头像:"
-                            inline="false">
-                <el-upload class="avatar-uploader"
-                           action=""
-                           :auto-upload="true"
-                           :show-file-list="false"
-                           :on-success="handleAvatarSuccess"
-                           :before-upload="beforeAvatarUpload"
-                           :http-request="httpRequest">
-                  <img v-if="imageUrl"
-                       :src="imageUrl"
-                       class="avatar">
-                  <i v-else
-                     class="el-icon-plus avatar-uploader-icon">
-                  </i>
-                </el-upload>
-              </el-form-item>
-              <el-row>
-                <el-col :span="12">
-                  <el-form-item label="名字"
-                                prop="firstName">
-                    <el-input size="small"
-                              style="width:80%"
-                              v-model="settingsAccount.firstName"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="姓氏"
-                                prop="lastName">
-                    <el-input style="width:80%"
-                              size="small"
-                              v-model="settingsAccount.lastName"></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-form-item label="电子邮件"
-                            prop="email">
-                <el-input size="small"
-                          style="width:90%"
-                          v-model="settingsAccount.email"></el-input>
-              </el-form-item>
-              <el-button size="small"
-                         type="primary"
-                         @click="save('ruleMessageForm')">保存</el-button>
-            </el-form>
-          </template>
+			<template>
+				<el-form label-width="80px"
+						 label-position="top"
+						 :model="settingsAccount"
+						 :rules="rules"
+						 ref="ruleMessageForm">
+					<el-form-item label="用户头像:"
+								  inline="false">
+						<el-upload class="avatar-uploader"
+								   action=""
+								   :auto-upload="true"
+								   :show-file-list="false"
+								   :on-success="handleAvatarSuccess"
+								   :before-upload="beforeAvatarUpload"
+								   :http-request="httpRequest">
+							<img v-if="imageUrl"
+								 :src="imageUrl"
+								 class="avatar">
+							<i v-else
+							   class="el-icon-plus avatar-uploader-icon">
+							</i>
+						</el-upload>
+					</el-form-item>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="用户名">
+								<el-input size="small"
+										  style="width:80%"
+										  :disabled="true"
+										  v-model="settingsAccount.login"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="电子邮件"
+										  prop="email">
+								<el-input size="small"
+										  style="width:80%"
+										  v-model="settingsAccount.email"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="名字"
+										  prop="firstName">
+								<el-input size="small"
+										  style="width:80%"
+										  v-model="settingsAccount.firstName"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="姓氏"
+										  prop="lastName">
+								<el-input style="width:80%"
+										  size="small"
+										  v-model="settingsAccount.lastName"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-button size="small"
+							   type="primary"
+							   @click="save('ruleMessageForm')">保存
+					</el-button>
+				</el-form>
+			</template>
         </el-card>
+		  <el-card class="box-card">
+			  <div slot="header"
+				   class="clearfix">
+				  <span>绑定手机号</span>
+			  </div>
+			  <template>
+				  <el-form :model="settingsAccount"
+						   status-icon
+						   :rules="mobileRules"
+						   ref="mobileForm"
+						   label-width="100px"
+						   class="demo-ruleForm">
+					  <el-form-item label="手机号"
+									prop="mobile">
+						  <el-input v-model="settingsAccount.mobile"
+									autocomplete="off"></el-input>
+					  </el-form-item>
+
+					  <el-form-item>
+						  <el-button type="primary"
+									 @click="save('mobileForm')">绑定</el-button>
+					  </el-form-item>
+				  </el-form>
+			  </template>
+		  </el-card>
         <el-card class="box-card">
           <div slot="header"
                class="clearfix">
@@ -154,6 +192,12 @@ export default {
           { type: 'email', message: '请输入正确的邮箱地址', trigger: ['change', 'blur'] }
         ]
       },
+      mobileRules: {
+        mobile: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { pattern: /^(1(3|4|5|6|7|8|9)\d{9})$/, message: '手机号码有误，请重填', trigger: 'change' }
+        ]
+      },
       rulePassForm: {
         pass: '',
         checkPass: ''
@@ -215,16 +259,7 @@ export default {
     async save(formName) {
       this.$refs[formName].validate(async(valid) => {
         if (valid) {
-          const data = {
-            activated: this.settingsAccount.activated,
-            email: this.settingsAccount.email,
-            firstName: this.settingsAccount.firstName,
-            langKey: this.settingsAccount.langKey,
-            lastName: this.settingsAccount.lastName,
-            login: this.settingsAccount.login,
-            imageUrl: ''
-          }
-          await saveAccount(data).then((res) => {
+          await saveAccount(this.settingsAccount).then((res) => {
             this.$nextTick(() => {
               this.$notify({
                 title: '成功',
