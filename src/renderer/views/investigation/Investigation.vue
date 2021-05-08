@@ -40,7 +40,7 @@
           {{JSON.parse(scope.row.content)[key] | ellipsis }}
         </template>
       </el-table-column>
-		<el-table-column label="患者">
+		<el-table-column label="患者" sortable="custom">
 			<template slot-scope="scope">
 				{{scope.row.patientName ? scope.row.patientName: '匿名'}}
 			</template>
@@ -89,6 +89,11 @@
         size: 10,
         predicate: 'id',
         order: 'ascending',
+        sortPropMap: {
+          id: 'investigation.id',
+          createdDate: 'investigation.createdDate',
+          patientName: 'patient.name'
+        },
         totalItems: null,
         queryCount: null,
         filter: {},
@@ -106,7 +111,7 @@
     },
     methods: {
       sort() {
-        return (this.predicate && this.order) ? this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
+        return (this.predicate && this.order) ? this.sortPropMap[this.predicate] + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
       },
       loadAll() {
         this.loading = true
@@ -162,13 +167,19 @@
       },
       reportKeys() {
         this.keys = []
+        const excludes = ['file', 'imagepicker', 'signaturepad', 'panel', 'paneldynamic', 'html', 'matrix', 'matrixdropdown', 'matrixdynamic', 'multipletext', 'editor', 'tagbox']
         const surveyModel = new SurveyVue.Model(this.report.survey)
         this.questions = surveyModel.getAllQuestions()
-        const count = this.questions.length > 5 ? 5 : this.questions.length
-        for (let i = 0; i < count; i++) {
+        let count = 0
+        for (let i = 0; i < this.questions.length; i++) {
           const question = this.questions[i]
-          if (question.getType() !== 'file') {
+          if (!excludes.includes(question.getType())) {
             this.keys.push(question.name)
+          }
+          if (count >= 5) {
+            break
+          } else {
+            count++
           }
         }
       }
