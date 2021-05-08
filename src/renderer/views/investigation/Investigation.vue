@@ -35,8 +35,8 @@
               sortable="custom"
               label="ID">
       </el-table-column>
-      <el-table-column v-for="(type, key, index) in keys" :label="key" :key="index">
-        <template slot-scope="scope" v-if="type !== 'file'">
+      <el-table-column v-for="(key, index) in keys" :label="key" :key="index">
+        <template slot-scope="scope">
           {{JSON.parse(scope.row.content)[key] | ellipsis }}
         </template>
       </el-table-column>
@@ -93,7 +93,7 @@
         content: null,
         loading: true,
         report: null,
-        keys: {}
+        keys: []
       }
     },
     mounted() {
@@ -156,12 +156,15 @@
         })
       },
       reportKeys() {
-        this.keys = {}
+        this.keys = []
         const surveyModel = new SurveyVue.Model(this.report.survey)
         this.questions = surveyModel.getAllQuestions()
         const count = this.questions.length > 5 ? 5 : this.questions.length
         for (let i = 0; i < count; i++) {
-          this.$set(this.keys, this.questions[i].name, this.questions[i].getType())
+          const question = this.questions[i]
+          if (question.getType() !== 'file') {
+            this.keys.push(question.name)
+          }
         }
       }
     }
