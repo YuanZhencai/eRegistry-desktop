@@ -48,10 +48,11 @@
 		</el-form>
 	</div>
 </template>
-
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 <script>
 	import { getIncorporationPatient, incorporationPatient } from '../../api/IncorporationService'
 	import { getProject } from '@/api/ProjectService'
+  import wx from 'weixin-js-sdk'
 
 	const codes = require('../patient/pca-code.json')
 
@@ -119,6 +120,7 @@
 	          incorporationPatient(this.patient).then(res => {
 	            this.isSaving = false
 	            this.getIncorporationPatient()
+              this.ToHomePage()
 	          }, () => {
 	            this.isSaving = false
 	          })
@@ -129,7 +131,12 @@
 	      this.patient.province = value[0]
 	      this.patient.city = value[1]
 	      this.patient.area = value[2]
-	    }
+	    },
+      ToHomePage() {
+        wx.switchTab({
+          url: '/pages/template/home/overview'
+        })
+      }
 	  }
 	}
 </script>
