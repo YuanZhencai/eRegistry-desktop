@@ -7,4 +7,4 @@ web:
 image:
 	docker build . -t registry.cn-hangzhou.aliyuncs.com/palan/eregistry-frontend
 push: image
-	docker push registry.cn-hangzhou.aliyuncs.com/palan/eregistry-desktop
+	docker push registry.cn-hangzhou.aliyuncs.com/palan/eregistry-frontend

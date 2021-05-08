@@ -5,10 +5,11 @@
 </template>
 
 <script>
-  import { getInvestigation, saveInvestigation } from '../../api/InvestigationService'
+  import { getInvestigation } from '../../api/InvestigationService'
   import SurveyView from '@/components/survey/SurveyView'
   import { InvestigationSurvey } from '../investigation/investigation-survey'
   import { getReport } from '../../api/ReportService'
+  import { fillInvestigation } from '../../api/PatientService'
 export default {
     name: 'PatientInvestigation',
     components: {
@@ -67,7 +68,7 @@ export default {
       save(data, state) {
         this.isSaving = true
         this.investigation = this.survey.complete(data, state)
-        saveInvestigation(this.investigation).then((res) => {
+        fillInvestigation(this.investigation).then((res) => {
           this.isSaving = false
           this.investigationId = res.data.id
           this.findInvestigationSurvey()
