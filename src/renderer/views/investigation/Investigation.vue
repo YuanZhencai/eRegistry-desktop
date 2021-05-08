@@ -40,6 +40,11 @@
           {{JSON.parse(scope.row.content)[key] | ellipsis }}
         </template>
       </el-table-column>
+		<el-table-column label="患者">
+			<template slot-scope="scope">
+				{{scope.row.patientName ? scope.row.patientName: '匿名'}}
+			</template>
+		</el-table-column>
       <el-table-column
               sortable="custom"
               label="创建时间"
