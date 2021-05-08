@@ -96,6 +96,7 @@
     "nprogress": "0.2.0",
     "signature_pad": "^2.3.2",
     "sockjs-client": "^1.4.0",
+    "sortablejs": "1.6.1",
     "stompjs": "^2.3.3",
     "survey-core": "1.5.12",
     "survey-creator": "1.5.12",
@@ -103,7 +104,6 @@
     "survey-pdf": "1.5.18",
     "survey-vue": "1.5.12",
     "surveyjs-widgets": "1.5.12",
-    "sortablejs": "1.6.1",
     "unused-filename": "^2.1.0",
     "vue": "2.5.10",
     "vue-axios": "^2.1.5",
@@ -111,7 +111,8 @@
     "vue-electron": "^1.0.6",
     "vue-i18n": "^8.15.5",
     "vue-router": "3.0.1",
-    "vuex": "3.0.1"
+    "vuex": "3.0.1",
+    "weixin-js-sdk": "^1.6.0"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -159,5 +160,6 @@
   "agora_electron": {
     "electron_version": "5.0.8",
     "prebuilt": true
-  }
+  },
+  "__npminstall_done": false
 }
