@@ -35,7 +35,7 @@
               sortable="custom"
               label="ID">
       </el-table-column>
-      <el-table-column v-for="(key, index) in keys" :label="key" :key="index">
+      <el-table-column v-for="(key, index) in keys" :label="key" :key="index" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{JSON.parse(scope.row.content)[key] | ellipsis }}
         </template>

@@ -48,8 +48,6 @@ export function initFilters() {
     }
     if (!a) {
       return ''
-    } else if (a.length > 32) {
-      return a.slice(0, 32) + '...'
     }
     return a
   })

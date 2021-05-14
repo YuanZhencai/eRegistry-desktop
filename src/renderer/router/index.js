@@ -153,6 +153,10 @@ export const constantRouterMap = [
             component: () => import('@/views/alert/AlertSetting')
           },
           {
+            path: 'event',
+            component: () => import('@/views/alert/index')
+          },
+          {
             path: 'event/:eventId',
             component: () => import('@/views/alert/AlertEvent')
           },
