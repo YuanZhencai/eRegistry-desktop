@@ -85,32 +85,36 @@
           <el-col :span="8" :offset="1">
             <el-card class="box-card panel-group">
               <div slot="header" class="clearfix" style="margin-top: 10px;">
-                <span slot="label">告警<el-badge :value="7" class="item"></el-badge></span>
+                <span slot="label">告警<el-badge :value="topEvents.count" class="item"></el-badge></span>
               </div>
               <el-table
-                :data="tableData"
+                :data="topEvents.events"
                 :show-header="false"
                 stripe
                 style="width: 100%">
                 <el-table-column>
                   <template slot-scope="scope">
                     <el-row>
-                      <el-col :span="12"><div class=" " style="font-size: 18px;font-weight: 500;">不良反应</div></el-col>
-                      <el-col :span="12"><div class=" " style="text-align: right;"><el-button type="text">查看</el-button></div></el-col>
+                      <el-col :span="12"><div class=" " style="font-size: 18px;font-weight: 500;">{{scope.row.title}}</div></el-col>
+                      <el-col :span="12">
+						  <div class=" " style="text-align: right;">
+							  <el-button type="text" @click="viewEvent(scope.row)">查看</el-button>
+						  </div>
+					  </el-col>
                     </el-row>
                     <el-row>
-                      <el-col :span="24"><div class=" " style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">食欲下降很严重、食欲下降很严重、食欲下降很严重、食欲下降很严重、食欲下降很严重、食欲下降很严重、食欲下降很严重、食欲下降很严重、食欲下降很严重、食欲下降很严重、食欲下降很严重、食欲下降很严重、</div></el-col>
+                      <el-col :span="24"><div class=" " style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">{{scope.row.content}}</div></el-col>
                     </el-row>
                     <el-row>
-                      <el-col :span="12"><div class=" " style="color: #6c757d;margin-top: 5px;">刘忻好</div></el-col>
-                      <el-col :span="12"><div class=" " style="text-align: right">2021-05-14</div></el-col>
+                      <el-col :span="12"><div class=" " style="color: #6c757d;margin-top: 5px;">{{scope.row.patientName ? scope.row.patientName: scope.row.submitter}}</div></el-col>
+                      <el-col :span="12"><div class=" " style="text-align: right">{{scope.row.date | formatDate('YYYY-MM-DD HH:mm')}}</div></el-col>
                     </el-row>
                   </template>
                 </el-table-column>
               </el-table>
               <div class="text-right" v-if="changes.length > 5">
                 <el-button type="text" size="mini">
-                  <router-link :to="{ path: `/project/${projectId}/log`, params: {projectId} }">更多...</router-link>
+                  <router-link :to="{ path: `/project/${projectId}/event`, params: {projectId} }">更多...</router-link>
                 </el-button>
               </div>
             </el-card>
@@ -192,6 +196,7 @@
   import UserAvatar from '../../components/avatar/userAvatar'
   import ProjectDialogComponent from './ProjectDialogComponent'
   import { getProject } from '@/api/ProjectService'
+  import { getTopAlertEvents } from '../../api/AlertService'
 
   export default {
     name: 'ProjectHome',
@@ -234,48 +239,30 @@
         },
         projectName: '',
         activeName: 'first',
-        tableData: [{
-          questionnaire: '不良反应',
-          name: '示长星',
-          bad: '食欲下降很严重',
-          date: '2021-05-10'
-        }, {
-          questionnaire: '不良反应',
-          name: '虢昆鹏',
-          bad: '胃灼热严重',
-          date: '2021-05-10'
-        }, {
-          questionnaire: '卵巢癌患者随访项目不良反应',
-          name: '刘星',
-          bad: '食欲下降很严重',
-          date: '2021-05-10'
-        }]
+        topEvents: {
+          events: [],
+          count: 0
+        }
       }
     },
     created() {
       this.loadAll()
     },
     methods: {
-      handleClick(tab, event) {
-      },
-      view1() {
-        this.$router.push({
-          path: `/project/20058/questionnaire/51/investigation/186`
-        })
-      },
-      view2() {
-        this.$router.push({
-          path: `/project/20058/questionnaire/51/investigation/187`
-        })
-      },
       loadAll() {
+        this.findEvents()
         this.findCenters()
         this.findProjectStatistics()
         this.patient()
         this.plan()
         this.findMembers()
         this.findChanges()
-        this.getProjects()
+        this.getProject()
+      },
+      findEvents() {
+        getTopAlertEvents(this.projectId).then((res) => {
+          this.topEvents = res.data
+        })
       },
       findCenters() {
         getAllCenters({ 'EQ_center.projectId': this.projectId }).then((res) => {
@@ -319,10 +306,14 @@
           this.loadAll()
         }, () => {})
       },
-      getProjects() {
+      getProject() {
         getProject(this.projectId).then(res => {
           this.projectName = res.data.name
-          console.log(this.projectName, '2')
+        })
+      },
+      viewEvent(event) {
+        this.$router.push({
+          path: `/project/${this.projectId}/event/${event.id}`
         })
       }
     }

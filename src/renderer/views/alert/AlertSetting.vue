@@ -97,12 +97,14 @@
 	          if (valid) {
 	            saveQuestionnaireAlertSetting(this.setting).then(res => {
 	              this.setting = res.data
+	              this.cancel()
 	            })
 	          }
 	        })
 	      } else {
 	        saveQuestionnaireAlertSetting(this.setting).then(res => {
 	          this.setting = res.data
+	          this.cancel()
 	        })
 	      }
 	    },

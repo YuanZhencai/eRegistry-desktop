@@ -54,7 +54,6 @@
 	      projectId: projectId,
 	      eventId: eventId,
 	      alertEvent: null,
-	      investigation: null,
 	      rules: {
 	        handleDesc: [
 	          { required: true, message: '请输入处理描述', trigger: 'change' },
@@ -70,20 +69,12 @@
 	    getEvent() {
 	      getAlertEvent(this.eventId).then(res => {
 	        this.alertEvent = res.data
-	        this.getInvestigation()
-	      })
-	    },
-	    getInvestigation() {
-	      getInvestigation(this.alertEvent.investigationId).then(res => {
-	        this.investigation = res.data
 	      })
 	    },
 	    cancel() {
-	      if (this.investigation) {
-	        this.$router.push({
-	          path: `/project/${this.projectId}/questionnaire/${this.investigation.questionnaireId}/alert`
-	        })
-	      }
+	      this.$router.push({
+	        path: `/project/${this.projectId}/event`
+	      })
 	    },
 	    handle(formName) {
 	      this.$refs[formName].validate((valid) => {
@@ -107,11 +98,14 @@
 	    },
 	    viewInvestigation() {
 	      if (this.alertEvent.investigationId) {
-	        if (this.investigation) {
-	          this.$router.push({
-	            path: `/project/${this.projectId}/questionnaire/${this.investigation.questionnaireId}/investigation/${this.investigation.id}`
-	          })
-	        }
+	        getInvestigation(this.alertEvent.investigationId).then(res => {
+	          const investigation = res.data
+	          if (investigation) {
+	            this.$router.push({
+	              path: `/project/${this.projectId}/questionnaire/${investigation.questionnaireId}/investigation/${investigation.id}`
+	            })
+	          }
+	        })
 	      }
 	    }
 	  }
