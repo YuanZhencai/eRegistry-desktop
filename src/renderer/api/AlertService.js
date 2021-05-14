@@ -9,5 +9,5 @@ export function saveQuestionnaireAlertSetting(settings) {
 }
 
 export function getProjectAlertEvents(projectId, params) {
-  return axios.get(`api/projects/${projectId}/alert-events`, params)
+  return axios.get(`api/projects/${projectId}/alert-events`, { params: params })
 }

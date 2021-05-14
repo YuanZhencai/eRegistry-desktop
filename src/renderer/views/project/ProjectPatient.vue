@@ -118,7 +118,7 @@ export default {
       const projectId = this.$route.params.projectId
       return {
         BASE_API: SERVER_API_URL,
-        loading: true,
+        loading: false,
         predicate: '',
         order: '',
         total: 0,

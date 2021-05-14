@@ -101,7 +101,7 @@
         begin: null,
         end: null,
         content: null,
-        loading: true,
+        loading: false,
         report: null,
         keys: []
       }

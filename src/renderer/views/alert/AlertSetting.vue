@@ -95,7 +95,7 @@
 	        expression: null,
 	        email: null
 	      },
-	      loading: true,
+	      loading: false,
 	      isSaving: false,
 	      predicate: '',
 	      order: '',
@@ -107,7 +107,6 @@
 	  },
 	  mounted() {
 	    this.getSetting()
-	    this.getEvents()
 	  },
 	  methods: {
 	    enabledSetting(enabled) {
@@ -133,6 +132,7 @@
 	      if (this.questionnaireId) {
 	        getQuestionnaireAlertSetting(this.questionnaireId).then(res => {
 	          this.setting = res.data
+	          this.getEvents()
 	        })
 	      }
 	    },
@@ -159,8 +159,10 @@
 	      })
 	    },
 	    getEvents() {
-	      if (this.projectId) {
+	      if (this.projectId && this.setting && this.setting.settingId) {
+	        this.loading = true
 	        getProjectAlertEvents(this.projectId, {
+	          'EQ_alertEvent.settingId': this.setting.settingId,
 	          page: this.currentPage - 1,
 	          size: this.pageSize,
 	          sort: this.sort()
@@ -172,7 +174,7 @@
 	      }
 	    },
 	    sort() {
-	      return (this.predicate && this.order) ? `alertEvent${this.predicate}` + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
+	      return (this.predicate && this.order) ? `alertEvent.${this.predicate}` + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
 	    },
 	    changeOrder(sort) {
 	      this.predicate = sort.prop

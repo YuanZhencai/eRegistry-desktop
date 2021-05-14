@@ -71,7 +71,7 @@
     data() {
       const projectId = this.$route.params.projectId
       return {
-        loading: true,
+        loading: false,
         predicate: 'reportName',
         order: 'descending',
         sortPropMap: {
