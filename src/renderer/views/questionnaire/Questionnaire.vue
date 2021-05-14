@@ -39,7 +39,9 @@
                       :fit="'fill'">
               </el-image>
               <el-button type="text" slot="reference">分享调查</el-button>
-            </el-popover>
+			</el-popover>
+			  <el-divider direction="vertical"></el-divider>
+			  <el-button type="text" @click="alert(scope.row.id)">告警</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -133,6 +135,11 @@
       investigation(questionnaireId) {
         this.$router.push({
           path: `/project/${this.projectId}/questionnaire/${questionnaireId}/investigation`
+        })
+      },
+      alert(questionnaireId) {
+        this.$router.push({
+          path: `/project/${this.projectId}/questionnaire/${questionnaireId}/alert`
         })
       },
       deleteQuestionnaire(questionnaire) {

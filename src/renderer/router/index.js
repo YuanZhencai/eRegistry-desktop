@@ -149,6 +149,10 @@ export const constantRouterMap = [
             component: () => import('@/views/investigation/InvestigationDetail')
           },
           {
+            path: 'questionnaire/:questionnaireId/alert/',
+            component: () => import('@/views/alert/AlertSetting')
+          },
+          {
             path: 'member',
             component: () => import('@/views/project/ProjectMember')
           },
