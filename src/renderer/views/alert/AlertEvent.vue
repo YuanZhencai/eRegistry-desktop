@@ -22,13 +22,13 @@
 						<el-button type="text" @click="viewInvestigation">详情</el-button>
 					</el-form-item>
 					<el-form-item label="填表时间">
-						<span>{{alertEvent.date | formatDate('YYYY-MM-DD')}}</span>
+						<span>{{alertEvent.date | formatDate('YYYY-MM-DD HH:mm')}}</span>
 					</el-form-item>
 					<el-form-item label="处理描述" prop="handleDesc">
 						<el-input type="textarea" v-model="alertEvent.handleDesc"></el-input>
 					</el-form-item>
 					<el-form-item label="处理时间" v-if="alertEvent.handleDate">
-						<span>{{alertEvent.handleDate | formatDate('YYYY-MM-DD')}}</span>
+						<span>{{alertEvent.handleDate | formatDate('YYYY-MM-DD HH:mm')}}</span>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="handle('form')">处理</el-button>

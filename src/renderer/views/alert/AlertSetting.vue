@@ -44,11 +44,11 @@
 					</template>
 				</el-table-column>
 				<el-table-column prop='date' label='填表时间' sortable="custom">
-					<template slot-scope="scope">{{scope.row.date | formatDate('YYYY-MM-DD')}}</template>
+					<template slot-scope="scope">{{scope.row.date | formatDate('YYYY-MM-DD HH:mm')}}</template>
 				</el-table-column>
 				<el-table-column prop='handleDesc' label='处理描述' sortable="custom"></el-table-column>
 				<el-table-column prop='handleDate' label='处理时间' sortable="custom">
-					<template slot-scope="scope">{{scope.row.handleDate | formatDate('YYYY-MM-DD')}}</template>
+					<template slot-scope="scope">{{scope.row.handleDate | formatDate('YYYY-MM-DD HH:mm')}}</template>
 				</el-table-column>
 				<el-table-column label="操作">
 					<template slot-scope="scope">
