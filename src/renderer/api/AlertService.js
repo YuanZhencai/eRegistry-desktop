@@ -11,3 +11,11 @@ export function saveQuestionnaireAlertSetting(settings) {
 export function getProjectAlertEvents(projectId, params) {
   return axios.get(`api/projects/${projectId}/alert-events`, { params: params })
 }
+
+export function getAlertEvent(eventId) {
+  return axios.get(`api/alert-events/${eventId}`)
+}
+
+export function handleAlertEvent(event) {
+  return axios.put(`api/alert-events/handle`, event)
+}

@@ -37,22 +37,22 @@
 				<el-table-column prop='id' label='事件ID' sortable="custom"></el-table-column>
 				<el-table-column prop='title' label='标题' sortable="custom"></el-table-column>
 				<el-table-column prop='content' label='告警内容' sortable="custom"></el-table-column>
-				<el-table-column prop='submitter' label='提交人'>
+				<el-table-column prop='submitter' label='填写人'>
 					<template slot-scope="scope">
-						<el-button type="text" v-if="scope.row.patientName">{{scope.row.patientName}}</el-button>
+						<span v-if="scope.row.patientName">{{scope.row.patientName}}</span>
 						<span v-if="!scope.row.patientName">{{scope.row.submitter}}</span>
 					</template>
 				</el-table-column>
-				<el-table-column prop='date' label='提交时间' sortable="custom">
+				<el-table-column prop='date' label='填表时间' sortable="custom">
 					<template slot-scope="scope">{{scope.row.date | formatDate('YYYY-MM-DD')}}</template>
 				</el-table-column>
 				<el-table-column prop='handleDesc' label='处理描述' sortable="custom"></el-table-column>
-				<el-table-column prop='handleDate' label='处理时间' sortable="custom"></el-table-column>
+				<el-table-column prop='handleDate' label='处理时间' sortable="custom">
+					<template slot-scope="scope">{{scope.row.handleDate | formatDate('YYYY-MM-DD')}}</template>
+				</el-table-column>
 				<el-table-column label="操作">
 					<template slot-scope="scope">
-						<el-button type="text">查看</el-button>
-						<el-divider direction="vertical"></el-divider>
-						<el-button type="text">处理</el-button>
+						<el-button type="text" @click="view(scope.row)">查看</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -184,6 +184,11 @@
 	    currentChange: function(currentPage) {
 	      this.currentPage = currentPage
 	      this.getEvents()
+	    },
+	    view(event) {
+	      this.$router.push({
+	        path: `/project/${this.projectId}/event/${event.id}`
+	      })
 	    }
 	  }
 	}
