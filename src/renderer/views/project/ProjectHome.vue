@@ -95,7 +95,7 @@
                 <el-table-column>
                   <template slot-scope="scope">
                     <el-row>
-                      <el-col :span="12"><div class=" " style="font-size: 18px;font-weight: 500;">{{scope.row.title}}</div></el-col>
+                      <el-col :span="12"><div class=" " style="font-size: 14px;font-weight: 500;">{{scope.row.title}}</div></el-col>
                       <el-col :span="12">
 						  <div class=" " style="text-align: right;">
 							  <el-button type="text" @click="viewEvent(scope.row)">查看</el-button>
@@ -112,7 +112,7 @@
                   </template>
                 </el-table-column>
               </el-table>
-              <div class="text-right" v-if="changes.length > 5">
+              <div class="text-right">
                 <el-button type="text" size="mini">
                   <router-link :to="{ path: `/project/${projectId}/event`, params: {projectId} }">更多...</router-link>
                 </el-button>
