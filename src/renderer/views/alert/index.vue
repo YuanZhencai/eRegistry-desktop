@@ -78,12 +78,11 @@
 	      })
 	    },
 	    sort() {
-	      return (this.predicate && this.order) ? `alertEvent.${this.predicate}` + ',' + (this.order === 'descending' ? 'desc': 'asc') : null
+	      return (this.predicate && this.order) ? `alertEvent.${this.predicate}` + ',' + (this.order === 'descending' ? 'desc' : 'asc') : null
 	    },
 	    changeOrder(sort) {
 	      this.predicate = sort.prop
 	      this.order = sort.order
-	      console.info('sort', sort)
 	      this.getEvents()
 	    },
 	    currentChange: function(currentPage) {
