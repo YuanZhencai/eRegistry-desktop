@@ -60,3 +60,11 @@ export function fillFollow(follow) {
     data: follow
   })
 }
+
+export function fillInvestigation(follow) {
+  return axios({
+    url: `api/patient/investigation`,
+    method: 'post',
+    data: follow
+  })
+}

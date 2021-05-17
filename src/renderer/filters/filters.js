@@ -44,16 +44,10 @@ export function initFilters() {
   Vue.filter('ellipsis', function(value) {
     let a = value
     if (typeof value === 'object') {
-      if (Array.isArray(value)) {
-        a = value.toString()
-      } else {
-        a = JSON.stringify(value)
-      }
+      a = JSON.stringify(value)
     }
     if (!a) {
       return ''
-    } else if (a.length > 32) {
-      return a.slice(0, 32) + '...'
     }
     return a
   })

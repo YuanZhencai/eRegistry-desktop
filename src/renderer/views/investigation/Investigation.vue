@@ -35,11 +35,16 @@
               sortable="custom"
               label="ID">
       </el-table-column>
-      <el-table-column v-for="(type, key, index) in keys" :label="key" :key="index">
-        <template slot-scope="scope" v-if="type !== 'file'">
+      <el-table-column v-for="(key, index) in keys" :label="key" :key="index" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
           {{JSON.parse(scope.row.content)[key] | ellipsis }}
         </template>
       </el-table-column>
+		<el-table-column label="患者" sortable="custom">
+			<template slot-scope="scope">
+				{{scope.row.patientName ? scope.row.patientName: '匿名'}}
+			</template>
+		</el-table-column>
       <el-table-column
               sortable="custom"
               label="创建时间"
@@ -84,6 +89,11 @@
         size: 10,
         predicate: 'id',
         order: 'ascending',
+        sortPropMap: {
+          id: 'investigation.id',
+          createdDate: 'investigation.createdDate',
+          patientName: 'patient.name'
+        },
         totalItems: null,
         queryCount: null,
         filter: {},
@@ -91,9 +101,9 @@
         begin: null,
         end: null,
         content: null,
-        loading: true,
+        loading: false,
         report: null,
-        keys: {}
+        keys: []
       }
     },
     mounted() {
@@ -101,7 +111,7 @@
     },
     methods: {
       sort() {
-        return (this.predicate && this.order) ? this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
+        return (this.predicate && this.order) ? this.sortPropMap[this.predicate] + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
       },
       loadAll() {
         this.loading = true
@@ -156,12 +166,21 @@
         })
       },
       reportKeys() {
-        this.keys = {}
+        this.keys = []
+        const excludes = ['file', 'imagepicker', 'signaturepad', 'panel', 'paneldynamic', 'html', 'matrix', 'matrixdropdown', 'matrixdynamic', 'multipletext', 'editor', 'tagbox']
         const surveyModel = new SurveyVue.Model(this.report.survey)
         this.questions = surveyModel.getAllQuestions()
-        const count = this.questions.length > 5 ? 5 : this.questions.length
-        for (let i = 0; i < count; i++) {
-          this.$set(this.keys, this.questions[i].name, this.questions[i].getType())
+        let count = 0
+        for (let i = 0; i < this.questions.length; i++) {
+          const question = this.questions[i]
+          if (!excludes.includes(question.getType())) {
+            this.keys.push(question.name)
+          }
+          if (count >= 5) {
+            break
+          } else {
+            count++
+          }
         }
       }
     }

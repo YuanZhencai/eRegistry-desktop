@@ -120,6 +120,12 @@
       "listofdatachangesorfieldsexported": "导出的数据更改或字段列表"
     }
   },
+  "alertSetting": {
+	"saved": "设置成功"
+  },
+  "alertEvent": {
+	"handled": "处理成功"
+  },
   "audit": {
     "home": {
       "title": "审核",

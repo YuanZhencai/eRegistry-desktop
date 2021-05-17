@@ -96,7 +96,7 @@ export default {
   data() {
     const projectId = this.$route.params.projectId
     return {
-      loading: true,
+      loading: false,
       isSaving: false,
       predicate: '',
       order: '',

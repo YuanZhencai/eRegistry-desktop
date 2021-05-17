@@ -70,7 +70,7 @@ export default {
     data() {
       return {
         isSaving: false,
-        loading: true,
+        loading: false,
         predicate: 'createdDate',
         order: 'desc',
         projects: [],
