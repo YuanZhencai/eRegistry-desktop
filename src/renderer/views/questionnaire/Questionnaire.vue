@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
+    <el-row v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId, 'PROJECT_PATIENT_' + projectId])">
       <el-col :span='24'>
         <el-button type='primary' class='float-right' size="mini" @click="newQuestionnaire">创建问卷</el-button>
       </el-col>
@@ -18,11 +18,14 @@
             <span>操作</span>
           </template>
           <template slot-scope="scope">
-            <template v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
+            <template v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId, 'PROJECT_PATIENT_' + projectId])">
               <el-button type="text" @click="editQuestionnaire(scope.row.id)">编辑</el-button>
               <el-divider direction="vertical"></el-divider>
+			  <el-button type="text" @click="alert(scope.row.id)">告警</el-button>
+			  <el-divider direction="vertical"></el-divider>
               <el-button type="text" @click="deleteQuestionnaire(scope.row)">删除</el-button>
-              <el-divider direction="vertical"></el-divider>
+			  <el-divider direction="vertical"></el-divider>
+
             </template>
             <el-button type="text" @click="newInvestigation(scope.row.id)">进行调查</el-button>
             <el-divider direction="vertical"></el-divider>
@@ -40,8 +43,7 @@
               </el-image>
               <el-button type="text" slot="reference">分享调查</el-button>
 			</el-popover>
-			  <el-divider direction="vertical"></el-divider>
-			  <el-button type="text" @click="alert(scope.row.id)">告警</el-button>
+
           </template>
         </el-table-column>
       </el-table>
