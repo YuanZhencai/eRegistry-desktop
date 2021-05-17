@@ -53,8 +53,8 @@
 	      projectId: projectId,
 	      loading: false,
 	      isSaving: false,
-	      predicate: '',
-	      order: '',
+	      predicate: 'date',
+	      order: 'descending',
 	      events: [],
 	      total: 0,
 	      pageSize: 10, // 单页数据量
@@ -78,11 +78,12 @@
 	      })
 	    },
 	    sort() {
-	      return (this.predicate && this.order) ? `alertEvent.${this.predicate}` + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
+	      return (this.predicate && this.order) ? `alertEvent.${this.predicate}` + ',' + (this.order === 'descending' ? 'desc': 'asc') : null
 	    },
 	    changeOrder(sort) {
 	      this.predicate = sort.prop
 	      this.order = sort.order
+	      console.info('sort', sort)
 	      this.getEvents()
 	    },
 	    currentChange: function(currentPage) {
