@@ -187,6 +187,10 @@ export const constantRouterMap = [
           {
             path: 'meeting',
             component: () => import('@/views/video-meeting/meeting')
+          },
+          {
+            path: 'layout',
+            component: () => import('@/views/demo/index')
           }
         ]
       }
