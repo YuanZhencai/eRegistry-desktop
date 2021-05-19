@@ -1,5 +1,5 @@
 <template>
-  <div class="col-flex h100">
+  <div class="col-flex h100" style="min-width: 1150px;">
     <el-row type="flex" class="row-bg" justify="space-between">
       <el-col :span="6">
         <div class="grid-content bg-purple">
@@ -45,46 +45,47 @@
       <div class="position-ab">
         <el-row class="h100">
           <el-col :span="15" class="h100">
-            <el-row :gutter="8" class="h100">
-              <el-card shadow="hover" class="h50"
+            <el-row :gutter="8" class="h50">
+              <el-card shadow="hover" class="h100"
                        :style="{'min-height': '278px'}"
                        :body-style="{ height: 'calc(100% - 45px)' }">
                 <div slot="header" class="clearfix">
                   <span>登记数据</span>
                 </div>
                 <div class="card-body h100">
-					<el-form ref="form"
-							 :inline="true"
-							 size="mini">
-						<el-form-item>
-							<el-radio-group v-model="range" size="mini" @change="changeRange">
-								<el-radio-button label="week">周</el-radio-button>
-								<el-radio-button label="month">月</el-radio-button>
-								<el-radio-button label="year">年</el-radio-button>
-							</el-radio-group>
-						</el-form-item>
-						<el-form-item>
-								<el-date-picker type="date"
-												v-model="dateRange"
-												:type="rangeMap[range].type"
-												range-separator="至"
-												:start-placeholder="rangeMap[range].start"
-												:end-placeholder="rangeMap[range].end"
-												:clearable="false"
-												@change="changeDateRange"
-												style="width: 100%;">
-								</el-date-picker>
-						</el-form-item>
-						<el-form-item>
-							<el-select v-model="centerId" size="mini" @change="patient">
-								<el-option :label="'全部'" :value="0"></el-option>
-								<el-option v-for="center in centers" :key="center.id"
-										   :label="center.name" :value="center.id">
-								</el-option>
-							</el-select>
-						</el-form-item>
-					</el-form>
-
+                  <div>
+                    <el-form ref="form"
+                             :inline="true"
+                             size="mini">
+                      <el-form-item>
+                        <el-radio-group v-model="range" size="mini" @change="changeRange">
+                          <el-radio-button label="week">周</el-radio-button>
+                          <el-radio-button label="month">月</el-radio-button>
+                          <el-radio-button label="year">年</el-radio-button>
+                        </el-radio-group>
+                      </el-form-item>
+                      <el-form-item>
+                        <el-date-picker type="date"
+                                        v-model="dateRange"
+                                        :type="rangeMap[range].type"
+                                        range-separator="至"
+                                        :start-placeholder="rangeMap[range].start"
+                                        :end-placeholder="rangeMap[range].end"
+                                        :clearable="false"
+                                        @change="changeDateRange"
+                                        style="width: 100%;">
+                        </el-date-picker>
+                      </el-form-item>
+                      <el-form-item>
+                        <el-select v-model="centerId" size="mini" @change="patient">
+                          <el-option :label="'全部'" :value="0"></el-option>
+                          <el-option v-for="center in centers" :key="center.id"
+                                     :label="center.name" :value="center.id">
+                          </el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-form>
+                  </div>
                   <div class="clearfix"></div>
                   <div class="chart-container" :style="{height: 'calc(100% - 33px)' }" v-if="patientOption">
                     <v-chart :options="patientOption" autoresize style="width: 100%; height: 100%;"></v-chart>
@@ -173,29 +174,6 @@
                            v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
                   <router-link :to="{ path: `/project/${projectId}/report`, params: {projectId} }">CRF</router-link>
                 </el-button>
-              </div>
-            </el-card>
-            <el-card shadow="hover" :body-style="{ padding: '10px'}">
-              <div slot="header" class="clearfix">
-                <span>动态</span>
-              </div>
-              <div class="card-body">
-                <div class="text-center" v-if="changes.length === 0">暂无数据</div>
-                <div v-for="(change, index) in showChanges" :key="index">
-                  <div class="row-flex">
-                    <user-avatar :username="change.author" :size="30"></user-avatar>
-                    <div style="margin-left: 10px;">
-                      <p class="no-margin-bottom">{{change.author}} {{change.action}}</p>
-                      <p class="no-margin-bottom">{{change.commitDate | formatDate('YYYY-MM-DD hh:mm:ss')}}</p>
-                    </div>
-                  </div>
-                  <el-divider class="divider-margin"></el-divider>
-                </div>
-                <div class="text-right" v-if="changes.length > 5">
-                  <el-button type="text" size="mini">
-                    <router-link :to="{ path: `/project/${projectId}/log`, params: {projectId} }">更多...</router-link>
-                  </el-button>
-                </div>
               </div>
             </el-card>
           </el-col>
