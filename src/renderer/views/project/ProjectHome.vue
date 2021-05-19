@@ -190,7 +190,6 @@
   import { mapGetters } from 'vuex'
   import { getAllCenters } from '@/api/CenterService'
   import { getProjectMembers } from '@/api/MemberService'
-  import { getChanges } from '@/api/ProjectService'
   import { getProjectStatistics, getDateChart, getPlanChart } from '@/api/StatisticsService'
   import UserAvatar from '../../components/avatar/userAvatar'
   import ProjectDialogComponent from './ProjectDialogComponent'
@@ -279,7 +278,6 @@
         this.findProjectStatistics()
         this.plan()
         this.findMembers()
-        this.findChanges()
         this.getProject()
       },
       findEvents() {
@@ -295,11 +293,6 @@
       findMembers() {
         getProjectMembers(this.projectId, { page: 0, size: 7 }).then((res) => {
           this.members = res.data
-        })
-      },
-      findChanges() {
-        getChanges(this.projectId, { page: 0, size: 6 }).then((res) => {
-          this.changes = res.data
         })
       },
       findProjectStatistics() {
