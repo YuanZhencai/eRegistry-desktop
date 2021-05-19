@@ -24,7 +24,7 @@ moment.locale('zh-cn')
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 
-Vue.use(ElementUI, { locale: locale, size: 'mini' })
+Vue.use(ElementUI, { locale: locale })
 Vue.use(Calendar)
 Vue.use(LocaleProvider)
 Vue.use(Badge)
