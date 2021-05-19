@@ -1,5 +1,5 @@
 <template>
-	<div class="grid-content bg-purple-dark dashboard-editor-container">
+	<div class="grid-content bg-purple-dark" :class="this.type !== 'questionnaire' ? ' dashboard-editor-container': ''">
 		<span style="border: 2px solid #cecbcb"></span>
 		<span style="margin-left: 5px;">调查结果</span>
 		<el-form :inline="true" class="demo-form-inline" style="margin-top: 10px;">
@@ -30,9 +30,9 @@
 				</el-button>
 			</el-form-item>
 		</el-form>
-		<el-row :gutter="40" class="panel-group">
+		<el-row :gutter="40" class="panel-group" v-if="this.type !== 'questionnaire'">
 			<el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-				<div class="card-panel">
+				<div class="card-panel" @click="toInvestigation">
 					<div class="card-panel-icon-wrapper icon-people">
 						<svg-icon icon-class="message" class-name="card-panel-icon"/>
 					</div>
@@ -46,7 +46,7 @@
 				</div>
 			</el-col>
 			<el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-				<div class="card-panel">
+				<div class="card-panel" @click="toInvestigation">
 					<div class="card-panel-icon-wrapper icon-message">
 						<svg-icon icon-class="peoples" class-name="card-panel-icon"/>
 					</div>
@@ -60,7 +60,7 @@
 				</div>
 			</el-col>
 			<el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-				<div class="card-panel">
+				<div class="card-panel" @click="toEvents">
 					<div class="card-panel-icon-wrapper icon-money">
 						<svg-icon icon-class="alert" class-name="card-panel-icon"/>
 					</div>
@@ -74,7 +74,7 @@
 				</div>
 			</el-col>
 			<el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-				<div class="card-panel">
+				<div class="card-panel" @click="toEvents">
 					<div class="card-panel-icon-wrapper icon-shopping">
 						<svg-icon icon-class="done" class-name="card-panel-icon"/>
 					</div>
@@ -146,7 +146,7 @@
 	  components: {
 	    CountTo
 	  },
-	  props: ['projectId', 'questionnaireId'],
+	  props: ['projectId', 'questionnaireId', 'type'],
 	  watch: {
 	    questionnaireId: {
 	      deep: true,
@@ -191,7 +191,9 @@
 	  },
 	  methods: {
 	    init() {
-	      this.sumQuestionnaire()
+	      if (this.type !== 'questionnaire') {
+	        this.sumQuestionnaire()
+	      }
 	      this.findQuestionnaireReport()
 	    },
 	    sort() {
@@ -276,6 +278,16 @@
 	          this.questionnaireSum = res.data
 	        })
 	      }
+	    },
+	    toInvestigation() {
+	      this.$router.push({
+	        path: `/project/${this.projectId}/questionnaire/${this.questionnaireId}/investigation-result`
+	      })
+	    },
+	    toEvents() {
+	      this.$router.push({
+	        path: `/project/${this.projectId}/event`
+	      })
 	    }
 	  }
 	}
