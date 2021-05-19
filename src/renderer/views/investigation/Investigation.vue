@@ -40,7 +40,8 @@
 						<div class="card-panel-text">
 							总记录数
 						</div>
-						<count-to :start-val="0" :end-val="questionnaireSum.investigation" :duration="2600" class="card-panel-num"/>
+						<count-to :start-val="0" :end-val="questionnaireSum.investigation" :duration="2600"
+								  class="card-panel-num"/>
 					</div>
 				</div>
 			</el-col>
@@ -53,7 +54,8 @@
 						<div class="card-panel-text">
 							填写人数
 						</div>
-						<count-to :start-val="0" :end-val="questionnaireSum.patient" :duration="3000" class="card-panel-num"/>
+						<count-to :start-val="0" :end-val="questionnaireSum.patient" :duration="3000"
+								  class="card-panel-num"/>
 					</div>
 				</div>
 			</el-col>
@@ -66,7 +68,8 @@
 						<div class="card-panel-text">
 							告警数
 						</div>
-						<count-to :start-val="0" :end-val="questionnaireSum.alert" :duration="3200" class="card-panel-num"/>
+						<count-to :start-val="0" :end-val="questionnaireSum.alert" :duration="3200"
+								  class="card-panel-num"/>
 					</div>
 				</div>
 			</el-col>
@@ -79,7 +82,8 @@
 						<div class="card-panel-text">
 							已处理
 						</div>
-						<count-to :start-val="0" :end-val="questionnaireSum.done" :duration="3600" class="card-panel-num"/>
+						<count-to :start-val="0" :end-val="questionnaireSum.done" :duration="3600"
+								  class="card-panel-num"/>
 					</div>
 				</div>
 			</el-col>
@@ -182,6 +186,9 @@
 	      }
 	    }
 	  },
+	  mounted() {
+	    this.init()
+	  },
 	  methods: {
 	    init() {
 	      this.sumQuestionnaire()
@@ -237,6 +244,7 @@
 	    },
 	    findQuestionnaireReport() {
 	      if (this.questionnaireId) {
+	        this.report = null
 	        getQuestionnaireReport(this.questionnaireId).then((res) => {
 	          this.report = res.data
 	          this.reportKeys()
