@@ -36,3 +36,7 @@ export function deleteQuestionnaire(id) {
     method: 'delete'
   })
 }
+
+export function getQuestionnaireSum(id) {
+  return axios.get(`api/questionnaires/${id}/sum`)
+}
