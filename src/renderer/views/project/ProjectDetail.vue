@@ -59,11 +59,6 @@
 						<i class="fa fa-video-camera"></i>
 						<span slot="title" class="d-none d-md-inline">视频会议</span>
 					</el-menu-item>
-          <el-menu-item index="layout"
-                        @click="selectMenu('layout')">
-            <i class="fa fa-file-text"></i>
-            <span slot="title" class="d-none d-md-inline">layout</span>
-          </el-menu-item>
 				</el-menu>
 			</el-aside>
 			<el-main class="main-wrapper">
