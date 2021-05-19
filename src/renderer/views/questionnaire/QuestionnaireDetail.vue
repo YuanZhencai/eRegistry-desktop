@@ -64,7 +64,7 @@ export default {
         this.questionnaireReport.report = this.report
         saveWithReport(this.questionnaireReport).then(res => {
           this.$router.push({
-            path: `/project/${this.projectId}/questionnaire`
+            path: `/project/${this.projectId}/questionnaire/manage`
           })
         })
       },

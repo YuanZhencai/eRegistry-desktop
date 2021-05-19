@@ -126,6 +126,10 @@ export const constantRouterMap = [
           },
           {
             path: 'questionnaire',
+            component: () => import('@/views/project/ProjectQuestionnaire')
+          },
+          {
+            path: 'questionnaire/manage',
             component: () => import('@/views/questionnaire/Questionnaire')
           },
           {
@@ -138,7 +142,11 @@ export const constantRouterMap = [
           },
           {
             path: 'questionnaire/:questionnaireId/investigation',
-            component: () => import('@/views/investigation/Investigation')
+            component: () => import('@/views/project/ProjectInvestigation')
+          },
+          {
+            path: 'questionnaire/:questionnaireId/investigation-result',
+            component: () => import('@/views/questionnaire/QuestionnaireInvestigation')
           },
           {
             path: 'questionnaire/:questionnaireId/investigation-input',
