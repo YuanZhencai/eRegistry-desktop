@@ -16,7 +16,7 @@
       </el-col>
       <el-col :span="6">
         <div class="grid-content bg-purple-light" style="margin-top: 12px;font-size: 20px">
-          <strong>{{this.projectName}}</strong>
+          <strong v-if="this.project">{{this.project.name}}</strong>
         </div>
       </el-col>
       <el-col :span="6">
@@ -51,19 +51,40 @@
                        :body-style="{ height: 'calc(100% - 45px)' }">
                 <div slot="header" class="clearfix">
                   <span>登记数据</span>
-                  <el-select v-model="centerId" size="mini" style="float: right; padding: 3px 0" @change="patient">
-                    <el-option :label="'全部'" :value="0"></el-option>
-                    <el-option v-for="center in centers" :key="center.id"
-                               :label="center.name" :value="center.id">
-                    </el-option>
-                  </el-select>
                 </div>
                 <div class="card-body h100">
-                  <el-radio-group class="float-right" v-model="range" size="mini" @change="patient">
-                    <el-radio-button label="week">周</el-radio-button>
-                    <el-radio-button label="month">月</el-radio-button>
-                    <el-radio-button label="year">年</el-radio-button>
-                  </el-radio-group>
+					<el-form ref="form"
+							 :inline="true"
+							 size="mini">
+						<el-form-item>
+							<el-radio-group v-model="range" size="mini" @change="changeRange">
+								<el-radio-button label="week">周</el-radio-button>
+								<el-radio-button label="month">月</el-radio-button>
+								<el-radio-button label="year">年</el-radio-button>
+							</el-radio-group>
+						</el-form-item>
+						<el-form-item>
+								<el-date-picker type="date"
+												v-model="dateRange"
+												:type="rangeMap[range].type"
+												range-separator="至"
+												:start-placeholder="rangeMap[range].start"
+												:end-placeholder="rangeMap[range].end"
+												:clearable="false"
+												@change="changeDateRange"
+												style="width: 100%;">
+								</el-date-picker>
+						</el-form-item>
+						<el-form-item>
+							<el-select v-model="centerId" size="mini" @change="patient">
+								<el-option :label="'全部'" :value="0"></el-option>
+								<el-option v-for="center in centers" :key="center.id"
+										   :label="center.name" :value="center.id">
+								</el-option>
+							</el-select>
+						</el-form-item>
+					</el-form>
+
                   <div class="clearfix"></div>
                   <div class="chart-container" :style="{height: 'calc(100% - 33px)' }" v-if="patientOption">
                     <v-chart :options="patientOption" autoresize style="width: 100%; height: 100%;"></v-chart>
@@ -197,6 +218,7 @@
   import ProjectDialogComponent from './ProjectDialogComponent'
   import { getProject } from '@/api/ProjectService'
   import { getTopAlertEvents } from '../../api/AlertService'
+  import moment from 'moment'
 
   export default {
     name: 'ProjectHome',
@@ -223,6 +245,24 @@
         projectId,
         centerId: 0,
         range: 'week',
+        rangeMap: {
+          'week': {
+            'type': 'daterange',
+            'start': '开始日期',
+            'end': '结束日期'
+          },
+          'month': {
+            'type': 'daterange',
+            'start': '开始日期',
+            'end': '结束日期'
+          },
+          'year': {
+            'type': 'monthrange',
+            'start': '开始月份',
+            'end': '结束月份'
+          }
+        },
+        dateRange: [],
         statistics: {},
         centers: [],
         members: [],
@@ -237,12 +277,14 @@
           VIEW: '查看',
           ADMIN: '负责人'
         },
-        projectName: '',
+        project: null,
         activeName: 'first',
         topEvents: {
           events: [],
           count: 0
-        }
+        },
+        beginDate: null,
+        endDate: null
       }
     },
     created() {
@@ -250,10 +292,13 @@
     },
     methods: {
       loadAll() {
+        getProject(this.projectId).then(res => {
+          this.project = res.data
+          this.changeRange()
+        })
         this.findEvents()
         this.findCenters()
         this.findProjectStatistics()
-        this.patient()
         this.plan()
         this.findMembers()
         this.findChanges()
@@ -284,9 +329,32 @@
           this.statistics = res.data
         })
       },
+      changeRange() {
+        if (this.project && this.project.endDate) {
+          this.endDate = moment(this.project.endDate)
+        } else {
+          this.endDate = moment(new Date())
+        }
+        if (this.range === 'week') {
+          this.beginDate = moment(this.endDate).subtract(7, 'days')
+        } else if (this.range === 'month') {
+          this.beginDate = moment(this.endDate).subtract(1, 'months')
+        } else if (this.range === 'year') {
+          this.beginDate = moment(this.endDate).subtract(1, 'years')
+        }
+        this.dateRange = [this.beginDate, this.endDate]
+        this.patient()
+      },
+      changeDateRange() {
+        this.beginDate = moment(this.dateRange[0])
+        this.endDate = moment(this.dateRange[1])
+        this.patient()
+      },
       patient() {
         const req = {
           range: this.range,
+          beginDate: this.beginDate.format('YYYY-MM-DD'),
+          endDate: this.endDate.format('YYYY-MM-DD'),
           centerId: null
         }
         if (this.centerId !== 0) {
@@ -307,9 +375,7 @@
         }, () => {})
       },
       getProject() {
-        getProject(this.projectId).then(res => {
-          this.projectName = res.data.name
-        })
+
       },
       viewEvent(event) {
         this.$router.push({
