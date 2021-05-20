@@ -60,7 +60,7 @@ export default {
         this.investigation = this.survey.complete(data, state)
         saveInvestigation(this.investigation).then((res) => {
           this.$router.push({
-            path: `/project/${this.projectId}/questionnaire/${this.questionnaireId}/investigation`
+            path: `/project/${this.projectId}/questionnaire/${this.questionnaireId}/investigation-result`
           })
         })
       }

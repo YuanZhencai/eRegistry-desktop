@@ -110,7 +110,7 @@
 	    },
 	    cancel() {
 	      this.$router.push({
-	        path: `/project/${this.projectId}/questionnaire`
+	        path: `/project/${this.projectId}/questionnaire/manage`
 	      })
 	    }
 	  }
