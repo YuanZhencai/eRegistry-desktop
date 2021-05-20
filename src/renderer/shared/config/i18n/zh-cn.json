@@ -120,6 +120,9 @@
       "listofdatachangesorfieldsexported": "导出的数据更改或字段列表"
     }
   },
+  "callCenter": {
+	"called": "拨打成功，请稍后接听来电"
+  },
   "alertSetting": {
 	"saved": "设置成功"
   },
