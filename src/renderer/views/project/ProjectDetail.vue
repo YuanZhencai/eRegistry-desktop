@@ -49,7 +49,7 @@
 						<i class="fa fa-calendar"></i>
 						<span slot="title" class="d-none d-md-inline">随访日历</span>
 					</el-menu-item>
-					<el-menu-item index="log"
+					<el-menu-item index="log" v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId])"
 								  @click="selectMenu('log')">
 						<i class="fa fa-file-text"></i>
 						<span slot="title" class="d-none d-md-inline">日志记录</span>
