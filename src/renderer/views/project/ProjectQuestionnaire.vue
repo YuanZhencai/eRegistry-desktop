@@ -17,7 +17,7 @@
 			</el-col>
 			<el-col :span="12">
 				<div style="display: flex;justify-content: flex-end;">
-					<el-button type="primary" @click="newQuestionnaire">创建问卷</el-button>
+					<el-button type="primary" v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId, 'PROJECT_PATIENT_' + projectId])" @click="newQuestionnaire">创建问卷</el-button>
 					<el-button type="primary" @click="manage">查看问卷</el-button>
 				</div>
 			</el-col>
