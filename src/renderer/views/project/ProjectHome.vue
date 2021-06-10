@@ -1,5 +1,5 @@
 <template>
-  <div class="col-flex h100" style="min-width: 1150px;">
+  <div class="col-flex h100" style="min-width: 1250px;">
     <el-row type="flex" class="row-bg" justify="space-between">
       <el-col :span="6">
         <div class="grid-content bg-purple">
@@ -364,6 +364,9 @@
   }
   .divider-margin{
     margin: 10px 0;
+  }
+  .box-card .el-card__body{
+    padding: 20px 0px;
   }
   .card-body{
     font-size: 12px;
