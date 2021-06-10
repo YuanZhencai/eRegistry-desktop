@@ -103,8 +103,14 @@ export default {
       this.$store.dispatch('ToggleSideBar')
     },
     logout() {
-      this.$store.dispatch('LogOut').then(() => {
-        location.reload() // 为了重新实例化vue-router对象 避免bug
+      const redirectUrl = encodeURIComponent(window.location.href)
+      this.$store.dispatch('LogOut').then((res) => {
+        const logoutUrl = res.data
+        if (logoutUrl) {
+          window.location.href = `${logoutUrl}?redirect_uri=${redirectUrl}`
+        } else {
+          location.reload() // 为了重新实例化vue-router对象 避免bug
+        }
       })
     },
     openHelpPage() {

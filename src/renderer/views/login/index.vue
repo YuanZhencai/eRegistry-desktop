@@ -112,18 +112,18 @@
 								<router-link :to="{path: '/register'}">注册一个新账号</router-link>
 							</el-button>
 						</el-form-item>
-						<el-row class="elRow" v-if="providers && providers.length > 0">
+						<el-row class="elRow" v-if="isWeb && providers && providers.length > 0">
 							<span style="margin-right: 5px">
 								其他方式登录
 							</span>
-							<el-tooltip content="认证中心" placement="bottom" v-for="(provider, index) in providers" :key="index">
+							<el-tooltip :content="provider.name" placement="bottom"
+										v-for="(provider, index) in providers" :key="index">
 								<el-button type="plain" circle @click="oauth(provider)">
 									<div style="width: 20px; height: 20px">
-										<img src="../../assets/20x20.png">
+										<img :src="provider.logo">
 									</div>
 								</el-button>
 							</el-tooltip>
-
 						</el-row>
 					</el-form>
 				</div>
@@ -171,11 +171,14 @@
 	    this.getProviders()
 	  },
 	  methods: {
-	    oauth(source) {
-	      const redirectUrl = encodeURIComponent(window.location.href)
-	      const oauthUrl = `${SERVER_API_URL}oauth/login/${source}?redirectUrl=${redirectUrl}`
-	      console.info('oauthUrl', oauthUrl)
-	      window.location.href = oauthUrl
+	    oauth(provider) {
+	      if (provider.oauthUrl) {
+	        const redirectUrl = encodeURIComponent(window.location.href)
+	        const query = provider.oauthUrl.indexOf('?') > -1 ? '&' : '?'
+	        const oauthUrl = `${SERVER_API_URL}${provider.oauthUrl}${query}redirectUrl=${redirectUrl}`
+	        console.info('oauthUrl', oauthUrl)
+	        window.location.href = oauthUrl
+	      }
 	    },
 	    getProviders() {
 	      getProviders().then(res => {
