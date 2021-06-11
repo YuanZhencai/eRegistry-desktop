@@ -137,14 +137,12 @@ export default {
         img_excel,
         img_csv,
         exportType: '',
-        task: null,
         project: null
       }
     },
     created() {
       this.findProject()
       this.getPatients()
-      this.findCurrentMemberTask()
     },
     mounted() {
       this.$on('patientCaseListModification', function() {
@@ -186,13 +184,6 @@ export default {
           this.form.queryString = null
         }
         this.getPatients()
-      },
-      findCurrentMemberTask() {
-        if (this.$hasAnyAuthority([`PROJECT_PATIENT_${this.projectId}`])) {
-          getCurrentProjectMemberTask(this.projectId).then(res => {
-            this.task = res.data
-          })
-        }
       },
       edit(patient) {
         this.selectedPatient = patient
