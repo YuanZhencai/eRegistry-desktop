@@ -108,7 +108,6 @@
   import PatientDialogComponent from '../patient/PatientDialogComponent'
   import img_excel from '@/assets/excel.png'
   import img_csv from '@/assets/csv.png'
-  import { getCurrentProjectMemberTask } from '@/api/TaskService'
   import { getProject } from '../../api/ProjectService'
   import Incorporation from '../../components/qrcode/Incorporation'
 export default {
