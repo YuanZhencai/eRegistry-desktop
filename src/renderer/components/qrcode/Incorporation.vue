@@ -4,7 +4,12 @@
             title="入组二维码"
             trigger="hover"
             width="200">
-        <el-image :src="url"></el-image>
+        <el-image :src="imageUrl"></el-image>
+		<el-button type="text"
+				   v-download="{'url': url, 'name': '入组二维码.png'}"
+				   icon="el-icon-download">
+			保存二维码
+		</el-button>
         <i class="fa fa-qrcode" slot="reference"></i>
     </el-popover>
 </template>
@@ -19,7 +24,7 @@
     computed: {
       url: function() {
         const name = store.getters && store.getters.name
-        const url = `${SERVER_API_URL}api/qrcode/incorporation`
+        const url = `api/qrcode/incorporation`
         const queries = []
         if (name) {
           queries.push(`chargedBy=${name}`)
@@ -32,6 +37,9 @@
         } else {
           return url
         }
+      },
+      imageUrl: function() {
+        return `${SERVER_API_URL}${this.url}`
       }
     }
   }
