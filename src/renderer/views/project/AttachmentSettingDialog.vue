@@ -8,7 +8,7 @@
 				<el-select placeholder="选择类型"
 						   v-model="attachmentSetting.type">
 					<el-option label="病例" value="PATIENT_CASE"></el-option>
-					<el-option label="随访" value="FOLLOW"></el-option>
+					<el-option label="随访" value="PLAN"></el-option>
 				</el-select>
 			</el-form-item>
 		</el-form>

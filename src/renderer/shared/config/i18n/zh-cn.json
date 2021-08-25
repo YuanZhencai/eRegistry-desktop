@@ -479,6 +479,11 @@
     "tasks": "任务",
     "projectId": "项目"
   },
+  "attachmentSetting":  {
+	"created": "病例附件类型添加成功",
+	"updated": "病例附件类型更新成功",
+	"deleted": "病例附件类型删除成功"
+  },
   "centerMember": {
     "home": {
       "title": "分中心成员",
