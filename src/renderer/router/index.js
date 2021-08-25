@@ -195,6 +195,10 @@ export const constantRouterMap = [
           {
             path: 'meeting',
             component: () => import('@/views/video-meeting/meeting')
+          },
+          {
+            path: 'attachment-setting',
+            component: () => import('@/views/project/ProjectAttachmentSetting')
           }
         ]
       }
