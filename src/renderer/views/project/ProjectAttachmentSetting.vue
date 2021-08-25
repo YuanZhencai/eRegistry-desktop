@@ -24,6 +24,9 @@
 				<el-table-column prop='type'
 								 label='类型'
 								 sortable="custom">
+					<template slot-scope="scope">
+						{{typeMapping[scope.row.type]}}
+					</template>
 				</el-table-column>
 				<el-table-column prop='lastModifiedBy' label='修改人' sortable="custom">
 				</el-table-column>
@@ -70,6 +73,10 @@
 	  data() {
 	    const projectId = this.$route.params.projectId
 	    return {
+	      typeMapping: {
+	        'PATIENT_CASE': '病例',
+	        'PLAN': '随访'
+	      },
 	      loading: false,
 	      isSaving: false,
 	      predicate: '',
