@@ -23,7 +23,7 @@
                                @click="exportPatient">导出
                     </el-button>
                     <el-button type="primary" size="mini" icon="el-icon-plus"
-                               v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])"
+                               v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_DOCTOR_' + projectId, 'PROJECT_PATIENT_' + projectId, 'PROJECT_FOLLOWER_' + projectId])"
                                @click="newPatient">新建患者
 						<incorporation :project-id="projectId"></incorporation>
                     </el-button>
@@ -62,7 +62,7 @@
                         <span>操作</span>
                     </template>
                     <template slot-scope="scope"
-                              v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
+                              v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_DOCTOR_' + projectId, 'PROJECT_PATIENT_' + projectId, 'PROJECT_FOLLOWER_' + projectId])">
                         <el-button type="text" @click="edit(scope.row)">编辑</el-button>
                     </template>
                 </el-table-column>
