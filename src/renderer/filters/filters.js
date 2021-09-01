@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { formatDate } from '../utils/date'
 import { SERVER_API_URL } from '../constants'
 import { extension } from '../utils'
+import { formatAttachmentUrl } from '../api/AttachmentService'
 
 export function initFilters() {
   Vue.filter('formatDate', function(val, pattern) {
@@ -14,6 +15,10 @@ export function initFilters() {
 
   Vue.filter('qrcode', function(url) {
     return `${SERVER_API_URL}api/qrcode?uri=${encodeURIComponent(url)}`
+  })
+
+  Vue.filter('attachmentUrl', function(attachmentId) {
+    return formatAttachmentUrl(attachmentId)
   })
 
   Vue.filter('extension', function(path) {

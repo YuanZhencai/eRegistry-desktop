@@ -68,16 +68,6 @@
                         申请数据变更
                     </el-button>
                 </template>
-                <template v-if="timeline && timeline.patient && name === timeline.patient.username && 'development' === env">
-                    <el-button type="primary" v-if="report">
-                        <router-link :to="{ name:'fill-case',query:{
-                          patientId: timeline.patient.id,
-                          projectId: projectId,
-                          reportId: report.id,
-                          caseId: patientCase.id,
-                        } }">填写病例</router-link>
-                    </el-button>
-                </template>
             </div>
         </el-row>
         <el-row :gutter="15">
