@@ -106,7 +106,7 @@ export default {
       const redirectUrl = encodeURIComponent(window.location.href)
       this.$store.dispatch('LogOut').then((res) => {
         const logoutUrl = res.data
-        if (logoutUrl) {
+        if (this.isWeb && logoutUrl) {
           window.location.href = `${logoutUrl}?redirect_uri=${redirectUrl}`
         } else {
           location.reload() // 为了重新实例化vue-router对象 避免bug
