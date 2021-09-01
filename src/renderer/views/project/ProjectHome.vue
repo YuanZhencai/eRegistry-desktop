@@ -151,7 +151,7 @@
                     <span>
                   {{member.username}}
                   <template v-if="member.task">
-                    (<span>{{TaskType[member.task]}}</span>)
+                    (<span>{{taskType[member.task]}}</span>)
                   </template>
                 </span>
                   </el-col>
@@ -250,9 +250,11 @@
         changes: [],
         patientOption: null,
         planOption: null,
-        TaskType: {
+        taskType: {
           null: '',
           PATIENT: '录入',
+          DOCTOR: '医生',
+          FOLLOWER: '随访专员',
           MASTER: '管理',
           AUDIT: '审核',
           VIEW: '查看',
