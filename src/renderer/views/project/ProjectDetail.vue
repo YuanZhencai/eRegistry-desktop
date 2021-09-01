@@ -30,16 +30,19 @@
 						<span slot="title" class="d-none d-md-inline">患者调查</span>
 					</el-menu-item>
 					<el-menu-item index="member"
+								  v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])"
 								  @click="selectMenu('member')">
 						<i class="fa fa-users"></i>
 						<span slot="title" class="d-none d-md-inline">项目成员</span>
 					</el-menu-item>
 					<el-menu-item index="center"
+								  v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])"
 								  @click="selectMenu('center')">
 						<i class="fa fa-hospital-o"></i>
 						<span slot="title" class="d-none d-md-inline">项目中心</span>
 					</el-menu-item>
 					<el-menu-item index="plan"
+								  v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId, 'PROJECT_PATIENT_' + projectId])"
 								  @click="selectMenu('plan')">
 						<i class="fa fa-medkit"></i>
 						<span slot="title" class="d-none d-md-inline">随访计划</span>
