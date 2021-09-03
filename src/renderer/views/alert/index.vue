@@ -5,7 +5,12 @@
 			<el-table v-loading="loading" stripe :data='events' @sort-change="changeOrder" style='width: 100%'>
 				<el-table-column prop='id' label='事件ID' sortable="custom"></el-table-column>
 				<el-table-column prop='title' label='标题' sortable="custom" :show-overflow-tooltip="true"></el-table-column>
-				<el-table-column prop='content' label='告警内容' sortable="custom" :show-overflow-tooltip="true"></el-table-column>
+				<el-table-column prop='question' label='问题' sortable="custom" :show-overflow-tooltip="true"></el-table-column>
+				<el-table-column prop='content' label='告警内容' sortable="custom" :show-overflow-tooltip="true">
+					<template slot-scope="scope">
+						<span :class="scope.row.type">{{scope.row.content}}</span>
+					</template>
+				</el-table-column>
 				<el-table-column prop='submitter' label='填写人'>
 					<template slot-scope="scope">
 						<span v-if="scope.row.patientName">{{scope.row.patientName}}</span>
@@ -20,8 +25,9 @@
 					<template slot-scope="scope">{{scope.row.handleDate | formatDate('YYYY-MM-DD HH:mm')}}</template>
 				</el-table-column>
 				<el-table-column label="操作">
-					<template slot-scope="scope">
+					<template slot-scope="scope" >
 						<el-button type="text" @click="view(scope.row)">查看</el-button>
+						<el-button type="text" v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId])" @click="remove(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -42,6 +48,7 @@
 
 <script>
 	import {
+	  deleteAlertEvent,
 	  getProjectAlertEvents
 	} from '../../api/AlertService'
 
@@ -53,7 +60,7 @@
 	      projectId: projectId,
 	      loading: false,
 	      isSaving: false,
-	      predicate: 'date',
+	      predicate: 'id',
 	      order: 'descending',
 	      events: [],
 	      total: 0,
@@ -92,6 +99,19 @@
 	    view(event) {
 	      this.$router.push({
 	        path: `/project/${this.projectId}/event/${event.id}`
+	      })
+	    },
+	    remove(event) {
+	      this.$confirm('确认要删除告警事件？', '提示', {
+	        confirmButtonText: '确定',
+	        cancelButtonText: '取消',
+	        type: 'warning'
+	      }).then(() => {
+	        deleteAlertEvent(event.id)
+	          .then(() => {
+	            this.getEvents()
+	          })
+	      }).catch(() => {
 	      })
 	    }
 	  }

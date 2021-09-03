@@ -127,7 +127,8 @@
 	"saved": "设置成功"
   },
   "alertEvent": {
-	"handled": "处理成功"
+	"handled": "处理成功",
+	"deleted": "删除成功"
   },
   "audit": {
     "home": {

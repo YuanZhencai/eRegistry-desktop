@@ -125,7 +125,11 @@
 					  </el-col>
                     </el-row>
                     <el-row>
-                      <el-col :span="24"><div class=" " style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">{{scope.row.content}}</div></el-col>
+                      <el-col :span="24">
+						  <div class=" " style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">
+							  <span style="margin-right: 5px">{{scope.row.question}}</span><span :class="scope.row.type">{{scope.row.content}}</span>
+						  </div>
+					  </el-col>
                     </el-row>
                     <el-row>
                       <el-col :span="12"><div class=" " style="color: #6c757d;margin-top: 5px;">{{scope.row.patientName ? scope.row.patientName: scope.row.submitter}}</div></el-col>
@@ -383,4 +387,5 @@
     bottom: 0;
     width: 100%;
   }
+
 </style>
