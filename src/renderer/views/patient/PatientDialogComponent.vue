@@ -40,7 +40,7 @@
 </template>
 
 <script>
-  import { getPatient, createPatient, updatePatient } from '@/api/PatientService'
+  import { getSensitiveIgnorePatient, createPatient, updatePatient } from '@/api/PatientService'
   const codes = require('./pca-code.json')
   export default {
     name: 'PatientDialogComponent',
@@ -65,12 +65,13 @@
       }
     },
     methods: {
-      show(patientId) {
+      show(projectId, patientId) {
         this.patient = { name: '' }
         this.provinceCity = []
         this.options = JSON.parse(JSON.stringify(codes))
         this.display = true
         this.patientId = patientId
+        this.projectId = projectId
         this.findPatient()
         return new Promise((resolve, reject) => {
           this.resolve = resolve
@@ -78,8 +79,8 @@
         })
       },
       findPatient() {
-        if (this.patientId) {
-          getPatient(this.patientId).then(res => {
+        if (this.projectId && this.patientId) {
+          getSensitiveIgnorePatient(this.projectId, this.patientId).then(res => {
             this.patient = res.data
             const cityList = []
             if (this.patient.province) {

@@ -2,7 +2,9 @@
 	<el-col :span="24">
 		<el-row>
 			<h3 class="no-margin-top">
-				{{patient.name}}<small style="margin-left: 10px;">{{patient.sex}}</small>
+				<span>{{firstName}}</span>
+				<span class="pointer" @click="getSensitiveIgnorePatient">{{lastName}}</span>
+				<small style="margin-left: 10px;">{{patient.sex}}</small>
 			</h3>
 		</el-row>
 		<el-row :gutter="10">
@@ -48,6 +50,29 @@
 	      }
 	    }
 	  },
+	  computed: {
+	    firstName: function() {
+	      if (this.patient && this.patient.name && this.patient.name.length > 0) {
+	        return this.patient.name.substring(0, 1)
+	      } else {
+	        return ''
+	      }
+	    },
+	    lastName: function() {
+	      if (this.patient && this.patient.name && this.patient.name.length > 0) {
+	        return this.patient.name.substring(1, this.patient.name.length)
+	      } else {
+	        return ''
+	      }
+	    }
+	  },
+	  data() {
+	    return {
+	      ignore: false
+	    }
+	  },
+	  mounted() {
+	  },
 	  methods: {
 	    call() {
 	      callPatient({
@@ -56,11 +81,17 @@
 	      }).then(res => {
 
 	      })
+	    },
+	    getSensitiveIgnorePatient() {
+	      this.ignore = !this.ignore
+	      this.$emit('getSensitiveIgnorePatient', this.ignore)
 	    }
 	  }
 	}
 </script>
 
 <style scoped>
-
+	.pointer {
+		cursor: pointer;
+	}
 </style>

@@ -62,7 +62,7 @@
                         <span>操作</span>
                     </template>
                     <template slot-scope="scope"
-                              v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_DOCTOR_' + projectId, 'PROJECT_PATIENT_' + projectId, 'PROJECT_FOLLOWER_' + projectId])">
+                              v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_DOCTOR_' + projectId, 'PROJECT_PATIENT_' + projectId])">
                         <el-button type="text" @click="edit(scope.row)">编辑</el-button>
                     </template>
                 </el-table-column>
@@ -186,7 +186,7 @@ export default {
       },
       edit(patient) {
         this.selectedPatient = patient
-        this.$refs['patient-dialog'].show(this.selectedPatient.id).then((res) => {
+        this.$refs['patient-dialog'].show(this.projectId, this.selectedPatient.id).then((res) => {
           this.getPatients()
         }, () => {})
       },

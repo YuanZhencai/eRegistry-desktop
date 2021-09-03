@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row>
-            <patient-info :patient="timeline.patient"></patient-info>
+            <patient-info :patient="timeline.patient" @getSensitiveIgnorePatient="getSensitiveIgnorePatient"></patient-info>
         </el-row>
         <el-row style="margin-bottom: 10px">
             <div class="float-right" v-if="timeline">
@@ -104,6 +104,7 @@
   import ApplyDataChangeDialog from './ApplyDataChangeDialog'
   import AuditChangeDialog from './AuditChangeDialog'
   import { mapGetters } from 'vuex'
+  import { getPatient, getSensitiveIgnorePatient } from '../../api/PatientService'
 export default {
     name: 'PatientDetail',
     components: { AuditChangeDialog, ApplyDataChangeDialog, WithdrawalAuditDialog, RecordAuditDialog, AuditComponent, Timeline, SurveyView, PatientInfo },
@@ -146,6 +147,17 @@ export default {
       this.findTimeline()
     },
     methods: {
+      getSensitiveIgnorePatient(ignore) {
+        if (ignore) {
+          getSensitiveIgnorePatient(this.projectId, this.patientId).then(res => {
+            this.timeline.patient = res.data
+          })
+        } else {
+          getPatient(this.patientId).then(res => {
+            this.timeline.patient = res.data
+          })
+        }
+      },
       mode() {
         return this.isRegister ? null : 'display'
       },
