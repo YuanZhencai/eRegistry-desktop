@@ -11,6 +11,16 @@
 					<el-option label="随访" value="PLAN"></el-option>
 				</el-select>
 			</el-form-item>
+			<el-form-item label="示例" prop="sampleUrl">
+				<el-input v-model="attachmentSetting.sampleUrl"></el-input>
+				<el-image style="width: 100px; height: 100px; margin-top: 5px"
+						  :src="attachmentSetting.sampleUrl"
+						  :preview-src-list="[attachmentSetting.sampleUrl]">
+					<div slot="error" class="image-slot">
+						<i class="el-icon-picture-outline"></i>
+					</div>
+				</el-image>
+			</el-form-item>
 		</el-form>
 		<div slot="footer" class="dialog-footer">
 			<el-button size="mini" @click="cancel">取 消</el-button>
@@ -36,6 +46,9 @@
 	        ],
 	        type: [
 	          { required: true, message: '请输入类型', trigger: 'change' }
+	        ],
+	        sampleUrl: [
+	          { max: 500, message: '长度最大为500个字符', trigger: 'change' }
 	        ]
 	      },
 	      attachmentSetting: { title: null },

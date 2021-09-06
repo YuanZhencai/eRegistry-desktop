@@ -125,7 +125,11 @@
 					  </el-col>
                     </el-row>
                     <el-row>
-                      <el-col :span="24"><div class=" " style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">{{scope.row.content}}</div></el-col>
+                      <el-col :span="24">
+						  <div class=" " style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">
+							  <span style="margin-right: 5px">{{scope.row.question}}</span><span :class="scope.row.type">{{scope.row.content}}</span>
+						  </div>
+					  </el-col>
                     </el-row>
                     <el-row>
                       <el-col :span="12"><div class=" " style="color: #6c757d;margin-top: 5px;">{{scope.row.patientName ? scope.row.patientName: scope.row.submitter}}</div></el-col>
@@ -151,7 +155,7 @@
                     <span>
                   {{member.username}}
                   <template v-if="member.task">
-                    (<span>{{TaskType[member.task]}}</span>)
+                    (<span>{{taskType[member.task]}}</span>)
                   </template>
                 </span>
                   </el-col>
@@ -250,9 +254,11 @@
         changes: [],
         patientOption: null,
         planOption: null,
-        TaskType: {
+        taskType: {
           null: '',
           PATIENT: '录入',
+          DOCTOR: '医生',
+          FOLLOWER: '随访专员',
           MASTER: '管理',
           AUDIT: '审核',
           VIEW: '查看',
@@ -381,4 +387,5 @@
     bottom: 0;
     width: 100%;
   }
+
 </style>

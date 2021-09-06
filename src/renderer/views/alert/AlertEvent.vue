@@ -9,8 +9,11 @@
 					<el-form-item label="标题">
 						<span>{{alertEvent.title}}</span>
 					</el-form-item>
+					<el-form-item label="问题">
+						<span>{{alertEvent.question}}</span>
+					</el-form-item>
 					<el-form-item label="告警内容">
-						<span>{{alertEvent.content}}</span>
+						<span :class="alertEvent.type">{{alertEvent.content}}</span>
 					</el-form-item>
 					<el-form-item label="填写人">
 						<el-button type="text" v-if="alertEvent.patientName" @click="viewPatient">
@@ -56,7 +59,6 @@
 	      alertEvent: null,
 	      rules: {
 	        handleDesc: [
-	          { required: true, message: '请输入处理描述', trigger: 'change' },
 	          { max: 500, message: '不能超过 500 个字符', trigger: 'blur' }
 	        ]
 	      }

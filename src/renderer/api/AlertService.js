@@ -20,6 +20,10 @@ export function getAlertEvent(eventId) {
   return axios.get(`api/alert-events/${eventId}`)
 }
 
+export function deleteAlertEvent(eventId) {
+  return axios.delete(`api/alert-events/${eventId}`)
+}
+
 export function handleAlertEvent(event) {
   return axios.put(`api/alert-events/handle`, event)
 }

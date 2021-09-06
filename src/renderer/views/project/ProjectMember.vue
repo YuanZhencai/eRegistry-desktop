@@ -115,6 +115,8 @@ export default {
       taskType: {
         null: '',
         PATIENT: '录入',
+        DOCTOR: '医生',
+        FOLLOWER: '随访专员',
         MASTER: '管理',
         AUDIT: '审核',
         VIEW: '查看',

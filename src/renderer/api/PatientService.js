@@ -15,6 +15,13 @@ export function getPatient(id) {
   })
 }
 
+export function getSensitiveIgnorePatient(projectId, patientId) {
+  return axios({
+    url: `api/projects/${projectId}/patient/${patientId}/sensitive-ignore`,
+    method: 'get'
+  })
+}
+
 export function deletePatient(id) {
   return axios({
     url: `api/patient/${id}`,

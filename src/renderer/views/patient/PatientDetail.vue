@@ -1,11 +1,11 @@
 <template>
     <div>
         <el-row>
-            <patient-info :patient="timeline.patient"></patient-info>
+            <patient-info :patient="timeline.patient" @getSensitiveIgnorePatient="getSensitiveIgnorePatient"></patient-info>
         </el-row>
         <el-row style="margin-bottom: 10px">
             <div class="float-right" v-if="timeline">
-                <template v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_AUDIT_' + projectId])">
+                <template v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_DOCTOR_' + projectId, 'PROJECT_AUDIT_' + projectId])">
                     <el-dropdown trigger="hover" v-if="!follow && patientCase && 'SUBMITTED' === patientCase.state">
                         <el-button type="primary" size="mini">
                             审核病例<i class="el-icon-arrow-down el-icon--right"></i>
@@ -46,7 +46,7 @@
                         </el-dropdown-menu>
                     </el-dropdown>
                 </template>
-                <template v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
+                <template v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_DOCTOR_' + projectId, 'PROJECT_PATIENT_' + projectId, 'PROJECT_FOLLOWER_' + projectId])">
                     <el-button type="primary" size="mini"
                                v-if="!follow && patientCase && 'SUBMITTED' === patientCase.state"
                                @click="withdrawalAudit('PATIENT_CASE')">
@@ -66,16 +66,6 @@
                                v-if="!patientCase && follow && 'APPROVED' === follow.state"
                                @click="applyChangeData('FOLLOW')">
                         申请数据变更
-                    </el-button>
-                </template>
-                <template v-if="timeline && timeline.patient && name === timeline.patient.username && 'development' === env">
-                    <el-button type="primary" v-if="report">
-                        <router-link :to="{ name:'fill-case',query:{
-                          patientId: timeline.patient.id,
-                          projectId: projectId,
-                          reportId: report.id,
-                          caseId: patientCase.id,
-                        } }">填写病例</router-link>
                     </el-button>
                 </template>
             </div>
@@ -114,6 +104,7 @@
   import ApplyDataChangeDialog from './ApplyDataChangeDialog'
   import AuditChangeDialog from './AuditChangeDialog'
   import { mapGetters } from 'vuex'
+  import { getPatient, getSensitiveIgnorePatient } from '../../api/PatientService'
 export default {
     name: 'PatientDetail',
     components: { AuditChangeDialog, ApplyDataChangeDialog, WithdrawalAuditDialog, RecordAuditDialog, AuditComponent, Timeline, SurveyView, PatientInfo },
@@ -149,11 +140,24 @@ export default {
     created() {
       this.isRegister = this.$hasAnyAuthority([
         'PROJECT_ADMIN_' + this.projectId,
-        'PROJECT_PATIENT_' + this.projectId
+        'PROJECT_DOCTOR_' + this.projectId,
+        'PROJECT_PATIENT_' + this.projectId,
+        'PROJECT_FOLLOWER_' + this.projectId
       ])
       this.findTimeline()
     },
     methods: {
+      getSensitiveIgnorePatient(ignore) {
+        if (ignore) {
+          getSensitiveIgnorePatient(this.projectId, this.patientId).then(res => {
+            this.timeline.patient = res.data
+          })
+        } else {
+          getPatient(this.patientId).then(res => {
+            this.timeline.patient = res.data
+          })
+        }
+      },
       mode() {
         return this.isRegister ? null : 'display'
       },

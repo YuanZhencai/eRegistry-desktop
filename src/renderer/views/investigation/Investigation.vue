@@ -66,9 +66,9 @@
 					</div>
 					<div class="card-panel-description">
 						<div class="card-panel-text">
-							告警数
+							中风险
 						</div>
-						<count-to :start-val="0" :end-val="questionnaireSum.alert" :duration="3200"
+						<count-to :start-val="0" :end-val="questionnaireSum.warn" :duration="3200"
 								  class="card-panel-num"/>
 					</div>
 				</div>
@@ -76,13 +76,13 @@
 			<el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
 				<div class="card-panel" @click="toEvents">
 					<div class="card-panel-icon-wrapper icon-shopping">
-						<svg-icon icon-class="done" class-name="card-panel-icon"/>
+						<svg-icon icon-class="error" class-name="card-panel-icon"/>
 					</div>
 					<div class="card-panel-description">
 						<div class="card-panel-text">
-							已处理
+							高风险
 						</div>
-						<count-to :start-val="0" :end-val="questionnaireSum.done" :duration="3600"
+						<count-to :start-val="0" :end-val="questionnaireSum.error" :duration="3600"
 								  class="card-panel-num"/>
 					</div>
 				</div>
@@ -355,11 +355,11 @@
 				}
 
 				.icon-money {
-					background: #f4516c;
+					background: #E6A23C;
 				}
 
 				.icon-shopping {
-					background: #34bfa3
+					background: #F56C6C
 				}
 			}
 
@@ -372,11 +372,11 @@
 			}
 
 			.icon-money {
-				color: #f4516c;
+				color: #E6A23C;
 			}
 
 			.icon-shopping {
-				color: #34bfa3
+				color: #F56C6C
 			}
 
 			.card-panel-icon-wrapper {
