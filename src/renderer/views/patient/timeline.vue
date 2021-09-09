@@ -109,8 +109,7 @@ export default {
         })
       },
       openPatientAttachmentDialog(step) {
-        const projectId = this.timeline.patient.projectId
-        this.$refs['patient-attachment-dialog'].show(projectId, step.patientId, step.planId).then(() => {
+        this.$refs['patient-attachment-dialog'].show(step.patientId, step.planId).then(() => {
         }, () => {
         })
       }

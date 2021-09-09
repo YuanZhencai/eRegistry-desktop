@@ -17,8 +17,8 @@ export function deleteAttachmentSetting(settingId) {
   return axios.delete(`api/attachment-settings/${settingId}`)
 }
 
-export function getAttachments(params) {
-  return axios.get(`api/attachments`, { params: params })
+export function getPatientAttachments(patientId, planId) {
+  return axios.get(`api/patients/${patientId}/attachments`, { params: { planId: planId }})
 }
 
 export function formatAttachmentUrl(attachmentId) {

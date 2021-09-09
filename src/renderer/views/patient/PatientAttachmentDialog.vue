@@ -14,14 +14,13 @@
 			</div>
 		</div>
 		<div slot="footer" class="dialog-footer">
-			<el-button size="mini" @click="cancel">取 消</el-button>
-			<el-button size="mini" type="primary" @click="confirm">确 定</el-button>
+			<el-button size="mini" @click="cancel">关闭</el-button>
 		</div>
 	</el-dialog>
 </template>
 
 <script>
-	import { formatAttachmentUrl, getAttachments } from '../../api/AttachmentService'
+	import { formatAttachmentUrl, getPatientAttachments } from '../../api/AttachmentService'
 
 	export default {
 	  name: 'PatientAttachmentDialog',
@@ -35,9 +34,9 @@
 	    }
 	  },
 	  methods: {
-	    show(projectId, patientId, planId) {
+	    show(patientId, planId) {
 	      this.display = true
-	      this.getAttachments(projectId, patientId, planId)
+	      this.getAttachments(patientId, planId)
 	      return new Promise((resolve, reject) => {
 	        this.resolve = resolve
 	        this.reject = reject
@@ -62,16 +61,8 @@
 	      this.resolve('confirm')
 	      this.clear()
 	    },
-	    getAttachments(projectId, patientId, planId) {
-	      let params = {
-	        'EQ_attachment.projectId': projectId
-	      }
-	      if (planId) {
-	        params['EQ_attachment.planId'] = planId
-	      } else if (patientId) {
-	        params['EQ_attachment.patientId'] = patientId
-	      }
-	      getAttachments(params).then(res => {
+	    getAttachments(patientId, planId) {
+	      getPatientAttachments(patientId, planId).then(res => {
 	        let titles = {}
 	        this.attachments = res.data.sort(function(x, y) {
 	          if (x.settingId < y.settingId) {
