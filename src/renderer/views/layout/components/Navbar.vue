@@ -8,7 +8,6 @@
           <i class="el-icon-question" @click="openHelpPage" style="cursor: pointer"></i>
         </el-tooltip>
       </div>
-      <remind-component class="right-menu-item"></remind-component>
       <div class="right-menu-item" v-if="!isWeb">
         <export-history></export-history>
       </div>
