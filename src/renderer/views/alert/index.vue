@@ -2,7 +2,12 @@
 	<div>
 		<el-row>
 			<el-table v-loading="loading" stripe :data='events' @sort-change="changeOrder" style='width: 100%'>
-				<el-table-column prop='id' label='事件ID' sortable="custom"></el-table-column>
+				<el-table-column label='风险程度' width="95" align="center">
+          <template slot-scope="scope">
+            <span v-if="scope.row.type === 'WARN'"><svg-icon icon-class="alert" :class="scope.row.type" class-name="card-panel-icon"/></span>
+            <span v-if="scope.row.type === 'ERROR'"><svg-icon icon-class="error" :class="scope.row.type" class-name="card-panel-icon"/></span>
+          </template>
+        </el-table-column>
 				<el-table-column prop='title' label='标题' sortable="custom" :show-overflow-tooltip="true"></el-table-column>
 				<el-table-column prop='question' label='问题' sortable="custom" :show-overflow-tooltip="true"></el-table-column>
 				<el-table-column prop='content' label='告警内容' sortable="custom" :show-overflow-tooltip="true">
@@ -81,7 +86,6 @@
 	      }).then((response) => {
 	        this.loading = false
 	        this.events = response.data
-	        console.log(this.events)
 	        this.total = Number(response.headers['x-total-count'])
 	      })
 	    },
