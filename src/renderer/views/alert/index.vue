@@ -2,8 +2,9 @@
 	<div>
 		<el-row>
 			<el-table v-loading="loading" stripe :data='events' @sort-change="changeOrder" style='width: 100%'>
-				<el-table-column label='风险程度' width="95" align="center">
+				<el-table-column label='风险程度' width="95" align="center" sortable="custom">
           <template slot-scope="scope">
+            <span v-if="scope.row.type === 'OTHER'"><svg-icon icon-class="info" class-name="card-panel-icon"/></span>
             <span v-if="scope.row.type === 'WARN'"><svg-icon icon-class="alert" :class="scope.row.type" class-name="card-panel-icon"/></span>
             <span v-if="scope.row.type === 'ERROR'"><svg-icon icon-class="error" :class="scope.row.type" class-name="card-panel-icon"/></span>
           </template>
@@ -86,6 +87,7 @@
 	      }).then((response) => {
 	        this.loading = false
 	        this.events = response.data
+	        console.log(this.events)
 	        this.total = Number(response.headers['x-total-count'])
 	      })
 	    },
