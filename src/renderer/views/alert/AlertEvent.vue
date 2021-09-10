@@ -3,11 +3,8 @@
 		<el-row>
 			<el-col :span="12">
 				<el-form ref="form" v-if="alertEvent" :model="alertEvent" :rules="rules" label-width="80px">
-					<el-form-item label="事件ID">
-						<span>{{alertEvent.id}}</span>
-					</el-form-item>
 					<el-form-item label="标题">
-						<span>{{alertEvent.title}}</span>
+						<span :class="alertEvent.type">{{alertEvent.title}}</span>
 					</el-form-item>
 					<el-form-item label="问题">
 						<span>{{alertEvent.question}}</span>
@@ -27,9 +24,16 @@
 					<el-form-item label="填表时间">
 						<span>{{alertEvent.date | formatDate('YYYY-MM-DD HH:mm')}}</span>
 					</el-form-item>
-					<el-form-item label="处理描述" prop="handleDesc">
-						<el-input type="textarea" v-model="alertEvent.handleDesc"></el-input>
+					<el-form-item label="处理描述">
+            <el-radio-group v-model="alertEvent.handleType">
+              <el-radio label="无处理"></el-radio>
+              <el-radio label="一般处理(注意膳食、运动、心情调节)"></el-radio>
+              <el-radio label="医疗处理(门诊、住院)"></el-radio>
+            </el-radio-group>
 					</el-form-item>
+          <el-form-item label="备注" prop="handleDesc">
+              <el-input type="textarea" v-model="alertEvent.handleDesc"></el-input>
+          </el-form-item>
 					<el-form-item label="处理时间" v-if="alertEvent.handleDate">
 						<span>{{alertEvent.handleDate | formatDate('YYYY-MM-DD HH:mm')}}</span>
 					</el-form-item>
@@ -38,7 +42,6 @@
 						<el-button @click="cancel">取消</el-button>
 					</el-form-item>
 				</el-form>
-
 			</el-col>
 		</el-row>
 	</div>
@@ -83,7 +86,8 @@
 	        if (valid) {
 	          handleAlertEvent({
 	            eventId: this.alertEvent.id,
-	            desc: this.alertEvent.handleDesc
+	            desc: this.alertEvent.handleDesc,
+	            type: this.alertEvent.handleType
 	          }).then(res => {
 	            this.cancel()
 	            this.setting = res.data

@@ -5,6 +5,8 @@ import VueAxios from 'vue-axios'
 import { hasAnyAuthority } from '../security/security'
 import VueI18n from 'vue-i18n'
 import CustomFormatter from './formatter'
+import ECharts from 'vue-echarts'
+import walden from '../../utils/default.project.json'
 
 export function initVueApp(vue) {
   vue.use(VueAxios, axios)
@@ -12,6 +14,10 @@ export function initVueApp(vue) {
   vue.prototype.$hasAnyAuthority = hasAnyAuthority
   directives.initDirectives()
   filters.initFilters()
+}
+
+export function initEcharts(vue) {
+  ECharts.registerTheme('walden', walden)
 }
 
 const dateTimeFormats = {

@@ -32,6 +32,7 @@ Vue.use(Icon)
 Vue.config.productionTip = false
 
 config.initVueApp(Vue)
+config.initEcharts(Vue)
 
 const i18n = config.initI18N(Vue)
 

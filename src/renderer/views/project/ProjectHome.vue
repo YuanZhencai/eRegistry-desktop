@@ -88,7 +88,7 @@
                   </div>
                   <div class="clearfix"></div>
                   <div class="chart-container" :style="{height: 'calc(100% - 33px)' }" v-if="patientOption">
-                    <v-chart :options="patientOption" autoresize style="width: 100%; height: 100%;"></v-chart>
+                    <v-chart :options="patientOption" :theme="'walden'" autoresize style="width: 100%; height: 100%;"></v-chart>
                   </div>
                 </div>
               </el-card>
@@ -99,7 +99,7 @@
                   <span>随访数据</span>
                 </div>
                 <div class="chart-container h100" v-if="planOption">
-                  <v-chart :options="planOption" autoresize style="width: 100%; height: 100%;"></v-chart>
+                  <v-chart :options="planOption" :theme="'walden'" autoresize style="width: 100%; height: 100%;"></v-chart>
                 </div>
               </el-card>
             </el-row>
