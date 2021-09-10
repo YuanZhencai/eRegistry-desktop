@@ -1,5 +1,4 @@
 <template>
-
 	<div>
 		<el-row>
 			<el-table v-loading="loading" stripe :data='events' @sort-change="changeOrder" style='width: 100%'>
@@ -20,7 +19,8 @@
 				<el-table-column prop='date' label='填表时间' sortable="custom">
 					<template slot-scope="scope">{{scope.row.date | formatDate('YYYY-MM-DD HH:mm')}}</template>
 				</el-table-column>
-				<el-table-column prop='handleDesc' label='处理描述' sortable="custom" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop='handleType' label='处理描述' sortable="custom" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop='handleDesc' label='备注' sortable="custom" :show-overflow-tooltip="true"></el-table-column>
 				<el-table-column prop='handleDate' label='处理时间' sortable="custom">
 					<template slot-scope="scope">{{scope.row.handleDate | formatDate('YYYY-MM-DD HH:mm')}}</template>
 				</el-table-column>
@@ -81,6 +81,7 @@
 	      }).then((response) => {
 	        this.loading = false
 	        this.events = response.data
+	        console.log(this.events)
 	        this.total = Number(response.headers['x-total-count'])
 	      })
 	    },
