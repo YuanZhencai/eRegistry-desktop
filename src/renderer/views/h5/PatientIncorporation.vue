@@ -41,7 +41,7 @@
 			</el-form-item>
 			<el-form-item>
 				<el-checkbox v-if="project && project.agreeUrl" v-model="checked">
-					<el-link type="primary" :href="project.agreeUrl">知情同意书</el-link>
+          <el-button type="text" @click="dialogVisible = true">知情同意书</el-button>
 				</el-checkbox>
 			</el-form-item>
 			<el-form-item>
@@ -49,6 +49,18 @@
 				<el-button type="primary" v-if="project.agreeUrl && '' !== project.agreeUrl" :disabled="!checked" @click="incorporationPatient('patientForm')">确定</el-button>
 			</el-form-item>
 		</el-form>
+    <el-dialog
+      title="知情同意书"
+      v-if="project.agreeUrl"
+      :visible.sync="dialogVisible"
+      width="80%"
+      class="dialogPadding"
+      :before-close="handleClose">
+      <div><iframe style="border:none;" width="100%" height="300px" :src="project.agreeUrl"></iframe></div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false">确 认</el-button>
+      </span>
+    </el-dialog>
 	</div>
 </template>
 <script>
@@ -81,7 +93,8 @@
 	      project: {
 	        'agreeUrl': null
 	      },
-	      checked: false
+	      checked: true,
+	      dialogVisible: true
 	    }
 	  },
 	  mounted() {
@@ -92,6 +105,9 @@
 	  methods: {
 	    show() {
 
+	    },
+	    handleClose(done) {
+	      done()
 	    },
 	    getProject() {
 	      getProject(this.projectId).then(res => {
@@ -143,6 +159,8 @@
 	}
 </script>
 
-<style scoped>
-
+<style>
+  .dialogPadding .el-dialog__body{
+    padding: 0 10px!important;
+  }
 </style>
