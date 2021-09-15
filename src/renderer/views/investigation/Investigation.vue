@@ -181,8 +181,8 @@
 	      questionnaireSum: {
 	        investigation: 0,
 	        patient: 0,
-	        alert: 0,
-	        done: 0
+	        warn: 0,
+	        error: 0
 	      }
 	    }
 	  },
