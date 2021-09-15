@@ -54,8 +54,9 @@
       v-if="project.agreeUrl"
       :visible.sync="dialogVisible"
       width="80%"
+      class="dialogPadding"
       :before-close="handleClose">
-      <span><iframe style="border:none;" width="100%" :src="project.agreeUrl"></iframe></span>
+      <div><iframe style="border:none;" width="100%" height="300px" :src="project.agreeUrl"></iframe></div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogVisible = false">确 认</el-button>
       </span>
@@ -158,6 +159,8 @@
 	}
 </script>
 
-<style scoped>
-
+<style>
+  .dialogPadding .el-dialog__body{
+    padding: 0 10px!important;
+  }
 </style>
