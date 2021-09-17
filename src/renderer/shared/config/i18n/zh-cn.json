@@ -130,6 +130,10 @@
 	"handled": "处理成功",
 	"deleted": "删除成功"
   },
+  "agreement": {
+	"created": "保存成功",
+	"updated": "保存成功"
+  },
   "audit": {
     "home": {
       "title": "审核",

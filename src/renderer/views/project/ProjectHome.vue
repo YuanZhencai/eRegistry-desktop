@@ -178,10 +178,13 @@
                            v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
                   <router-link :to="{ path: `/project/${projectId}/report`, params: {projectId} }">CRF</router-link>
                 </el-button>
-				  <el-button type="text"
-							 v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">
-					  <router-link :to="{ path: `/project/${projectId}/attachment-setting`, params: {projectId} }">病例附件管理</router-link>
-				  </el-button>
+                <el-button type="text"
+                     v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">
+                  <router-link :to="{ path: `/project/${projectId}/attachment-setting`, params: {projectId} }">病例附件管理</router-link>
+                </el-button>
+                <el-button type="text" v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">
+                  <router-link :to="{ path: `/project/${projectId}/informed-consent` }">知情同意书</router-link>
+                </el-button>
               </div>
             </el-card>
           </el-col>

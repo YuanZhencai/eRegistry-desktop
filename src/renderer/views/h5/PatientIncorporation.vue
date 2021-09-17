@@ -40,23 +40,22 @@
 				<el-input v-model="patient.address"></el-input>
 			</el-form-item>
 			<el-form-item>
-				<el-checkbox v-if="project && project.agreeUrl" v-model="checked">
+				<el-checkbox v-if="content" v-model="checked">
           <el-button type="text" @click="dialogVisible = true">知情同意书</el-button>
 				</el-checkbox>
 			</el-form-item>
 			<el-form-item>
-				<el-button type="primary" v-if="!project.agreeUrl || '' === project.agreeUrl" @click="incorporationPatient('patientForm')">确定</el-button>
-				<el-button type="primary" v-if="project.agreeUrl && '' !== project.agreeUrl" :disabled="!checked" @click="incorporationPatient('patientForm')">确定</el-button>
+				<el-button type="primary" v-if="!agreement" @click="incorporationPatient('patientForm')">确定</el-button>
+				<el-button type="primary" v-if="agreement" :disabled="!checked" @click="incorporationPatient('patientForm')">确定</el-button>
 			</el-form-item>
 		</el-form>
     <el-dialog
-      title="知情同意书"
-      v-if="project.agreeUrl"
+      v-if="agreement && agreement.content"
       :visible.sync="dialogVisible"
       width="80%"
       class="dialogPadding"
       :before-close="handleClose">
-      <div><iframe style="border:none;" width="100%" height="300px" :src="project.agreeUrl"></iframe></div>
+      <div class="editor-content agreement-content" v-html="agreement.content" />
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogVisible = false">确 认</el-button>
       </span>
@@ -66,6 +65,7 @@
 <script>
 	import { getIncorporationPatient, incorporationPatient } from '../../api/IncorporationService'
 	import { getProject } from '@/api/ProjectService'
+	import { getAgreement } from '../../api/AgreementService'
 	import wx from 'weixin-js-sdk'
 
 	const codes = require('../patient/pca-code.json')
@@ -91,8 +91,9 @@
 	      options: [],
 	      isSaving: false,
 	      project: {
-	        'agreeUrl': null
+	        name: null
 	      },
+	      agreement: null,
 	      checked: true,
 	      dialogVisible: true
 	    }
@@ -101,10 +102,13 @@
 	    this.options = JSON.parse(JSON.stringify(codes))
 	    this.getIncorporationPatient()
 	    this.getProject()
+	    this.getAgreement()
 	  },
 	  methods: {
-	    show() {
-
+    getAgreement() {
+	      getAgreement(this.projectId).then((res) => {
+	        this.agreement = res.data
+	      })
 	    },
 	    handleClose(done) {
 	      done()
@@ -162,5 +166,9 @@
 <style>
   .dialogPadding .el-dialog__body{
     padding: 0 10px!important;
+  }
+  .agreement-content {
+    max-height: 300px;
+    overflow-y: scroll;
   }
 </style>

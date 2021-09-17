@@ -199,6 +199,10 @@ export const constantRouterMap = [
           {
             path: 'attachment-setting',
             component: () => import('@/views/project/ProjectAttachmentSetting')
+          },
+          {
+            path: 'informed-consent',
+            component: () => import('@/views/project/ProjectInformedConsent')
           }
         ]
       }
