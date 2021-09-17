@@ -91,12 +91,11 @@
 	      options: [],
 	      isSaving: false,
 	      project: {
-          name: null
-        },
-        agreement: null,
+	        name: null
+	      },
+	      agreement: null,
 	      checked: true,
-	      dialogVisible: true,
-	      content: ''
+	      dialogVisible: true
 	    }
 	  },
 	  mounted() {
@@ -106,7 +105,7 @@
 	    this.getAgreement()
 	  },
 	  methods: {
-      getAgreement() {
+    getAgreement() {
 	      getAgreement(this.projectId).then((res) => {
 	        this.agreement = res.data
 	      })
