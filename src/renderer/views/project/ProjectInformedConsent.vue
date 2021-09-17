@@ -8,11 +8,10 @@
 
 <script>
   import Tinymce from '@/components/Tinymce'
-  import { getAgreement, saveAgreements } from '../../api/AttachmentService'
+  import { getAgreement, saveAgreement } from '../../api/AgreementService'
   export default {
     name: 'ProjectInformedConsent',
     components: { Tinymce },
-
     data() {
       const projectId = this.$route.params.projectId
       return {
@@ -35,7 +34,7 @@
         })
       },
       save() {
-        saveAgreements(this.agreement).then(() => {
+        saveAgreement(this.agreement).then(() => {
           this.$router.push({
             path: `/project/${this.projectId}/home`
           })
