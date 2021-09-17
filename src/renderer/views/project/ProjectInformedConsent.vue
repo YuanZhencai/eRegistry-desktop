@@ -1,10 +1,8 @@
 <template>
   <div class="components-container">
-    <el-button type="primary" @click="save">保存</el-button>
     <div class="editor-content">
-      <tinymce v-model="content" :height="300" />
+      <tinymce v-if="agreement" v-model="agreement.content" :height="500" @save="save"/>
     </div>
-    <div class="editor-content" v-html="content" />
   </div>
 </template>
 
@@ -19,8 +17,7 @@
       const projectId = this.$route.params.projectId
       return {
         projectId: projectId,
-        agreementId: '',
-        content: ``
+        agreement: null
       }
     },
     created() {
@@ -29,16 +26,16 @@
     methods: {
       loadAll() {
         getAgreement(this.projectId).then((res) => {
-          this.content = res.data.content
-          this.agreementId = res.data.id
+          this.agreement = res.data
+          if (!this.agreement) {
+            this.agreement = {
+              projectId: this.projectId
+            }
+          }
         })
       },
       save() {
-        saveAgreements({
-          id: this.agreementId,
-          projectId: this.projectId,
-          content: this.content
-        }).then(() => {
+        saveAgreements(this.agreement).then(() => {
           this.$router.push({
             path: `/project/${this.projectId}/home`
           })
