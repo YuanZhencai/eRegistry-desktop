@@ -24,10 +24,3 @@ export function getPatientAttachments(patientId, planId) {
 export function formatAttachmentUrl(attachmentId) {
   return `${SERVER_API_URL}api/attachments/image/${attachmentId}.png`
 }
-export function getAgreement(patientId) {
-  return axios.get(`api/projects/${patientId}/agreement`)
-}
-
-export function saveAgreements(event) {
-  return axios.put(`api/agreements`, event)
-}
