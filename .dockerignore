@@ -1,3 +1,4 @@
 # Ignore everything
 **
 !dist
+!conf.d
