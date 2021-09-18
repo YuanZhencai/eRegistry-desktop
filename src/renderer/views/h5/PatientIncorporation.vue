@@ -40,7 +40,7 @@
 				<el-input v-model="patient.address"></el-input>
 			</el-form-item>
 			<el-form-item>
-				<el-checkbox v-if="content" v-model="checked">
+				<el-checkbox v-if="agreement && agreement.content" v-model="checked">
           <el-button type="text" @click="dialogVisible = true">知情同意书</el-button>
 				</el-checkbox>
 			</el-form-item>
