@@ -105,7 +105,7 @@
 	    this.getAgreement()
 	  },
 	  methods: {
-    getAgreement() {
+	    getAgreement() {
 	      getAgreement(this.projectId).then((res) => {
 	        this.agreement = res.data
 	      })
