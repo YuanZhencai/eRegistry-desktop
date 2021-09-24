@@ -171,21 +171,26 @@
               <div slot="header" class="clearfix">
                 <span>快速开始 / 便捷导航</span>
               </div>
-              <div class="card-body">
-                <el-button type="text" @click="setProject"
-                           v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">项目设置</el-button>
-                <el-button type="text"
-                           v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
-                  <router-link :to="{ path: `/project/${projectId}/report`, params: {projectId} }">CRF</router-link>
-                </el-button>
-                <el-button type="text"
-                     v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">
-                  <router-link :to="{ path: `/project/${projectId}/attachment-setting`, params: {projectId} }">病例附件管理</router-link>
-                </el-button>
-                <el-button type="text" v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">
-                  <router-link :to="{ path: `/project/${projectId}/informed-consent` }">知情同意书</router-link>
-                </el-button>
-              </div>
+				<div class="card-body">
+					<template v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">
+						<el-button type="text" @click="setProject">项目设置</el-button>
+						<el-button type="text">
+							<router-link :to="{ path: `/project/${projectId}/attachment-setting`}">病例附件管理</router-link>
+						</el-button>
+						<el-button type="text">
+							<router-link :to="{ path: `/project/${projectId}/informed-consent` }">知情同意书</router-link>
+						</el-button>
+						<el-button type="text">
+							<router-link :to="{ path: `/project/${projectId}/article` }">文章管理</router-link>
+						</el-button>
+					</template>
+
+					<el-button type="text"
+							   v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_PATIENT_' + projectId])">
+						<router-link :to="{ path: `/project/${projectId}/report`}">CRF</router-link>
+					</el-button>
+
+				</div>
             </el-card>
           </el-col>
         </el-row>

@@ -1,7 +1,7 @@
 <template>
   <div class="components-container">
     <div class="editor-content">
-      <tinymce v-if="agreement" v-model="agreement.content" :height="500" @save="save"/>
+      <tinymce v-if="agreement" v-model="agreement.content" action="保存" :height="500" @callback="save"/>
     </div>
   </div>
 </template>
