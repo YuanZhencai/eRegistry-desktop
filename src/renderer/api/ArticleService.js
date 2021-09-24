@@ -11,3 +11,7 @@ export function getArticle(articleId) {
 export function saveArticle(article) {
   return axios.put(`api/articles`, article)
 }
+
+export function deleteArticle(articleId) {
+  return axios.delete(`api/articles/${articleId}`)
+}

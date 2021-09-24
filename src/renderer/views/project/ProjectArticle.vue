@@ -47,7 +47,7 @@
 </template>
 
 <script>
-	import { getArticles } from '../../api/ArticleService'
+	import { deleteArticle, getArticles } from '../../api/ArticleService'
 	import { SERVER_API_URL } from '../../constants'
 	import store from '../../store'
 
@@ -118,6 +118,16 @@
 	      })
 	    },
 	    deleteArticle(article) {
+	      this.$confirm('确认要删除文章吗？', '提示', {
+	        confirmButtonText: '确定',
+	        cancelButtonText: '取消',
+	        type: 'error'
+	      }).then(() => {
+	        deleteArticle(article.id).then(() => {
+	          this.getArticles()
+	        })
+	      }).catch(() => {
+	      })
 	    }
 	  }
 	}
