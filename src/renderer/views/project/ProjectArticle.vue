@@ -33,6 +33,8 @@
 						<el-button type="text" @click="editArticle(scope.row)">编辑</el-button>
 						<el-divider direction="vertical"></el-divider>
 						<el-button type="text" @click="deleteArticle(scope.row)">删除</el-button>
+						<el-divider direction="vertical"></el-divider>
+						<el-button type="text" @click="view(scope.row)">查看</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -128,6 +130,11 @@
 	        })
 	      }).catch(() => {
 	      })
+	    },
+	    view(article) {
+	      this.$router.push({
+	        path: `/patient/article/${article.id}`
+	      })
 	    }
 	  }
 	}
@@ -137,9 +144,11 @@
 	.SAVED {
 		color: #909399;
 	}
+
 	.PUBLISHED {
 		color: #67C23A;
 	}
+
 	.WITHDRAWN {
 		color: #F56C6C;
 	}
