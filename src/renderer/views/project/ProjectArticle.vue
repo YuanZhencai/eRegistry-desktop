@@ -1,9 +1,18 @@
 <template>
 	<div>
 		<el-row v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">
-			<el-col :span='24'>
-				<el-button type='primary' size="mini" class='float-right' @click="newArticle()">创建文章</el-button>
-			</el-col>
+			<el-form :inline="true">
+				<el-form-item label="">
+					<el-input v-model="title"
+							  placeholder="搜索文章标题"
+							  suffix-icon="el-icon-search"
+							  @change="searchArticles">
+					</el-input>
+				</el-form-item>
+				<el-form-item label="">
+					<el-button type='primary' size="mini" class='float-right' @click="newArticle()">创建文章</el-button>
+				</el-form-item>
+			</el-form>
 		</el-row>
 		<el-row>
 			<el-table v-loading="loading" stripe :data='articles' style='width: 100%'>
@@ -75,13 +84,17 @@
 	        'SAVED': '已保存',
 	        'PUBLISHED': '已发布',
 	        'WITHDRAWN': '已撤回'
-	      }
+	      },
+	      title: null
 	    }
 	  },
 	  created() {
 	    this.getArticles()
 	  },
 	  methods: {
+	    searchArticles() {
+	      this.getArticles()
+	    },
 	    sort() {
 	      return (this.predicate && this.order) ? this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
 	    },
@@ -92,12 +105,16 @@
 	    },
 	    getArticles() {
 	      this.loading = true
-	      getArticles({
+	      let params = {
 	        'EQ_article.projectId': this.projectId,
 	        page: this.currentPage - 1,
 	        size: this.pageSize,
 	        sort: this.sort()
-	      }).then(response => {
+	      }
+	      if (this.title) {
+	        params['LIKE_article.title'] = `%${this.title}%`
+	      }
+	      getArticles(params).then(response => {
 	        this.loading = false
 	        this.articles = response.data
 	        this.total = Number(response.headers['x-total-count'])
