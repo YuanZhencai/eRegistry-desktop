@@ -38,6 +38,7 @@
 		</el-form>
 		<image-cropper
 				v-show="show"
+				:noCircle="true"
 				lang-type="zh"
 				@crop-success="cropSuccess"
 				@close="close"
