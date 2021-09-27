@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { SERVER_API_URL } from '../constants'
+import store from '../store'
 
 export function getAttachmentSettings(params) {
   return axios.get(`api/attachment-settings`, { params: params })
@@ -22,5 +23,6 @@ export function getPatientAttachments(patientId, planId) {
 }
 
 export function formatAttachmentUrl(attachmentId) {
-  return `${SERVER_API_URL}api/attachments/image/${attachmentId}.png`
+  const token = store.getters.token
+  return `${SERVER_API_URL}api/attachments/${attachmentId}/content.png?access_token=${token}`
 }
