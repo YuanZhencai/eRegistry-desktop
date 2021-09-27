@@ -13,7 +13,7 @@
 				<el-table-column prop='cover' label='封面'>
 					<template slot-scope="scope">
 						<el-image
-								style="width: 100px; height: 100px"
+								style="width: 85px; height: 85px"
 								:src="`${SERVER_API_URL}api/articles/${scope.row.id}/cover.png?access_token=${token}`"
 						></el-image>
 					</template>
@@ -63,7 +63,7 @@
 	      order: '',
 	      articles: [],
 	      total: 0,
-	      pageSize: 10, // 单页数据量
+	      pageSize: 5, // 单页数据量
 	      currentPage: 1, // 默认开始页面
 	      deleteCenterDialogVisible: false,
 	      selectedCenter: {},
