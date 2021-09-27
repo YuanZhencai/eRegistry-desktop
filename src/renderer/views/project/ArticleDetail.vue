@@ -7,12 +7,12 @@
 			<el-form-item label="作者" prop="author">
 				<el-input v-model="article.author"></el-input>
 			</el-form-item>
-			<el-form-item label="正文">
+			<el-form-item label="正文" prop="content">
 			</el-form-item>
 			<el-form-item>
 				<tinymce v-if="article" v-model="article.content" :height="500" @save="save"/>
 			</el-form-item>
-			<el-form-item label="文章和摘要">
+			<el-form-item label="文章和摘要" prop="cover">
 			</el-form-item>
 			<el-form-item>
 				<el-row>
@@ -63,7 +63,27 @@
 	      projectId: projectId,
 	      articleId: articleId,
 	      article: null,
-	      rules: {
+	      rules: {},
+	      imageUrl: '',
+	      show: false
+	    }
+	  },
+	  created() {
+	    this.getArticle()
+	    this.initRules()
+	  },
+	  mounted() {
+	  },
+	  methods: {
+	    initRules() {
+	      const checkCover = (rule, value, callback) => {
+	        if (!this.article.cover) {
+	          callback(new Error('请上传封面'))
+	        } else {
+	          callback()
+	        }
+	      }
+	      this.rules = {
 	        title: [
 	          { required: true, message: '请输入名称', trigger: 'blur' },
 	          { max: 100, message: '长度在 100 个字符', trigger: 'blur' }
@@ -73,18 +93,15 @@
 	        ],
 	        summary: [
 	          { max: 200, message: '长度在 200 个字符', trigger: 'blur' }
+	        ],
+	        content: [
+	          { required: true, message: '请输入正文', trigger: 'blur' }
+	        ],
+	        cover: [
+	          { validator: checkCover, trigger: 'blur' }
 	        ]
-	      },
-	      imageUrl: '',
-	      show: false
-	    }
-	  },
-	  created() {
-	    this.getArticle()
-	  },
-	  mounted() {
-	  },
-	  methods: {
+	      }
+	    },
 	    getArticle() {
 	      if (this.articleId) {
 	        const token = store.getters.token
