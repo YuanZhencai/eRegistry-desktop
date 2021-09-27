@@ -203,6 +203,18 @@ export const constantRouterMap = [
           {
             path: 'informed-consent',
             component: () => import('@/views/project/ProjectInformedConsent')
+          },
+          {
+            path: 'article',
+            component: () => import('@/views/project/ProjectArticle')
+          },
+          {
+            path: 'article-new',
+            component: () => import('@/views/project/ArticleDetail')
+          },
+          {
+            path: 'article/:articleId',
+            component: () => import('@/views/project/ArticleDetail')
           }
         ]
       }

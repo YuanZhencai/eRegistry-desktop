@@ -130,6 +130,12 @@
 	"handled": "处理成功",
 	"deleted": "删除成功"
   },
+  "article": {
+	"saved": "保存成功",
+	"published": "发布成功",
+	"withdrawn": "撤回成功",
+	"deleted": "删除成功"
+  },
   "agreement": {
 	"created": "保存成功",
 	"updated": "保存成功"

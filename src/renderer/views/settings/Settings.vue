@@ -226,6 +226,7 @@ export default {
     },
     httpRequest(options) {
       const file = options.file
+      console.info('httpRequest', file)
       if (file) {
         this.fileReader.readAsDataURL(file)
       }
@@ -308,7 +309,7 @@ export default {
   }
 }
 </script>
-<style scope>
+<style>
 .box-card {
   margin: 0 0 20px;
 }
