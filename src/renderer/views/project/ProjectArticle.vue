@@ -59,8 +59,8 @@
 	    const token = store.getters.token
 	    return {
 	      loading: false,
-	      predicate: '',
-	      order: '',
+	      predicate: 'createdDate',
+	      order: 'descending',
 	      articles: [],
 	      total: 0,
 	      pageSize: 5, // 单页数据量
