@@ -77,7 +77,7 @@ function onLogin() {
     const referrer = args.baseApi
 
     const filter = {
-      urls: ['*']
+      urls: ['*://*/*']
     }
 
     session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
