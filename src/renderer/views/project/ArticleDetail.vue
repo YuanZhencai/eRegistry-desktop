@@ -12,7 +12,7 @@
 			<el-form-item>
 				<tinymce v-if="article" v-model="article.content" :height="500" @save="save"/>
 			</el-form-item>
-			<el-form-item label="文章和摘要" prop="cover">
+			<el-form-item label="封面和摘要" prop="cover">
 			</el-form-item>
 			<el-form-item>
 				<el-row>
