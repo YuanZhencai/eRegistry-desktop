@@ -23,7 +23,7 @@
                          sortable="custom">
           <template slot-scope="scope">
             {{scope.row.username}}
-            <span v-if="project && scope.row.username === project.chargedBy">(负责人)</span>
+            <span v-if="project && scope.row.username === project.chargedBy">(创建人)</span>
           </template>
         </el-table-column>
         <el-table-column prop='centerName'
@@ -119,8 +119,7 @@ export default {
         FOLLOWER: '随访专员',
         MASTER: '管理',
         AUDIT: '审核',
-        VIEW: '查看',
-        ADMIN: '负责人'
+        VIEW: '查看'
       },
       deleteMemberDialogVisible: false
     }

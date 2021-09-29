@@ -85,7 +85,7 @@ export default {
             saveButton = document.createElement('input')
             saveButton.setAttribute('id', 'save-button')
             saveButton.setAttribute('type', 'button')
-            saveButton.setAttribute('value', '保存问卷')
+            saveButton.setAttribute('value', '保存')
             saveButton.onclick = () => {
               this.save(survey, options)
             }

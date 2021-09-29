@@ -1,8 +1,8 @@
 <template>
-    <el-dialog title="创建或编辑项目" width="500px"
+    <el-dialog title="创建或编辑项目" width="600px"
                :visible.sync="display"
                :before-close="close">
-        <el-form label-width="85px" size="mini" ref="projectForm" :model="project" :rules="rules">
+        <el-form label-width="110px" size="mini" ref="projectForm" :model="project" :rules="rules">
             <el-form-item label="项目名称" prop="name">
                 <el-input v-model="project.name"></el-input>
             </el-form-item>
@@ -34,6 +34,9 @@
                     </el-form-item>
                 </el-col>
             </el-row>
+			<el-form-item label="主要研究者(pi)" prop="principalInvestigator">
+				<el-input v-model="project.principalInvestigator"></el-input>
+			</el-form-item>
             <el-form-item label="项目简介">
                 <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="project.introduction"></el-input>
             </el-form-item>
@@ -71,6 +74,9 @@ export default {
           ],
           beginDate: [
             { required: true, message: '选择开始时间', trigger: 'change' }
+          ],
+          principalInvestigator: [
+            { max: 50, message: '长度最大为 50 个字符', trigger: 'change' }
           ]
         },
         beginDateOptions: {

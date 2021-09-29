@@ -25,7 +25,8 @@
                         {{scope.row.endDate | formatDate('YYYY-MM-DD')}}
                     </template>
                 </el-table-column>
-                <el-table-column prop='chargedBy' label='负责人' sortable="custom"></el-table-column>
+                <el-table-column prop='principalInvestigator' label='主要研究者(pi)' sortable="custom"></el-table-column>
+                <el-table-column prop='chargedBy' label='创建人' sortable="custom"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button type="text" @click="view(scope.row.id)">查看</el-button>
