@@ -9,12 +9,13 @@
                 </el-step>
                 <el-step :key="index" v-if="step.type === 'PLAN'" icon=" ">
                     <template slot="icon"><i class="fa fa-user-plus fa-2x" @click="addItem(step)"/></template>
-                    <template slot="title" ><span @click="addItem(step)">{{step.title}}</span> <el-link @click="openPatientAttachmentDialog(step)" icon="el-icon-picture-outline"/></template>
+					<template slot="title" ><span @click="addItem(step)">{{step.title}}</span></template>
                     <template slot="description">{{step.desc}}</template>
                 </el-step>
-                <el-step :key="index" v-if="step.type === 'FOLLOW'" icon="fa fa-address-book-o fa-2x"
+                <el-step :key="index" v-if="step.type === 'FOLLOW'" icon=" "
                          @click.native="selectItem(step, index)">
-                    <template slot="title">{{step.title}}</template>
+					<template slot="icon"><i class="fa fa-address-book-o fa-2x" @click="selectItem(step, index)"/></template>
+					<template slot="title"><span @click="selectItem(step, index)">{{step.title}}</span> <el-link @click="openPatientAttachmentDialog(step)" icon="el-icon-picture-outline"/></template>
                     <template slot="description">{{step.desc}}</template>
                 </el-step>
             </template>
@@ -109,7 +110,7 @@ export default {
         })
       },
       openPatientAttachmentDialog(step) {
-        this.$refs['patient-attachment-dialog'].show(step.patientId, step.planId).then(() => {
+        this.$refs['patient-attachment-dialog'].show(step.patientId, step.caseId, step.followId).then(() => {
         }, () => {
         })
       }

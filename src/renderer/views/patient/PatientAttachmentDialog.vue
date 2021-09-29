@@ -34,9 +34,9 @@
 	    }
 	  },
 	  methods: {
-	    show(patientId, planId) {
+	    show(patientId, caseId, followId) {
 	      this.display = true
-	      this.getAttachments(patientId, planId)
+	      this.getAttachments(patientId, caseId, followId)
 	      return new Promise((resolve, reject) => {
 	        this.resolve = resolve
 	        this.reject = reject
@@ -61,8 +61,8 @@
 	      this.resolve('confirm')
 	      this.clear()
 	    },
-	    getAttachments(patientId, planId) {
-	      getPatientAttachments(patientId, planId).then(res => {
+	    getAttachments(patientId, caseId, followId) {
+	      getPatientAttachments(patientId, caseId, followId).then(res => {
 	        let titles = {}
 	        this.attachments = res.data.sort(function(x, y) {
 	          if (x.settingId < y.settingId) {
