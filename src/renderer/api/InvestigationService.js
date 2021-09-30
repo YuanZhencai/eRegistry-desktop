@@ -22,3 +22,10 @@ export function getInvestigation(id) {
     method: 'get'
   })
 }
+
+export function deleteInvestigation(id) {
+  return axios({
+    url: `api/investigations/${id}`,
+    method: 'delete'
+  })
+}

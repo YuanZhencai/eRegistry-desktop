@@ -269,8 +269,7 @@
           FOLLOWER: '随访专员',
           MASTER: '管理',
           AUDIT: '审核',
-          VIEW: '查看',
-          ADMIN: '负责人'
+          VIEW: '查看'
         },
         project: null,
         activeName: 'first',

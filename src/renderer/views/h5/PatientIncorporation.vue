@@ -122,6 +122,9 @@
 	    getIncorporationPatient() {
 	      getIncorporationPatient(this.projectId).then(res => {
 	        this.patient = res.data
+	        if (this.patient && this.patient.id) {
+	          this.toHomePage()
+	        }
 	        const cityList = []
 	        if (this.patient.province) {
 	          cityList.push(this.patient.province)
@@ -142,7 +145,7 @@
 	          incorporationPatient(this.patient).then(res => {
 	            this.isSaving = false
 	            this.getIncorporationPatient()
-	            this.ToHomePage()
+	            this.toHomePage()
 	          }, () => {
 	            this.isSaving = false
 	          })
@@ -154,7 +157,7 @@
 	      this.patient.city = value[1]
 	      this.patient.area = value[2]
 	    },
-	    ToHomePage() {
+	    toHomePage() {
 	      wx.miniProgram.switchTab({
 	        url: '/pages/template/home/overview'
 	      })

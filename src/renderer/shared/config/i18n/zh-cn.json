@@ -432,7 +432,7 @@
     "beginDate": "开始时间",
     "endDate": "结束时间",
     "open": "是否公开项目",
-    "chargedBy": "负责人",
+    "chargedBy": "创建人",
     "reportId": "CRF模板"
   },
   "health": {
@@ -601,7 +601,7 @@
     "MASTER": "管理",
     "AUDIT": "审核",
     "VIEW": "查看",
-    "ADMIN": "负责人"
+    "ADMIN": "创建人"
   },
   "investigation": {
     "home": {

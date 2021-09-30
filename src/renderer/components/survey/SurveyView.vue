@@ -13,6 +13,9 @@ import * as screen from '../screen/screen'
 
 const Survey = SurveyVue.Survey
 SurveyVue.StylesManager.applyTheme('winterstone')
+SurveyVue.surveyLocalization.locales['zh-cn'] = {
+  completeText: '提交'
+}
 
 widgets.init(SurveyVue)
 export default {
@@ -85,7 +88,7 @@ export default {
             saveButton = document.createElement('input')
             saveButton.setAttribute('id', 'save-button')
             saveButton.setAttribute('type', 'button')
-            saveButton.setAttribute('value', '保存问卷')
+            saveButton.setAttribute('value', '保存')
             saveButton.onclick = () => {
               this.save(survey, options)
             }

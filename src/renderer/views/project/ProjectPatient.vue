@@ -6,14 +6,14 @@
                     <el-input v-model="form.queryString" placeholder="搜索患者姓名" size="mini" suffix-icon="el-icon-search"
                               @change="searchPatient"></el-input>
                 </el-form-item>
-                <el-form-item label="入组时间">
+                <el-form-item label="入组日期">
                     <el-col :span="11">
-                        <el-date-picker type="date" v-model="form.startDate" placeholder="开始时间" style="width: 100%;"
+                        <el-date-picker type="date" v-model="form.startDate" placeholder="开始日期" style="width: 100%;"
                                         clearable @change="searchPatient"></el-date-picker>
                     </el-col>
                     <el-col class="text-center" :span="2">至</el-col>
                     <el-col :span="11">
-                        <el-date-picker type="date" v-model="form.endDate" placeholder="结束时间" style="width: 100%;"
+                        <el-date-picker type="date" v-model="form.endDate" placeholder="结束日期" style="width: 100%;"
                                         clearable @change="searchPatient"></el-date-picker>
                     </el-col>
                 </el-form-item>
@@ -49,21 +49,27 @@
                 </el-table-column>
                 <el-table-column prop="sex" label="性别" sortable="custom"></el-table-column>
                 <el-table-column prop="age" label="年龄"></el-table-column>
-                <el-table-column prop="visitDate" label="就诊日期" sortable="custom">
+                <el-table-column prop="visitDate" label="入组日期" sortable="custom">
                     <template slot-scope="scope">{{scope.row.visitDate | formatDate('YYYY-MM-DD')}}</template>
                 </el-table-column>
                 <el-table-column prop="lastModifiedDate" label="更新时间" sortable="custom">
-                    <template slot-scope="scope">{{scope.row.lastModifiedDate | formatDate('YYYY-MM-DD')}}</template>
+                    <template slot-scope="scope">{{scope.row.lastModifiedDate | formatDate('YYYY-MM-DD HH:mm')}}</template>
                 </el-table-column>
-                <el-table-column prop="chargedBy" label="负责人" sortable="custom"></el-table-column>
+                <el-table-column prop="chargedBy" label="负责人" sortable="custom">
+					<template slot-scope="scope">{{scope.row.chargedName || scope.row.chargedBy}}</template>
+				</el-table-column>
                 <el-table-column prop="followCount" label="随访数"></el-table-column>
                 <el-table-column align="center" style="width: 100px;">
                     <template slot="header" slot-scope="scope">
                         <span>操作</span>
                     </template>
-                    <template slot-scope="scope"
-                              v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_DOCTOR_' + projectId, 'PROJECT_PATIENT_' + projectId])">
-                        <el-button type="text" @click="edit(scope.row)">编辑</el-button>
+                    <template slot-scope="scope">
+                        <el-button v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_DOCTOR_' + projectId, 'PROJECT_PATIENT_' + projectId])"
+								type="text" @click="edit(scope.row)">编辑
+						</el-button>
+						<el-button v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId])"
+								   type="text" @click="remove(scope.row)">删除
+						</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -110,6 +116,7 @@
   import img_csv from '@/assets/csv.png'
   import { getProject } from '../../api/ProjectService'
   import Incorporation from '../../components/qrcode/Incorporation'
+  import { deletePatient } from '../../api/PatientService'
 export default {
     name: 'ProjectPatient',
     components: { Incorporation, PatientDialogComponent },
@@ -118,8 +125,8 @@ export default {
       return {
         BASE_API: SERVER_API_URL,
         loading: false,
-        predicate: '',
-        order: '',
+        predicate: 'lastModifiedDate',
+        order: 'descending',
         total: 0,
         pageSize: 10, // 单页数据量
         currentPage: 1, // 默认开始页面
@@ -152,7 +159,7 @@ export default {
     },
     methods: {
       sort() {
-        return (this.predicate && this.order) ? this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
+        return (this.predicate && this.order) ? `patient.${this.predicate}` + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
       },
       changeOrder(sort) {
         this.predicate = sort.prop
@@ -189,6 +196,19 @@ export default {
         this.$refs['patient-dialog'].show(this.projectId, this.selectedPatient.id).then((res) => {
           this.getPatients()
         }, () => {})
+      },
+      remove(patient) {
+        this.$confirm('确认要删除患者？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deletePatient(patient.id).then(() => {
+            this.getPatients()
+          })
+        }).catch(() => {
+
+        })
       },
       newPatient() {
         this.selectedPatient = { id: null, name: '' }

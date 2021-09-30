@@ -46,9 +46,11 @@ const compareVersion2Update = (current, latest) => {
   let flag = false
 
   try {
+    console.info('当前版本:' + current + ' 最新版本:' + latest)
     const currentVersion = getVersionValue(current)
     const latestVersion = getVersionValue(latest)
     flag = currentVersion < latestVersion
+    console.info('当前版本:' + currentVersion + ' 最新版本:' + latestVersion)
   } catch (e) {
     console.info('版本比较失败')
   }
@@ -58,8 +60,7 @@ const compareVersion2Update = (current, latest) => {
 
 const getVersionValue = (version) => {
   const numbers = version.split('.').map(item => parseInt(item))
-  const value = numbers[0] * 100 + numbers[1] * 10 + numbers[2]
-  console.info('getVersionValue', value)
+  const value = numbers[0] * 10000 + numbers[1] * 100 + numbers[2]
   return value
 }
 

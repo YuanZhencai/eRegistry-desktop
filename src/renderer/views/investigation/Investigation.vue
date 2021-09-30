@@ -121,6 +121,9 @@
 					<el-button type="text" @click="view(scope.row)">
 						查看
 					</el-button>
+					<el-button v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId])"
+							   type="text" @click="remove(scope.row)">删除
+					</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -137,7 +140,7 @@
 
 <script>
 	import * as SurveyVue from 'survey-vue'
-	import { getInvestigations } from '../../api/InvestigationService'
+	import { deleteInvestigation, getInvestigations } from '../../api/InvestigationService'
 	import { getQuestionnaireReport, getQuestionnaireSum } from '../../api/QuestionnaireService'
 	import CountTo from 'vue-count-to'
 
@@ -242,6 +245,18 @@
 	    view(investigation) {
 	      this.$router.push({
 	        path: `/project/${this.projectId}/questionnaire/${this.questionnaireId}/investigation/${investigation.id}`
+	      })
+	    },
+	    remove(investigation) {
+	      this.$confirm('确认要删除调查结果？', '提示', {
+	        confirmButtonText: '确定',
+	        cancelButtonText: '取消',
+	        type: 'warning'
+	      }).then(() => {
+	        deleteInvestigation(investigation.id).then(() => {
+	          this.init()
+	        })
+	      }).catch(() => {
 	      })
 	    },
 	    findQuestionnaireReport() {
