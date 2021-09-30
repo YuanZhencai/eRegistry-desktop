@@ -22,12 +22,18 @@
 			>
 				<el-input :disabled="user.id !== null" v-model="user.email"/>
 			</el-form-item>
-      <el-form-item
-        prop="name"
-        label="姓名"
-      >
-        <el-input v-model="user.name"/>
-      </el-form-item>
+		  <el-form-item
+			prop="lastName"
+			label="姓氏"
+		  >
+			<el-input v-model="user.lastName"/>
+		  </el-form-item>
+			<el-form-item
+					prop="firstName"
+					label="名字"
+			>
+				<el-input v-model="user.firstName"/>
+			</el-form-item>
 			<el-form-item label="激活">
 				<el-checkbox v-model="user.activated"/>
 			</el-form-item>
@@ -38,6 +44,7 @@
 				<el-checkbox-group v-model="user.authorities">
 					<el-checkbox label="ROLE_USER"/>
 					<el-checkbox label="ROLE_ADMIN"/>
+					<el-checkbox label="ROLE_PATIENT"/>
 				</el-checkbox-group>
 			</el-form-item>
 		</el-form>
@@ -58,7 +65,8 @@
 	      user: {
 	        id: null,
 	        authorities: [],
-	        name: null,
+	        firstName: null,
+	        lastName: null,
 	        activated: true
 	      },
 	      display: false,
@@ -99,6 +107,13 @@
 	      this.reject('cancel')
 	    },
 	    save(formName) {
+	      if (!this.user.authorities || this.user.authorities.length === 0) {
+	        this.$message({
+	          type: 'error',
+	          message: `权限不能为空`
+	        })
+	        return
+	      }
 	      this.$refs[formName].validate((valid) => {
 	        if (valid) {
 	          this.isSaving = true

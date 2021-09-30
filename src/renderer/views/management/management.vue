@@ -45,7 +45,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.lastName }}{{ scope.row.firstName }}</span>
         </template>
       </el-table-column>
 			<el-table-column
@@ -243,7 +243,7 @@
 	      })
 	    },
 	    editUser(user) {
-	      this.$refs['user-dialog'].show(user).then(() => {
+	      this.$refs['user-dialog'].show(JSON.parse(JSON.stringify(user))).then(() => {
 	        this.loadAll()
 	      }, () => {
 	      })
