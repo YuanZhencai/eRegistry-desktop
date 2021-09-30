@@ -122,7 +122,7 @@
 	    getIncorporationPatient() {
 	      getIncorporationPatient(this.projectId).then(res => {
 	        this.patient = res.data
-	        if (this.patient && this.patient.projectId) {
+	        if (this.patient && this.patient.id) {
 	          this.ToHomePage()
 	        }
 	        const cityList = []
