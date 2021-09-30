@@ -34,12 +34,20 @@
 					label="用户名"
 					sortable="custom"
 					align="center"
-					width="280"
+					width="200"
 			>
 				<template slot-scope="scope">
 					<span>{{ scope.row.login }}</span>
 				</template>
 			</el-table-column>
+      <el-table-column
+        label="姓名"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <span>{{ scope.row.name }}</span>
+        </template>
+      </el-table-column>
 			<el-table-column
 					label="邮箱"
 					min-width="130px"
@@ -98,7 +106,7 @@
 			<el-table-column
 					label="操作"
 					align="center"
-					width="420"
+					width="320"
 					class-name="fixed-width">
 				<template v-if="row.login !== 'admin'" slot-scope="{row}">
 					<!-- 编辑 -->
