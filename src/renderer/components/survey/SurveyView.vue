@@ -13,6 +13,9 @@ import * as screen from '../screen/screen'
 
 const Survey = SurveyVue.Survey
 SurveyVue.StylesManager.applyTheme('winterstone')
+SurveyVue.surveyLocalization.locales['zh-cn'] = {
+  completeText: '提交'
+}
 
 widgets.init(SurveyVue)
 export default {
