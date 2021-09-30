@@ -122,6 +122,9 @@
 	    getIncorporationPatient() {
 	      getIncorporationPatient(this.projectId).then(res => {
 	        this.patient = res.data
+	        if (this.patient && this.patient.projectId) {
+	          this.ToHomePage()
+	        }
 	        const cityList = []
 	        if (this.patient.province) {
 	          cityList.push(this.patient.province)

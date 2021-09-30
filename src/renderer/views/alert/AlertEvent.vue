@@ -119,5 +119,8 @@
 </script>
 
 <style scoped>
+  .el-textarea >>> .el-textarea__inner {
+    height: 150px;
+  }
 
 </style>

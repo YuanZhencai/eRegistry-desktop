@@ -22,6 +22,12 @@
 			>
 				<el-input :disabled="user.id !== null" v-model="user.email"/>
 			</el-form-item>
+      <el-form-item
+        prop="name"
+        label="姓名"
+      >
+        <el-input v-model="user.name"/>
+      </el-form-item>
 			<el-form-item label="激活">
 				<el-checkbox v-model="user.activated"/>
 			</el-form-item>
@@ -52,6 +58,7 @@
 	      user: {
 	        id: null,
 	        authorities: [],
+	        name: null,
 	        activated: true
 	      },
 	      display: false,
