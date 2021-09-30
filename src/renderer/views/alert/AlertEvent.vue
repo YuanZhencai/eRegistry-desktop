@@ -32,7 +32,7 @@
             </el-radio-group>
 					</el-form-item>
           <el-form-item label="备注" prop="handleDesc">
-              <el-input type="textarea" v-model="alertEvent.handleDesc"></el-input>
+              <el-input type="textarea" :autosize="{ minRows: 10}" v-model="alertEvent.handleDesc"></el-input>
           </el-form-item>
 					<el-form-item label="处理时间" v-if="alertEvent.handleDate">
 						<span>{{alertEvent.handleDate | formatDate('YYYY-MM-DD HH:mm')}}</span>
@@ -119,8 +119,4 @@
 </script>
 
 <style scoped>
-  .el-textarea >>> .el-textarea__inner {
-    height: 150px;
-  }
-
 </style>
