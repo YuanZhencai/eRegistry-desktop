@@ -63,9 +63,13 @@
                     <template slot="header" slot-scope="scope">
                         <span>操作</span>
                     </template>
-                    <template slot-scope="scope"
-                              v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_DOCTOR_' + projectId, 'PROJECT_PATIENT_' + projectId])">
-                        <el-button type="text" @click="edit(scope.row)">编辑</el-button>
+                    <template slot-scope="scope">
+                        <el-button v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_DOCTOR_' + projectId, 'PROJECT_PATIENT_' + projectId])"
+								type="text" @click="edit(scope.row)">编辑
+						</el-button>
+						<el-button v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId])"
+								   type="text" @click="remove(scope.row)">删除
+						</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -112,6 +116,7 @@
   import img_csv from '@/assets/csv.png'
   import { getProject } from '../../api/ProjectService'
   import Incorporation from '../../components/qrcode/Incorporation'
+  import { deletePatient } from '../../api/PatientService'
 export default {
     name: 'ProjectPatient',
     components: { Incorporation, PatientDialogComponent },
@@ -191,6 +196,19 @@ export default {
         this.$refs['patient-dialog'].show(this.projectId, this.selectedPatient.id).then((res) => {
           this.getPatients()
         }, () => {})
+      },
+      remove(patient) {
+        this.$confirm('确认要删除患者？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deletePatient(patient.id).then(() => {
+            this.getPatients()
+          })
+        }).catch(() => {
+
+        })
       },
       newPatient() {
         this.selectedPatient = { id: null, name: '' }
