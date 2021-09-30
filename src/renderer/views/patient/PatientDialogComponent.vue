@@ -31,6 +31,14 @@
             <el-form-item label="地址">
                 <el-input v-model="patient.address"></el-input>
             </el-form-item>
+			<el-form-item label="绑定用户" v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">
+				<el-autocomplete
+						v-model="patient.username"
+						:fetch-suggestions="querySearchAsync"
+						placeholder="请输入用户名"
+						@select="handleSelect"
+				></el-autocomplete>
+			</el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button size="mini" @click="cancel">取 消</el-button>
@@ -41,11 +49,13 @@
 
 <script>
   import { getSensitiveIgnorePatient, createPatient, updatePatient } from '@/api/PatientService'
+  import { getUsersByLoginStartingWith } from '../../api/UserService'
   const codes = require('./pca-code.json')
   export default {
     name: 'PatientDialogComponent',
     data() {
       return {
+        projectId: null,
         patientId: null,
         display: false,
         resolve: null,
@@ -109,10 +119,13 @@
         this.display = false
         this.reject('close')
       },
-      confirm(formName) {
-        this.$refs[formName].validate((valid) => {
+      confirm() {
+        this.$refs['patientForm'].validate((valid) => {
           if (valid) {
             this.isSaving = true
+            if (this.patient.username === '') {
+              this.patient.username = null
+            }
             if (this.patientId) {
               updatePatient(this.patient).then(res => {
                 this.isSaving = false
@@ -133,6 +146,23 @@
             }
           }
         })
+      },
+      querySearchAsync(queryString, cb) {
+        if (queryString) {
+          getUsersByLoginStartingWith(queryString).then(response => {
+            cb(response.data.map(
+              u => {
+                return {
+                  'value': u.login
+                }
+              })
+            )
+          })
+        } else {
+          cb([])
+        }
+      },
+      handleSelect(item) {
       }
     }
   }
