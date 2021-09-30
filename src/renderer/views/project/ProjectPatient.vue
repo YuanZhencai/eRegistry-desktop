@@ -53,7 +53,7 @@
                     <template slot-scope="scope">{{scope.row.visitDate | formatDate('YYYY-MM-DD')}}</template>
                 </el-table-column>
                 <el-table-column prop="lastModifiedDate" label="更新时间" sortable="custom">
-                    <template slot-scope="scope">{{scope.row.lastModifiedDate | formatDate('YYYY-MM-DD')}}</template>
+                    <template slot-scope="scope">{{scope.row.lastModifiedDate | formatDate('YYYY-MM-DD HH:mm')}}</template>
                 </el-table-column>
                 <el-table-column prop="chargedBy" label="负责人" sortable="custom">
 					<template slot-scope="scope">{{scope.row.chargedName || scope.row.chargedBy}}</template>
@@ -120,8 +120,8 @@ export default {
       return {
         BASE_API: SERVER_API_URL,
         loading: false,
-        predicate: '',
-        order: '',
+        predicate: 'lastModifiedDate',
+        order: 'descending',
         total: 0,
         pageSize: 10, // 单页数据量
         currentPage: 1, // 默认开始页面
@@ -154,7 +154,7 @@ export default {
     },
     methods: {
       sort() {
-        return (this.predicate && this.order) ? this.predicate + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
+        return (this.predicate && this.order) ? `patient.${this.predicate}` + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
       },
       changeOrder(sort) {
         this.predicate = sort.prop
