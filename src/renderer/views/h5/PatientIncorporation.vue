@@ -145,7 +145,7 @@
 	          incorporationPatient(this.patient).then(res => {
 	            this.isSaving = false
 	            this.getIncorporationPatient()
-	            this.ToHomePage()
+	            this.toHomePage()
 	          }, () => {
 	            this.isSaving = false
 	          })
