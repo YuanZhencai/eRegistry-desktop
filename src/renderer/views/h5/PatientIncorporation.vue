@@ -123,7 +123,7 @@
 	      getIncorporationPatient(this.projectId).then(res => {
 	        this.patient = res.data
 	        if (this.patient && this.patient.id) {
-	          this.ToHomePage()
+	          this.toHomePage()
 	        }
 	        const cityList = []
 	        if (this.patient.province) {
@@ -157,7 +157,7 @@
 	      this.patient.city = value[1]
 	      this.patient.area = value[2]
 	    },
-	    ToHomePage() {
+	    toHomePage() {
 	      wx.miniProgram.switchTab({
 	        url: '/pages/template/home/overview'
 	      })
