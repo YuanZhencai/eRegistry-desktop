@@ -18,7 +18,7 @@
              style="margin-top: 10px">
           <div class="line-height30">
             <i class="fa fa-user" aria-hidden="true"></i>
-            <span >{{name}}</span>
+            <span >{{nickname}}</span>
             <i class="el-icon-caret-bottom"></i>
           </div>
         </div>
@@ -84,7 +84,7 @@ export default {
     ...mapGetters([
       'sidebar',
       'avatar',
-      'name'
+      'nickname'
     ])
   },
   data() {

@@ -21,6 +21,15 @@ export function login(username, password) {
   })
 }
 
+export function nickname(user) {
+  const lastName = user.lastName
+  const firstName = user.firstName
+  if (!lastName && !firstName) {
+    return user.login
+  }
+  return `${lastName || ''}${firstName || ''}`
+}
+
 export function getInfo(token) {
   return axios({
     url: 'api/account',
@@ -35,6 +44,7 @@ export function getInfo(token) {
       return {
         roles: data.authorities,
         name: data.login,
+        nickname: nickname(data),
         avatar: data.imageUrl,
         email: data.email,
         introduction: `${data.lastName} ${data.firstName}`

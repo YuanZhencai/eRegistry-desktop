@@ -9,7 +9,7 @@
             </div>
             <div class="desc">
               <p><small>当前登录用户</small></p>
-              <div class="desc-title fa-lg" v-if="name"><strong>{{name}}</strong></div>
+              <div class="desc-title fa-lg" v-if="nickname"><strong>{{nickname}}</strong></div>
             </div>
           </div>
         </div>
@@ -222,6 +222,7 @@
     computed: {
       ...mapGetters([
         'name',
+        'nickname',
         'roles',
         'avatar'
       ]),
