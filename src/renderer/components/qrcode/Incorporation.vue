@@ -10,7 +10,7 @@
 				   icon="el-icon-download">
 			保存二维码
 		</el-button>
-        <i class="fa fa-qrcode" slot="reference"></i>
+		<el-button type="primary" slot="reference"><i class="fa fa-qrcode"/> 入组二维码</el-button>
     </el-popover>
 </template>
 
