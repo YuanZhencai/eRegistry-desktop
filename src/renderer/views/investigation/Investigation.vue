@@ -60,7 +60,7 @@
 				</div>
 			</el-col>
 			<el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-				<div class="card-panel" @click="toEvents">
+				<div class="card-panel" @click="toEvents('WARN')">
 					<div class="card-panel-icon-wrapper icon-money">
 						<svg-icon icon-class="alert" class-name="card-panel-icon"/>
 					</div>
@@ -74,7 +74,7 @@
 				</div>
 			</el-col>
 			<el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-				<div class="card-panel" @click="toEvents">
+				<div class="card-panel" @click="toEvents('ERROR')">
 					<div class="card-panel-icon-wrapper icon-shopping">
 						<svg-icon icon-class="error" class-name="card-panel-icon"/>
 					</div>
@@ -299,9 +299,13 @@
 	        path: `/project/${this.projectId}/questionnaire/${this.questionnaireId}/investigation-result`
 	      })
 	    },
-	    toEvents() {
+	    toEvents(type) {
 	      this.$router.push({
-	        path: `/project/${this.projectId}/event`
+	        path: `/project/${this.projectId}/event`,
+	        query: {
+	          questionnaireId: this.questionnaireId,
+	          type: type
+	        }
 	      })
 	    }
 	  }
