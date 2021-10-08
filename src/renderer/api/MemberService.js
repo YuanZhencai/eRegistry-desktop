@@ -8,6 +8,17 @@ export function getProjectMembers(projectId, params) {
   })
 }
 
+export function getProjectChargedByMembers(projectId) {
+  return new Promise((resolve, reject) => {
+    getProjectMembers(projectId).then(res => {
+      const chargedByMembers = res.data.filter(m => m.task !== 'VIEW')
+      resolve(chargedByMembers)
+    }, error => {
+      reject(error)
+    })
+  })
+}
+
 export function getMember(id) {
   return axios({
     url: `api/members/${id}`,

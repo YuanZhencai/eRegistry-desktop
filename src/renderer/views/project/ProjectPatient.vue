@@ -197,7 +197,7 @@ export default {
       },
       edit(patient) {
         this.selectedPatient = patient
-        this.$refs['patient-dialog'].show(this.projectId, this.selectedPatient.id).then((res) => {
+        this.$refs['patient-dialog'].show(this.selectedPatient.id).then((res) => {
           this.getPatients()
         }, () => {})
       },
