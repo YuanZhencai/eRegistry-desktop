@@ -1,9 +1,9 @@
-import { app, BrowserWindow, ipcMain, session } from 'electron'
+import { app, BrowserWindow, ipcMain, session, Menu } from 'electron'
 import { download } from 'electron-dl'
 import checkVersion from './updater'
 const path = require('path')
 const unusedFilename = require('unused-filename')
-
+Menu.setApplicationMenu(null)
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html

@@ -26,6 +26,7 @@
 
 <script>
   import moment from 'moment'
+  import store from '../../store'
 export default {
     name: 'timeline',
     components: { },
@@ -108,15 +109,19 @@ export default {
         })
       },
       openPatientAttachment(step) {
+        const token = store.getters.token
         let routeData = this.$router.resolve({
           path: '/patient-attachment',
           query: {
+            access_token: token,
             patientId: step.patientId,
             caseId: step.caseId,
             followId: step.followId
           }
         })
-        window.open(routeData.href, '', 'width=1200,height=800')
+        const url = routeData.href
+        console.info('url', url)
+        window.open(url, '', 'width=1200,height=800')
       }
     }
   }

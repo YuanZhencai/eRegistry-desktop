@@ -132,7 +132,7 @@
     "del": "^3.0.0",
     "devtron": "^1.4.0",
     "electron": "6.1.12",
-    "electron-builder": "^21.2.0",
+    "electron-builder": "21.2.0",
     "electron-debug": "^1.4.0",
     "electron-reload": "^1.0.2",
     "eslint": "^4.4.1",
