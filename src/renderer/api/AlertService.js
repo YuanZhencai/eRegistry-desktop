@@ -12,6 +12,10 @@ export function getProjectAlertEvents(projectId, params) {
   return axios.get(`api/projects/${projectId}/alert-events`, { params: params })
 }
 
+export function getInvestigationAlertEvents(investigationId) {
+  return axios.get(`api/investigations/${investigationId}/alert-events`)
+}
+
 export function getTopAlertEvents(projectId) {
   return axios.get(`api/projects/${projectId}/top-events`)
 }

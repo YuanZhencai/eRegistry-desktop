@@ -118,7 +118,7 @@
 			</el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
-					<el-button type="text" @click="view(scope.row)">
+					<el-button type="text" @click="toPatientInvestigation(scope.row)">
 						查看
 					</el-button>
 					<el-button v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId])"
@@ -297,6 +297,17 @@
 	    toInvestigation() {
 	      this.$router.push({
 	        path: `/project/${this.projectId}/questionnaire/${this.questionnaireId}/investigation-result`
+	      })
+	    },
+	    toPatientInvestigation(investigation) {
+	      this.$router.push({
+	        path: '/patient/investigation',
+	        query: {
+	          reportId: this.report.id,
+	          projectId: this.projectId,
+	          questionnaireId: this.questionnaireId,
+	          investigationId: investigation.id
+	        }
 	      })
 	    },
 	    toEvents(type) {
