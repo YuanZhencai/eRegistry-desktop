@@ -10,6 +10,7 @@ const user = {
   state: {
     token: getToken(),
     name: '',
+    nickname: null,
     avatar: '',
     roles: []
   },
@@ -20,6 +21,9 @@ const user = {
     },
     SET_NAME: (state, name) => {
       state.name = name
+    },
+    SET_NICKNAME: (state, nickname) => {
+      state.nickname = nickname
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
@@ -63,6 +67,7 @@ const user = {
           }
           const avatar = `${process.env.BASE_API}api/avatars/${data.name}.png`
           commit('SET_NAME', data.name)
+          commit('SET_NICKNAME', data.nickname)
           commit('SET_AVATAR', avatar)
           resolve(response)
         }).catch(error => {

@@ -31,6 +31,16 @@
             <el-form-item label="地址">
                 <el-input v-model="patient.address"></el-input>
             </el-form-item>
+			<el-form-item label="负责人" v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">
+				<el-select v-model="patient.chargedBy" placeholder="请选择">
+					<el-option
+							v-for="member in members"
+							:key="member.username"
+							:label="member.username"
+							:value="member.username">
+					</el-option>
+				</el-select>
+			</el-form-item>
 			<el-form-item label="绑定用户" v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">
 				<el-autocomplete
 						v-model="patient.username"
@@ -50,12 +60,14 @@
 <script>
   import { getSensitiveIgnorePatient, createPatient, updatePatient } from '@/api/PatientService'
   import { getUsersByLoginStartingWith } from '../../api/UserService'
+  import { getProjectChargedByMembers } from '../../api/MemberService'
+  import store from '../../store'
   const codes = require('./pca-code.json')
   export default {
     name: 'PatientDialogComponent',
     data() {
       return {
-        projectId: null,
+        projectId: this.$route.params.projectId,
         patientId: null,
         display: false,
         resolve: null,
@@ -71,17 +83,18 @@
         patient: { name: '' },
         provinceCity: [],
         options: [],
-        isSaving: false
+        isSaving: false,
+        members: []
       }
     },
     methods: {
-      show(projectId, patientId) {
+      show(patientId) {
         this.patient = { name: '' }
         this.provinceCity = []
         this.options = JSON.parse(JSON.stringify(codes))
         this.display = true
         this.patientId = patientId
-        this.projectId = projectId
+        this.getMembers()
         this.findPatient()
         return new Promise((resolve, reject) => {
           this.resolve = resolve
@@ -89,7 +102,7 @@
         })
       },
       findPatient() {
-        if (this.projectId && this.patientId) {
+        if (this.patientId) {
           getSensitiveIgnorePatient(this.projectId, this.patientId).then(res => {
             this.patient = res.data
             const cityList = []
@@ -104,6 +117,12 @@
             }
             this.provinceCity = cityList
           })
+        } else {
+          this.patient = JSON.parse(JSON.stringify({
+            projectId: this.projectId,
+            chargedBy: store.getters.name,
+            name: ''
+          }))
         }
       },
       handleChange(value) {
@@ -135,7 +154,6 @@
                 this.isSaving = false
               })
             } else {
-              this.patient.projectId = this.$route.params.projectId
               createPatient(this.patient).then(res => {
                 this.isSaving = false
                 this.display = false
@@ -163,6 +181,11 @@
         }
       },
       handleSelect(item) {
+      },
+      getMembers() {
+        getProjectChargedByMembers(this.projectId).then((members) => {
+          this.members = members
+        })
       }
     }
   }

@@ -1,7 +1,34 @@
 <template>
     <div>
-        <survey-view :info="survey" @dataChange="save"></survey-view>
-    </div>
+		<div v-if="events && events.length > 0">
+			<div style="padding-left: 10px">异常指标</div>
+			<el-table
+					:data="events"
+					:show-header="false"
+					stripe
+					style="width: 100%">
+				<el-table-column>
+					<template slot-scope="scope">
+						<el-row>
+							<el-col :span="24">
+								<div class=" " style="font-size: 14px;font-weight: 500;">
+									<div class=" " style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">
+										<span style="margin-right: 5px">{{scope.row.question}}</span><span :class="scope.row.type">{{scope.row.content}}</span>
+									</div>
+								</div>
+							</el-col>
+						</el-row>
+						<el-row v-if="scope.row.handleType">
+							<el-col :span="24">
+								<span style="margin-right: 5px">处理意见: {{scope.row.handleType}}</span><span>{{scope.row.handleDesc}}</span>
+							</el-col>
+						</el-row>
+					</template>
+				</el-table-column>
+			</el-table>
+		</div>
+		<survey-view :info="survey" @dataChange="save"></survey-view>
+	</div>
 </template>
 
 <script>
@@ -10,6 +37,7 @@
   import { InvestigationSurvey } from '../investigation/investigation-survey'
   import { getReport } from '../../api/ReportService'
   import { fillInvestigation } from '../../api/PatientService'
+  import { getInvestigationAlertEvents } from '../../api/AlertService'
 export default {
     name: 'PatientInvestigation',
     components: {
@@ -24,13 +52,22 @@ export default {
         report: {},
         investigation: {},
         survey: {},
-        isSaving: false
+        isSaving: false,
+        events: []
       }
     },
     created() {
       this.findInvestigationSurvey()
+      this.findEvents()
     },
     methods: {
+      findEvents() {
+        if (this.investigationId) {
+          getInvestigationAlertEvents(this.investigationId).then((res) => {
+            this.events = res.data
+          })
+        }
+      },
       findReport() {
         if (this.reportId) {
           return getReport(this.reportId)

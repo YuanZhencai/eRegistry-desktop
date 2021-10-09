@@ -60,7 +60,7 @@
 				</div>
 			</el-col>
 			<el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-				<div class="card-panel" @click="toEvents">
+				<div class="card-panel" @click="toEvents('WARN')">
 					<div class="card-panel-icon-wrapper icon-money">
 						<svg-icon icon-class="alert" class-name="card-panel-icon"/>
 					</div>
@@ -74,7 +74,7 @@
 				</div>
 			</el-col>
 			<el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-				<div class="card-panel" @click="toEvents">
+				<div class="card-panel" @click="toEvents('ERROR')">
 					<div class="card-panel-icon-wrapper icon-shopping">
 						<svg-icon icon-class="error" class-name="card-panel-icon"/>
 					</div>
@@ -118,7 +118,7 @@
 			</el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
-					<el-button type="text" @click="view(scope.row)">
+					<el-button type="text" @click="toPatientInvestigation(scope.row)">
 						查看
 					</el-button>
 					<el-button v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId])"
@@ -299,9 +299,24 @@
 	        path: `/project/${this.projectId}/questionnaire/${this.questionnaireId}/investigation-result`
 	      })
 	    },
-	    toEvents() {
+	    toPatientInvestigation(investigation) {
 	      this.$router.push({
-	        path: `/project/${this.projectId}/event`
+	        path: '/patient/investigation',
+	        query: {
+	          reportId: this.report.id,
+	          projectId: this.projectId,
+	          questionnaireId: this.questionnaireId,
+	          investigationId: investigation.id
+	        }
+	      })
+	    },
+	    toEvents(type) {
+	      this.$router.push({
+	        path: `/project/${this.projectId}/event`,
+	        query: {
+	          questionnaireId: this.questionnaireId,
+	          type: type
+	        }
 	      })
 	    }
 	  }

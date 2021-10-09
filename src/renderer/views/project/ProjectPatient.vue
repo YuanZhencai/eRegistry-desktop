@@ -19,14 +19,18 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" size="mini" icon="el-icon-download"
-                               v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId, 'PROJECT_VIEW_' + projectId])"
+                               v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])"
                                @click="exportPatient">导出
                     </el-button>
-                    <el-button type="primary" size="mini" icon="el-icon-plus"
+                    <el-button type="primary" size="mini" icon="el-icon-plus" style="margin-left: 0px;"
                                v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_DOCTOR_' + projectId, 'PROJECT_PATIENT_' + projectId, 'PROJECT_FOLLOWER_' + projectId])"
                                @click="newPatient">新建患者
-						<incorporation :project-id="projectId"></incorporation>
                     </el-button>
+
+					<incorporation
+							v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_DOCTOR_' + projectId, 'PROJECT_PATIENT_' + projectId, 'PROJECT_FOLLOWER_' + projectId])"
+							:project-id="projectId">
+					</incorporation>
                 </el-form-item>
             </el-form>
         </el-row>
@@ -193,7 +197,7 @@ export default {
       },
       edit(patient) {
         this.selectedPatient = patient
-        this.$refs['patient-dialog'].show(this.projectId, this.selectedPatient.id).then((res) => {
+        this.$refs['patient-dialog'].show(this.selectedPatient.id).then((res) => {
           this.getPatients()
         }, () => {})
       },
