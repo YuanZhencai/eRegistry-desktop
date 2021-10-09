@@ -247,6 +247,11 @@ export const constantRouterMap = [
   {
     path: '/questionnaire/:questionnaireId/investigation-new',
     component: () => import('@/views/investigation/SharedInvestigationDetail')
+  },
+  {
+    path: '/patient-attachment',
+    name: 'PatientAttachment',
+    component: () => import('@/views/patient/PatientAttachment')
   }
 ]
 

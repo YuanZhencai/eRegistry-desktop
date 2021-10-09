@@ -4,7 +4,7 @@
             <template v-for="(step, index) in steps">
                 <el-step :key="index" v-if="step.type === 'PATIENT'" icon=" ">
                     <template slot="icon"><i class="fa fa-user-o fa-2x" @click="selectItem(step, index)"/></template>
-                    <template slot="title"><span @click="selectItem(step, index)">{{step.title}}</span> <el-link @click="openPatientAttachmentDialog(step)" icon="el-icon-picture-outline"/></template>
+                    <template slot="title"><span @click="selectItem(step, index)">{{step.title}}</span> <el-link @click="openPatientAttachment(step)" icon="el-icon-picture-outline"/></template>
                     <template slot="description"><span>{{step.desc}}</span></template>
                 </el-step>
                 <el-step :key="index" v-if="step.type === 'PLAN'" icon=" ">
@@ -15,22 +15,20 @@
                 <el-step :key="index" v-if="step.type === 'FOLLOW'" icon=" "
                          @click.native="selectItem(step, index)">
 					<template slot="icon"><i class="fa fa-address-book-o fa-2x" @click="selectItem(step, index)"/></template>
-					<template slot="title"><span @click="selectItem(step, index)">{{step.title}}</span> <el-link @click="openPatientAttachmentDialog(step)" icon="el-icon-picture-outline"/></template>
+					<template slot="title"><span @click="selectItem(step, index)">{{step.title}}</span> <el-link @click="openPatientAttachment(step)" icon="el-icon-picture-outline"/></template>
                     <template slot="description">{{step.desc}}</template>
                 </el-step>
             </template>
             <el-step title="结束" icon="fa fa-smile-o fa-2x"></el-step>
         </el-steps>
-        <patient-attachment-dialog ref="patient-attachment-dialog"></patient-attachment-dialog>
     </div>
 </template>
 
 <script>
   import moment from 'moment'
-  import PatientAttachmentDialog from './PatientAttachmentDialog'
 export default {
     name: 'timeline',
-    components: { PatientAttachmentDialog },
+    components: { },
     props: {
       timeline: {
         type: Object
@@ -109,10 +107,16 @@ export default {
           }
         })
       },
-      openPatientAttachmentDialog(step) {
-        this.$refs['patient-attachment-dialog'].show(step.patientId, step.caseId, step.followId).then(() => {
-        }, () => {
+      openPatientAttachment(step) {
+        let routeData = this.$router.resolve({
+          path: '/patient-attachment',
+          query: {
+            patientId: step.patientId,
+            caseId: step.caseId,
+            followId: step.followId
+          }
         })
+        window.open(routeData.href, '', 'width=1200,height=800')
       }
     }
   }
