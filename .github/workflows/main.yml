@@ -47,7 +47,7 @@ jobs:
           npm install electron --arch=ia32
 
       # step5: build electron app
-      - name: build release
+      - name: build electron
         if: matrix.os != 'macos-latest'
         run: |
           npm run release
@@ -66,8 +66,12 @@ jobs:
         with:
           name: dist-build-artifacts
           path: |
+            Dockerfile
+            Dockerfile.desktop
+            Dockerfile.web
             dist/web/**
             build/*.*
+            !build/builder-debug.yml
 
   make_docker_image:
     name: make docker image
