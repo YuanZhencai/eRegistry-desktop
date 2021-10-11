@@ -1,7 +1,7 @@
 # main.yml
 
 # Workflow's name
-name: Build Electron App For Win/Mac
+name: Build Electron App For Win/Mac/Web
 
 # Workflow's trigger
 on:
@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2019, macos-10.15]
+        os: [ubuntu-18.04, windows-2019, macos-10.15]
 
     # create steps
     steps:
@@ -46,9 +46,43 @@ jobs:
         run: |
           npm install electron --arch=ia32
 
-      # step5: publish release
-      - name: publish release
+      # step5: build electron app
+      - name: build release
+        if: matrix.os != 'ubuntu-18.04'
         run: |
           npm run release
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      # step6: build web app
+      - name: build web app
+        if: matrix.os == 'ubuntu-18.04'
+        run: |
+          npm run build:web
+
+      # step7: Archive production artifacts
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist-build-artifacts
+          path: |
+            dist/web/**
+            build/*.*
+
+  make_docker_image:
+    name: make docker image
+    needs: release
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Download math result
+        uses: actions/download-artifact@v2
+        with:
+          name: dist-build-artifacts
+      - name: build docker image and push aliyun docker registry
+        run: |
+          ls -al
+          docker login -u ${{ secrets.ALI_DOCKER_HUB_ACCOUNT }} -p ${{ secrets.ALI_DOCKER_HUB_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
+          docker build . -t registry.cn-hangzhou.aliyuncs.com/palan/eregistry-web -f Dockerfile.web
+          docker build . -t registry.cn-hangzhou.aliyuncs.com/palan/eregistry-desktop -f Dockerfile.desktop
+          docker build . -t registry.cn-hangzhou.aliyuncs.com/palan/eregistry-frontend
+          docker push registry.cn-hangzhou.aliyuncs.com/palan/eregistry-frontend
