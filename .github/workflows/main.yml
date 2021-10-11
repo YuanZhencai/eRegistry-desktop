@@ -69,6 +69,7 @@ jobs:
             Dockerfile
             Dockerfile.desktop
             Dockerfile.web
+            conf.d/**
             dist/web/**
             build/*.*
             !build/builder-debug.yml
