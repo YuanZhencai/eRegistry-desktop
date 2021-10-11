@@ -47,47 +47,29 @@ jobs:
           npm install electron --arch=ia32
 
       # step5: build electron app
-      - name: build electron
+      - name: build electron app
         if: matrix.os != 'macos-latest'
         run: |
           npm run release
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      # step6: build web app
-      - name: build web app
+      # step6: build web app and build docker image
+      - name: build web app and bulid docker image
         if: matrix.os == 'macos-latest'
         run: |
           npm run build:web
-
-      # step7: Archive production artifacts
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: dist-build-artifacts
-          path: |
-            Dockerfile
-            Dockerfile.desktop
-            Dockerfile.web
-            conf.d/**
-            dist/web/**
-            build/*.*
-            !build/builder-debug.yml
-
-  make_docker_image:
-    name: make docker image
-    needs: release
-    runs-on: ubuntu-18.04
-    steps:
-      - name: Download math result
-        uses: actions/download-artifact@v2
-        with:
-          name: dist-build-artifacts
-      - name: build docker image and push aliyun docker registry
-        run: |
-          ls -al
+          version=${GITHUB_REF/refs\/tags\//}
+          echo "download release: $version"
+          gh release download $version -R YuanZhencai/eRegistry-desktop -D dist/release
+          ls -al dist/release
           docker login -u ${{ secrets.ALI_DOCKER_HUB_ACCOUNT }} -p ${{ secrets.ALI_DOCKER_HUB_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
           docker build . -t registry.cn-hangzhou.aliyuncs.com/palan/eregistry-web -f Dockerfile.web
           docker build . -t registry.cn-hangzhou.aliyuncs.com/palan/eregistry-desktop -f Dockerfile.desktop
           docker build . -t registry.cn-hangzhou.aliyuncs.com/palan/eregistry-frontend
+          docker tag registry.cn-hangzhou.aliyuncs.com/palan/eregistry-frontend registry.cn-hangzhou.aliyuncs.com/palan/eregistry-frontend:$version
           docker push registry.cn-hangzhou.aliyuncs.com/palan/eregistry-frontend
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+
