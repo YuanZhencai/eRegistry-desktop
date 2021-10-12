@@ -83,7 +83,7 @@ jobs:
           echo "download release: $version"
           web_app_file_name=eregistry-web-${version}.zip
           echo "web file: $web_app_file_name"
-          gh release download $version -R ${GITHUB_REPOSITORY} -d dist/release
+          gh release download $version -R ${GITHUB_REPOSITORY} -D dist/release
           unzip -o dist/release/$web_app_file_name -d dist/web
           rm -rf dist/release/$web_app_file_name
           ls -al dist/release dist/web
