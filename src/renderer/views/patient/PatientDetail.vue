@@ -5,7 +5,7 @@
         </el-row>
         <el-row style="margin-bottom: 10px">
             <div class="float-right" v-if="timeline">
-                <template v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_DOCTOR_' + projectId, 'PROJECT_AUDIT_' + projectId])">
+                <template v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_DOCTOR_' + projectId, 'PROJECT_DIRECTOR_' + projectId, 'PROJECT_AUDIT_' + projectId])">
                     <el-dropdown trigger="hover" v-if="!follow && patientCase && 'SUBMITTED' === patientCase.state">
                         <el-button type="primary" size="mini">
                             审核病例<i class="el-icon-arrow-down el-icon--right"></i>
@@ -46,7 +46,7 @@
                         </el-dropdown-menu>
                     </el-dropdown>
                 </template>
-                <template v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_DOCTOR_' + projectId, 'PROJECT_PATIENT_' + projectId, 'PROJECT_FOLLOWER_' + projectId])">
+                <template v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_DOCTOR_' + projectId, 'PROJECT_DIRECTOR_' + projectId, 'PROJECT_PATIENT_' + projectId, 'PROJECT_FOLLOWER_' + projectId])">
                     <el-button type="primary" size="mini"
                                v-if="!follow && patientCase && 'SUBMITTED' === patientCase.state"
                                @click="withdrawalAudit('PATIENT_CASE')">
@@ -140,6 +140,7 @@ export default {
     created() {
       this.isRegister = this.$hasAnyAuthority([
         'PROJECT_ADMIN_' + this.projectId,
+        'PROJECT_DIRECTOR_' + this.projectId,
         'PROJECT_DOCTOR_' + this.projectId,
         'PROJECT_PATIENT_' + this.projectId,
         'PROJECT_FOLLOWER_' + this.projectId

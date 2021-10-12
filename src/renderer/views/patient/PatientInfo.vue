@@ -3,7 +3,7 @@
 		<el-row>
 			<h3 class="no-margin-top">
 				<span>{{firstName}}</span>
-				<span v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + patient.projectId, 'PROJECT_DOCTOR_' + patient.projectId, 'PROJECT_MASTER_' + patient.projectId, 'PROJECT_PATIENT_' + patient.projectId])" class="pointer" @click="getSensitiveIgnorePatient">{{lastName}}</span>
+				<span v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + patient.projectId, 'PROJECT_DOCTOR_' + patient.projectId, 'PROJECT_DIRECTOR_' + patient.projectId, 'PROJECT_MASTER_' + patient.projectId, 'PROJECT_PATIENT_' + patient.projectId])" class="pointer" @click="getSensitiveIgnorePatient">{{lastName}}</span>
 				<span v-else>{{lastName}}</span>
 				<small style="margin-left: 10px;">{{patient.sex}}</small>
 			</h3>
@@ -12,7 +12,7 @@
 			<el-col :span="6"><span>出生日期:{{patient.birthday | formatDate('YYYY-MM-DD')}}</span></el-col>
 			<el-col :span="6">
 				<span>手机号:{{patient.telephone}}</span>
-				<el-tooltip content="拨打电话" placement="top" v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + patient.projectId, 'PROJECT_DOCTOR_' + patient.projectId, 'PROJECT_MASTER_' + patient.projectId, 'PROJECT_PATIENT_' + patient.projectId]) && patient.telephone">
+				<el-tooltip content="拨打电话" placement="top" v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + patient.projectId, 'PROJECT_DOCTOR_' + patient.projectId, 'PROJECT_DIRECTOR_' + patient.projectId, 'PROJECT_MASTER_' + patient.projectId, 'PROJECT_PATIENT_' + patient.projectId]) && patient.telephone">
 					<el-button style="margin-left: 5px;"
 							   type="primary"
 							   icon="el-icon-phone"

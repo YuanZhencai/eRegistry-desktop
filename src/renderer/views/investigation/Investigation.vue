@@ -206,7 +206,7 @@
 	      this.loading = true
 	      this.investigations = []
 	      const sort = this.sort()
-	      getInvestigations(Object.assign({
+	      getInvestigations(this.projectId, Object.assign({
 	        page: this.page - 1,
 	        size: this.size,
 	        sort

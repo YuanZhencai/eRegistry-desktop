@@ -46,6 +46,7 @@ export default {
         { label: '录入', value: 'PATIENT' },
         { label: '审核', value: 'AUDIT' },
         { label: '查看', value: 'VIEW' },
+        { label: '主任', value: 'DIRECTOR' },
         { label: '医生', value: 'DOCTOR' },
         { label: '随访专员', value: 'FOLLOWER' }
       ],
