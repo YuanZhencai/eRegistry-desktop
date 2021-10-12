@@ -27,7 +27,7 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "YuanZhencai",
+        "owner": "palandatarxcom",
         "repo": "eRegistry-desktop",
         "releaseType": "draft"
       }
