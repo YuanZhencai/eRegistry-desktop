@@ -84,8 +84,8 @@ jobs:
           web_app_file_name=eregistry-web-${version}.zip
           echo "web file: $web_app_file_name"
           gh release download $version -R ${GITHUB_REPOSITORY} -D dist/release
-          unzip -o dist/release/$web_app_file_name -d dist/web
-          rm -rf dist/release/$web_app_file_name
+          mv dist/release/$web_app_file_name ./
+          unzip -o $web_app_file_name
           ls -al dist/release dist/web
           docker login -u ${{ secrets.ALI_DOCKER_HUB_ACCOUNT }} -p ${{ secrets.ALI_DOCKER_HUB_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
           docker build . -t registry.cn-hangzhou.aliyuncs.com/palan/eregistry-web -f Dockerfile.web
