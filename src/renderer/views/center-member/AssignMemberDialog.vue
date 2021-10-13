@@ -2,7 +2,7 @@
     <el-dialog title="创建或编辑分中心成员" width="500px" :visible.sync="display" :before-close="close">
         <el-form label-width="80px" size="mini">
             <el-form-item label="成员">
-                <el-input v-model="centerMember.username" :disabled="true"></el-input>
+				{{nickname || centerMember.username}}
             </el-form-item>
             <el-form-item label="分中心">
                 <el-select placeholder="选择分中心" v-model="centerMember.centerId">
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import { getAllCenters } from '@/api/CenterService'
+  import { getProjectCenters } from '@/api/CenterService'
   import { createCenterMember, updateCenterMember, getCenterMemberByMemberId } from '@/api/CenterMemberService'
   export default {
     name: 'AssignMemberDialog',
@@ -36,12 +36,14 @@
         reject: null,
         resolve: null,
         memberId: null,
+        nickname: null,
         isSaving: false
       }
     },
     methods: {
-      show(memberId) {
-        this.memberId = memberId
+      show(member) {
+        this.memberId = member.id
+        this.nickname = member.nickname
         this.findCenters()
         this.findCenterMember()
         this.display = true
@@ -51,7 +53,7 @@
         })
       },
       findCenters: function() {
-        getAllCenters({ 'EQ_center.projectId': this.projectId }).then((res) => {
+        getProjectCenters(this.projectId).then((res) => {
           this.centers = res.data
         })
       },

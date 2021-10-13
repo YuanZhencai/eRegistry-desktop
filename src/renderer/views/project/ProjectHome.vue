@@ -153,7 +153,7 @@
                   <el-col :span="8" v-for="member in showMembers" :key="member.id">
                     <user-avatar :username="member.username" :size="30"></user-avatar>
                     <span>
-                  {{member.username}}
+                  {{member.nickname || member.username}}
                   <template v-if="member.task">
                     (<span>{{taskType[member.task]}}</span>)
                   </template>
