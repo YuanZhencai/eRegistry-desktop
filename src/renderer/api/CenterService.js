@@ -8,6 +8,13 @@ export function getProjectCenters(projectId, params) {
   })
 }
 
+export function getProjectCurrentCenter(projectId) {
+  return axios({
+    url: `api/projects/${projectId}/current-center`,
+    method: 'get'
+  })
+}
+
 export function getCenter(id) {
   return axios({
     url: `api/centers/${id}`,

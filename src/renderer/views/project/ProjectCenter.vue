@@ -2,7 +2,7 @@
     <div>
         <el-row v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">
             <el-col :span='24'>
-                <el-button type='primary' size="mini" class='float-right' @click="newCenter()">创建分中心</el-button>
+                <el-button v-if="!currentCenter" type='primary' size="mini" class='float-right' @click="newCenter()">创建分中心</el-button>
             </el-col>
         </el-row>
         <el-row>
@@ -17,8 +17,8 @@
                 <el-table-column label="操作">
                     <template slot-scope="scope" v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">
                         <el-button type="text" @click="editCenter(scope.row)">编辑</el-button>
-                        <el-divider direction="vertical"></el-divider>
-                        <el-button type="text" @click="deleteCenter(scope.row)">删除</el-button>
+                        <el-divider v-if="!currentCenter" direction="vertical"></el-divider>
+                        <el-button v-if="!currentCenter" type="text" @click="deleteCenter(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -43,6 +43,7 @@
 <script>
   import { getProjectCenters, deleteCenter } from '@/api/CenterService'
   import CenterDialogComponent from '../center/CenterDialogComponent'
+  import { getProjectCurrentCenter } from '../../api/CenterService'
   export default {
     name: 'ProjectCenter',
     components: { CenterDialogComponent },
@@ -53,6 +54,7 @@
         predicate: '',
         order: '',
         centers: [],
+        currentCenter: null,
         total: 0,
         pageSize: 10, // 单页数据量
         currentPage: 1, // 默认开始页面
@@ -70,8 +72,17 @@
     },
     created() {
       this.getCenters()
+      this.findProjectCurrentCenter()
     },
     methods: {
+      findProjectCurrentCenter() {
+        getProjectCurrentCenter(this.projectId).then((res) => {
+          if (res.data && res.data.id) {
+            this.currentCenter = res.data
+            this.centerId = this.currentCenter.id
+          }
+        })
+      },
       sort() {
         return (this.predicate && this.order) ? this.sortPropMap[this.predicate] + ',' + (this.order === 'ascending' ? 'asc' : 'desc') : null
       },
