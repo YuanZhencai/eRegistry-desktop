@@ -20,7 +20,7 @@
 									style="width: 100%;"></el-date-picker>
 				</el-col>
 			</el-form-item>
-			<el-form-item v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId])">
+			<el-form-item v-if="$hasAnyAuthority(['PROJECT_ADMIN_' + projectId, 'PROJECT_MASTER_' + projectId])">
 				<el-button v-if="report && report.title"
 						   v-download="{name: `${report.title}.zip`, url: `api/projects/${projectId}/questionnaire/${questionnaireId}/data`}"
 						   type="primary"
@@ -206,7 +206,7 @@
 	      this.loading = true
 	      this.investigations = []
 	      const sort = this.sort()
-	      getInvestigations(Object.assign({
+	      getInvestigations(this.projectId, Object.assign({
 	        page: this.page - 1,
 	        size: this.size,
 	        sort

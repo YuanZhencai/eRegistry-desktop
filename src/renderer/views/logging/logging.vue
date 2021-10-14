@@ -57,7 +57,8 @@
                        width="180">
       </el-table-column>
       <el-table-column prop="action"
-                       label="行动">
+                       label="行动"
+					   width="180">
       </el-table-column>
       <el-table-column prop="values"
                        label="导出的数据更改或字段列表">

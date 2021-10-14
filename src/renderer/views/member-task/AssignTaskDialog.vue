@@ -6,8 +6,7 @@
     <el-form label-width="80px"
              size="mini">
       <el-form-item label="成员">
-        <el-input v-model="member.username"
-                  :disabled="true"></el-input>
+		  {{nickname || member.username}}
       </el-form-item>
       <el-form-item label="角色">
         <el-select placeholder="选择角色"
@@ -46,6 +45,7 @@ export default {
         { label: '录入', value: 'PATIENT' },
         { label: '审核', value: 'AUDIT' },
         { label: '查看', value: 'VIEW' },
+        { label: '主任', value: 'DIRECTOR' },
         { label: '医生', value: 'DOCTOR' },
         { label: '随访专员', value: 'FOLLOWER' }
       ],
@@ -53,12 +53,14 @@ export default {
       reject: null,
       resolve: null,
       memberId: null,
+      nickname: null,
       isSaving: false
     }
   },
   methods: {
-    show(memberId) {
-      this.memberId = memberId
+    show(member) {
+      this.memberId = member.id
+      this.nickname = member.nickname
       this.display = true
       this.findMember()
       this.findMemberTask()

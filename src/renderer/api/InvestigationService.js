@@ -8,9 +8,9 @@ export function saveInvestigation(investigation) {
   })
 }
 
-export function getInvestigations(req) {
+export function getInvestigations(projectId, req) {
   return axios({
-    url: `api/investigations`,
+    url: `api/projects/${projectId}/investigations`,
     method: 'get',
     params: req
   })

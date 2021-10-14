@@ -77,7 +77,7 @@
                         </el-date-picker>
                       </el-form-item>
                       <el-form-item>
-                        <el-select v-model="centerId" size="mini" @change="patient">
+                        <el-select v-model="centerId" size="mini" @change="patient" :disabled="currentCenter">
                           <el-option :label="'全部'" :value="0"></el-option>
                           <el-option v-for="center in centers" :key="center.id"
                                      :label="center.name" :value="center.id">
@@ -153,7 +153,7 @@
                   <el-col :span="8" v-for="member in showMembers" :key="member.id">
                     <user-avatar :username="member.username" :size="30"></user-avatar>
                     <span>
-                  {{member.username}}
+                  {{member.nickname || member.username}}
                   <template v-if="member.task">
                     (<span>{{taskType[member.task]}}</span>)
                   </template>
@@ -204,7 +204,7 @@
   import ECharts from 'vue-echarts'
   import 'echarts'
   import { mapGetters } from 'vuex'
-  import { getAllCenters } from '@/api/CenterService'
+  import { getProjectCenters } from '@/api/CenterService'
   import { getProjectMembers } from '@/api/MemberService'
   import { getProjectStatistics, getDateChart, getPlanChart } from '@/api/StatisticsService'
   import UserAvatar from '../../components/avatar/userAvatar'
@@ -212,6 +212,7 @@
   import { getProject } from '@/api/ProjectService'
   import { getTopAlertEvents } from '../../api/AlertService'
   import moment from 'moment'
+  import { getProjectCurrentCenter } from '../../api/CenterService'
 
   export default {
     name: 'ProjectHome',
@@ -238,6 +239,7 @@
       return {
         projectId,
         centerId: 0,
+        currentCenter: null,
         range: 'week',
         rangeMap: {
           'week': {
@@ -266,6 +268,7 @@
         taskType: {
           null: '',
           PATIENT: '录入',
+          DIRECTOR: '主任',
           DOCTOR: '医生',
           FOLLOWER: '随访专员',
           MASTER: '管理',
@@ -291,6 +294,7 @@
           this.project = res.data
           this.changeRange()
         })
+        this.findProjectCurrentCenter()
         this.findEvents()
         this.findCenters()
         this.findProjectStatistics()
@@ -298,13 +302,21 @@
         this.findMembers()
         this.getProject()
       },
+      findProjectCurrentCenter() {
+        getProjectCurrentCenter(this.projectId).then((res) => {
+          if (res.data && res.data.id) {
+            this.currentCenter = res.data
+            this.centerId = this.currentCenter.id
+          }
+        })
+      },
       findEvents() {
         getTopAlertEvents(this.projectId).then((res) => {
           this.topEvents = res.data
         })
       },
       findCenters() {
-        getAllCenters({ 'EQ_center.projectId': this.projectId }).then((res) => {
+        getProjectCenters(this.projectId).then((res) => {
           this.centers = res.data
         })
       },

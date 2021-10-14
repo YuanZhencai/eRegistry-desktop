@@ -22,7 +22,7 @@
                          label='用户名'
                          sortable="custom">
           <template slot-scope="scope">
-            {{scope.row.username}}
+            {{scope.row.nickname || scope.row.username}}
             <span v-if="project && scope.row.username === project.chargedBy">(创建人)</span>
           </template>
         </el-table-column>
@@ -115,6 +115,7 @@ export default {
       taskType: {
         null: '',
         PATIENT: '录入',
+        DIRECTOR: '主任',
         DOCTOR: '医生',
         FOLLOWER: '随访专员',
         MASTER: '管理',
@@ -168,14 +169,14 @@ export default {
     },
     assignCenter(member) {
       this.selectedMember = member
-      this.$refs['assign-member-dialog'].show(this.selectedMember.id).then(() => {
+      this.$refs['assign-member-dialog'].show(this.selectedMember).then(() => {
         this.loading = true
         this.getMembers()
       }, () => { })
     },
     assignTask(member) {
       this.selectedMember = member
-      this.$refs['assign-task-dialog'].show(this.selectedMember.id).then(() => {
+      this.$refs['assign-task-dialog'].show(this.selectedMember).then(() => {
         this.loading = true
         this.getMembers()
       }, () => { })

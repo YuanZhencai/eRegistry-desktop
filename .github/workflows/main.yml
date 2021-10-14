@@ -93,5 +93,6 @@ jobs:
           docker build . -t registry.cn-hangzhou.aliyuncs.com/palan/eregistry-frontend
           docker tag registry.cn-hangzhou.aliyuncs.com/palan/eregistry-frontend registry.cn-hangzhou.aliyuncs.com/palan/eregistry-frontend:$version
           docker push registry.cn-hangzhou.aliyuncs.com/palan/eregistry-frontend
+          docker push registry.cn-hangzhou.aliyuncs.com/palan/eregistry-frontend:$version
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}

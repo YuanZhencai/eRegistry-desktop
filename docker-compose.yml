@@ -3,7 +3,7 @@ services:
   eregistry:
     image: registry.cn-hangzhou.aliyuncs.com/palan/eregistry-frontend
     restart: always
-#    volumes:
-#      - ./dist/web:/usr/share/nginx/html
+    volumes:
+      - ./conf.d/default.conf:/etc/nginx/conf.d/default.conf
     ports:
       - 7080:80
